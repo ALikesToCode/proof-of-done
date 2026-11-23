@@ -65,6 +65,8 @@ export interface ContractStore {
   createContract(row: ContractRow): Promise<boolean>;
   insertCriteria(criteria: Criterion[]): Promise<void>;
   deactivateCriterion(criterionId: string, issueId: string): Promise<void>;
+  /** The id of the work item a criterion belongs to, or null when there is no such criterion. */
+  findCriterionIssue(criterionId: string): Promise<string | null>;
   insertEvidence(evidence: Evidence, projectId: string): Promise<void>;
   insertVerdict(verdict: Verdict, projectId: string): Promise<void>;
   insertEvent(event: EventRow): Promise<void>;

@@ -186,6 +186,11 @@ export class SqlContractStore implements ContractStore {
     await write('UPDATE pod_criteria SET is_active = 0 WHERE id = ? AND issue_id = ?', criterionId, issueId);
   }
 
+  async findCriterionIssue(criterionId: string): Promise<string | null> {
+    const rows = await select('SELECT issue_id FROM pod_criteria WHERE id = ? LIMIT 1', criterionId);
+    return rows[0] ? str(rows[0]['issue_id']) || null : null;
+  }
+
   async insertEvidence(e: Evidence, projectId: string): Promise<void> {
     await write(
       `INSERT INTO pod_evidence (${EVIDENCE_COLUMNS}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,

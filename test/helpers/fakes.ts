@@ -40,6 +40,10 @@ export class MemoryStore implements ContractStore {
     for (const c of this.criteria) if (c.id === criterionId && c.issueId === issueId) c.active = false;
   }
 
+  async findCriterionIssue(criterionId: string): Promise<string | null> {
+    return this.criteria.find((c) => c.id === criterionId)?.issueId ?? null;
+  }
+
   async insertEvidence(evidence: Evidence, _projectId?: string): Promise<void> {
     this.evidence.push(clone(evidence));
   }
