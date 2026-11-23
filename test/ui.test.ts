@@ -383,7 +383,10 @@ describe('the issue panel', () => {
     expect(page.text()).toContain('Added by hand, just now');
     expect(page.text()).toContain('118 passed, 0 failed');
     expect(page.text()).toContain('Command: npm test');
-    expect(page.text()).toContain('You added this evidence, so someone else has to accept it.');
+    // Someone alone on a site reads here how to get past the rule.
+    expect(page.text()).toContain(
+      "You added this evidence, so someone else has to accept it. A project admin can turn that rule off for a team of one, in the project's Proof of Done settings.",
+    );
     expect(page.buttons()).not.toContain('Review');
 
     // A second person opens the panel.

@@ -531,7 +531,7 @@ function toEvidenceView(
     canReject: mayReview && (standing === 'pending' || standing === 'accepted' || standing === 'self_accepted'),
     acceptBlocked:
       mayReview && open && !independent && settings.requireIndependent
-        ? 'You added this evidence, so someone else has to accept it.'
+        ? "You added this evidence, so someone else has to accept it. A project admin can turn that rule off for a team of one, in the project's Proof of Done settings."
         : null,
   };
 }
