@@ -276,6 +276,13 @@ describe('submitting evidence', () => {
     await expectError(service.submitEvidence('MOBL-1', ALICE, { criterionId: 'any', ...TEST_RUN }), 'invalid');
   });
 
+  it('does not take evidence from the verifier', async () => {
+    const created = await service.createContract('MOBL-1', ALICE, { withSuggestions: true });
+    const error = await expectError(service.submitEvidence('MOBL-1', VERIFIER, { criterionId: criterionId(created), ...TEST_RUN }), 'forbidden');
+    expect(error.message).toBe('The verifier checks evidence. It does not submit any.');
+    expect(store.evidence).toHaveLength(0);
+  });
+
   it('notes a link that is reused across criteria without failing it', async () => {
     const first = await contractWithEvidence();
     const view = await service.submitEvidence('MOBL-1', ALICE, { criterionId: criterionId(first, 1), ...TEST_RUN });
