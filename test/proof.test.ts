@@ -159,12 +159,27 @@ describe('gateDecision', () => {
     const c2 = criterion('c2');
     const e1 = evidence('e1', 'c1');
     const proven = summarize([c1], [e1], [verdict('v1', e1, 'accepted')], true);
-    expect(gateDecision(proven, warn)).toEqual({ pass: true, reason: 'All 1 criteria are proven.' });
+    expect(gateDecision(proven, warn)).toEqual({ pass: true, reason: 'The one criterion is proven.' });
+    const both = summarize([c1, c2], [e1, evidence('e2', 'c2')], [verdict('v1', e1, 'accepted'), verdict('v2', evidence('e2', 'c2'), 'accepted')], true);
+    expect(gateDecision(both, warn)).toEqual({ pass: true, reason: 'All 2 criteria are proven.' });
     const waiting = summarize([c1, c2], [e1], [], true);
     expect(waiting.state).toBe('unproven');
     expect(gateDecision(waiting, warn)).toEqual({
       pass: false,
       reason: '2 of 2 criteria are not proven (1 with no evidence, 1 waiting for a check).',
+    });
+  });
+  it('speaks of the one criterion when a contract has only one', () => {
+    const c1 = criterion('c1');
+    const e1 = evidence('e1', 'c1');
+    expect(gateDecision(summarize([c1], [], [], true), warn)).toEqual({ pass: false, reason: 'The one criterion has no evidence.' });
+    expect(gateDecision(summarize([c1], [e1], [], true), warn)).toEqual({
+      pass: false,
+      reason: 'The evidence for the one criterion waits for a check.',
+    });
+    expect(gateDecision(summarize([c1], [e1], [verdict('v1', e1, 'rejected')], true), warn)).toEqual({
+      pass: false,
+      reason: 'The evidence for the one criterion was turned away.',
     });
   });
   it('always passes when the gate is off', () => {

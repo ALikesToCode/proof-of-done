@@ -149,7 +149,12 @@ export function gateDecision(
       : { pass: true, reason: 'No done contract, so nothing to prove.' };
   }
   if (summary.state === 'proven') {
-    return { pass: true, reason: `All ${summary.total} criteria are proven.` };
+    return { pass: true, reason: summary.total === 1 ? 'The one criterion is proven.' : `All ${summary.total} criteria are proven.` };
+  }
+  if (summary.total === 1) {
+    if (summary.submitted) return { pass: false, reason: 'The evidence for the one criterion waits for a check.' };
+    if (summary.rejected) return { pass: false, reason: 'The evidence for the one criterion was turned away.' };
+    return { pass: false, reason: 'The one criterion has no evidence.' };
   }
   const missing = summary.total - summary.proven;
   const parts: string[] = [];
