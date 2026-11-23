@@ -196,6 +196,9 @@ export function actorLabel(entry: Pick<HistoryEntry, 'channel'>): string {
   return entry.channel === 'sample' ? 'Sample data' : 'The app';
 }
 
+/** The Rovo agent that reviews evidence. The key and the name are the ones in the manifest. */
+export const VERIFIER = { agentKey: 'proof-verifier', agentName: 'Proof Verifier' } as const;
+
 export function proofLine(proven: number, total: number): string {
   if (total === 0) return 'No criteria yet';
   return `${proven} of ${total} ${total === 1 ? 'criterion' : 'criteria'} proven`;

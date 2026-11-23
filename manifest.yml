@@ -109,6 +109,39 @@ modules:
         - start-done-contract
         - submit-evidence
         - list-unproven-work
+  rovo:agent:
+    - key: proof-verifier
+      name: Proof Verifier
+      description: Checks the evidence on a Jira work item against its done contract and records a verdict on each piece, with its reasoning.
+      icon: resource:icons;proof-verifier.svg
+      prompt: resource:rovo-prompts;proof-verifier.txt
+      conversationStarters:
+        - Review the evidence that waits on this work item
+        - What is still unproven on this work item?
+        - Which work in this project was closed without proof?
+      actions:
+        - list-evidence-to-review
+        - record-verdict
+        - get-done-contract
+        - list-unproven-work
+      skills:
+        - review-evidence
+        - report-proof
+  rovo:skill:
+    - key: review-evidence
+      source:
+        dir: rovo/skills/review-evidence
+      dependencies:
+        tools:
+          - list-evidence-to-review
+          - record-verdict
+    - key: report-proof
+      source:
+        dir: rovo/skills/report-proof
+      dependencies:
+        tools:
+          - get-done-contract
+          - list-unproven-work
   action:
     - key: get-context-pack
       name: Get context pack
@@ -289,6 +322,8 @@ resources:
     path: src/frontend/project-settings.tsx
   - key: icons
     path: static/icons
+  - key: rovo-prompts
+    path: rovo/prompts
 permissions:
   scopes:
     - read:jira-work
