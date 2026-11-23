@@ -72,6 +72,28 @@ Every project gets a Proof of Done page in its sidebar. The settings also sit un
 - **Settings.** What the gate does, whether evidence needs a second person, whether a work item with no contract fails the gate, and the project rules. A project rule is a criterion the project adds to every new contract, for all work item types or for some. Project admins and Jira admins can change the settings. Everyone else can read them.
 - **Sample data.** One button creates five work items in the project, labelled `proof-of-done-sample`. One is closed and proven, one is closed without proof, two are in progress, and one has no contract yet. Each shows up in the meter and the list like real work. Removing the sample deletes only the work items the app recorded as its own. A label someone else put on a work item is never enough.
 
+## The agent tools
+
+Seven Forge actions do the work. The app's MCP server offers five of them to outside agents. Two belong to the Proof Verifier alone.
+
+| Tool | What it does | Who has it |
+| --- | --- | --- |
+| `get-context-pack` | Returns the description, the parent, subtasks, links, the latest comments, the contract and the rules of proof | Coding agents |
+| `get-done-contract` | Returns each criterion with its id, its evidence and its state, and says whether the work item may close | Coding agents, Proof Verifier |
+| `start-done-contract` | Creates the contract from the criteria in the description and the project rules | Coding agents |
+| `submit-evidence` | Records one piece of evidence for one criterion and answers with the check results | Coding agents |
+| `list-unproven-work` | Lists the project's work under contract that is not proven, with the meter | Coding agents, Proof Verifier |
+| `list-evidence-to-review` | Lists the evidence on a work item that waits for a verdict | Proof Verifier |
+| `record-verdict` | Accepts or rejects one piece of evidence, with the reasoning | Proof Verifier |
+
+Every answer is written for a language model. States are plain words, empty fields are left out, and a `next` line says what to do. A refusal comes back as `ok: false` with a code and a sentence the agent can act on.
+
+A tool does what the person behind the agent may do, and nothing more. The app takes the account from the invocation, never from an input, and makes its Jira calls as that person. An agent can start a contract only from criteria that are already written down. It cannot add criteria of its own, attest, or record a verdict.
+
+The Proof Verifier has two skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. The panel then looks for new verdicts every few seconds, for five minutes.
+
+`skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when the gate passes.
+
 ## How it is built
 
 The app is deterministic. It stores contracts, evidence and verdicts, runs the checks and enforces the gate. All language-model reasoning happens in Rovo agents or in the outside coding agent, so the app makes no LLM calls and costs nothing to run per verdict.
@@ -80,13 +102,13 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built, deployed to the development site |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 179 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 232 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, the pages are not yet checked in a browser |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
-| Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Next |
-| Proof Verifier | `rovo:agent` with `rovo:skill` | After the agent tools |
+| Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
+| Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Not yet tried in Rovo chat |
 | Linked pages and pull requests | Teamwork Graph API | Last |
 
 ## Decisions and their reasons
@@ -97,6 +119,9 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 - **Guessed evidence kinds are suggestions.** Keyword matching mislabelled some seeded tickets, so a contract read from a description takes any evidence until a person tightens it.
 - **Sample data goes into the current project.** A dedicated sample project would need the Jira administration scope. Labelled sample work items need only the scopes the app already has, and one button removes them. The app creates them as itself, so a person who may not create work items in the project can still load them if they administer it.
 - **Jira admins count as project admins.** A project created through the REST API had an empty Administrators role, and the site's own admin could not change its settings. The app accepts either permission.
+- **Tools run as the person, with no fallback to the app.** The app cannot check another user's permissions. Jira answers that only Jira admins and Connect apps may ask. So a tool that cannot act as the person says so, and tells them to open the panel once and choose Allow access.
+- **The verdict tools are not on the MCP server.** An outside agent that could record a verdict could accept its own evidence.
+- **The Proof Verifier's verdict counts as an independent check.** It is a second reader with its own instructions, and it has no tool that submits evidence. The history names the person who asked it.
 - **A deleted work item takes its contract with it.** Jira tells the app about the deletion, and the app removes every row it stored for that work item. Nobody could reach those rows again.
 
 ## Preview features this relies on
