@@ -1,3 +1,4 @@
+import { LinkedKind } from '../core/graph';
 import { MeterVerdict } from '../core/meter';
 import { Decision, EvidenceDetails, EvidenceKind, GateMode, ProofState, RequiredKind } from '../core/types';
 
@@ -72,11 +73,29 @@ export interface AgentContract {
   next: string;
 }
 
+/** A pull request, build or deployment that Jira's Teamwork Graph links to the work item. */
+export interface AgentLinkedItem {
+  kind: LinkedKind;
+  /** What the tool it came from calls it. */
+  name: string;
+  url?: string;
+  /** In plain words, such as merged, open, successful or failed. */
+  state?: string;
+  /** Where a deployment went. */
+  environment?: string;
+  /** The tool it came from, for example GitHub. */
+  provider?: string;
+  /** ISO 8601. */
+  updatedAt?: string;
+}
+
 export interface SubmitResult {
   evidenceId: string;
   /** False when the automatic checks turned the evidence away. */
   passedChecks: boolean;
   problems: string[];
+  /** What Jira's Teamwork Graph holds about the pull request or build behind this evidence. The reviewer sees it too. */
+  graph?: string;
   criterion: AgentCriterion;
   proof: AgentProof;
   gate: AgentGate;
@@ -102,6 +121,10 @@ export interface ContextPack {
   comments?: Array<{ author: string; at: string; text: string }>;
   /** How many comments the work item has, when more than the ones shown. */
   commentTotal?: number;
+  /** The pull requests, builds and deployments that Jira's Teamwork Graph links to the work item. */
+  development?: AgentLinkedItem[];
+  /** Present when the graph holds more than the ones listed. */
+  developmentCut?: true;
   contract: AgentContract;
   /** What an agent has to know about how proof works here. */
   rules: string[];
@@ -131,6 +154,8 @@ export interface ReviewItem {
   submittedAt: string;
   /** What the automatic checks noted. They all passed, or the evidence would not be here. */
   checks: string[];
+  /** What Jira's Teamwork Graph holds about the pull request or build behind this evidence. A second source next to what the evidence says. */
+  graph?: string;
 }
 
 export interface ReviewQueue {

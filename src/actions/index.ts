@@ -1,6 +1,8 @@
+import { ForgeGraphGateway } from '../graph/forge-graph';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { AgentService } from '../services/agent';
 import { ContractService } from '../services/contracts';
+import { GraphService } from '../services/graph';
 import { ProjectService } from '../services/project';
 import { SqlContractStore } from '../store/sql-store';
 import { ToolName, runTool } from './tools';
@@ -12,7 +14,8 @@ import { ToolName, runTool } from './tools';
 
 const store = new SqlContractStore();
 const jira = new ForgeJiraGateway();
-const agent = new AgentService(new ContractService(store, jira), new ProjectService(store, jira), jira, store);
+const contracts = new ContractService(store, jira);
+const agent = new AgentService(contracts, new ProjectService(store, jira), jira, store, new GraphService(contracts, new ForgeGraphGateway()));
 
 const tool = (name: ToolName) => (payload: unknown, context: unknown) => runTool(agent, name, payload, context);
 

@@ -2,9 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MCP_TOOLS, TOOLS, VERIFIER_TOOLS, accountOf, issueOf, projectOf, runTool } from '../src/actions/tools';
 import { AgentService } from '../src/services/agent';
 import { ContractService } from '../src/services/contracts';
+import { GraphService } from '../src/services/graph';
 import { ProjectService } from '../src/services/project';
 import { doc, h, ul } from './helpers/adf';
-import { FakeJira, MemoryStore, issueInfo } from './helpers/fakes';
+import { FakeGraph, FakeJira, MemoryStore, issueInfo } from './helpers/fakes';
 import { entries, items, repoFile, section } from './helpers/manifest';
 
 const ALICE = { principal: { accountId: 'alice' } };
@@ -16,7 +17,8 @@ let agent: AgentService;
 beforeEach(() => {
   store = new MemoryStore();
   jira = new FakeJira();
-  agent = new AgentService(new ContractService(store, jira), new ProjectService(store, jira), jira, store);
+  const contracts = new ContractService(store, jira);
+  agent = new AgentService(contracts, new ProjectService(store, jira), jira, store, new GraphService(contracts, new FakeGraph()));
   jira.add(issueInfo({ id: '1', key: 'MOBL-1', description: doc(h(2, 'Acceptance criteria'), ul('Login works', 'Logout works')) }));
   vi.spyOn(console, 'log').mockImplementation(() => undefined);
   vi.spyOn(console, 'error').mockImplementation(() => undefined);

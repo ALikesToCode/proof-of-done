@@ -1,5 +1,6 @@
 import { adfText } from '../core/adf';
 import { PodError } from '../core/errors';
+import { LinkedItem, LinkedWork, compareWithGraph, graphCovers } from '../core/graph';
 import { awaitsReview } from '../core/proof';
 import { CriterionState, EvidenceChannel, EvidenceKind, EvidenceStanding, RequiredKind, VerdictChannel } from '../core/types';
 import { JiraGateway } from '../jira/gateway';
@@ -10,6 +11,7 @@ import {
   AgentCriterionState,
   AgentEvidence,
   AgentGate,
+  AgentLinkedItem,
   AgentProof,
   AgentStanding,
   AgentWorkItem,
@@ -114,6 +116,13 @@ const HOW_TO_PROVE: Record<RequiredKind, string> = {
   attestation: 'Only a person can prove this one. Ask a person to add their attestation in the Proof of Done panel.',
   other: 'Submit a link, or the excerpt that shows it.',
 };
+
+/** Added to the review rules when the graph has something to say about an entry. */
+const GRAPH_RULE =
+  "A `graph` line says what Jira's Teamwork Graph holds about the pull request or build behind an entry. Jira got it from the tool itself, so trust it over what the evidence says about itself. Where it says the two differ, reject unless the evidence explains the difference. Where it says the link is not among the ones Jira links to the work item, the link alone proves nothing.";
+
+/** What an agent can do when Jira does not link its pull request or build to the work item. */
+const HOW_JIRA_LINKS = 'Jira links a pull request or a build to a work item when the work item key is in the branch name, the pull request title or a commit message.';
 
 const REVIEW_RULES = [
   'Judge each piece of evidence against its own criterion. The question is whether it shows the criterion is met.',
@@ -234,6 +243,7 @@ function proofRules(policy: ContractView['policy']): string[] {
     'Evidence that passes the checks waits for a review. A person or the Proof Verifier accepts or rejects it. You cannot accept evidence yourself.',
     'Only a person can attest. Do not submit an attestation.',
     'You cannot add, change or remove criteria. If a criterion is wrong or cannot be met, tell the person who gave you the work.',
+    `When you submit a pull request or a build, the reviewer sees whether Jira's Teamwork Graph links it to the work item. ${HOW_JIRA_LINKS}`,
   ];
   if (policy.gateMode === 'warn') {
     rules.push('Do not move the work item to a done status before every criterion is proven. The done gate comments on work that is closed without proof.');
@@ -249,6 +259,23 @@ export function splitExcerpt(excerpt: string): { command: string; text: string }
   const match = /^\s*\$ +([^\n]+)\n?/.exec(excerpt);
   if (!match) return { command: '', text: excerpt };
   return { command: (match[1] ?? '').trim(), text: excerpt.slice(match[0].length) };
+}
+
+export function toAgentLinked(item: LinkedItem): AgentLinkedItem {
+  return {
+    kind: item.kind,
+    name: item.name,
+    ...(item.url ? { url: item.url } : {}),
+    ...(item.state ? { state: item.state.replace(/_/g, ' ') } : {}),
+    ...(item.environment ? { environment: item.environment } : {}),
+    ...(item.provider ? { provider: item.provider } : {}),
+    ...(item.updatedAt ? { updatedAt: item.updatedAt } : {}),
+  };
+}
+
+/** Where the agent tools read the Teamwork Graph. Null means the graph gave no answer. */
+export interface GraphLookup {
+  linked(issueId: string): Promise<LinkedWork | null>;
 }
 
 function clip(text: string, limit: number): { text: string; cut: boolean } {
@@ -272,6 +299,7 @@ export class AgentService {
     private readonly projects: ProjectService,
     private readonly jira: JiraGateway,
     private readonly store: ContractStore,
+    private readonly graph: GraphLookup,
   ) {}
 
   /** The contract of a work item and where its proof stands. */
@@ -325,9 +353,13 @@ export class AgentService {
     if (!criterion || !evidence) throw new Error('The evidence was recorded but could not be read back.');
     const passedChecks = evidence.standing !== 'failed_checks';
     const open = view.summary.unproven + view.summary.rejected;
+    // The reviewer will see what the graph holds about this link, so the agent hears it first.
+    const linked = passedChecks && graphCovers(evidence) ? await this.graph.linked(view.issue.id) : null;
+    const note = linked ? compareWithGraph(evidence, linked) : null;
     const next = passedChecks
       ? [
           'Recorded. It passed the automatic checks and now waits for a review by a person or the Proof Verifier. You cannot accept it yourself.',
+          note?.finding === 'not_linked' ? HOW_JIRA_LINKS : '',
           open > 0 ? `${count(open, 'criterion still needs', 'criteria still need')} evidence.` : '',
         ]
           .filter(Boolean)
@@ -337,6 +369,7 @@ export class AgentService {
       evidenceId,
       passedChecks,
       problems: failedChecks(evidence),
+      ...(note ? { graph: note.text } : {}),
       criterion: toAgentCriterion(criterion),
       proof: toProof(view),
       gate: toGate(view),
@@ -347,7 +380,11 @@ export class AgentService {
   /** Everything an agent should read before it starts on a work item. */
   async contextPack(issueKey: unknown, caller: Caller): Promise<ContextPack> {
     const view = await this.contracts.view(asText(issueKey), caller);
-    const [issue, context] = await Promise.all([this.jira.getIssue(view.issue.id, 'user'), this.jira.getIssueContext(view.issue.id, 'user')]);
+    const [issue, context, linked] = await Promise.all([
+      this.jira.getIssue(view.issue.id, 'user'),
+      this.jira.getIssueContext(view.issue.id, 'user'),
+      this.graph.linked(view.issue.id),
+    ]);
     const parent = issue?.parentKey ? await this.jira.getIssue(issue.parentKey, 'user') : null;
     const description = clip(adfText(issue?.description).trim(), DESCRIPTION_LIMIT);
     const parentText = parent ? clip(adfText(parent.description).trim(), PARENT_LIMIT).text : '';
@@ -381,6 +418,8 @@ export class AgentService {
         : {}),
       ...(comments.length > 0 ? { comments } : {}),
       ...(context && context.commentTotal > comments.length ? { commentTotal: context.commentTotal } : {}),
+      ...(linked && linked.items.length > 0 ? { development: linked.items.map(toAgentLinked) } : {}),
+      ...(linked && linked.partial.length > 0 ? { developmentCut: true as const } : {}),
       contract: toAgentContract(view),
       rules: proofRules(view.policy),
     };
@@ -421,11 +460,17 @@ export class AgentService {
   async reviewQueue(issueKey: unknown, caller: Caller): Promise<ReviewQueue> {
     const view = await this.contracts.view(asText(issueKey), caller);
     const issue = await this.jira.getIssue(view.issue.id, 'user');
+    const queued = view.criteria.flatMap((criterion) =>
+      criterion.evidence.filter((evidence) => awaitsReview(evidence.standing, view.policy.requireIndependent)),
+    );
+    // One question to the graph covers every piece that waits on this work item.
+    const linked = queued.some(graphCovers) ? await this.graph.linked(view.issue.id) : null;
     const waiting: ReviewItem[] = [];
     for (const criterion of view.criteria) {
       for (const evidence of criterion.evidence) {
         if (!awaitsReview(evidence.standing, view.policy.requireIndependent)) continue;
         const shown = toAgentEvidence(evidence);
+        const note = linked ? compareWithGraph(evidence, linked) : null;
         waiting.push({
           evidenceId: evidence.id,
           criterionId: criterion.id,
@@ -438,6 +483,7 @@ export class AgentService {
           submittedBy: shown.submittedBy,
           submittedAt: shown.submittedAt,
           checks: evidence.checks.map((check) => check.note),
+          ...(note ? { graph: note.text } : {}),
         });
       }
     }
@@ -452,7 +498,7 @@ export class AgentService {
       workItem: toWorkItem(view.issue),
       description: clip(adfText(issue?.description).trim(), REVIEW_DESCRIPTION_LIMIT).text,
       waiting,
-      rules: REVIEW_RULES,
+      rules: waiting.some((item) => item.graph) ? [...REVIEW_RULES, GRAPH_RULE] : REVIEW_RULES,
       next,
     };
   }

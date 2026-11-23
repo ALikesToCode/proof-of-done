@@ -1,10 +1,11 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import { AgentService, splitExcerpt, toDecisionWord, toKind } from '../src/services/agent';
 import { Caller, ContractService } from '../src/services/contracts';
+import { GraphService } from '../src/services/graph';
 import { ProjectService } from '../src/services/project';
 import { doc, h, p, ul } from './helpers/adf';
-import { FakeJira, MemoryStore, issueInfo } from './helpers/fakes';
+import { FakeGraph, FakeJira, MemoryStore, issueInfo } from './helpers/fakes';
 
 const AGENT: Caller = { accountId: 'alice', via: 'agent', agentName: 'claude-code' };
 const ALICE: Caller = { accountId: 'alice', via: 'ui' };
@@ -16,6 +17,7 @@ const HIDDEN = 'No criterion you can see has that id. Call get-done-contract for
 
 let store: MemoryStore;
 let jira: FakeJira;
+let graph: FakeGraph;
 let contracts: ContractService;
 let agent: AgentService;
 let clock: number;
@@ -43,7 +45,8 @@ beforeEach(() => {
   const now = () => clock++;
   jira.clock = () => clock;
   contracts = new ContractService(store, jira, now);
-  agent = new AgentService(contracts, new ProjectService(store, jira, now), jira, store);
+  graph = new FakeGraph();
+  agent = new AgentService(contracts, new ProjectService(store, jira, now), jira, store, new GraphService(contracts, graph, 50));
   addIssue('1', 'MOBL-1', ['The account locks after five failed sign-ins', 'A locked account gets an email'], {
     summary: 'Lock an account after five failed sign-ins',
   });
@@ -228,8 +231,11 @@ describe('the context pack', () => {
     expect(pack.comments).toEqual([{ author: 'Bob Example', at: '2026-11-20T10:00:00.000+0000', text: 'Use the existing lockout table.' }]);
     expect(pack.commentTotal).toBe(7);
     expect(pack.contract.hasContract).toBe(false);
-    expect(pack.rules).toHaveLength(6);
+    expect(pack.rules).toHaveLength(7);
     expect(pack.rules[5]).toBe(
+      "When you submit a pull request or a build, the reviewer sees whether Jira's Teamwork Graph links it to the work item. Jira links a pull request or a build to a work item when the work item key is in the branch name, the pull request title or a commit message.",
+    );
+    expect(pack.rules[6]).toBe(
       'Do not move the work item to a done status before every criterion is proven. The done gate comments on work that is closed without proof.',
     );
   });
@@ -242,7 +248,7 @@ describe('the context pack', () => {
     expect(Object.keys(pack)).toEqual(['workItem', 'description', 'descriptionCut', 'contract', 'rules']);
     expect(pack.description.length).toBeLessThan(12_010);
     expect(pack.descriptionCut).toBe(true);
-    expect(pack.rules).toHaveLength(5);
+    expect(pack.rules).toHaveLength(6);
   });
 });
 
@@ -382,5 +388,137 @@ describe('reviewing evidence as the verifier', () => {
     await store.saveSettings('10000', { ...DEFAULT_SETTINGS, requireIndependent: true });
     const queue = await agent.reviewQueue('MOBL-1', VERIFIER);
     expect(queue.waiting.map((w) => [w.evidenceId, w.submittedBy])).toEqual([[added.evidenceId, 'a person']]);
+  });
+});
+
+describe('what the Teamwork Graph adds', () => {
+  const PR = 'https://github.com/acme/mobile/pull/12';
+  const RUN = 'https://github.com/acme/mobile/actions/runs/881';
+  const RECORDED = 'Recorded. It passed the automatic checks and now waits for a review by a person or the Proof Verifier. You cannot accept it yourself.';
+  const HOW_JIRA_LINKS =
+    'Jira links a pull request or a build to a work item when the work item key is in the branch name, the pull request title or a commit message.';
+
+  const pullRequest = (criterionId: string, extra: Record<string, unknown> = {}) => ({
+    criterionId,
+    kind: 'pull_request',
+    summary: 'The change that locks the account.',
+    url: PR,
+    status: 'merged',
+    ...extra,
+  });
+
+  it('tells the agent at once what Jira holds about its pull request', async () => {
+    const [first] = (await agent.start('MOBL-1', AGENT)).criteria;
+    graph.link('1', [{ state: 'merged' }]);
+    const result = await agent.submit(pullRequest(first!.id), AGENT);
+    expect(result.graph).toBe('The Teamwork Graph links this pull request to the work item and has it as merged.');
+    expect(result.next).toBe(`${RECORDED} 1 criterion still needs evidence.`);
+    expect(graph.asked).toEqual(['1']);
+  });
+
+  it('says how Jira links a pull request when it does not link this one', async () => {
+    const [first] = (await agent.start('MOBL-1', AGENT)).criteria;
+    graph.link('1', [{ url: 'https://github.com/acme/mobile/pull/7' }]);
+    const result = await agent.submit(pullRequest(first!.id), AGENT);
+    expect(result.passedChecks).toBe(true);
+    expect(result.graph).toBe('The Teamwork Graph links 1 pull request to this work item, and this link is not one of them.');
+    expect(result.next).toBe(`${RECORDED} ${HOW_JIRA_LINKS} 1 criterion still needs evidence.`);
+  });
+
+  it('does not ask the graph about a test run, or about evidence the checks turned away', async () => {
+    const [first] = (await agent.start('MOBL-1', AGENT)).criteria;
+    expect((await agent.submit(testRun(first!.id, { url: 'https://ci.example.com/runs/88' }), AGENT)).graph).toBeUndefined();
+    const notAPullRequest = await agent.submit(pullRequest(first!.id, { url: 'https://github.com/acme/mobile' }), AGENT);
+    expect(notAPullRequest.passedChecks).toBe(false);
+    expect(notAPullRequest.graph).toBeUndefined();
+    expect(graph.asked).toEqual([]);
+  });
+
+  it('records the evidence all the same when the graph is down or too slow', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const [first] = (await agent.start('MOBL-1', AGENT)).criteria;
+    for (const mood of ['down', 'slow', 'silent'] as const) {
+      graph.mood = mood;
+      // The app turns away the same evidence twice, so each try words it differently.
+      const result = await agent.submit(pullRequest(first!.id, { summary: `The change that locks the account, with the graph ${mood}.` }), AGENT);
+      expect(result, mood).toMatchObject({ passedChecks: true, problems: [] });
+      expect(result.graph, mood).toBeUndefined();
+      expect(result.next, mood).toBe(`${RECORDED} 1 criterion still needs evidence.`);
+    }
+    expect(store.evidence).toHaveLength(3);
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it('lists what Jira links to the work item in the context pack', async () => {
+    graph.link(
+      '1',
+      [
+        {},
+        { kind: 'build', name: 'CI 881', url: RUN, state: 'in_progress' },
+        { kind: 'deployment', name: 'Deploy 44', url: null, state: 'successful', environment: 'production', provider: null, updatedAt: null },
+      ],
+      ['build'],
+    );
+    const pack = await agent.contextPack('MOBL-1', AGENT);
+    expect(pack.development).toEqual([
+      {
+        kind: 'pull_request',
+        name: '#12 Lock accounts after five failed sign-ins',
+        url: PR,
+        state: 'merged',
+        provider: 'GitHub',
+        updatedAt: '2026-11-20T10:00:00.000Z',
+      },
+      { kind: 'build', name: 'CI 881', url: RUN, state: 'in progress', provider: 'GitHub', updatedAt: '2026-11-20T10:00:00.000Z' },
+      { kind: 'deployment', name: 'Deploy 44', state: 'successful', environment: 'production' },
+    ]);
+    expect(pack.developmentCut).toBe(true);
+    expect(Object.keys(pack)).toEqual(['workItem', 'description', 'development', 'developmentCut', 'contract', 'rules']);
+  });
+
+  it('leaves development out of the context pack when nothing is linked or the graph has no answer', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    for (const mood of ['up', 'down', 'silent'] as const) {
+      graph.mood = mood;
+      const pack = await agent.contextPack('MOBL-1', AGENT);
+      expect(Object.keys(pack), mood).toEqual(['workItem', 'description', 'contract', 'rules']);
+    }
+  });
+
+  it('gives the verifier the graph line next to the evidence, and the rule for reading it', async () => {
+    const [lock, email] = (await agent.start('MOBL-1', AGENT)).criteria;
+    await agent.submit(pullRequest(lock!.id), AGENT);
+    await agent.submit(testRun(email!.id), AGENT);
+    graph.link('1', [{ state: 'open' }]);
+    graph.asked = [];
+
+    const queue = await agent.reviewQueue('MOBL-1', VERIFIER);
+    expect(queue.waiting.map((item) => [item.kind, item.graph])).toEqual([
+      ['pull_request', 'The evidence says this pull request is merged, but the Teamwork Graph has it as open.'],
+      ['test_run', undefined],
+    ]);
+    expect(queue.rules).toHaveLength(6);
+    expect(queue.rules[5]).toBe(
+      "A `graph` line says what Jira's Teamwork Graph holds about the pull request or build behind an entry. Jira got it from the tool itself, so trust it over what the evidence says about itself. Where it says the two differ, reject unless the evidence explains the difference. Where it says the link is not among the ones Jira links to the work item, the link alone proves nothing.",
+    );
+    // One question covers the whole queue.
+    expect(graph.asked).toEqual(['1']);
+  });
+
+  it('keeps the graph out of a review queue it has no say on, and out of one it cannot answer for', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const [lock, email] = (await agent.start('MOBL-1', AGENT)).criteria;
+    await agent.submit(testRun(lock!.id), AGENT);
+    const plain = await agent.reviewQueue('MOBL-1', VERIFIER);
+    expect(plain.waiting).toHaveLength(1);
+    expect(plain.rules).toHaveLength(5);
+    expect(graph.asked).toEqual([]);
+
+    graph.mood = 'down';
+    await agent.submit(pullRequest(email!.id), AGENT);
+    const queue = await agent.reviewQueue('MOBL-1', VERIFIER);
+    expect(queue.waiting).toHaveLength(2);
+    expect(queue.waiting.every((item) => item.graph === undefined)).toBe(true);
+    expect(queue.rules).toHaveLength(5);
   });
 });
