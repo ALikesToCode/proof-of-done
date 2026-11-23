@@ -1,6 +1,6 @@
 import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
-import { IssueInfo, JiraGateway, ProofProperty, RunAs } from '../../src/jira/gateway';
+import { IssueInfo, JiraGateway, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
 import { ContractBundle, ContractRow, ContractStore, EventRow } from '../../src/store/types';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -104,6 +104,47 @@ export class FakeJira implements JiraGateway {
   async setProofProperty(issueId: string, value: ProofProperty): Promise<void> {
     if (this.failPropertyWrites) throw new Error('Jira is down');
     this.properties.set(issueId, clone(value));
+  }
+
+  /** Status id to category key. */
+  statuses = new Map<string, string>([
+    ['1', 'new'],
+    ['3', 'indeterminate'],
+    ['5', 'done'],
+  ]);
+  /** The transitions every work item offers. */
+  transitions: TransitionInfo[] = [
+    { id: '11', name: 'To Do', toStatusId: '1', toStatusName: 'To Do' },
+    { id: '21', name: 'Start', toStatusId: '3', toStatusName: 'In Progress' },
+    { id: '31', name: 'Done', toStatusId: '5', toStatusName: 'Done' },
+  ];
+  comments: Array<{ issueId: string; paragraphs: string[] }> = [];
+  statusLookups = 0;
+  /** Set to make Jira refuse the next moves or comments, as a workflow rule or a permission scheme can. */
+  failTransition = false;
+  failComment = false;
+
+  async getStatusCategory(statusId: string): Promise<string | null> {
+    this.statusLookups++;
+    return this.statuses.get(statusId) ?? null;
+  }
+
+  async listTransitions(): Promise<TransitionInfo[]> {
+    return clone(this.transitions);
+  }
+
+  async transition(issueId: string, transitionId: string): Promise<void> {
+    const transition = this.transitions.find((t) => t.id === transitionId);
+    const issue = this.issues.get(issueId);
+    if (!transition || !issue) throw new Error('No such transition');
+    if (this.failTransition) throw new Error('Jira returned 400 when moving the work item.');
+    issue.statusName = transition.toStatusName;
+    issue.statusCategory = this.statuses.get(transition.toStatusId) ?? 'indeterminate';
+  }
+
+  async addComment(issueId: string, paragraphs: string[]): Promise<void> {
+    if (this.failComment) throw new Error('Jira returned 403 when commenting.');
+    this.comments.push({ issueId, paragraphs: [...paragraphs] });
   }
 }
 

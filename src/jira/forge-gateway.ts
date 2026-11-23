@@ -1,6 +1,6 @@
 import api, { route } from '@forge/api';
-import { AdfNode } from '../core/adf';
-import { IssueInfo, JiraGateway, PROOF_PROPERTY_KEY, ProofProperty, RunAs } from './gateway';
+import { AdfNode, adfParagraphs } from '../core/adf';
+import { IssueInfo, JiraGateway, PROOF_PROPERTY_KEY, ProofProperty, RunAs, TransitionInfo } from './gateway';
 
 const ISSUE_FIELDS = 'summary,description,issuetype,status,assignee,parent,project';
 
@@ -65,5 +65,41 @@ export class ForgeJiraGateway implements JiraGateway {
       body: JSON.stringify(value),
     });
     if (!response.ok) throw new Error(`Jira returned ${response.status} when saving the proof state of work item ${issueId}.`);
+  }
+
+  async getStatusCategory(statusId: string): Promise<string | null> {
+    const response = await api.asApp().requestJira(route`/rest/api/3/status/${statusId}`, { headers: { Accept: 'application/json' } });
+    if (!response.ok) return null;
+    return text(object(object(await response.json())['statusCategory'])['key']) || null;
+  }
+
+  async listTransitions(issueId: string): Promise<TransitionInfo[]> {
+    const response = await api.asApp().requestJira(route`/rest/api/3/issue/${issueId}/transitions`, { headers: { Accept: 'application/json' } });
+    if (!response.ok) throw new Error(`Jira returned ${response.status} when listing the transitions of work item ${issueId}.`);
+    const transitions = object(await response.json())['transitions'];
+    if (!Array.isArray(transitions)) return [];
+    return transitions.map((raw) => {
+      const transition = object(raw);
+      const to = object(transition['to']);
+      return { id: text(transition['id']), name: text(transition['name']), toStatusId: text(to['id']), toStatusName: text(to['name']) };
+    });
+  }
+
+  async transition(issueId: string, transitionId: string): Promise<void> {
+    const response = await api.asApp().requestJira(route`/rest/api/3/issue/${issueId}/transitions`, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transition: { id: transitionId } }),
+    });
+    if (!response.ok) throw new Error(`Jira returned ${response.status} when moving work item ${issueId}.`);
+  }
+
+  async addComment(issueId: string, paragraphs: string[]): Promise<void> {
+    const response = await api.asApp().requestJira(route`/rest/api/3/issue/${issueId}/comment`, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ body: adfParagraphs(paragraphs) }),
+    });
+    if (!response.ok) throw new Error(`Jira returned ${response.status} when commenting on work item ${issueId}.`);
   }
 }
