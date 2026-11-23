@@ -103,11 +103,11 @@ Evidence for a pull request or a build says what its author says. Jira often kno
 | Confirmed | The graph links this pull request, build or deployment to the work item, and its state agrees with the evidence |
 | Differs | The graph links it and holds a state that contradicts the evidence, such as a pull request that is still open or a deployment that failed |
 | Not linked | The graph links others of its kind to the work item, and this link is not one of them |
-| No record | The graph has nothing that settles it. No development tool is connected, or the list was too long to read in full |
+| No record | The graph has nothing that settles it. No development tool is connected, or the app did not get the whole list |
 
 The note shows up in four places.
 
-- The Review dialog shows it under the checks the app ran.
+- The Review dialog shows it under the checks the app ran. When the graph gives no answer, the dialog says so and offers to ask again.
 - `list-evidence-to-review` gives the Proof Verifier a `graph` line per entry, and a rule that says to trust it over what the evidence says about itself.
 - `submit-evidence` answers with the same line, so a coding agent hears it before the reviewer does. When Jira does not link the pull request, the answer says how Jira links one.
 - `get-context-pack` lists what Jira already links to the work item, under `development`.
@@ -119,12 +119,15 @@ How the app reads the graph:
 - One GraphQL operation, `proofofdone_linkedDevelopment`, asks three of the graph's curated queries for the work item. `jiraWorkItemLinkedExternalPullRequests` and `jiraWorkItemLinkedExternalDeployments` give pull requests and deployments. Builds have no query of their own, so they come from `jiraWorkItemDevelopmentArtifacts`.
 - The call goes through `requestTeamworkGraph` as the person using the app, so the graph returns only what that person may see.
 - The scopes are `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`. All four only read.
-- The graph gives at most 25 rows per query. When a list is cut, the note says the list was incomplete. It does not claim that a link is missing.
-- The app waits four seconds. A slow answer, an error or a refusal reads as no note, and the review goes on without one.
+- The graph gives at most 25 rows per page. Builds share their list with every commit and branch of the work item, so the app reads up to three more pages for them, 100 artifacts in all. When a list is still cut, the note says the list was incomplete. It does not claim that a link is missing.
+- The graph can refuse one list and answer for another in the same call. The app asks again for a list or a page the graph refused, up to twice, and gives everything after its first question three seconds. A list it still lacks counts as incomplete, and the lists that answered still count.
+- A page or a tool waits four seconds for the graph. With no answer by then, the review goes on without a note.
 - A title or a name in the graph is text from outside Jira, and a note goes to the Proof Verifier. So a note is made of the app's own words. States are mapped to a fixed list. The only outside text that can enter is the environment of a deployment, and only when it is one plain word such as `production`.
 - Evidence matches a graph entry when both links point at the same page. Case, the query string and a trailing slash are ignored. A page under it, such as the files tab of a pull request, also matches.
 
-On 23 Nov the development site had no development tool connected. The real query ran there through Forge and came back with empty lists, which the app reads as "No record". Unit tests cover the comparison on answers in the graph's shape. It has not yet run against a real linked pull request.
+On 23 Nov the development site had no code host connected, and the real query came back with empty lists, which the app reads as "No record". For one check, a temporary build of the app then reported two pull requests, two builds and a deployment for a scratch work item through Jira's development information API, the channel a code host uses. About a minute later the graph returned all five. The app gave the right note for seven pieces of sample evidence: confirmed, differs and not linked for pull requests and for builds, and "successful in production" for the deployment. That build and its data are gone. A pull request from a real code host has not been tried yet.
+
+The same test showed that the graph does not always answer. On 23 Nov it refused single lists with "User is not permitted to query this organization", under HTTP 200. That happened for about half an hour after each deploy of a new minor version, and again in the evening with no deploy near it. In between, four probes in a row got all of their lists. Atlassian reported a degraded authentication service that evening, so a normal day may look better. The calls were made on a person's behalf from a background function, so a call from the Review dialog may fare differently too. Either way the app asks again, and the dialog says when it got no answer. In the last live run the graph refused lists in most calls. The app still gave the right note for two of five pieces of evidence, said for two that its list was incomplete, and had no note for one. The context pack got all five linked items after asking again.
 
 ## How it is built
 
@@ -134,14 +137,14 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Not yet checked in a browser |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 283 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 295 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Not yet checked in a browser |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
 | Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Not yet tried in Rovo chat |
-| Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. One real query answered on the development site, with empty lists because no development tool is connected there. Not yet seen with a real linked pull request, and not yet checked in a browser |
+| Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. Verified on the development site against pull requests, builds and a deployment that a test provider reported to Jira. Not yet seen with a pull request from a real code host, and not yet checked in a browser |
 
 ## Decisions and their reasons
 

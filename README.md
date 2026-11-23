@@ -67,7 +67,7 @@ Evidence for a pull request or a build says what its author says. When a code ho
 | Not linked | The graph links other pull requests or builds to the work item, and this link is not one of them |
 | No record | The graph has nothing to compare with |
 
-To see more than "No record", the site needs a development tool connected, such as GitHub or Bitbucket, and a pull request with the work item key in its title. Add that pull request as evidence on the work item. The note is in the dialog that opens from Review, or from Reject on evidence you entered yourself.
+To see more than "No record", the site needs a development tool connected, such as GitHub or Bitbucket, and a pull request with the work item key in its title. Add that pull request as evidence on the work item. The note is in the dialog that opens from Review, or from Reject on evidence you entered yourself. When the graph does not answer, the dialog says so and has an Ask again button.
 
 The note is advice for the reviewer. It never accepts or rejects, and the done gate does not read it. The Proof Verifier gets the same note with each piece of evidence, and a coding agent gets it in the answer to `submit-evidence`.
 
@@ -114,6 +114,8 @@ forge install -e development --product jira --site <your-site>.atlassian.net
 ```
 
 `forge register` runs once and writes your own app id into `manifest.yml`.
+
+On 23 Nov 2026 the Teamwork Graph refused some of the app's queries for up to half an hour after each `forge deploy` on the development site. When the Review dialog says that the graph did not answer, ask again a little later.
 
 | Path | What is in it |
 | --- | --- |
