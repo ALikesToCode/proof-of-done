@@ -123,7 +123,7 @@ export interface ContextPack {
   commentTotal?: number;
   /** The pull requests, builds and deployments that Jira's Teamwork Graph links to the work item. */
   development?: AgentLinkedItem[];
-  /** Present when the graph holds more than the ones listed. */
+  /** Present when the list may be incomplete: the graph holds more than the ones listed, or it left a part out. */
   developmentCut?: true;
   contract: AgentContract;
   /** What an agent has to know about how proof works here. */

@@ -271,15 +271,41 @@ describe('reading the answer of the graph', () => {
   it('marks what it did not read in full', () => {
     const data = { pullRequests: page([], true), deployments: page([]), artifacts: page([], true) };
     expect(toLinkedWork({ data })?.partial).toEqual(['pull_request', 'build']);
-    // Builds are an extra. Without them the rest still counts.
-    expect(toLinkedWork({ data: { pullRequests: page([]), deployments: page([]), artifacts: null } })).toEqual({ items: [], partial: ['build'] });
   });
 
-  it('gives no answer when the graph refused the query or left out a part it needs', () => {
+  // Seen on the development site: the graph answers for one list and refuses another in the same call.
+  const REFUSED = { message: 'User is not permitted to query this organization' };
+
+  it('keeps the lists the graph answered for when it refuses the others', () => {
+    expect(toLinkedWork({ data: { pullRequests: page([]), deployments: page([]), artifacts: null } })).toEqual({ items: [], partial: ['build'] });
+    expect(toLinkedWork({ data: { pullRequests: page([]), deployments: null, artifacts: page([]) }, errors: [REFUSED] })).toEqual({ items: [], partial: ['deployment'] });
+    const onlyBuilds = toLinkedWork({ data: { pullRequests: null, deployments: null, artifacts: ANSWER.data.artifacts }, errors: [REFUSED, REFUSED] });
+    expect(onlyBuilds?.items.map((item) => item.name)).toEqual(['Build 881']);
+    expect(onlyBuilds?.partial).toEqual(['pull_request', 'deployment']);
+  });
+
+  it('does not call a link missing from a list the graph refused', () => {
+    const onlyBuilds = toLinkedWork({ data: { pullRequests: null, deployments: null, artifacts: ANSWER.data.artifacts }, errors: [REFUSED, REFUSED] })!;
+    expect(compareWithGraph(evidence('pull_request', PR, { status: 'merged' }), onlyBuilds)).toEqual({
+      finding: 'no_record',
+      text: 'The Teamwork Graph gave the app an incomplete list for this work item, and this link is not in the part it read.',
+    });
+    // What it did answer for still counts.
+    expect(compareWithGraph(evidence('build', RUN, { status: 'passed' }), onlyBuilds)).toEqual({
+      finding: 'differs',
+      text: 'The Teamwork Graph links this build to the work item, but has it as failed.',
+    });
+    const onlyPullRequests = toLinkedWork({ data: { pullRequests: ANSWER.data.pullRequests, deployments: null, artifacts: null }, errors: [REFUSED, REFUSED] })!;
+    expect(compareWithGraph(evidence('pull_request', PR, { status: 'merged' }), onlyPullRequests)?.finding).toBe('confirmed');
+    expect(compareWithGraph(evidence('pull_request', 'https://github.com/acme/mobile/pull/99'), onlyPullRequests)?.finding).toBe('not_linked');
+    expect(compareWithGraph(evidence('build', RUN), onlyPullRequests)?.finding).toBe('no_record');
+  });
+
+  it('gives no answer when the graph refused the whole query', () => {
     expect(toLinkedWork({ errors: [{ message: 'Validation error' }] })).toBeNull();
     expect(toLinkedWork({ data: null })).toBeNull();
-    expect(toLinkedWork({ data: { pullRequests: null, deployments: null, artifacts: null }, errors: [{ message: 'Auth' }] })).toBeNull();
-    expect(toLinkedWork({ data: { pullRequests: page([]), deployments: null, artifacts: page([]) } })).toBeNull();
+    expect(toLinkedWork({ data: {} })).toBeNull();
+    expect(toLinkedWork({ data: { pullRequests: null, deployments: null, artifacts: null }, errors: [REFUSED] })).toBeNull();
     expect(toLinkedWork('<html>')).toBeNull();
     expect(toLinkedWork(null)).toBeNull();
   });
@@ -423,6 +449,16 @@ describe('asking the graph through Forge', () => {
     expect(await new ForgeGraphGateway().linkedWork('10001')).toBeNull();
     expect(console.warn).toHaveBeenCalledTimes(1);
     expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph answered 403.');
+  });
+
+  it('passes on the lists that answered when the graph refuses one, and logs one line', async () => {
+    const body = { data: { ...ANSWER.data, deployments: null }, errors: [{ message: 'User is not permitted to query this organization' }, { message: 'Null in a non null field' }] };
+    forge.request.mockResolvedValue(answer(body));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'build']);
+    expect(linked?.partial).toEqual(['deployment']);
+    expect(console.warn).toHaveBeenCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph reported 2 problem(s). User is not permitted to query this organization');
   });
 
   it('gives no answer when the graph reports errors and no data', async () => {

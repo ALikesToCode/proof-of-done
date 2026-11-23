@@ -107,13 +107,12 @@ interface Part {
   type: string;
   kind: LinkedKind;
   read: (node: Json) => LinkedItem;
-  required: boolean;
 }
 
-const ARTIFACTS: Part = { field: 'artifacts', type: 'ExternalBuild', kind: 'build', read: build, required: false };
+const ARTIFACTS: Part = { field: 'artifacts', type: 'ExternalBuild', kind: 'build', read: build };
 const PARTS: Part[] = [
-  { field: 'pullRequests', type: 'ExternalPullRequest', kind: 'pull_request', read: pullRequest, required: true },
-  { field: 'deployments', type: 'ExternalDeployment', kind: 'deployment', read: deployment, required: true },
+  { field: 'pullRequests', type: 'ExternalPullRequest', kind: 'pull_request', read: pullRequest },
+  { field: 'deployments', type: 'ExternalDeployment', kind: 'deployment', read: deployment },
   ARTIFACTS,
 ];
 
@@ -129,27 +128,28 @@ function readPage(connection: unknown, part: Part): { items: LinkedItem[]; more:
 }
 
 /**
- * Turns the answer to LINKED_QUERY into the app's own shape. Null when the graph did
- * not answer for pull requests or deployments. Builds are an extra: when their part
- * is missing, the rest still counts and builds are marked as not read in full.
+ * Turns the answer to LINKED_QUERY into the app's own shape. The graph can answer for
+ * one list and refuse another in the same call. A list it left out is marked as not
+ * read in full, and the rest still counts. Null when it gave none of the lists.
  */
 export function toLinkedWork(body: unknown): LinkedWork | null {
   const data = object(body)['data'];
   if (!data || typeof data !== 'object') return null;
   const items: LinkedItem[] = [];
   const partial: LinkedKind[] = [];
+  let answered = 0;
   for (const part of PARTS) {
     const connection = object(data)[part.field];
     if (!connection || typeof connection !== 'object') {
-      if (part.required) return null;
       partial.push(part.kind);
       continue;
     }
+    answered++;
     const page = readPage(connection, part);
     items.push(...page.items);
     if (page.more) partial.push(part.kind);
   }
-  return { items, partial };
+  return answered > 0 ? { items, partial } : null;
 }
 
 /** Where the next page of artifacts starts, when the graph says there is one. */
