@@ -1,4 +1,5 @@
 import { migrationRunner } from '@forge/sql';
+import { isSchemaBehind } from './sql-errors';
 
 /**
  * Schema for Forge SQL (MySQL-compatible, backed by TiDB). Forge SQL has no foreign
@@ -123,21 +124,6 @@ export function migrate(): Promise<string[]> {
     });
   }
   return running;
-}
-
-const SCHEMA_BEHIND = /doesn't exist|does not exist|unknown column|no such table|\b1146\b|\b1054\b|42S02|42S22/i;
-
-/** True when a query failed because the schema has not been created or is out of date. */
-export function isSchemaBehind(error: unknown): boolean {
-  if (!error || typeof error !== 'object') return false;
-  const e = error as { message?: unknown; code?: unknown; context?: unknown };
-  let haystack = `${String(e.message ?? '')} ${String(e.code ?? '')}`;
-  try {
-    haystack += ' ' + JSON.stringify(e.context ?? '');
-  } catch {
-    // The context was not serialisable. The message is enough.
-  }
-  return SCHEMA_BEHIND.test(haystack);
 }
 
 /**
