@@ -27,6 +27,7 @@ import {
 } from '../core/types';
 import { IssueInfo, JiraGateway } from '../jira/gateway';
 import { ContractBundle, ContractStore } from '../store/types';
+import { saveProof } from './proof-sync';
 import {
   ContractView,
   CriterionInput,
@@ -344,22 +345,7 @@ export class ContractService {
     } else if (before.state === 'proven' && summary.state !== 'proven') {
       await this.record(issue, caller, 'proof.reopened', { proven: summary.proven, total: summary.total });
     }
-    const now = this.now();
-    await this.store.saveSummary(issue.id, summary, now);
-    try {
-      await this.jira.setProofProperty(issue.id, {
-        state: summary.state,
-        proven: summary.proven,
-        total: summary.total,
-        open: summary.total - summary.proven,
-        selfReviewed: summary.selfReviewed,
-        updated: new Date(now).toISOString(),
-      });
-    } catch (error) {
-      // The contract is the source of truth. The property is a copy for JQL, and the
-      // next change or the daily sync writes it again.
-      console.error(`Proof of Done: could not write the proof property of ${issue.key}.`, error);
-    }
+    await saveProof(this.store, this.jira, issue, summary, this.now());
     return buildView(issue, bundle, settings, caller, true);
   }
 
