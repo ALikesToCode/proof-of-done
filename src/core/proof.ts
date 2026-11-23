@@ -36,6 +36,15 @@ export function isIndependent(
   return decider.actorAccountId !== evidence.actorAccountId;
 }
 
+/**
+ * A person's attestation is their own word, so no second person has to accept it.
+ * It counts as independent when the person is not the one the work is assigned to.
+ */
+export function attestationIndependent(attesterAccountId: string | null, assigneeAccountId: string | null): boolean {
+  if (!attesterAccountId) return false;
+  return attesterAccountId !== assigneeAccountId;
+}
+
 /** The verdict that currently stands for a piece of evidence: the newest one. */
 export function latestVerdict(evidenceId: string, verdicts: Verdict[]): Verdict | null {
   let latest: Verdict | null = null;
