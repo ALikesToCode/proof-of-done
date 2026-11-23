@@ -100,12 +100,12 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 
 | Part | Forge module | State on 23 Nov |
 | --- | --- | --- |
-| Issue panel | `jira:issuePanel`, UI Kit | Built, deployed to the development site |
+| Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Not yet checked in a browser |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 235 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 237 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
-| Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, the pages are not yet checked in a browser |
+| Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Not yet checked in a browser |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
 | Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Not yet tried in Rovo chat |
