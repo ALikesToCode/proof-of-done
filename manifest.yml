@@ -18,6 +18,8 @@ modules:
       handler: index.onIssueUpdated
     - key: validate-done
       handler: index.validateDone
+    - key: on-issue-deleted
+      handler: index.onIssueDeleted
   trigger:
     - key: app-installed
       function: on-installed
@@ -35,6 +37,12 @@ modules:
           && event.changelog.items.some(item => item.field == 'status')
           && event.associatedStatuses.some(status => status.statusCategory.key == 'done')
         onError: RECEIVE_AND_LOG
+    - key: work-item-deleted
+      function: on-issue-deleted
+      events:
+        - avi:jira:deleted:issue
+      filter:
+        ignoreSelf: true
   jira:workflowValidator:
     - key: proof-is-complete
       name: Proof of Done is complete

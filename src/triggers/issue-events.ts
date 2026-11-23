@@ -2,7 +2,8 @@ import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { GateService, StatusChange, ValidatorResult } from '../services/gate';
 import { SqlContractStore } from '../store/sql-store';
 
-const gate = new GateService(new SqlContractStore(), new ForgeJiraGateway());
+const store = new SqlContractStore();
+const gate = new GateService(store, new ForgeJiraGateway());
 
 type Json = Record<string, unknown>;
 const object = (value: unknown): Json => (value && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : {});
@@ -47,6 +48,19 @@ export async function onIssueUpdated(event: unknown): Promise<void> {
   if (!change) return;
   const action = await gate.onStatusChange(change);
   if (action !== 'ignored') console.log(`Proof of Done: status change on work item ${change.issueId}: ${action}.`);
+}
+
+/** The id of the work item a "deleted" event is about, or null when the event names none. */
+export function deletedIssueId(event: unknown): string | null {
+  return text(object(object(event)['issue'])['id']) || null;
+}
+
+/** Jira tells the app a work item was deleted. Its contract and proof go with it. */
+export async function onIssueDeleted(event: unknown): Promise<void> {
+  const issueId = deletedIssueId(event);
+  if (!issueId) return;
+  await store.purgeIssue(issueId);
+  console.log(`Proof of Done: work item ${issueId} was deleted, so its contract is gone too.`);
 }
 
 /** The workflow validator: Jira asks whether a transition may go ahead. */
