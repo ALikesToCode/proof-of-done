@@ -21,7 +21,7 @@ describe('extractCriteria', () => {
       'Conduct thorough security testing to identify and address any vulnerabilities.',
       'Provide clear user instructions for setting up and using two-factor authentication.',
     ]);
-    expect(found.map((c) => c.requiredKind)).toEqual(['any', 'test_run', 'document']);
+    expect(found.map((c) => c.suggestedKind)).toEqual(['any', 'test_run', 'document']);
     expect(found[0]?.anchor).toBe('Acceptance Criteria');
   });
 

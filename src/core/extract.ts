@@ -12,7 +12,11 @@ export interface ExtractedCriterion {
   text: string;
   /** The heading or label the text was found under, as written in the description. */
   anchor: string;
-  requiredKind: RequiredKind;
+  /**
+   * A guess at the kind of evidence the wording calls for. The contract does not
+   * enforce it: a keyword match is too weak a reason to turn evidence away.
+   */
+  suggestedKind: RequiredKind;
 }
 
 const MAX_CRITERIA = 40;
@@ -182,7 +186,7 @@ function add(c: Collector, raw: string, anchor: string): void {
   const key = text.toLowerCase();
   if (c.seen.has(key)) return;
   c.seen.add(key);
-  c.out.push({ text, anchor, requiredKind: suggestKind(text) });
+  c.out.push({ text, anchor, suggestedKind: suggestKind(text) });
 }
 
 const KIND_HINTS: Array<[RequiredKind, RegExp]> = [
@@ -194,8 +198,9 @@ const KIND_HINTS: Array<[RequiredKind, RegExp]> = [
 ];
 
 /**
- * A first guess at the kind of evidence a criterion needs, from its wording. It is a
- * default the team can change, so it leans towards `any` when nothing clearly matches.
+ * A first guess at the kind of evidence a criterion needs, from its wording. The
+ * evidence form uses it to pre-select a kind. It leans towards `any` when nothing
+ * clearly matches.
  */
 export function suggestKind(text: string): RequiredKind {
   for (const [kind, pattern] of KIND_HINTS) {
