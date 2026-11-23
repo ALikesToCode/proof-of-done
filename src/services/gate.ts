@@ -26,6 +26,11 @@ export interface ValidatorResult {
 
 const PANEL_HINT = 'Add or review evidence in the Proof of Done panel.';
 
+/** The comment the gate leaves on a work item that reached a done status without proof. */
+export function doneWithoutProofComment(issueKey: string, statusName: string, reason: string): string[] {
+  return [`${issueKey} is ${statusName}, but it is not proven. ${reason}`, PANEL_HINT];
+}
+
 /**
  * The done gate. It answers one question for a work item that is being closed: is
  * every criterion of its contract proven? What happens on a "no" is the project's
@@ -91,10 +96,7 @@ export class GateService {
 
     // The fact goes in before the comment, so a comment Jira refuses cannot lose it.
     await this.record(issue, change, 'issue.done', closed);
-    const commented = await this.comment(issue, [
-      `${issue.key} is ${issue.statusName}, but it is not proven. ${decision.reason}`,
-      PANEL_HINT,
-    ]);
+    const commented = await this.comment(issue, doneWithoutProofComment(issue.key, issue.statusName, decision.reason));
     await this.record(issue, change, 'gate.warned', {
       ...base,
       reason: decision.reason,
