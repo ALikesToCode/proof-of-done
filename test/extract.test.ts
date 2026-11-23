@@ -124,6 +124,8 @@ describe('suggestKind', () => {
     ['Changes are code reviewed and merged', 'pull_request'],
     ['The pipeline deploys to staging', 'build'],
     ['README explains the new flag', 'document'],
+    ['Release notes are updated', 'document'],
+    ['The release is tagged', 'build'],
     ['The button is blue', 'any'],
   ])('%s -> %s', (text, kind) => {
     expect(suggestKind(text)).toBe(kind);

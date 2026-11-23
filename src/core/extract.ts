@@ -193,7 +193,8 @@ const KIND_HINTS: Array<[RequiredKind, RegExp]> = [
   ['attestation', /\b(approv\w*|sign[- ]?off|signed off|confirm(?:ed|s)? by|stakeholder|product owner|legal review)\b/i],
   ['test_run', /\b(tests?|tested|testing|regression|coverage|unit|e2e|end-to-end|qa|verif(?:y|ied) that)\b/i],
   ['pull_request', /\b(pull request|merge request|code review|reviewed|merged)\b/i],
-  ['build', /\b(builds?|compiles?|pipeline|ci|deploy(?:ed|s|ment)?|released?)\b/i],
+  // "Release notes" are a document, so a release only counts as a build when no notes follow it.
+  ['build', /\b(builds?|compiles?|pipeline|ci|deploy(?:ed|s|ment)?|released?(?!\s+notes?\b))\b/i],
   ['document', /\b(document(?:ed|ation)?|docs|instructions|readme|guide|runbook|release notes|changelog)\b/i],
 ];
 
