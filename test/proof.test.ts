@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { awaitsReview, criterionProof, evidenceStanding, gateDecision, isIndependent, summarize } from '../src/core/proof';
+import { awaitsReview, criterionProof, evidenceStanding, gateDecision, isIndependent, proofStateOf, summarize } from '../src/core/proof';
 import { Criterion, Evidence, Verdict } from '../src/core/types';
 
 let clock = 1_000;
@@ -139,6 +139,15 @@ describe('summarize', () => {
   });
 });
 
+describe('proofStateOf', () => {
+  it('calls a work item partly proven only when a criterion is proven', () => {
+    expect(proofStateOf(0, 0)).toBe('none');
+    expect(proofStateOf(3, 0)).toBe('unproven');
+    expect(proofStateOf(3, 1)).toBe('partial');
+    expect(proofStateOf(3, 3)).toBe('proven');
+  });
+});
+
 describe('gateDecision', () => {
   const warn = { gateMode: 'warn' as const, enforceWithoutContract: false };
   it('passes work with no contract unless the project requires one', () => {
@@ -151,8 +160,9 @@ describe('gateDecision', () => {
     const e1 = evidence('e1', 'c1');
     const proven = summarize([c1], [e1], [verdict('v1', e1, 'accepted')], true);
     expect(gateDecision(proven, warn)).toEqual({ pass: true, reason: 'All 1 criteria are proven.' });
-    const partial = summarize([c1, c2], [e1], [], true);
-    expect(gateDecision(partial, warn)).toEqual({
+    const waiting = summarize([c1, c2], [e1], [], true);
+    expect(waiting.state).toBe('unproven');
+    expect(gateDecision(waiting, warn)).toEqual({
       pass: false,
       reason: '2 of 2 criteria are not proven (1 with no evidence, 1 waiting for a check).',
     });

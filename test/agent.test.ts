@@ -120,7 +120,7 @@ describe('submitting evidence as an agent', () => {
       testRun(first!.id, { excerpt: '$ npm test -- lockout\n14 passed (14)', commit: 'a1b2c3d', url: 'https://ci.example.com/runs/88' }),
       AGENT,
     );
-    expect(result).toMatchObject({ passedChecks: true, problems: [], proof: { state: 'partial', proven: 0, total: 2 } });
+    expect(result).toMatchObject({ passedChecks: true, problems: [], proof: { state: 'unproven', proven: 0, total: 2 } });
     expect(result.criterion.state).toBe('waiting_for_review');
     expect(result.criterion.evidence[0]).toMatchObject({
       id: result.evidenceId,

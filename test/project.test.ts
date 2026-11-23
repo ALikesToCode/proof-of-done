@@ -145,7 +145,7 @@ describe('the project overview', () => {
       ['MOBL-2', 'open'],
       ['MOBL-1', 'none'],
     ]);
-    expect(view.rows[1]).toMatchObject({ waiting: 1, proofState: 'partial' });
+    expect(view.rows[1]).toMatchObject({ waiting: 1, proven: 0, proofState: 'unproven' });
     expect(view.contracts.waiting).toBe(1);
   });
 
@@ -229,13 +229,13 @@ describe('project settings', () => {
         '10000',
       );
     }
-    expect((await projects.overview('10000', 7)).rows[0]).toMatchObject({ proofState: 'partial', proven: 0 });
+    expect((await projects.overview('10000', 7)).rows[0]).toMatchObject({ proofState: 'unproven', proven: 0 });
 
     await projects.saveSettings('10000', 'alice', { ...DEFAULT_SETTINGS, requireIndependent: false });
     expect((await projects.overview('10000', 7)).rows[0]).toMatchObject({ proofState: 'proven', proven: 2 });
     expect(jira.properties.get('1')).toMatchObject({ state: 'proven', selfReviewed: 2 });
 
     await projects.saveSettings('10000', 'alice', { ...DEFAULT_SETTINGS, requireIndependent: true });
-    expect((await projects.overview('10000', 7)).rows[0]).toMatchObject({ proofState: 'partial', proven: 0 });
+    expect((await projects.overview('10000', 7)).rows[0]).toMatchObject({ proofState: 'unproven', proven: 0 });
   });
 });

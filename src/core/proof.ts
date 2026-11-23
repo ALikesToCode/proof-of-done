@@ -5,6 +5,7 @@ import {
   EvidenceChannel,
   EvidenceStanding,
   GateMode,
+  ProofState,
   ProofSummary,
   Verdict,
   VerdictChannel,
@@ -100,6 +101,16 @@ export function criterionProof(
   return { ...base, state: 'unproven' };
 }
 
+/**
+ * The proof state of a whole work item. Partly proven means that some criteria are
+ * proven. Evidence that waits for a check proves nothing yet, however much there is.
+ */
+export function proofStateOf(total: number, proven: number): ProofState {
+  if (total <= 0) return 'none';
+  if (proven >= total) return 'proven';
+  return proven > 0 ? 'partial' : 'unproven';
+}
+
 export function summarize(
   criteria: Criterion[],
   evidence: Evidence[],
@@ -114,10 +125,7 @@ export function summarize(
     summary[proof.state]++;
     if (proof.selfReviewed) summary.selfReviewed++;
   }
-  if (summary.total === 0) summary.state = 'none';
-  else if (summary.proven === summary.total) summary.state = 'proven';
-  else if (summary.proven > 0 || summary.submitted > 0) summary.state = 'partial';
-  else summary.state = 'unproven';
+  summary.state = proofStateOf(summary.total, summary.proven);
   return summary;
 }
 

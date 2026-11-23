@@ -48,7 +48,7 @@ Two things an admin should know. A validator left on a workflow after the app is
 
 ## JQL fields
 
-The app copies each contract's state into the work item property `proof-of-done`, and Jira indexes it. `proofState` is `unproven`, `partial` or `proven`. `provenCriteria`, `unprovenCriteria` and `proofCriteria` are numbers. `statusCategory = Done AND proofState != proven` lists closed work that still lacks proof.
+The app copies each contract's state into the work item property `proof-of-done`, and Jira indexes it. `proofState` is `unproven`, `partial` or `proven`. A work item is `partial` once some of its criteria are proven. Evidence that waits for a check does not move it out of `unproven`. `provenCriteria`, `unprovenCriteria` and `proofCriteria` are numbers. `statusCategory = Done AND proofState != proven` lists closed work that still lacks proof.
 
 Anyone who can edit a work item can overwrite that property through the REST API. So the gate and the meter never read it. They read the app's own store.
 

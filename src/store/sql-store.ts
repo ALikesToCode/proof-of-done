@@ -1,4 +1,5 @@
 import { sql } from '@forge/sql';
+import { proofStateOf } from '../core/proof';
 import { normalizeSettings } from '../core/settings';
 import {
   CheckResult,
@@ -10,7 +11,6 @@ import {
   EvidenceDetails,
   EvidenceKind,
   ProjectSettings,
-  ProofState,
   ProofSummary,
   RequiredKind,
   Verdict,
@@ -284,13 +284,14 @@ export class SqlContractStore implements ContractStore {
   async listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]> {
     const capped = Math.max(1, Math.min(500, Math.floor(limit)));
     const rows = await select(
-      `SELECT issue_id, issue_key, proof_state, total_count, proven_count, submitted_count, rejected_count, updated_at FROM pod_contracts WHERE project_id = ? ORDER BY updated_at DESC, issue_id LIMIT ${capped}`,
+      `SELECT issue_id, issue_key, total_count, proven_count, submitted_count, rejected_count, updated_at FROM pod_contracts WHERE project_id = ? ORDER BY updated_at DESC, issue_id LIMIT ${capped}`,
       projectId,
     );
+    // The state comes from the counts, so a row written under an older rule still reads right.
     return rows.map((row) => ({
       issueId: str(row['issue_id']),
       issueKey: str(row['issue_key']),
-      proofState: str(row['proof_state']) as ProofState,
+      proofState: proofStateOf(num(row['total_count']), num(row['proven_count'])),
       total: num(row['total_count']),
       proven: num(row['proven_count']),
       submitted: num(row['submitted_count']),

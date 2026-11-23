@@ -229,8 +229,8 @@ describe('submitting evidence', () => {
     const view = await contractWithEvidence();
     expect(view.criteria[0]!.state).toBe('submitted');
     expect(firstEvidence(view)).toMatchObject({ standing: 'pending', channel: 'ui', actorAccountId: 'alice', agentName: null });
-    expect(view.summary).toMatchObject({ submitted: 1, unproven: 2, state: 'partial' });
-    expect(jira.properties.get('10001')).toMatchObject({ state: 'partial', proven: 0 });
+    expect(view.summary).toMatchObject({ submitted: 1, unproven: 2, state: 'unproven' });
+    expect(jira.properties.get('10001')).toMatchObject({ state: 'unproven', proven: 0 });
   });
 
   it('stores evidence that fails a check, but it proves nothing', async () => {
