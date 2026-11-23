@@ -13,7 +13,7 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 3. Someone adds evidence against a criterion: a test run, a build, a pull request, a document, a person's attestation, or something else with a link or excerpt.
 4. The app runs mechanical checks on the evidence the moment it arrives. A test run with failures, a pull request link that is not a pull request, or a build with no result is turned away with the reason.
 5. Evidence that passes the checks waits for a review. A person or the Proof Verifier agent accepts or rejects it, with a reason.
-6. When the work item moves to a done status without proof, the done gate reacts. Depending on the project setting it comments, moves the work item back, or does nothing.
+6. When the work item moves to a done status without proof, the done gate reacts. Depending on the project setting it comments, moves the work item back, or does nothing. An admin can also add the app's validator to a workflow transition, and then Jira refuses the transition outright.
 7. The project page shows the meter and the list of work items that are done but not proven.
 
 ## What an agent does with it
@@ -33,6 +33,25 @@ The Proof Verifier is a Rovo agent. It reads the evidence that is waiting, decid
 - Changing a criterion retires its evidence. Proof given for one wording is never read as proof of another.
 - Evidence, verdicts and events are append-only. The history shows every one.
 
+## The done gate
+
+A work item with a contract should not pass as Done while a criterion is unproven. The app holds that line in two ways, and the project decides how strict it is.
+
+- **After the fact.** The app listens for status changes into or out of a done status. Jira promises delivery within 3 minutes. On the development site it took about a second. In warn mode the app comments on the work item and says what is missing. In bounce mode it moves the work item back to the status it came from, and only there. If the workflow has no such transition, or Jira refuses it, the app falls back to the comment. Off does nothing.
+- **Before the fact.** An admin adds the "Proof of Done is complete" validator to a workflow transition. Jira then refuses that transition and shows what is missing. The validator blocks in warn and bounce mode and stands down when the gate is off.
+
+A work item with no contract passes both, unless the project requires a contract.
+
+Every reaction goes into the event log as `issue.done`, `issue.reopened`, `gate.warned`, `gate.bounced` or `gate.blocked`, and the meter reads them from there. Jira can deliver one status change twice. The app recognises the repeat by Jira's change id and ignores it.
+
+Two things an admin should know. A validator left on a workflow after the app is uninstalled blocks that transition, so remove it first. And an error inside the app's check lets the transition through, because a broken app must not lock a team out of its own workflow.
+
+## JQL fields
+
+The app copies each contract's state into the work item property `proof-of-done`, and Jira indexes it. `proofState` is `unproven`, `partial` or `proven`. `provenCriteria`, `unprovenCriteria` and `proofCriteria` are numbers. `statusCategory = Done AND proofState != proven` lists closed work that still lacks proof.
+
+Anyone who can edit a work item can overwrite that property through the REST API. So the gate and the meter never read it. They read the app's own store.
+
 ## How it is built
 
 The app is deterministic. It stores contracts, evidence and verdicts, runs the checks and enforces the gate. All language-model reasoning happens in Rovo agents or in the outside coding agent, so the app makes no LLM calls and costs nothing to run per verdict.
@@ -41,10 +60,10 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built, deployed to the development site |
 | Storage | `sql` (Forge SQL), six tables | Built, verified on the development site |
-| Rules and service | plain TypeScript, no Forge imports in the core | Built, 111 unit tests |
-| Done gate | `trigger` on work item updates, `jira:workflowValidator` | Next |
-| JQL fields | `jira:entityProperty` on the `proof-of-done` property | Next |
-| Project page, meter, sample data | `jira:projectPage`, `jira:projectSettingsPage` | After the gate |
+| Rules and service | plain TypeScript, no Forge imports in the core | Built, 134 unit tests |
+| Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
+| JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
+| Project page, meter, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Next |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | After the project page |
 | Proof Verifier | `rovo:agent` with `rovo:skill` | After the agent tools |
 | Linked pages and pull requests | Teamwork Graph API | Last |
