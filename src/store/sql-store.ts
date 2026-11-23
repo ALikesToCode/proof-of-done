@@ -10,13 +10,14 @@ import {
   EvidenceDetails,
   EvidenceKind,
   ProjectSettings,
+  ProofState,
   ProofSummary,
   RequiredKind,
   Verdict,
   VerdictChannel,
 } from '../core/types';
 import { withSchema } from './schema';
-import { ContractBundle, ContractRow, ContractStore, EventRow } from './types';
+import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from './types';
 
 type Row = Record<string, unknown>;
 
@@ -125,6 +126,9 @@ function toEvent(row: Row): EventRow {
     data: parseJson<Record<string, unknown>>(row['data_json'], {}),
   };
 }
+
+/** Every table that holds rows about a work item, in the order a purge empties them. */
+const ISSUE_TABLES = ['pod_verdicts', 'pod_evidence', 'pod_criteria', 'pod_events', 'pod_contracts', 'pod_samples'];
 
 export class SqlContractStore implements ContractStore {
   async getBundle(issueId: string): Promise<ContractBundle> {
@@ -270,5 +274,55 @@ export class SqlContractStore implements ContractStore {
       actorAccountId,
       now,
     );
+  }
+
+  async listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]> {
+    const capped = Math.max(1, Math.min(500, Math.floor(limit)));
+    const rows = await select(
+      `SELECT issue_id, issue_key, proof_state, total_count, proven_count, submitted_count, rejected_count, updated_at FROM pod_contracts WHERE project_id = ? ORDER BY updated_at DESC, issue_id LIMIT ${capped}`,
+      projectId,
+    );
+    return rows.map((row) => ({
+      issueId: str(row['issue_id']),
+      issueKey: str(row['issue_key']),
+      proofState: str(row['proof_state']) as ProofState,
+      total: num(row['total_count']),
+      proven: num(row['proven_count']),
+      submitted: num(row['submitted_count']),
+      rejected: num(row['rejected_count']),
+      updatedAt: num(row['updated_at']),
+    }));
+  }
+
+  async countEvents(projectId: string, since: number): Promise<EventCount[]> {
+    const rows = await select(
+      'SELECT event_type, COUNT(*) AS event_count, COUNT(DISTINCT issue_id) AS issue_count FROM pod_events WHERE project_id = ? AND occurred_at >= ? GROUP BY event_type',
+      projectId,
+      since,
+    );
+    return rows.map((row) => ({ type: str(row['event_type']), count: num(row['event_count']), issues: num(row['issue_count']) }));
+  }
+
+  async listSampleIssues(projectId: string): Promise<SampleMarker[]> {
+    const rows = await select(
+      'SELECT issue_id, sample_slug FROM pod_samples WHERE project_id = ? ORDER BY created_at, issue_id',
+      projectId,
+    );
+    return rows.map((row) => ({ issueId: str(row['issue_id']), slug: str(row['sample_slug']) }));
+  }
+
+  async markSample(issueId: string, projectId: string, slug: string, now: number): Promise<void> {
+    await write(
+      'INSERT IGNORE INTO pod_samples (issue_id, project_id, sample_slug, created_at) VALUES (?, ?, ?, ?)',
+      issueId,
+      projectId,
+      slug,
+      now,
+    );
+  }
+
+  async purgeIssue(issueId: string): Promise<void> {
+    // The sample marker goes last, so a purge that fails half way can be run again.
+    for (const table of ISSUE_TABLES) await write(`DELETE FROM ${table} WHERE issue_id = ?`, issueId);
   }
 }

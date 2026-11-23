@@ -107,6 +107,16 @@ const MIGRATIONS: Array<[name: string, ddl: string]> = [
       updated_at BIGINT NOT NULL
     )`,
   ],
+  [
+    'v007_samples',
+    `CREATE TABLE IF NOT EXISTS pod_samples (
+      issue_id VARCHAR(32) NOT NULL PRIMARY KEY,
+      project_id VARCHAR(32) NOT NULL,
+      sample_slug VARCHAR(40) NOT NULL,
+      created_at BIGINT NOT NULL,
+      INDEX idx_pod_samples_project (project_id)
+    )`,
+  ],
 ];
 
 for (const [name, ddl] of MIGRATIONS) migrationRunner.enqueue(name, ddl);

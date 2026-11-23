@@ -1,7 +1,7 @@
 import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
 import { IssueInfo, JiraGateway, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
-import { ContractBundle, ContractRow, ContractStore, EventRow } from '../../src/store/types';
+import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../../src/store/types';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
@@ -40,11 +40,11 @@ export class MemoryStore implements ContractStore {
     for (const c of this.criteria) if (c.id === criterionId && c.issueId === issueId) c.active = false;
   }
 
-  async insertEvidence(evidence: Evidence): Promise<void> {
+  async insertEvidence(evidence: Evidence, _projectId?: string): Promise<void> {
     this.evidence.push(clone(evidence));
   }
 
-  async insertVerdict(verdict: Verdict): Promise<void> {
+  async insertVerdict(verdict: Verdict, _projectId?: string): Promise<void> {
     this.verdicts.push(clone(verdict));
   }
 
@@ -61,8 +61,10 @@ export class MemoryStore implements ContractStore {
     );
   }
 
-  async saveSummary(issueId: string, summary: ProofSummary): Promise<void> {
+  async saveSummary(issueId: string, summary: ProofSummary, now: number): Promise<void> {
     this.summaries.set(issueId, clone(summary));
+    const contract = this.contracts.get(issueId);
+    if (contract) contract.updatedAt = now;
   }
 
   async getSettings(projectId: string): Promise<ProjectSettings> {
@@ -71,6 +73,58 @@ export class MemoryStore implements ContractStore {
 
   async saveSettings(projectId: string, settings: ProjectSettings): Promise<void> {
     this.settings.set(projectId, clone(settings));
+  }
+
+  samples = new Map<string, { projectId: string; slug: string }>();
+
+  async listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]> {
+    return [...this.contracts.values()]
+      .filter((c) => c.projectId === projectId)
+      .sort((a, b) => b.updatedAt - a.updatedAt || (a.issueId < b.issueId ? -1 : 1))
+      .slice(0, limit)
+      .map((c) => {
+        const s = this.summaries.get(c.issueId);
+        return {
+          issueId: c.issueId,
+          issueKey: c.issueKey,
+          proofState: s?.state ?? 'none',
+          total: s?.total ?? 0,
+          proven: s?.proven ?? 0,
+          submitted: s?.submitted ?? 0,
+          rejected: s?.rejected ?? 0,
+          updatedAt: c.updatedAt,
+        };
+      });
+  }
+
+  async countEvents(projectId: string, since: number): Promise<EventCount[]> {
+    const byType = new Map<string, { count: number; issues: Set<string | null> }>();
+    for (const event of this.events) {
+      if (event.projectId !== projectId || event.at < since) continue;
+      const entry = byType.get(event.type) ?? { count: 0, issues: new Set() };
+      entry.count++;
+      entry.issues.add(event.issueId);
+      byType.set(event.type, entry);
+    }
+    return [...byType].map(([type, entry]) => ({ type, count: entry.count, issues: entry.issues.size }));
+  }
+
+  async listSampleIssues(projectId: string): Promise<SampleMarker[]> {
+    return [...this.samples].filter(([, s]) => s.projectId === projectId).map(([issueId, s]) => ({ issueId, slug: s.slug }));
+  }
+
+  async markSample(issueId: string, projectId: string, slug: string): Promise<void> {
+    if (!this.samples.has(issueId)) this.samples.set(issueId, { projectId, slug });
+  }
+
+  async purgeIssue(issueId: string): Promise<void> {
+    this.contracts.delete(issueId);
+    this.summaries.delete(issueId);
+    this.samples.delete(issueId);
+    this.criteria = this.criteria.filter((c) => c.issueId !== issueId);
+    this.evidence = this.evidence.filter((e) => e.issueId !== issueId);
+    this.verdicts = this.verdicts.filter((v) => v.issueId !== issueId);
+    this.events = this.events.filter((e) => e.issueId !== issueId);
   }
 
   eventTypes(issueId: string): string[] {
