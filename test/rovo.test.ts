@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { TOOLS, VERIFIER_TOOLS } from '../src/actions/tools';
+import { MCP_TOOLS, TOOLS, VERIFIER_TOOLS } from '../src/actions/tools';
 import { VERIFIER } from '../src/frontend/text';
-import { entries, items, readSkill, resourceFile, value } from './helpers/manifest';
+import { entries, items, manifest, readSkill, resourceFile, value } from './helpers/manifest';
 
 const SKILL_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -75,5 +75,32 @@ describe('the Rovo skills', () => {
     const judging = skills.filter((skill) => skill.tools.some((tool) => VERIFIER_TOOLS.includes(tool as (typeof TOOLS)[number])));
     expect(judging.map((skill) => skill.key)).toEqual(['review-evidence']);
     expect([...judging[0]!.tools].sort()).toEqual([...VERIFIER_TOOLS].sort());
+  });
+});
+
+describe('the open skill for coding agents', () => {
+  const skill = readSkill('skills/proof-of-done/SKILL.md');
+
+  it('follows the Agent Skills format', () => {
+    expectSkillFormat(skill, 'proof-of-done');
+  });
+
+  it('teaches every tool an outside agent has, and neither verdict tool', () => {
+    for (const tool of MCP_TOOLS) expect(skill.body, tool).toContain(`\`${tool}\``);
+    for (const tool of VERIFIER_TOOLS) expect(skill.body, tool).not.toContain(tool);
+  });
+
+  it('names every input of submit-evidence and every kind an agent may send', () => {
+    const submit = entries('action').find((action) => action.key === 'submit-evidence');
+    const inputs = [...(submit?.block ?? '').matchAll(/^        ([A-Za-z]+):$/gm)].map((m) => m[1]!);
+    expect(inputs.length).toBeGreaterThan(0);
+    for (const input of inputs) expect(skill.body, input).toContain(`\`${input}\``);
+    for (const kind of ['test_run', 'build', 'pull_request', 'document', 'other']) expect(skill.body, kind).toContain(`| \`${kind}\` |`);
+  });
+
+  it('points at the MCP server of this app', () => {
+    const appId = /^  id: ari:cloud:ecosystem::app\/(.+)$/m.exec(manifest)?.[1];
+    expect(appId).toBeTruthy();
+    expect(skill.body).toContain(`https://mcp.atlassian.com/forge/${appId}`);
   });
 });
