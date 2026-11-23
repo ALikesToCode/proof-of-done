@@ -65,6 +65,14 @@ export function evidenceStanding(evidence: Evidence, verdicts: Verdict[]): Evide
   return verdict.independent ? 'accepted' : 'self_accepted';
 }
 
+/**
+ * Whether a reviewer can still decide on evidence with this standing. Evidence its own
+ * submitter accepted stays open where the project asks for an independent check.
+ */
+export function awaitsReview(standing: EvidenceStanding, requireIndependent: boolean): boolean {
+  return standing === 'pending' || (standing === 'self_accepted' && requireIndependent);
+}
+
 export interface CriterionProof {
   state: CriterionState;
   /** Proven only because the project allows self-review. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { criterionProof, evidenceStanding, gateDecision, isIndependent, summarize } from '../src/core/proof';
+import { awaitsReview, criterionProof, evidenceStanding, gateDecision, isIndependent, summarize } from '../src/core/proof';
 import { Criterion, Evidence, Verdict } from '../src/core/types';
 
 let clock = 1_000;
@@ -77,6 +77,18 @@ describe('evidenceStanding', () => {
   it('marks an acceptance by the submitter as self-accepted', () => {
     const e = evidence('e1', 'c1');
     expect(evidenceStanding(e, [verdict('v1', e, 'accepted', { independent: false })])).toBe('self_accepted');
+  });
+});
+
+describe('awaitsReview', () => {
+  it('holds for evidence nobody decided on, and for a self-review where a second check is required', () => {
+    expect(awaitsReview('pending', false)).toBe(true);
+    expect(awaitsReview('pending', true)).toBe(true);
+    expect(awaitsReview('self_accepted', true)).toBe(true);
+    expect(awaitsReview('self_accepted', false)).toBe(false);
+    expect(awaitsReview('accepted', true)).toBe(false);
+    expect(awaitsReview('rejected', true)).toBe(false);
+    expect(awaitsReview('failed_checks', true)).toBe(false);
   });
 });
 
