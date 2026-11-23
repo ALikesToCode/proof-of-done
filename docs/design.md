@@ -12,13 +12,13 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 2. The panel reads the acceptance criteria out of the description and offers them as a done contract. One click creates it. Criteria can be added, edited or removed by hand.
 3. Someone adds evidence against a criterion: a test run, a build, a pull request, a document, a person's attestation, or something else with a link or excerpt.
 4. The app runs mechanical checks on the evidence the moment it arrives. A test run with failures, a pull request link that is not a pull request, or a build with no result is turned away with the reason.
-5. Evidence that passes the checks waits for a review. A person or the Proof Verifier agent accepts or rejects it, with a reason.
+5. Evidence that passes the checks waits for a review. A person or the Proof Verifier agent accepts or rejects it, with a reason. For a pull request or a build, the Review dialog says whether Jira's Teamwork Graph links it to the work item, and in what state.
 6. When the work item moves to a done status without proof, the done gate reacts. Depending on the project setting it comments, moves the work item back, or does nothing. An admin can also add the app's validator to a workflow transition, and then Jira refuses the transition outright.
 7. The project page shows the meter and every work item under contract, with the ones closed without proof at the top.
 
 ## What an agent does with it
 
-A coding agent connects to the app's MCP endpoint. It fetches the contract and a context pack for its ticket, does the work, and submits evidence per criterion. It gets the check results back in the same call. It cannot edit the contract and cannot judge its own evidence.
+A coding agent connects to the app's MCP endpoint. It fetches the contract and a context pack for its ticket, does the work, and submits evidence per criterion. It gets the check results back in the same call, and for a pull request or a build, what Jira's Teamwork Graph holds about it. It cannot edit the contract and cannot judge its own evidence.
 
 The Proof Verifier is a Rovo agent. It reads the evidence that is waiting, decides whether each piece proves its criterion, and records a verdict with its reasoning. The action that records a verdict is not exposed through MCP, so the agent that did the work cannot reach it.
 
@@ -78,12 +78,12 @@ Seven Forge actions do the work. The app's MCP server offers five of them to out
 
 | Tool | What it does | Who has it |
 | --- | --- | --- |
-| `get-context-pack` | Returns the description, the parent, subtasks, links, the latest comments, the contract and the rules of proof | Coding agents |
+| `get-context-pack` | Returns the description, the parent, subtasks, links, the latest comments, the pull requests, builds and deployments Jira links to the work item, the contract and the rules of proof | Coding agents |
 | `get-done-contract` | Returns each criterion with its id, its evidence and its state, and says whether the work item may close | Coding agents, Proof Verifier |
 | `start-done-contract` | Creates the contract from the criteria in the description and the project rules | Coding agents |
-| `submit-evidence` | Records one piece of evidence for one criterion and answers with the check results | Coding agents |
+| `submit-evidence` | Records one piece of evidence for one criterion and answers with the check results, and with what the Teamwork Graph holds about a pull request or a build | Coding agents |
 | `list-unproven-work` | Lists the project's work under contract that is not proven, with the meter | Coding agents, Proof Verifier |
-| `list-evidence-to-review` | Lists the evidence on a work item that waits for a verdict | Proof Verifier |
+| `list-evidence-to-review` | Lists the evidence on a work item that waits for a verdict, with what the Teamwork Graph holds about each pull request or build | Proof Verifier |
 | `record-verdict` | Accepts or rejects one piece of evidence, with the reasoning | Proof Verifier |
 
 Every answer is written for a language model. States are plain words, empty fields are left out, and a `next` line says what to do. A refusal comes back as `ok: false` with a code and a sentence the agent can act on.
@@ -94,6 +94,38 @@ The Proof Verifier has two skills. `review-evidence` walks the review queue and 
 
 `skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when the gate passes.
 
+## The Teamwork Graph check
+
+Evidence for a pull request or a build says what its author says. Jira often knows more. A code host or a CI tool connected to Jira reports the pull requests, builds and deployments of a work item, and the Teamwork Graph holds them. The app reads that list and tells the reviewer how the evidence compares with it.
+
+| Finding | What it means |
+| --- | --- |
+| Confirmed | The graph links this pull request, build or deployment to the work item, and its state agrees with the evidence |
+| Differs | The graph links it and holds a state that contradicts the evidence, such as a pull request that is still open or a deployment that failed |
+| Not linked | The graph links others of its kind to the work item, and this link is not one of them |
+| No record | The graph has nothing that settles it. No development tool is connected, or the list was too long to read in full |
+
+The note shows up in four places.
+
+- The Review dialog shows it under the checks the app ran.
+- `list-evidence-to-review` gives the Proof Verifier a `graph` line per entry, and a rule that says to trust it over what the evidence says about itself.
+- `submit-evidence` answers with the same line, so a coding agent hears it before the reviewer does. When Jira does not link the pull request, the answer says how Jira links one.
+- `get-context-pack` lists what Jira already links to the work item, under `development`.
+
+A note is advice. The checks and the gate never read the graph, and only a reviewer's verdict proves a criterion.
+
+How the app reads the graph:
+
+- One GraphQL operation, `proofofdone_linkedDevelopment`, asks three of the graph's curated queries for the work item. `jiraWorkItemLinkedExternalPullRequests` and `jiraWorkItemLinkedExternalDeployments` give pull requests and deployments. Builds have no query of their own, so they come from `jiraWorkItemDevelopmentArtifacts`.
+- The call goes through `requestTeamworkGraph` as the person using the app, so the graph returns only what that person may see.
+- The scopes are `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`. All four only read.
+- The graph gives at most 25 rows per query. When a list is cut, the note says the list was incomplete. It does not claim that a link is missing.
+- The app waits four seconds. A slow answer, an error or a refusal reads as no note, and the review goes on without one.
+- A title or a name in the graph is text from outside Jira, and a note goes to the Proof Verifier. So a note is made of the app's own words. States are mapped to a fixed list. The only outside text that can enter is the environment of a deployment, and only when it is one plain word such as `production`.
+- Evidence matches a graph entry when both links point at the same page. Case, the query string and a trailing slash are ignored. A page under it, such as the files tab of a pull request, also matches.
+
+On 23 Nov the development site had no development tool connected. The real query ran there through Forge and came back with empty lists, which the app reads as "No record". Unit tests cover the comparison on answers in the graph's shape. It has not yet run against a real linked pull request.
+
 ## How it is built
 
 The app is deterministic. It stores contracts, evidence and verdicts, runs the checks and enforces the gate. All language-model reasoning happens in Rovo agents or in the outside coding agent, so the app makes no LLM calls and costs nothing to run per verdict.
@@ -102,18 +134,18 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Not yet checked in a browser |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 241 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 283 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Not yet checked in a browser |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
 | Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Not yet tried in Rovo chat |
-| Linked pages and pull requests | Teamwork Graph API | Last |
+| Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. One real query answered on the development site, with empty lists because no development tool is connected there. Not yet seen with a real linked pull request, and not yet checked in a browser |
 
 ## Decisions and their reasons
 
-- **Jira only.** The first version installs into Jira alone. Linked Confluence pages reach the context pack through Teamwork Graph later.
+- **Jira only.** The first version installs into Jira alone. The Teamwork Graph could also bring linked Confluence pages into the context pack. That waits.
 - **No web trigger.** Adding one made the Forge CLI report the loss of Runs on Atlassian eligibility. Evidence from CI therefore goes through an agent's MCP call.
 - **Calls run as the user.** Jira decides who may see and edit a work item. The cost is one "Allow access" click per person on first use.
 - **Guessed evidence kinds are suggestions.** Keyword matching mislabelled some seeded tickets, so a contract read from a description takes any evidence until a person tightens it.
@@ -122,6 +154,7 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 - **Tools run as the person, with no fallback to the app.** The app cannot check another user's permissions. Jira answers that only Jira admins and Connect apps may ask. So a tool that cannot act as the person says so, and tells them to open the panel once and choose Allow access.
 - **The verdict tools are not on the MCP server.** An outside agent that could record a verdict could accept its own evidence.
 - **The Proof Verifier's verdict counts as an independent check.** It is a second reader with its own instructions, and it has no tool that submits evidence. The history names the person who asked it.
+- **The Teamwork Graph advises and never gates.** The graph can be empty for reasons that have nothing to do with the work. No development tool is connected, an admin withheld a scope, or the person may not see the repository. A gate that read it would fail teams for those reasons, so the graph informs the reviewer and stops there.
 - **A deleted work item takes its contract with it.** Jira tells the app about the deletion, and the app removes every row it stored for that work item. Nobody could reach those rows again.
 
 ## Preview features this relies on

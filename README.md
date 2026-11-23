@@ -15,6 +15,7 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 - **Done contract.** The issue panel reads the acceptance criteria out of the description and offers them as a contract. People can add, change and remove criteria, and a project can set rules that every new contract starts with.
 - **Evidence with checks.** Evidence is a test run, a build, a pull request, a document, a person's attestation, or something else with a link or an excerpt. The app checks each piece the moment it arrives. A test run with failures, a link that is not a pull request, or a build with no result is turned away with the reason.
 - **A verdict from someone else.** Evidence that passes the checks waits for a review. A person or the Proof Verifier, a Rovo agent that ships with the app, accepts or rejects it with a reason. Nobody can accept evidence they typed in themselves, unless the project allows it, and then the proof is labelled self-reviewed.
+- **A second source for pull requests and builds.** When evidence links a pull request or a build, the app asks Jira's Teamwork Graph what the connected development tool reported for that work item. The reviewer sees whether the two agree.
 - **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright.
 - **Project meter.** One page per project says whether the work is climbing, busy but not climbing, or stalled, and lists every work item under contract with what it still needs.
 - **Tools for coding agents.** An MCP server lets an outside agent fetch the contract and a context pack and submit evidence. It has no tool that records a verdict.
@@ -26,7 +27,7 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 
 You need a Jira site where you are an admin, with one software project. Only step 6 needs Rovo.
 
-1. **Install the app.** The shared install link goes here once the production build is published. Until then, deploy your own copy as described under [Development](#development).
+1. **Install the app.** The shared install link goes here once the production build is published. Until then, deploy your own copy as described under [Development](#development). The app asks for Teamwork Graph scopes, and Atlassian's documentation says an organization admin has to grant those. On a site you created yourself, you are one.
 2. **Load the sample.** Open the project, choose Proof of Done in the sidebar, and press Load sample data. The app creates five work items labelled `proof-of-done-sample`. One is closed and proven, one is closed without proof, two are in progress, and one has no contract yet. On a project with no other recent work the meter reads "Busy, not climbing", because one work item was closed with proof against five that were opened.
 3. **Review evidence.** Open "Sample: Export the audit log as CSV" and add the Proof of Done panel from the work item's apps button. Two pieces of evidence wait for a check. Press Review on one, read what it states and what the checks found, and accept or reject it with a reason.
 4. **Start a contract of your own.** Open any other work item and add the panel. If the description has a list under a heading such as "Acceptance criteria", the panel offers those criteria and one click creates the contract. If not, type the first criterion and press Add. Jira asks you to allow access the first time, because the app acts as you.
@@ -55,9 +56,24 @@ The Proof Verifier is a Rovo agent. It reads the evidence that waits on a work i
 
 Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat and ask, for example, "Review the evidence that waits on ABC-123".
 
+## The Teamwork Graph check
+
+Evidence for a pull request or a build says what its author says. When a code host or a CI tool is connected to Jira, the Teamwork Graph holds what that tool reported for the work item. The app compares the two and puts a note in the Review dialog.
+
+| Note | What it means |
+| --- | --- |
+| Confirmed | The graph links this pull request, build or deployment to the work item, and its state agrees with the evidence |
+| Differs | The graph holds a state that contradicts the evidence, such as a pull request that is still open |
+| Not linked | The graph links other pull requests or builds to the work item, and this link is not one of them |
+| No record | The graph has nothing to compare with |
+
+To see more than "No record", the site needs a development tool connected, such as GitHub or Bitbucket, and a pull request with the work item key in its title. Add that pull request as evidence on the work item. The note is in the dialog that opens from Review, or from Reject on evidence you entered yourself.
+
+The note is advice for the reviewer. It never accepts or rejects, and the done gate does not read it. The Proof Verifier gets the same note with each piece of evidence, and a coding agent gets it in the answer to `submit-evidence`.
+
 ## Coding agents
 
-The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `start-done-contract`, `submit-evidence` and `list-unproven-work`. An agent can start a contract only from criteria that are already written down, and it cannot record a verdict, so it cannot accept its own work. Access from outside Atlassian is off until an admin turns it on.
+The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `start-done-contract`, `submit-evidence` and `list-unproven-work`. An agent can start a contract only from criteria that are already written down, and it cannot record a verdict, so it cannot accept its own work. `get-context-pack` also lists the pull requests, builds and deployments Jira links to the work item. Access from outside Atlassian is off until an admin turns it on.
 
 1. A site admin opens Atlassian Administration, then Apps, Sites, the site, Connected apps, Proof of Done, and turns on its tools.
 2. Each person who will use an agent opens the Proof of Done panel on any work item once and chooses Allow access. The tools act as that person, so Jira decides what the agent may see and change.
@@ -72,10 +88,10 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
 
 ## What it stores and what it may do
 
-- Its scopes are `read:jira-work` and `write:jira-work`.
+- Its scopes are `read:jira-work` and `write:jira-work`, and four Teamwork Graph scopes that only read: `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`.
 - Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app sends data nowhere else, and the Forge CLI reports it as eligible for Runs on Atlassian.
 - The app makes no LLM calls. The reasoning happens in Rovo and in the coding agent.
-- It reads work items as the person who is using it, and asks Jira whether that person may edit them. As itself it comments on or moves a work item that was closed without proof, writes the work item property `proof-of-done` that JQL searches, and creates and deletes the sample work items.
+- It reads work items and the Teamwork Graph as the person who is using it, and asks Jira whether that person may edit them. As itself it comments on or moves a work item that was closed without proof, writes the work item property `proof-of-done` that JQL searches, and creates and deletes the sample work items.
 - When a work item is deleted, the app deletes everything it stored for it.
 
 ## Development
@@ -104,7 +120,7 @@ forge install -e development --product jira --site <your-site>.atlassian.net
 | `manifest.yml` | The Forge modules, the agent tools and the scopes |
 | `src/core/` | The rules of proof, the checks and the meter. No Forge imports |
 | `src/services/` | Contracts, the project page, the done gate, the sample data, the agent tools |
-| `src/store/`, `src/jira/` | The Forge SQL store and the Jira REST gateway |
+| `src/store/`, `src/jira/`, `src/graph/` | The Forge SQL store, the Jira REST gateway and the Teamwork Graph gateway |
 | `src/resolvers/`, `src/actions/`, `src/triggers/` | The backend of the pages, the seven tools, and the gate, validator and cleanup |
 | `src/frontend/` | The issue panel, the project page and the settings page, in UI Kit |
 | `rovo/` | The Proof Verifier's prompt and its two skills |
@@ -113,4 +129,4 @@ forge install -e development --product jira --site <your-site>.atlassian.net
 
 ## Preview features
 
-`jira:workflowValidator`, `rovo:mcp` and `rovo:skill` were in Preview on 23 Nov 2026, so they can change. Package versions are pinned exactly in `package.json`, and the runtime is `nodejs24.x`.
+`jira:workflowValidator`, `rovo:mcp`, `rovo:skill` and the Teamwork Graph API were in Preview on 23 Nov 2026, so they can change. Package versions are pinned exactly in `package.json`, and the runtime is `nodejs24.x`.
