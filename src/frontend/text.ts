@@ -113,6 +113,17 @@ export function detailLines(details: EvidenceDetails): string[] {
   return lines;
 }
 
+/** How much of an excerpt the panel shows before someone asks for the rest. */
+const EXCERPT_LINES = 6;
+const EXCERPT_CHARS = 480;
+
+/** The start of an excerpt, and whether that leaves anything out. */
+export function excerptHead(text: string): { head: string; cut: boolean } {
+  const whole = text.replace(/\r\n?/g, '\n').trim();
+  const head = whole.split('\n').slice(0, EXCERPT_LINES).join('\n').slice(0, EXCERPT_CHARS);
+  return { head: head.trimEnd(), cut: head.length < whole.length };
+}
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export function timeAgo(at: number, now: number): string {

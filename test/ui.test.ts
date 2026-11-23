@@ -309,6 +309,31 @@ describe('the issue panel', () => {
     expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
   });
 
+  it('shows a pasted excerpt with its line breaks and folds a long one', async () => {
+    const log = Array.from({ length: 8 }, (_, index) => `deploy step ${index + 1} ok`).join('\n');
+    onWorkItem();
+    await contract();
+    const page = await show(pages.panel);
+
+    await page.press('Add evidence');
+    await page.dialog.pick('evidence-kind', 'other');
+    await page.dialog.type('evidence-summary', 'The end of the deploy log on staging');
+    await page.dialog.type('evidence-text', log);
+    await page.dialog.press('Add evidence');
+    expect(page.all('CodeBlock').map((block) => block.props['text'])).toEqual([log.split('\n').slice(0, 6).join('\n')]);
+
+    await page.press('Show the whole excerpt');
+    expect(page.all('CodeBlock')[0]!.props).toMatchObject({ text: log, showLineNumbers: false, shouldWrapLongLines: true });
+    await page.press('Show less of the excerpt');
+
+    // The review dialog shows all of it, because the reviewer has to read it.
+    world().accountId = 'bob';
+    await page.press('Refresh');
+    await page.press('Review');
+    expect(page.dialog.all('CodeBlock').map((block) => block.props['text'])).toEqual([log]);
+    expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
+  });
+
   it('starts the form on the kind the wording suggests, and locks it when the criterion needs one kind', async () => {
     onWorkItem();
     const created = await contract();

@@ -102,7 +102,7 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Not yet checked in a browser |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 237 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 241 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Not yet checked in a browser |

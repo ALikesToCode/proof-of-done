@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Inline, Link, Lozenge, Stack, Text, User } from '@forge/react';
 import type { CriterionView, EvidenceView } from '../../services/view';
 import { KIND, REQUIRED, STANDING, channelLine, criterionBadge, detailLines, sourceLine, timeAgo } from '../text';
+import { Excerpt } from './Excerpt';
 import { card, evidenceBox } from './styles';
 
 const SHOWN_AT_FIRST = 2;
@@ -40,6 +41,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
             {line}
           </Text>
         ))}
+        {evidence.details.text && <Excerpt text={evidence.details.text} />}
         {failed.map((check) => (
           <Text key={check.id} size="small" color="color.text.danger">
             {check.note}

@@ -7,6 +7,7 @@ import {
   criterionBadge,
   describeEvent,
   detailLines,
+  excerptHead,
   proofLine,
   sourceLine,
   timeAgo,
@@ -201,5 +202,28 @@ describe('project page wording', () => {
     expect(contractsLine({ total: 9, listed: 6 })).toBe(
       '9 work items have a done contract. 3 are not listed, because you cannot see them or they were deleted.',
     );
+  });
+});
+
+describe('excerptHead', () => {
+  const lines = (count: number) => Array.from({ length: count }, (_, index) => `line ${index + 1}`).join('\n');
+
+  it('keeps a short excerpt whole', () => {
+    expect(excerptHead('Tests: 120 passed\nTime: 4.2 s')).toEqual({ head: 'Tests: 120 passed\nTime: 4.2 s', cut: false });
+    expect(excerptHead(lines(6))).toEqual({ head: lines(6), cut: false });
+  });
+
+  it('shows the first six lines of a longer one', () => {
+    expect(excerptHead(lines(9))).toEqual({ head: lines(6), cut: true });
+  });
+
+  it('cuts one very long line', () => {
+    const { head, cut } = excerptHead('x'.repeat(2_000));
+    expect(head).toHaveLength(480);
+    expect(cut).toBe(true);
+  });
+
+  it('reads Windows line ends as line breaks', () => {
+    expect(excerptHead('one\r\ntwo\r\n')).toEqual({ head: 'one\ntwo', cut: false });
   });
 });

@@ -22,6 +22,7 @@ import {
 import type { ContractView, CriterionView, EvidenceView } from '../../services/view';
 import { api, messageOf } from '../api';
 import { KIND, STANDING, channelLine, detailLines } from '../text';
+import { Excerpt } from './Excerpt';
 
 interface Props {
   criterion: CriterionView;
@@ -90,11 +91,7 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                   {line}
                 </Text>
               ))}
-              {evidence.details.text && (
-                <Text size="small" color="color.text.subtle">
-                  {evidence.details.text}
-                </Text>
-              )}
+              {evidence.details.text && <Excerpt text={evidence.details.text} whole />}
             </Stack>
             <Stack space="space.050">
               <Text size="small" color="color.text.subtle">
