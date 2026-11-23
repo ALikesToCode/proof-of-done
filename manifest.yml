@@ -36,6 +36,20 @@ modules:
       handler: index.validateDone
     - key: on-issue-deleted
       handler: index.onIssueDeleted
+    - key: tool-context-pack
+      handler: index.getContextPack
+    - key: tool-contract
+      handler: index.getDoneContract
+    - key: tool-start-contract
+      handler: index.startDoneContract
+    - key: tool-submit-evidence
+      handler: index.submitEvidence
+    - key: tool-unproven-work
+      handler: index.listUnprovenWork
+    - key: tool-review-queue
+      handler: index.listEvidenceToReview
+    - key: tool-record-verdict
+      handler: index.recordVerdict
   trigger:
     - key: app-installed
       function: on-installed
@@ -84,6 +98,181 @@ modules:
         - path: total
           type: number
           searchAlias: proofCriteria
+  rovo:mcp:
+    - key: proof-of-done-mcp
+      name: Proof of Done
+      # What a coding agent may call. The two verdict actions are left out on purpose:
+      # the agent that did the work must not be able to judge its own evidence.
+      tools:
+        - get-context-pack
+        - get-done-contract
+        - start-done-contract
+        - submit-evidence
+        - list-unproven-work
+  action:
+    - key: get-context-pack
+      name: Get context pack
+      function: tool-context-pack
+      actionVerb: GET
+      description: >
+        Call this before starting work on a Jira work item. Returns the description,
+        the parent, linked work items, recent comments, and the done contract: the
+        criteria that must be proven before the work counts as done.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+    - key: get-done-contract
+      name: Get done contract
+      function: tool-contract
+      actionVerb: GET
+      description: >
+        Returns the done contract of a Jira work item: each criterion with its id, the
+        evidence submitted so far and whether it is proven. Also says whether the work
+        item may be closed yet. Call it again after submitting evidence.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+    - key: start-done-contract
+      name: Start done contract
+      function: tool-start-contract
+      actionVerb: CREATE
+      description: >
+        Creates the done contract of a Jira work item from the acceptance criteria in
+        its description and the rules of its project. Use it when get-done-contract
+        says the work item has no contract yet. It cannot add criteria of your own.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+    - key: submit-evidence
+      name: Submit evidence
+      function: tool-submit-evidence
+      actionVerb: CREATE
+      description: >
+        Submits one piece of evidence for one criterion of a done contract: a test run,
+        a build, a pull request, a document or other evidence. The answer says at once
+        whether it passed the automatic checks. Evidence that passes still waits for a review.
+      inputs:
+        criterionId:
+          title: Criterion id
+          type: string
+          required: true
+          description: The id of the criterion this evidence is for, as returned by get-done-contract.
+        kind:
+          title: Kind of evidence
+          type: string
+          required: true
+          description: One of test_run, build, pull_request, document or other.
+        summary:
+          title: Summary
+          type: string
+          required: true
+          description: One or two sentences on what this evidence shows about the criterion.
+        url:
+          title: Link
+          type: string
+          required: false
+          description: A link to the test run, build, pull request or document. A pull request and a document need one.
+        passed:
+          title: Tests passed
+          type: integer
+          required: false
+          description: For a test run, how many tests passed.
+        failed:
+          title: Tests failed
+          type: integer
+          required: false
+          description: For a test run, how many tests failed.
+        status:
+          title: Result or state
+          type: string
+          required: false
+          description: For a build, its result, such as passed or failed. For a pull request, its state, such as open or merged.
+        commit:
+          title: Commit
+          type: string
+          required: false
+          description: The commit the evidence is about.
+        excerpt:
+          title: Excerpt
+          type: string
+          required: false
+          description: The part of the output that shows the result, at most 4,000 characters. Put the command first, on a line of its own, as in "$ npm test".
+        agentName:
+          title: Agent name
+          type: string
+          required: false
+          description: The name of the agent or tool that submits this, for example claude-code.
+    - key: list-unproven-work
+      name: List unproven work
+      function: tool-unproven-work
+      actionVerb: GET
+      description: >
+        Lists the work items of a Jira project that have a done contract and are not
+        fully proven, with what each still needs. Work closed without proof comes first.
+        Also returns the project meter: climbing, busy but not climbing, or stalled.
+      inputs:
+        projectKey:
+          title: Project key
+          type: string
+          required: true
+          description: The key of the Jira project, for example ABC.
+        windowDays:
+          title: Days to look back
+          type: integer
+          required: false
+          description: The window of the project meter. 7, 14 or 30 days. The default is 7.
+    - key: list-evidence-to-review
+      name: List evidence to review
+      function: tool-review-queue
+      actionVerb: GET
+      description: >
+        Lists the evidence on a Jira work item that waits for a verdict. Each entry has
+        the criterion it is for and everything the evidence states. Call it before
+        recording any verdict.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+    - key: record-verdict
+      name: Record verdict
+      function: tool-record-verdict
+      actionVerb: UPDATE
+      description: >
+        Records the verdict on one piece of evidence: accepted when it shows that its
+        criterion is met, rejected when it does not. The reasoning is stored with the
+        verdict and shown to the team.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+        evidenceId:
+          title: Evidence id
+          type: string
+          required: true
+          description: The id of the evidence, as returned by list-evidence-to-review.
+        decision:
+          title: Decision
+          type: string
+          required: true
+          description: Either accepted or rejected.
+        reason:
+          title: Reasoning
+          type: string
+          required: true
+          description: One or two sentences on why the evidence does or does not show that the criterion is met.
   scheduledTrigger:
     - key: daily-maintenance
       function: maintenance
