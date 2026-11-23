@@ -283,6 +283,19 @@ describe('submitting evidence', () => {
     expect(evidence.standing).toBe('pending');
     expect(evidence.checks.some((c) => c.id === 'url.reused')).toBe(true);
   });
+
+  it('says which evidence it recorded', async () => {
+    const created = await service.createContract('MOBL-1', ALICE, { withSuggestions: true });
+    const first = await service.addEvidence('MOBL-1', ALICES_AGENT, { criterionId: criterionId(created), ...TEST_RUN });
+    const second = await service.addEvidence('MOBL-1', ALICES_AGENT, {
+      criterionId: criterionId(created),
+      kind: 'other',
+      summary: 'The login screen accepts a known account',
+      details: { text: 'Signed in as the test account and reached the dashboard.' },
+    });
+    expect(second.evidenceId).not.toBe(first.evidenceId);
+    expect(second.view.criteria[0]!.evidence.map((e) => e.id)).toEqual([second.evidenceId, first.evidenceId]);
+  });
 });
 
 describe('verdicts', () => {

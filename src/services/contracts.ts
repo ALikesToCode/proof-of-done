@@ -202,6 +202,11 @@ export class ContractService {
    * tried, but it can never be accepted.
    */
   async submitEvidence(issueRef: string, caller: Caller, input: EvidenceInput): Promise<ContractView> {
+    return (await this.addEvidence(issueRef, caller, input)).view;
+  }
+
+  /** Records a piece of evidence and says which one it was, so a tool call can report on exactly that one. */
+  async addEvidence(issueRef: string, caller: Caller, input: EvidenceInput): Promise<{ view: ContractView; evidenceId: string }> {
     if (caller.via === 'verifier') throw new PodError('forbidden', 'The verifier checks evidence. It does not submit any.');
     const session = await this.open(issueRef);
     const { issue, bundle } = session;
@@ -265,7 +270,7 @@ export class ContractService {
         independent,
       });
     }
-    return this.close(session, caller);
+    return { view: await this.close(session, caller), evidenceId: evidence.id };
   }
 
   /** Accepts or rejects a piece of evidence. Only a person or the verifier can. */
