@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LinkedWork, compareWithGraph, graphCovers, toLinkedState } from '../src/core/graph';
 import { EvidenceDetails, EvidenceKind } from '../src/core/types';
-import { ForgeGraphGateway, LINKED_OPERATION, LINKED_QUERY, MORE_OPERATION, MORE_QUERY, toLinkedWork, workItemAri } from '../src/graph/forge-graph';
+import { AGAIN_OPERATION, ForgeGraphGateway, LINKED_OPERATION, LINKED_QUERY, MORE_OPERATION, MORE_QUERY, toLinkedWork, workItemAri } from '../src/graph/forge-graph';
 import { Caller, ContractService } from '../src/services/contracts';
 import { GraphService } from '../src/services/graph';
 import { FakeGraph, FakeJira, MemoryStore, issueInfo, linkedItem } from './helpers/fakes';
@@ -332,7 +332,11 @@ describe('the query the app sends', () => {
     expect(LINKED_OPERATION).toMatch(/^[a-z]{3,}_[A-Za-z]{4,}$/);
     expect(LINKED_OPERATION.length).toBeLessThanOrEqual(100);
     expect(LINKED_QUERY.startsWith(`query ${LINKED_OPERATION}(`)).toBe(true);
-    expect(MORE_OPERATION).toMatch(/^[a-z]{3,}_[A-Za-z]{4,}$/);
+    for (const operation of [AGAIN_OPERATION, MORE_OPERATION]) {
+      expect(operation).toMatch(/^[a-z]{3,}_[A-Za-z]{4,}$/);
+      expect(operation.length).toBeLessThanOrEqual(100);
+    }
+    expect(new Set([LINKED_OPERATION, AGAIN_OPERATION, MORE_OPERATION]).size).toBe(3);
     expect(MORE_QUERY.startsWith(`query ${MORE_OPERATION}(`)).toBe(true);
   });
 
@@ -411,14 +415,93 @@ describe('asking the graph through Forge', () => {
   });
 
   it('keeps what the first answer gave when a later page fails', async () => {
-    for (const later of [() => Promise.reject(new Error('The graph hung up.')), () => Promise.resolve(answer({}, false, 502)), () => Promise.resolve(answer({ data: {} }))]) {
+    for (const later of [() => Promise.reject(new Error('The graph hung up.')), () => Promise.resolve(answer({}, false, 502))]) {
       forge.request.mockReset();
       forge.request.mockResolvedValueOnce(answer({ ...ANSWER, data: { ...ANSWER.data, artifacts: page([buildNode(5)], true, 'next') } }));
       forge.request.mockImplementationOnce(later);
       const linked = await new ForgeGraphGateway().linkedWork('10001');
+      expect(forge.request).toHaveBeenCalledTimes(2);
       expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
       expect(linked?.partial).toEqual(['build']);
     }
+  });
+
+  // Seen on the development site: the graph refuses one list and answers for another in the same call.
+  const refusal = (data: Record<string, unknown>) => answer({ data, errors: [{ message: 'User is not permitted to query this organization' }] });
+  const fieldsAsked = (call: unknown[]) => ['pullRequests', 'deployments', 'artifacts'].filter((field) => String(call[0]).includes(`${field}: `));
+
+  it('asks again for the lists the graph refused', async () => {
+    forge.request
+      .mockResolvedValueOnce(refusal({ pullRequests: ANSWER.data.pullRequests, deployments: null, artifacts: null }))
+      .mockResolvedValueOnce(refusal({ deployments: ANSWER.data.deployments, artifacts: null }))
+      .mockResolvedValueOnce(answer({ data: { artifacts: ANSWER.data.artifacts } }));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
+    expect(linked?.partial).toEqual([]);
+    const calls = forge.request.mock.calls;
+    expect(calls.map(fieldsAsked)).toEqual([['pullRequests', 'deployments', 'artifacts'], ['deployments', 'artifacts'], ['artifacts']]);
+    expect(calls.map((call) => call[2])).toEqual([LINKED_OPERATION, AGAIN_OPERATION, AGAIN_OPERATION]);
+    expect(String(calls[1]![0]).startsWith(`query ${AGAIN_OPERATION}($id: ID!) {`)).toBe(true);
+    expect(calls[2]![1]).toEqual({ id: `ari:cloud:jira:${SITE}:issue/10001` });
+  });
+
+  it('asks twice more for a list, then goes on without it', async () => {
+    forge.request.mockResolvedValue(refusal({ ...ANSWER.data, deployments: null }));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(forge.request.mock.calls.map(fieldsAsked)).toEqual([['pullRequests', 'deployments', 'artifacts'], ['deployments'], ['deployments']]);
+    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'build']);
+    expect(linked?.partial).toEqual(['deployment']);
+    // One line per question, and never the answer.
+    expect(console.warn).toHaveBeenCalledTimes(3);
+    expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph reported 1 problem(s). User is not permitted to query this organization');
+  });
+
+  it('asks again for a page of builds the graph refused', async () => {
+    forge.request
+      .mockResolvedValueOnce(answer(firstPage(page(commits(25), true, 'after-25'))))
+      .mockResolvedValueOnce(refusal({ artifacts: null }))
+      .mockResolvedValueOnce(answer(nextPage(page([buildNode(881)]))));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(linked?.items.map((item) => item.name)).toEqual(['Build 881']);
+    expect(linked?.partial).toEqual([]);
+    const id = `ari:cloud:jira:${SITE}:issue/10001`;
+    expect(forge.request.mock.calls.slice(1)).toEqual([
+      [MORE_QUERY, { id, after: 'after-25' }, MORE_OPERATION],
+      [MORE_QUERY, { id, after: 'after-25' }, MORE_OPERATION],
+    ]);
+  });
+
+  it('gives up on a page the graph goes on refusing', async () => {
+    forge.request.mockResolvedValueOnce(answer({ ...ANSWER, data: { ...ANSWER.data, artifacts: page([buildNode(5)], true, 'next') } }));
+    forge.request.mockResolvedValue(refusal({ artifacts: null }));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(forge.request).toHaveBeenCalledTimes(4);
+    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
+    expect(linked?.partial).toEqual(['build']);
+  });
+
+  it('goes on with what it has when a later page takes too long', async () => {
+    forge.request.mockResolvedValueOnce(answer({ ...ANSWER, data: { ...ANSWER.data, artifacts: page([buildNode(5)], true, 'next') } }));
+    forge.request.mockImplementationOnce(() => new Promise(() => undefined));
+    const started = Date.now();
+    const linked = await new ForgeGraphGateway(40).linkedWork('10001');
+    expect(Date.now() - started).toBeLessThan(1_000);
+    expect(forge.request).toHaveBeenCalledTimes(2);
+    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
+    expect(linked?.partial).toEqual(['build']);
+  });
+
+  it('asks nothing further once its time is up', async () => {
+    forge.request.mockResolvedValue(answer(firstPage(page(commits(25), true, 'next'))));
+    const linked = await new ForgeGraphGateway(0).linkedWork('10001');
+    expect(forge.request).toHaveBeenCalledTimes(1);
+    expect(linked?.partial).toEqual(['build']);
+
+    forge.request.mockReset();
+    forge.request.mockResolvedValue(refusal({ ...ANSWER.data, pullRequests: null }));
+    const cut = await new ForgeGraphGateway(0).linkedWork('10001');
+    expect(forge.request).toHaveBeenCalledTimes(1);
+    expect(cut?.partial).toEqual(['pull_request']);
   });
 
   it('does not ask for a page the graph gave no cursor to', async () => {
@@ -451,20 +534,11 @@ describe('asking the graph through Forge', () => {
     expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph answered 403.');
   });
 
-  it('passes on the lists that answered when the graph refuses one, and logs one line', async () => {
-    const body = { data: { ...ANSWER.data, deployments: null }, errors: [{ message: 'User is not permitted to query this organization' }, { message: 'Null in a non null field' }] };
-    forge.request.mockResolvedValue(answer(body));
-    const linked = await new ForgeGraphGateway().linkedWork('10001');
-    expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'build']);
-    expect(linked?.partial).toEqual(['deployment']);
-    expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph reported 2 problem(s). User is not permitted to query this organization');
-  });
-
-  it('gives no answer when the graph reports errors and no data', async () => {
+  it('gives no answer when the graph goes on reporting errors and no data', async () => {
     const body = { errors: [{ message: 'Auth category: UNAUTHENTICATED is not allowed in service graph_store' }], data: { pullRequests: null, deployments: null, artifacts: null } };
     forge.request.mockResolvedValue(answer(body));
     expect(await new ForgeGraphGateway().linkedWork('10001')).toBeNull();
+    expect(forge.request).toHaveBeenCalledTimes(3);
     expect(console.warn).toHaveBeenCalledWith(
       'Proof of Done: the Teamwork Graph reported 1 problem(s). Auth category: UNAUTHENTICATED is not allowed in service graph_store',
     );

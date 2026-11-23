@@ -8,39 +8,23 @@ import { GraphGateway } from './gateway';
  *
  * The graph wants every operation named in the shape company_operation, and gives at
  * most 25 rows per field and page. A scope the admin withheld empties a list without an error.
+ * It can also refuse one list and answer for another in the same call, so the app asks
+ * again for what it left out.
  */
 
 export const LINKED_OPERATION = 'proofofdone_linkedDevelopment';
+export const AGAIN_OPERATION = 'proofofdone_linkedDevelopmentAgain';
 export const MORE_OPERATION = 'proofofdone_moreDevelopment';
 
 const BUILDS = `edges { node { __typename ... on ExternalBuild { displayName buildNumber url state lastUpdatedAt provider { name } } } }
     pageInfo { hasNextPage endCursor }`;
 
-/** Builds have no query of their own, so they come out of the list of all development artifacts. */
-export const LINKED_QUERY = `query ${LINKED_OPERATION}($id: ID!) {
-  pullRequests: jiraWorkItemLinkedExternalPullRequests(id: $id, first: 25) {
-    edges { node { __typename ... on ExternalPullRequest { title displayId url status lastUpdatedAt provider { name } } } }
-    pageInfo { hasNextPage }
-  }
-  deployments: jiraWorkItemLinkedExternalDeployments(id: $id, first: 25) {
-    edges { node { __typename ... on ExternalDeployment { displayName url state environment { displayName type } lastUpdatedAt provider { name } } } }
-    pageInfo { hasNextPage }
-  }
-  artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25) {
-    ${BUILDS}
-  }
-}`;
-
-/** One more page of artifacts. That list also holds every commit and branch, so builds can sit pages in. */
-export const MORE_QUERY = `query ${MORE_OPERATION}($id: ID!, $after: String!) {
-  artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25, after: $after) {
-    ${BUILDS}
-  }
-}`;
-
-/** How many further pages of artifacts the app reads, and how long after the first question it still starts one. */
+/** How often the app asks again for a list or a page the graph refused. */
+const RETRIES = 2;
+/** How many further pages of artifacts the app reads. */
 const MORE_PAGES = 3;
-const PAGING_MS = 2_000;
+/** How long everything after the first question gets, counted from that question. */
+const EXTRA_MS = 3_000;
 
 type Json = Record<string, unknown>;
 
@@ -102,19 +86,60 @@ function build(node: Json): LinkedItem {
   };
 }
 
+/** One of the three lists the app reads: its name in the answer, the query for it, and how its rows are read. */
 interface Part {
   field: string;
+  query: string;
   type: string;
   kind: LinkedKind;
   read: (node: Json) => LinkedItem;
 }
 
-const ARTIFACTS: Part = { field: 'artifacts', type: 'ExternalBuild', kind: 'build', read: build };
+/** Builds have no query of their own, so they come out of the list of all development artifacts. */
+const ARTIFACTS: Part = {
+  field: 'artifacts',
+  query: `artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25) {
+    ${BUILDS}
+  }`,
+  type: 'ExternalBuild',
+  kind: 'build',
+  read: build,
+};
 const PARTS: Part[] = [
-  { field: 'pullRequests', type: 'ExternalPullRequest', kind: 'pull_request', read: pullRequest },
-  { field: 'deployments', type: 'ExternalDeployment', kind: 'deployment', read: deployment },
+  {
+    field: 'pullRequests',
+    query: `pullRequests: jiraWorkItemLinkedExternalPullRequests(id: $id, first: 25) {
+    edges { node { __typename ... on ExternalPullRequest { title displayId url status lastUpdatedAt provider { name } } } }
+    pageInfo { hasNextPage }
+  }`,
+    type: 'ExternalPullRequest',
+    kind: 'pull_request',
+    read: pullRequest,
+  },
+  {
+    field: 'deployments',
+    query: `deployments: jiraWorkItemLinkedExternalDeployments(id: $id, first: 25) {
+    edges { node { __typename ... on ExternalDeployment { displayName url state environment { displayName type } lastUpdatedAt provider { name } } } }
+    pageInfo { hasNextPage }
+  }`,
+    type: 'ExternalDeployment',
+    kind: 'deployment',
+    read: deployment,
+  },
   ARTIFACTS,
 ];
+
+const queryFor = (operation: string, parts: Part[]) => `query ${operation}($id: ID!) {\n${parts.map((part) => `  ${part.query}`).join('\n')}\n}`;
+
+/** The first question: all three lists of a work item. */
+export const LINKED_QUERY = queryFor(LINKED_OPERATION, PARTS);
+
+/** One more page of artifacts. That list also holds every commit and branch, so builds can sit pages in. */
+export const MORE_QUERY = `query ${MORE_OPERATION}($id: ID!, $after: String!) {
+  artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25, after: $after) {
+    ${BUILDS}
+  }
+}`;
 
 /** The rows of one page that are of the part's type, and whether the graph has more pages. */
 function readPage(connection: unknown, part: Part): { items: LinkedItem[]; more: boolean } {
@@ -175,6 +200,23 @@ export function workItemAri(cloudId: string, issueId: string): string {
   return `ari:cloud:jira:${cloudId}:issue/${issueId}`;
 }
 
+/** What the work gave, or null when it failed or took longer than the time allowed. */
+function within<T>(ms: number, work: Promise<T>): Promise<T | null> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), ms);
+    work.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(null);
+      },
+    );
+  });
+}
+
 const SITE_IN_ARI = /site\/([0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})/i;
 
 /** The id of the site this call runs on. Forge keeps it in the installation's context. */
@@ -193,33 +235,52 @@ function siteId(): string | null {
 }
 
 export class ForgeGraphGateway implements GraphGateway {
+  constructor(private readonly extraMs: number = EXTRA_MS) {}
+
   async linkedWork(issueId: string): Promise<LinkedWork | null> {
     const cloudId = siteId();
     if (!cloudId || !/^\d{1,18}$/.test(issueId)) return null;
     const id = workItemAri(cloudId, issueId);
     const started = Date.now();
-    const first = await this.ask(LINKED_QUERY, { id }, LINKED_OPERATION);
-    let work = first ? toLinkedWork(first.body) : null;
-    if (!first || !work) return null;
+    const left = () => this.extraMs - (Date.now() - started);
+    // A further question that fails or comes late leaves what the app has. What it could not read stays marked.
+    const further = (query: string, variables: Record<string, string>, operation: string) =>
+      left() > 0 ? within(left(), this.ask(query, variables, operation)) : Promise.resolve(null);
+
+    // The three lists. The app asks again for the ones the graph refused.
+    const lists: Json = {};
+    let missing = PARTS;
+    for (let attempt = 0; missing.length > 0 && attempt <= RETRIES; attempt++) {
+      const answer =
+        attempt === 0
+          ? await this.ask(LINKED_QUERY, { id }, LINKED_OPERATION)
+          : await further(queryFor(AGAIN_OPERATION, missing), { id }, AGAIN_OPERATION);
+      if (!answer) break;
+      const data = object(object(answer.body)['data']);
+      for (const part of missing) if (data[part.field] && typeof data[part.field] === 'object') lists[part.field] = data[part.field];
+      missing = missing.filter((part) => !(part.field in lists));
+    }
+    let work = toLinkedWork({ data: lists });
+    if (!work) return null;
 
     // Builds share their list with every commit and branch of the work item, so the app reads on for them.
-    let cursor = artifactsCursor(first.body);
-    for (let page = 0; cursor && page < MORE_PAGES && Date.now() - started < PAGING_MS; page++) {
-      let more: { body: unknown } | null;
-      try {
-        more = await this.ask(MORE_QUERY, { id, after: cursor }, MORE_OPERATION);
-      } catch {
-        // What the first answer gave still stands. Builds stay marked as not read in full.
-        more = null;
-      }
+    let cursor = artifactsCursor({ data: lists });
+    for (let pages = 0, refused = 0; cursor && pages < MORE_PAGES && refused <= RETRIES; ) {
+      const more = await further(MORE_QUERY, { id, after: cursor }, MORE_OPERATION);
       if (!more) break;
+      const page = object(object(more.body)['data'])[ARTIFACTS.field];
+      if (!page || typeof page !== 'object') {
+        refused++;
+        continue;
+      }
       work = withMoreArtifacts(work, more.body);
       cursor = artifactsCursor(more.body);
+      pages++;
     }
     return work;
   }
 
-  /** One question to the graph. Null when the graph refused it. */
+  /** One question to the graph. Null when it answered with an HTTP error. */
   private async ask(query: string, variables: Record<string, string>, operation: string): Promise<{ body: unknown } | null> {
     const response = await api.asUser().requestTeamworkGraph(query, variables, operation);
     if (!response.ok) {
