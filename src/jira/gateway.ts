@@ -58,6 +58,29 @@ export interface IssueRow {
   statusCategoryChangedAt: number | null;
 }
 
+/** What surrounds a work item. An agent reads this before it starts the work. */
+export interface IssueContext {
+  priority: string | null;
+  labels: string[];
+  components: string[];
+  /** Display names, as Jira shows them to the caller. */
+  assignee: string | null;
+  reporter: string | null;
+  dueDate: string | null;
+  subtasks: IssueBrief[];
+  /** `relation` reads from this work item's side, for example "is blocked by". */
+  links: Array<IssueBrief & { relation: string }>;
+  /** The latest comments, newest first. */
+  comments: Array<{ author: string; at: string; text: string }>;
+  commentTotal: number;
+}
+
+export interface IssueBrief {
+  key: string;
+  summary: string;
+  statusName: string;
+}
+
 export interface NewIssue {
   projectId: string;
   issueTypeId: string;
@@ -88,7 +111,7 @@ export interface JiraGateway {
   transition(issueId: string, transitionId: string): Promise<void>;
   /** Adds a comment as the app, one paragraph per entry. */
   addComment(issueId: string, paragraphs: string[]): Promise<void>;
-  /** Returns null when the project does not exist or the caller may not see it. */
+  /** Takes a project id or key. Returns null when the project does not exist or the caller may not see it. */
   getProject(projectId: string, as: RunAs): Promise<ProjectInfo | null>;
   /** Whether the calling user administers the project, as a project admin or as a Jira admin. */
   canAdminister(projectId: string): Promise<boolean>;
@@ -96,6 +119,8 @@ export interface JiraGateway {
   countIssues(jql: string, as: RunAs): Promise<number>;
   /** The listed work items that exist and that the caller may see, at most 100 per call. */
   getIssueRows(issueIds: string[], as: RunAs): Promise<IssueRow[]>;
+  /** Returns null when the work item does not exist or the caller may not see it. */
+  getIssueContext(idOrKey: string, as: RunAs): Promise<IssueContext | null>;
   /** Creates a work item as the app. */
   createIssue(issue: NewIssue): Promise<{ id: string; key: string }>;
   /** Deletes a work item as the app. False when Jira refused. A work item that is already gone counts as deleted. */

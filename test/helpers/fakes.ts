@@ -1,6 +1,6 @@
 import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
-import { IssueInfo, IssueRow, JiraGateway, NewIssue, ProjectInfo, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
+import { IssueContext, IssueInfo, IssueRow, JiraGateway, NewIssue, ProjectInfo, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
 import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../../src/store/types';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -231,8 +231,29 @@ export class FakeJira implements JiraGateway {
   private nextIssue = 100;
 
   async getProject(projectId: string, _as: RunAs): Promise<ProjectInfo | null> {
-    const project = this.projects.get(projectId);
+    const project = this.projects.get(projectId) ?? [...this.projects.values()].find((p) => p.key === projectId);
     return project ? clone(project) : null;
+  }
+
+  /** What surrounds a work item, by work item id. Work items without an entry have nothing around them. */
+  contexts = new Map<string, Partial<IssueContext>>();
+
+  async getIssueContext(idOrKey: string, _as: RunAs): Promise<IssueContext | null> {
+    const issue = await this.getIssue(idOrKey, 'user');
+    if (!issue) return null;
+    return clone({
+      priority: null,
+      labels: [],
+      components: [],
+      assignee: null,
+      reporter: null,
+      dueDate: null,
+      subtasks: [],
+      links: [],
+      comments: [],
+      commentTotal: 0,
+      ...this.contexts.get(issue.id),
+    });
   }
 
   async canAdminister(): Promise<boolean> {

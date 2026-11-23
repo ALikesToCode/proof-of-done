@@ -1,6 +1,8 @@
 import api, { route } from '@forge/api';
-import { AdfNode, adfParagraphs } from '../core/adf';
+import { AdfNode, adfParagraphs, adfText } from '../core/adf';
 import {
+  IssueBrief,
+  IssueContext,
   IssueInfo,
   IssueRow,
   JiraGateway,
@@ -14,6 +16,8 @@ import {
 
 const ISSUE_FIELDS = 'summary,description,issuetype,status,assignee,parent,project';
 const ROW_FIELDS = ['summary', 'issuetype', 'status', 'assignee', 'statuscategorychangedate'];
+const CONTEXT_FIELDS = 'priority,labels,components,assignee,reporter,duedate,subtasks,issuelinks';
+const COMMENTS_SHOWN = 5;
 const JSON_HEADERS = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
 type Json = Record<string, unknown>;
@@ -63,6 +67,45 @@ export function toIssueRow(raw: unknown): IssueRow {
     statusCategory: text(object(status['statusCategory'])['key']),
     assigneeAccountId: assignee ? text(assignee['accountId']) || null : null,
     statusCategoryChangedAt: Number.isFinite(changed) ? changed : null,
+  };
+}
+
+/** Builds the context of a work item from Jira's issue and its page of comments. */
+export function toIssueContext(rawIssue: unknown, rawComments: unknown): IssueContext {
+  const fields = object(object(rawIssue)['fields']);
+  const list = (value: unknown): Json[] => (Array.isArray(value) ? value.map(object) : []);
+  const person = (value: unknown): string | null => (value ? text(object(value)['displayName']) || null : null);
+  const brief = (raw: unknown): IssueBrief => {
+    const issue = object(raw);
+    const issueFields = object(issue['fields']);
+    return { key: text(issue['key']), summary: text(issueFields['summary']), statusName: text(object(issueFields['status'])['name']) };
+  };
+  const links = list(fields['issuelinks']).flatMap((link) => {
+    const type = object(link['type']);
+    if (link['outwardIssue']) return [{ relation: text(type['outward']) || text(type['name']), ...brief(link['outwardIssue']) }];
+    if (link['inwardIssue']) return [{ relation: text(type['inward']) || text(type['name']), ...brief(link['inwardIssue']) }];
+    return [];
+  });
+  const page = object(rawComments);
+  const comments = list(page['comments']).map((comment) => ({
+    author: person(comment['author']) ?? 'Someone',
+    at: text(comment['created']),
+    text: adfText(comment['body'] && typeof comment['body'] === 'object' ? (comment['body'] as AdfNode) : null).trim(),
+  }));
+  const total = Number(page['total']);
+  return {
+    priority: text(object(fields['priority'])['name']) || null,
+    labels: Array.isArray(fields['labels']) ? fields['labels'].map(text).filter(Boolean) : [],
+    components: list(fields['components'])
+      .map((component) => text(component['name']))
+      .filter(Boolean),
+    assignee: person(fields['assignee']),
+    reporter: person(fields['reporter']),
+    dueDate: text(fields['duedate']) || null,
+    subtasks: list(fields['subtasks']).map(brief),
+    links,
+    comments,
+    commentTotal: Number.isFinite(total) && total > comments.length ? total : comments.length,
   };
 }
 
@@ -198,6 +241,18 @@ export class ForgeJiraGateway implements JiraGateway {
     if (!response.ok) throw new Error(`Jira returned ${response.status} when reading work items.`);
     const issues = object(await response.json())['issues'];
     return Array.isArray(issues) ? issues.map(toIssueRow) : [];
+  }
+
+  async getIssueContext(idOrKey: string, as: RunAs): Promise<IssueContext | null> {
+    const headers = { Accept: 'application/json' };
+    const [issue, comments] = await Promise.all([
+      requester(as).requestJira(route`/rest/api/3/issue/${idOrKey}?fields=${CONTEXT_FIELDS}`, { headers }),
+      requester(as).requestJira(route`/rest/api/3/issue/${idOrKey}/comment?orderBy=-created&maxResults=${COMMENTS_SHOWN}`, { headers }),
+    ]);
+    if (issue.status === 404 || issue.status === 403 || issue.status === 400) return null;
+    if (!issue.ok) throw new Error(`Jira returned ${issue.status} when reading the context of work item ${idOrKey}.`);
+    // Comments are an extra. A work item whose comments cannot be read still gets the rest.
+    return toIssueContext(await issue.json(), comments.ok ? await comments.json() : null);
   }
 
   async createIssue(issue: NewIssue): Promise<{ id: string; key: string }> {
