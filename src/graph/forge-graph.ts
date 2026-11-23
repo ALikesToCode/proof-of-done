@@ -7,10 +7,14 @@ import { GraphGateway } from './gateway';
  * as the person using the app, so the graph returns only what they may see.
  *
  * The graph wants every operation named in the shape company_operation, and gives at
- * most 25 rows per field. A scope the admin withheld empties a list without an error.
+ * most 25 rows per field and page. A scope the admin withheld empties a list without an error.
  */
 
 export const LINKED_OPERATION = 'proofofdone_linkedDevelopment';
+export const MORE_OPERATION = 'proofofdone_moreDevelopment';
+
+const BUILDS = `edges { node { __typename ... on ExternalBuild { displayName buildNumber url state lastUpdatedAt provider { name } } } }
+    pageInfo { hasNextPage endCursor }`;
 
 /** Builds have no query of their own, so they come out of the list of all development artifacts. */
 export const LINKED_QUERY = `query ${LINKED_OPERATION}($id: ID!) {
@@ -23,10 +27,20 @@ export const LINKED_QUERY = `query ${LINKED_OPERATION}($id: ID!) {
     pageInfo { hasNextPage }
   }
   artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25) {
-    edges { node { __typename ... on ExternalBuild { displayName buildNumber url state lastUpdatedAt provider { name } } } }
-    pageInfo { hasNextPage }
+    ${BUILDS}
   }
 }`;
+
+/** One more page of artifacts. That list also holds every commit and branch, so builds can sit pages in. */
+export const MORE_QUERY = `query ${MORE_OPERATION}($id: ID!, $after: String!) {
+  artifacts: jiraWorkItemDevelopmentArtifacts(id: $id, first: 25, after: $after) {
+    ${BUILDS}
+  }
+}`;
+
+/** How many further pages of artifacts the app reads, and how long after the first question it still starts one. */
+const MORE_PAGES = 3;
+const PAGING_MS = 2_000;
 
 type Json = Record<string, unknown>;
 
@@ -88,11 +102,31 @@ function build(node: Json): LinkedItem {
   };
 }
 
-const PARTS: Array<{ field: string; type: string; kind: LinkedKind; read: (node: Json) => LinkedItem; required: boolean }> = [
+interface Part {
+  field: string;
+  type: string;
+  kind: LinkedKind;
+  read: (node: Json) => LinkedItem;
+  required: boolean;
+}
+
+const ARTIFACTS: Part = { field: 'artifacts', type: 'ExternalBuild', kind: 'build', read: build, required: false };
+const PARTS: Part[] = [
   { field: 'pullRequests', type: 'ExternalPullRequest', kind: 'pull_request', read: pullRequest, required: true },
   { field: 'deployments', type: 'ExternalDeployment', kind: 'deployment', read: deployment, required: true },
-  { field: 'artifacts', type: 'ExternalBuild', kind: 'build', read: build, required: false },
+  ARTIFACTS,
 ];
+
+/** The rows of one page that are of the part's type, and whether the graph has more pages. */
+function readPage(connection: unknown, part: Part): { items: LinkedItem[]; more: boolean } {
+  const items: LinkedItem[] = [];
+  const edges = object(connection)['edges'];
+  for (const edge of Array.isArray(edges) ? edges : []) {
+    const node = object(object(edge)['node']);
+    if (node['__typename'] === part.type) items.push(part.read(node));
+  }
+  return { items, more: object(object(connection)['pageInfo'])['hasNextPage'] === true };
+}
 
 /**
  * Turns the answer to LINKED_QUERY into the app's own shape. Null when the graph did
@@ -111,14 +145,29 @@ export function toLinkedWork(body: unknown): LinkedWork | null {
       partial.push(part.kind);
       continue;
     }
-    const edges = object(connection)['edges'];
-    for (const edge of Array.isArray(edges) ? edges : []) {
-      const node = object(object(edge)['node']);
-      if (node['__typename'] === part.type) items.push(part.read(node));
-    }
-    if (object(object(connection)['pageInfo'])['hasNextPage'] === true) partial.push(part.kind);
+    const page = readPage(connection, part);
+    items.push(...page.items);
+    if (page.more) partial.push(part.kind);
   }
   return { items, partial };
+}
+
+/** Where the next page of artifacts starts, when the graph says there is one. */
+export function artifactsCursor(body: unknown): string | null {
+  const info = object(object(object(object(body)['data'])[ARTIFACTS.field])['pageInfo']);
+  const cursor = info['endCursor'];
+  return info['hasNextPage'] === true && typeof cursor === 'string' && cursor ? cursor : null;
+}
+
+/** Adds the builds of a further page of artifacts. Builds count as read in full once a page says it is the last. */
+export function withMoreArtifacts(work: LinkedWork, body: unknown): LinkedWork {
+  const connection = object(object(body)['data'])[ARTIFACTS.field];
+  if (!connection || typeof connection !== 'object') return work;
+  const page = readPage(connection, ARTIFACTS);
+  return {
+    items: [...work.items, ...page.items],
+    partial: page.more ? work.partial : work.partial.filter((kind) => kind !== ARTIFACTS.kind),
+  };
 }
 
 /** The Atlassian resource identifier of a Jira work item, which is how the graph names it. */
@@ -147,7 +196,32 @@ export class ForgeGraphGateway implements GraphGateway {
   async linkedWork(issueId: string): Promise<LinkedWork | null> {
     const cloudId = siteId();
     if (!cloudId || !/^\d{1,18}$/.test(issueId)) return null;
-    const response = await api.asUser().requestTeamworkGraph(LINKED_QUERY, { id: workItemAri(cloudId, issueId) }, LINKED_OPERATION);
+    const id = workItemAri(cloudId, issueId);
+    const started = Date.now();
+    const first = await this.ask(LINKED_QUERY, { id }, LINKED_OPERATION);
+    let work = first ? toLinkedWork(first.body) : null;
+    if (!first || !work) return null;
+
+    // Builds share their list with every commit and branch of the work item, so the app reads on for them.
+    let cursor = artifactsCursor(first.body);
+    for (let page = 0; cursor && page < MORE_PAGES && Date.now() - started < PAGING_MS; page++) {
+      let more: { body: unknown } | null;
+      try {
+        more = await this.ask(MORE_QUERY, { id, after: cursor }, MORE_OPERATION);
+      } catch {
+        // What the first answer gave still stands. Builds stay marked as not read in full.
+        more = null;
+      }
+      if (!more) break;
+      work = withMoreArtifacts(work, more.body);
+      cursor = artifactsCursor(more.body);
+    }
+    return work;
+  }
+
+  /** One question to the graph. Null when the graph refused it. */
+  private async ask(query: string, variables: Record<string, string>, operation: string): Promise<{ body: unknown } | null> {
+    const response = await api.asUser().requestTeamworkGraph(query, variables, operation);
     if (!response.ok) {
       console.warn(`Proof of Done: the Teamwork Graph answered ${response.status}.`);
       return null;
@@ -158,6 +232,6 @@ export class ForgeGraphGateway implements GraphGateway {
       // One line, and never the answer itself: it can name a team's pull requests.
       console.warn(`Proof of Done: the Teamwork Graph reported ${errors.length} problem(s). ${line(object(errors[0])['message'])}`);
     }
-    return toLinkedWork(body);
+    return { body };
   }
 }

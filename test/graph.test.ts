@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LinkedWork, compareWithGraph, graphCovers, toLinkedState } from '../src/core/graph';
 import { EvidenceDetails, EvidenceKind } from '../src/core/types';
-import { ForgeGraphGateway, LINKED_OPERATION, LINKED_QUERY, toLinkedWork, workItemAri } from '../src/graph/forge-graph';
+import { ForgeGraphGateway, LINKED_OPERATION, LINKED_QUERY, MORE_OPERATION, MORE_QUERY, toLinkedWork, workItemAri } from '../src/graph/forge-graph';
 import { Caller, ContractService } from '../src/services/contracts';
 import { GraphService } from '../src/services/graph';
 import { FakeGraph, FakeJira, MemoryStore, issueInfo, linkedItem } from './helpers/fakes';
@@ -204,7 +204,7 @@ describe('what the graph has no say on', () => {
 });
 
 const node = (typename: string, fields: Record<string, unknown>) => ({ node: { __typename: typename, ...fields } });
-const page = (edges: unknown[], hasNextPage = false) => ({ edges, pageInfo: { hasNextPage } });
+const page = (edges: unknown[], hasNextPage = false, endCursor: string | null = null) => ({ edges, pageInfo: { hasNextPage, endCursor } });
 
 const ANSWER = {
   data: {
@@ -306,6 +306,8 @@ describe('the query the app sends', () => {
     expect(LINKED_OPERATION).toMatch(/^[a-z]{3,}_[A-Za-z]{4,}$/);
     expect(LINKED_OPERATION.length).toBeLessThanOrEqual(100);
     expect(LINKED_QUERY.startsWith(`query ${LINKED_OPERATION}(`)).toBe(true);
+    expect(MORE_OPERATION).toMatch(/^[a-z]{3,}_[A-Za-z]{4,}$/);
+    expect(MORE_QUERY.startsWith(`query ${MORE_OPERATION}(`)).toBe(true);
   });
 
   it('asks for at most 25 rows of each list', () => {
@@ -314,6 +316,8 @@ describe('the query the app sends', () => {
     for (const field of ['jiraWorkItemLinkedExternalPullRequests', 'jiraWorkItemLinkedExternalDeployments', 'jiraWorkItemDevelopmentArtifacts']) {
       expect(LINKED_QUERY, field).toContain(`${field}(id: $id, first: 25)`);
     }
+    expect(MORE_QUERY).toContain('jiraWorkItemDevelopmentArtifacts(id: $id, first: 25, after: $after)');
+    expect(MORE_QUERY).toContain('pageInfo { hasNextPage endCursor }');
   });
 
   it('has a scope in the manifest for every object type it reads', () => {
@@ -347,6 +351,55 @@ describe('asking the graph through Forge', () => {
     expect(forge.request).toHaveBeenCalledWith(LINKED_QUERY, { id: `ari:cloud:jira:${SITE}:issue/10001` }, LINKED_OPERATION);
     expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
     expect(workItemAri(SITE, '10001')).toBe(`ari:cloud:jira:${SITE}:issue/10001`);
+  });
+
+  // A work item's commits and branches are artifacts too, so its builds can sit behind them.
+  const commits = (count: number) => Array.from({ length: count }, () => node('ExternalCommit', {}));
+  const buildNode = (number: number) => node('ExternalBuild', { buildNumber: number, url: `https://ci.example.com/runs/${number}`, state: 'SUCCESSFUL' });
+  const firstPage = (artifacts: unknown) => ({ data: { pullRequests: page([]), deployments: page([]), artifacts } });
+  const nextPage = (artifacts: unknown) => ({ data: { artifacts } });
+
+  it('reads on through the artifacts until it has the builds', async () => {
+    forge.request
+      .mockResolvedValueOnce(answer(firstPage(page(commits(25), true, 'after-25'))))
+      .mockResolvedValueOnce(answer(nextPage(page([...commits(24), buildNode(881)], true, 'after-50'))))
+      .mockResolvedValueOnce(answer(nextPage(page([buildNode(882)]))));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(linked?.items.map((item) => item.name)).toEqual(['Build 881', 'Build 882']);
+    expect(linked?.partial).toEqual([]);
+    const id = `ari:cloud:jira:${SITE}:issue/10001`;
+    expect(forge.request.mock.calls).toEqual([
+      [LINKED_QUERY, { id }, LINKED_OPERATION],
+      [MORE_QUERY, { id, after: 'after-25' }, MORE_OPERATION],
+      [MORE_QUERY, { id, after: 'after-50' }, MORE_OPERATION],
+    ]);
+  });
+
+  it('stops after three more pages and says the builds were not read in full', async () => {
+    forge.request.mockResolvedValueOnce(answer(firstPage(page(commits(25), true, 'next'))));
+    forge.request.mockResolvedValue(answer(nextPage(page([buildNode(7)], true, 'next'))));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(forge.request).toHaveBeenCalledTimes(4);
+    expect(linked?.items).toHaveLength(3);
+    expect(linked?.partial).toEqual(['build']);
+  });
+
+  it('keeps what the first answer gave when a later page fails', async () => {
+    for (const later of [() => Promise.reject(new Error('The graph hung up.')), () => Promise.resolve(answer({}, false, 502)), () => Promise.resolve(answer({ data: {} }))]) {
+      forge.request.mockReset();
+      forge.request.mockResolvedValueOnce(answer({ ...ANSWER, data: { ...ANSWER.data, artifacts: page([buildNode(5)], true, 'next') } }));
+      forge.request.mockImplementationOnce(later);
+      const linked = await new ForgeGraphGateway().linkedWork('10001');
+      expect(linked?.items.map((item) => item.kind)).toEqual(['pull_request', 'deployment', 'build']);
+      expect(linked?.partial).toEqual(['build']);
+    }
+  });
+
+  it('does not ask for a page the graph gave no cursor to', async () => {
+    forge.request.mockResolvedValue(answer(firstPage(page(commits(25), true))));
+    const linked = await new ForgeGraphGateway().linkedWork('10001');
+    expect(forge.request).toHaveBeenCalledTimes(1);
+    expect(linked?.partial).toEqual(['build']);
   });
 
   it('finds the site in the runtime context when the installation does not name it', async () => {
