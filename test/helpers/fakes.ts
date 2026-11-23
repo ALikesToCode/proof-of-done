@@ -1,5 +1,7 @@
+import { LinkedItem, LinkedWork } from '../../src/core/graph';
 import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
+import { GraphGateway } from '../../src/graph/gateway';
 import { IssueContext, IssueInfo, IssueRow, JiraGateway, NewIssue, ProjectInfo, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
 import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../../src/store/types';
 
@@ -333,6 +335,54 @@ export class FakeJira implements JiraGateway {
     this.issues.delete(issueId);
     return true;
   }
+}
+
+/** The Teamwork Graph with what it links to each work item, by work item id. A work item without an entry has nothing linked. */
+export class FakeGraph implements GraphGateway {
+  linked = new Map<string, LinkedWork>();
+  /** `down` throws, `silent` gives no answer, `slow` never answers. */
+  mood: 'up' | 'down' | 'silent' | 'slow' = 'up';
+  /** The work items the app asked about, in order. */
+  asked: string[] = [];
+  private gate: Promise<void> | null = null;
+
+  /** Makes the graph keep its answers back until the returned function is called. */
+  hold(): () => void {
+    let release!: () => void;
+    this.gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    return () => {
+      this.gate = null;
+      release();
+    };
+  }
+
+  link(issueId: string, items: Array<Partial<LinkedItem>>, partial: LinkedWork['partial'] = []): void {
+    this.linked.set(issueId, { items: items.map(linkedItem), partial });
+  }
+
+  async linkedWork(issueId: string): Promise<LinkedWork | null> {
+    this.asked.push(issueId);
+    if (this.gate) await this.gate;
+    if (this.mood === 'down') throw new Error('The graph is down.');
+    if (this.mood === 'slow') return new Promise(() => undefined);
+    if (this.mood === 'silent') return null;
+    return clone(this.linked.get(issueId) ?? { items: [], partial: [] });
+  }
+}
+
+export function linkedItem(overrides: Partial<LinkedItem> = {}): LinkedItem {
+  return {
+    kind: 'pull_request',
+    name: '#12 Lock accounts after five failed sign-ins',
+    url: 'https://github.com/acme/mobile/pull/12',
+    state: 'merged',
+    environment: null,
+    provider: 'GitHub',
+    updatedAt: '2026-11-20T10:00:00.000Z',
+    ...overrides,
+  };
 }
 
 export function issueInfo(overrides: Partial<IssueInfo> = {}): IssueInfo {
