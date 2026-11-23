@@ -14,11 +14,35 @@ modules:
       handler: index.onInstalled
     - key: maintenance
       handler: index.maintenance
+    - key: on-issue-updated
+      handler: index.onIssueUpdated
+    - key: validate-done
+      handler: index.validateDone
   trigger:
     - key: app-installed
       function: on-installed
       events:
         - avi:forge:installed:app
+    - key: work-item-updated
+      function: on-issue-updated
+      events:
+        - avi:jira:updated:issue
+      filter:
+        ignoreSelf: true
+        # Only a status change into or out of a done status. Some updates carry no changelog at all.
+        expression: >-
+          event.changelog != null
+          && event.changelog.items.some(item => item.field == 'status')
+          && event.associatedStatuses.some(status => status.statusCategory.key == 'done')
+        onError: RECEIVE_AND_LOG
+  jira:workflowValidator:
+    - key: proof-is-complete
+      name: Proof of Done is complete
+      description: Blocks the transition until every criterion of the work item's done contract is proven.
+      function: validate-done
+      projectTypes:
+        - company-managed
+        - team-managed
   scheduledTrigger:
     - key: daily-maintenance
       function: maintenance
