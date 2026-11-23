@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readMeter } from '../src/core/meter';
+import { activityLine, attentionNote, contractsLine, meterFigures } from '../src/frontend/project-text';
 import { actorLabel, channelLine, criterionBadge, describeEvent, detailLines, proofLine, sourceLine, timeAgo } from '../src/frontend/text';
 
 const MINUTE = 60_000;
@@ -125,5 +127,42 @@ describe('gate events and sample entries', () => {
     expect(actorLabel({ channel: 'jira' })).toBe('The app');
     expect(channelLine({ channel: 'sample', agentName: 'claude-code' })).toBe('Sample data, as if submitted by the agent claude-code');
     expect(channelLine({ channel: 'sample', agentName: null })).toBe('Sample data, as if added by a person');
+  });
+});
+
+describe('project page wording', () => {
+  const meter = readMeter({ windowDays: 7, opened: 5, reopened: 1, closed: 4, closedProven: 1, closedUnproven: 1, evidence: 1, verdicts: 3 });
+
+  it('lists the figures behind the meter', () => {
+    expect(meterFigures(meter).map((f) => [f.label, f.value])).toEqual([
+      ['Opened', 5],
+      ['Reopened', 1],
+      ['Closed with proof', 1],
+      ['Closed without proof', 1],
+      ['Closed, no contract', 2],
+    ]);
+    expect(meterFigures(readMeter({ ...meter, closed: 2 }))).toHaveLength(4);
+    expect(activityLine(meter)).toBe('1 piece of evidence and 3 verdicts in the last 7 days.');
+  });
+
+  it('says what a work item needs next', () => {
+    const row = { proven: 1, total: 3, waiting: 2, rejected: 1, proofState: 'partial' as const };
+    expect(attentionNote({ ...row, attention: 'closed_unproven' })).toBe('Closed without proof. 2 of 3 not proven.');
+    expect(attentionNote({ ...row, attention: 'rejected' })).toBe('Evidence turned away on 1 criterion.');
+    expect(attentionNote({ ...row, attention: 'waiting' })).toBe('2 waiting for a check.');
+    expect(attentionNote({ ...row, attention: 'open' })).toBe('2 of 3 still to prove.');
+    expect(attentionNote({ ...row, attention: 'none', proofState: 'proven' })).toBe('Nothing. Every criterion is proven.');
+    expect(attentionNote({ ...row, attention: 'none', proofState: 'none' })).toBe('No criteria yet.');
+  });
+
+  it('counts the contracts and admits what it leaves out', () => {
+    expect(contractsLine({ total: 0, listed: 0 })).toBe('No work item in this project has a done contract yet.');
+    expect(contractsLine({ total: 1, listed: 1 })).toBe('1 work item has a done contract.');
+    expect(contractsLine({ total: 4, listed: 3 })).toBe(
+      '4 work items have a done contract. 1 is not listed, because you cannot see it or it was deleted.',
+    );
+    expect(contractsLine({ total: 9, listed: 6 })).toBe(
+      '9 work items have a done contract. 3 are not listed, because you cannot see them or they were deleted.',
+    );
   });
 });

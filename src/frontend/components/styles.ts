@@ -19,3 +19,8 @@ export const evidenceBox = xcss({
 
 export const grow = xcss({ flexGrow: 1 });
 export const kindSelect = xcss({ width: '210px' });
+
+export const windowSelect = xcss({ width: '170px' });
+export const typeSelect = xcss({ width: '240px' });
+export const page = xcss({ padding: 'space.300' });
+export const tabBody = xcss({ paddingBlockStart: 'space.200' });
