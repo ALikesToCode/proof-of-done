@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { criterionBadge, describeEvent, detailLines, proofLine, sourceLine, timeAgo } from '../src/frontend/text';
+import { actorLabel, channelLine, criterionBadge, describeEvent, detailLines, proofLine, sourceLine, timeAgo } from '../src/frontend/text';
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -89,5 +89,41 @@ describe('describeEvent', () => {
     const long = 'x'.repeat(200);
     expect(describeEvent({ type: 'criterion.removed', data: { text: long } }).length).toBeLessThan(130);
     expect(describeEvent({ type: 'something.new', data: {} })).toBe('something.new');
+  });
+});
+
+describe('gate events and sample entries', () => {
+  it('describes what the done gate saw', () => {
+    expect(describeEvent({ type: 'issue.done', data: { status: 'Done', proven: true, contract: true } })).toBe(
+      'moved the work item to Done with every criterion proven',
+    );
+    expect(describeEvent({ type: 'issue.done', data: { status: 'Done', proven: false, contract: true } })).toBe(
+      'moved the work item to Done without proof',
+    );
+    expect(describeEvent({ type: 'issue.done', data: { status: 'Closed', proven: false, contract: false } })).toBe(
+      'moved the work item to Closed before it had a contract',
+    );
+    expect(describeEvent({ type: 'issue.reopened', data: { fromStatus: 'Done', status: 'In Progress' } })).toBe(
+      'moved the work item from Done back to In Progress',
+    );
+  });
+
+  it('describes what the done gate did', () => {
+    const reason = '2 of 3 criteria are not proven (2 with no evidence).';
+    expect(describeEvent({ type: 'gate.warned', data: { reason } })).toBe(`got a warning from the done gate. ${reason}`);
+    expect(describeEvent({ type: 'gate.bounced', data: { reason, backTo: 'In Progress' } })).toBe(
+      `closed the work item without proof, and the done gate moved it back to In Progress. ${reason}`,
+    );
+    expect(describeEvent({ type: 'gate.blocked', data: { reason } })).toBe(
+      `tried to move the work item on, and the workflow validator refused. ${reason}`,
+    );
+    expect(describeEvent({ type: 'gate.warned', data: {} })).toBe('got a warning from the done gate.');
+  });
+
+  it('labels sample data as sample data', () => {
+    expect(actorLabel({ channel: 'sample' })).toBe('Sample data');
+    expect(actorLabel({ channel: 'jira' })).toBe('The app');
+    expect(channelLine({ channel: 'sample', agentName: 'claude-code' })).toBe('Sample data, as if submitted by the agent claude-code');
+    expect(channelLine({ channel: 'sample', agentName: null })).toBe('Sample data, as if added by a person');
   });
 });

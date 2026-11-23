@@ -49,7 +49,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
           <Inline space="space.050" alignBlock="center" shouldWrap>
             <Text size="small" color="color.text.subtle">
               {verdict.decision === 'accepted' ? 'Accepted' : 'Rejected'}
-              {verdict.channel === 'verifier' ? ' by the Proof Verifier, asked by' : ' by'}
+              {verdict.channel === 'verifier' ? ' by the Proof Verifier, asked by' : verdict.channel === 'sample' ? ' in the sample data' : ' by'}
             </Text>
             {verdict.actorAccountId && <User accountId={verdict.actorAccountId} />}
             <Text size="small" color="color.text.subtle">

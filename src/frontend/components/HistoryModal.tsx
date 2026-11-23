@@ -16,7 +16,7 @@ import {
 } from '@forge/react';
 import type { HistoryEntry } from '../../services/view';
 import { api, messageOf } from '../api';
-import { describeEvent, timeAgo } from '../text';
+import { actorLabel, describeEvent, timeAgo } from '../text';
 
 interface Props {
   issueKey: string;
@@ -63,7 +63,7 @@ export const HistoryModal = ({ issueKey, onClose }: Props) => {
               {entries.map((entry) => (
                 <Stack key={entry.id} space="space.025">
                   <Inline space="space.050" alignBlock="center" shouldWrap>
-                    {entry.actorAccountId ? <User accountId={entry.actorAccountId} /> : <Text weight="medium">The app</Text>}
+                    {entry.actorAccountId ? <User accountId={entry.actorAccountId} /> : <Text weight="medium">{actorLabel(entry)}</Text>}
                     <Text size="small" color="color.text.subtlest">
                       {entry.channel === 'agent' ? 'through an agent, ' : ''}
                       {timeAgo(entry.at, now)}

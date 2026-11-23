@@ -91,7 +91,7 @@ export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'
     case 'graph':
       return 'Found through Teamwork Graph';
     case 'sample':
-      return 'Sample data';
+      return evidence.agentName ? `Sample data, as if submitted by the agent ${evidence.agentName}` : 'Sample data, as if added by a person';
     default:
       return 'Added by hand';
   }
@@ -168,9 +168,32 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
       return 'made the last change that proved every criterion';
     case 'proof.reopened':
       return 'made a change that left the work item no longer fully proven';
+    case 'issue.done': {
+      const status = statusName(data['status'], 'a done status');
+      if (data['contract'] === false) return `moved the work item to ${status} before it had a contract`;
+      return data['proven'] === true
+        ? `moved the work item to ${status} with every criterion proven`
+        : `moved the work item to ${status} without proof`;
+    }
+    case 'issue.reopened':
+      return `moved the work item from ${statusName(data['fromStatus'], 'a done status')} back to ${statusName(data['status'], 'an open status')}`;
+    case 'gate.warned':
+      return `got a warning from the done gate.${sentence(data['reason'])}`;
+    case 'gate.bounced':
+      return `closed the work item without proof, and the done gate moved it back to ${statusName(data['backTo'], 'where it was')}.${sentence(data['reason'])}`;
+    case 'gate.blocked':
+      return `tried to move the work item on, and the workflow validator refused.${sentence(data['reason'])}`;
     default:
       return entry.type;
   }
+}
+
+const statusName = (value: unknown, fallback: string): string => (typeof value === 'string' && value ? value : fallback);
+const sentence = (value: unknown): string => (typeof value === 'string' && value ? ` ${value}` : '');
+
+/** Who an entry in the history is attributed to when no person did it. */
+export function actorLabel(entry: Pick<HistoryEntry, 'channel'>): string {
+  return entry.channel === 'sample' ? 'Sample data' : 'The app';
 }
 
 export function proofLine(proven: number, total: number): string {
