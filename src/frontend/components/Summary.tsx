@@ -6,10 +6,11 @@ import { PROOF_STATE, proofLine } from '../text';
 interface Props {
   view: ContractView;
   onHistory: () => void;
+  onRefresh: () => void;
 }
 
 /** The state of the whole contract and what it means for closing the work item. */
-export const Summary = ({ view, onHistory }: Props) => {
+export const Summary = ({ view, onHistory, onRefresh }: Props) => {
   const { summary, gate, policy, issue } = view;
   const badge = PROOF_STATE[summary.state];
   const proven = summary.state === 'proven';
@@ -23,9 +24,14 @@ export const Summary = ({ view, onHistory }: Props) => {
           </Lozenge>
           <Text>{proofLine(summary.proven, summary.total)}</Text>
         </Inline>
-        <Button appearance="subtle" spacing="compact" onClick={onHistory}>
-          History
-        </Button>
+        <Inline space="space.050">
+          <Button appearance="subtle" spacing="compact" onClick={onRefresh}>
+            Refresh
+          </Button>
+          <Button appearance="subtle" spacing="compact" onClick={onHistory}>
+            History
+          </Button>
+        </Inline>
       </Inline>
       {summary.total > 0 && (
         <ProgressBar

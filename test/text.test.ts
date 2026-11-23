@@ -1,7 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { readMeter } from '../src/core/meter';
 import { activityLine, attentionNote, contractsLine, meterFigures } from '../src/frontend/project-text';
-import { actorLabel, channelLine, criterionBadge, describeEvent, detailLines, proofLine, sourceLine, timeAgo } from '../src/frontend/text';
+import {
+  actorLabel,
+  channelLine,
+  criterionBadge,
+  describeEvent,
+  detailLines,
+  proofLine,
+  sourceLine,
+  timeAgo,
+  verifierPrompt,
+  waitingForReview,
+  waitingLine,
+} from '../src/frontend/text';
+import type { CriterionView, EvidenceView } from '../src/services/view';
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -58,6 +71,30 @@ describe('badges and lines', () => {
     expect(proofLine(0, 0)).toBe('No criteria yet');
     expect(proofLine(1, 1)).toBe('1 of 1 criterion proven');
     expect(proofLine(2, 5)).toBe('2 of 5 criteria proven');
+  });
+});
+
+describe('asking the Proof Verifier', () => {
+  const evidence = (standing: EvidenceView['standing']) => ({ standing }) as EvidenceView;
+  const view = (requireIndependent: boolean) => ({
+    policy: { requireIndependent, gateMode: 'warn' as const },
+    criteria: [
+      { evidence: [evidence('pending'), evidence('rejected')] },
+      { evidence: [evidence('self_accepted'), evidence('accepted'), evidence('failed_checks')] },
+      { evidence: [] },
+    ] as unknown as CriterionView[],
+  });
+
+  it('counts the evidence a reviewer can still decide on', () => {
+    expect(waitingForReview(view(false))).toBe(1);
+    expect(waitingForReview(view(true))).toBe(2);
+    expect(waitingForReview({ ...view(true), criteria: [] })).toBe(0);
+  });
+
+  it('words the count and the request', () => {
+    expect(waitingLine(1)).toBe('1 piece of evidence waits for a check.');
+    expect(waitingLine(3)).toBe('3 pieces of evidence wait for a check.');
+    expect(verifierPrompt('POD-7')).toBe('Review the evidence that waits for a verdict on POD-7.');
   });
 });
 

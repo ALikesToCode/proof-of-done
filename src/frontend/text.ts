@@ -6,7 +6,8 @@ import type {
   ProofState,
   RequiredKind,
 } from '../core/types';
-import type { CriterionView, EvidenceView, HistoryEntry } from '../services/view';
+import { awaitsReview } from '../core/proof';
+import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
 
 /** Wording and small formatters for the panel. No Forge imports, so it can be unit-tested. */
 
@@ -198,6 +199,23 @@ export function actorLabel(entry: Pick<HistoryEntry, 'channel'>): string {
 
 /** The Rovo agent that reviews evidence. The key and the name are the ones in the manifest. */
 export const VERIFIER = { agentKey: 'proof-verifier', agentName: 'Proof Verifier' } as const;
+
+/** How many pieces of evidence still wait for someone to decide on them. */
+export function waitingForReview(view: Pick<ContractView, 'criteria' | 'policy'>): number {
+  return view.criteria.reduce(
+    (sum, criterion) => sum + criterion.evidence.filter((e) => awaitsReview(e.standing, view.policy.requireIndependent)).length,
+    0,
+  );
+}
+
+export function waitingLine(waiting: number): string {
+  return waiting === 1 ? '1 piece of evidence waits for a check.' : `${waiting} pieces of evidence wait for a check.`;
+}
+
+/** What the panel says to the Proof Verifier when it opens Rovo chat. */
+export function verifierPrompt(issueKey: string): string {
+  return `Review the evidence that waits for a verdict on ${issueKey}.`;
+}
 
 export function proofLine(proven: number, total: number): string {
   if (total === 0) return 'No criteria yet';
