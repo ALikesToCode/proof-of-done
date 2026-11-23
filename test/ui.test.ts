@@ -327,7 +327,7 @@ describe('the issue panel', () => {
     expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Confirmed']);
   });
 
-  it('reviews without the graph when it gives no answer', async () => {
+  it('says so when the graph gives no answer, and reviews without it', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const { graph } = onWorkItem();
     await contractWithPullRequest();
@@ -336,13 +336,33 @@ describe('the issue panel', () => {
 
     await page.press('Review');
     expect(world().calls).toEqual(['getContract', 'getGraphNote']);
-    expect(page.dialog.text()).not.toContain('Teamwork Graph');
+    expect(page.dialog.text()).toContain('The Teamwork Graph did not answer. You can judge without it, or ask again.');
     expect(page.dialog.text()).not.toContain('Asking what Jira links');
+    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check']);
+    expect(page.dialog.buttons()).toEqual(['Ask again', 'Cancel', 'Reject', 'Accept']);
     expect(warn).toHaveBeenCalledTimes(1);
 
     await page.dialog.press('Accept');
     expect(page.all('Modal')).toHaveLength(0);
     expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+  });
+
+  it('asks the graph again when the reviewer wants it to', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { graph } = onWorkItem();
+    await contractWithPullRequest();
+    graph.mood = 'down';
+    const page = await show(pages.panel);
+    await page.press('Review');
+
+    graph.mood = 'up';
+    graph.link('10001', [{}]);
+    await page.dialog.press('Ask again');
+    expect(world().calls).toEqual(['getContract', 'getGraphNote', 'getGraphNote']);
+    expect(page.dialog.text()).not.toContain('did not answer');
+    expect(page.dialog.text()).toContain('The Teamwork Graph links this pull request to the work item and has it as merged.');
+    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Confirmed']);
+    expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
   });
 
   it('does not ask the graph about a test run', async () => {

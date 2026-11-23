@@ -38,15 +38,18 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
   const [reason, setReason] = useState('');
   const [saving, setSaving] = useState<'accepted' | 'rejected' | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
+  const covered = graphCovers(evidence);
   const [graph, setGraph] = useState<GraphNote | null>(null);
-  const [asking, setAsking] = useState(graphCovers(evidence));
+  const [asking, setAsking] = useState(covered);
+  const [asks, setAsks] = useState(0);
   const standing = STANDING[evidence.standing];
 
   // For a pull request or a build, ask what Jira itself links to the work item.
-  // The answer is an extra: when the graph is silent the dialog goes on without it.
+  // The answer is an extra: when the graph is silent the dialog says so and goes on without it.
   useEffect(() => {
-    if (!graphCovers(evidence)) return;
+    if (!covered) return;
     let open = true;
+    setAsking(true);
     api
       .getGraphNote(evidence.id)
       .then((answer) => {
@@ -59,7 +62,7 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
     return () => {
       open = false;
     };
-  }, [evidence.id]);
+  }, [evidence.id, asks]);
 
   const decide = async (decision: 'accepted' | 'rejected') => {
     if (decision === 'rejected' && reason.trim().length < 3) {
@@ -129,15 +132,22 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                 These only show the evidence is well-formed. Whether it proves the criterion is your call.
               </Text>
             </Stack>
-            {(asking || graph) && (
+            {covered && (
               <Stack space="space.050">
                 <Inline space="space.100" alignBlock="center" shouldWrap>
                   <Text size="small" color="color.text.subtle">
                     Teamwork Graph
                   </Text>
                   {graph && <Lozenge appearance={GRAPH_FINDING[graph.finding].tone}>{GRAPH_FINDING[graph.finding].label}</Lozenge>}
+                  {!graph && !asking && (
+                    <Button spacing="compact" appearance="subtle" onClick={() => setAsks(asks + 1)}>
+                      Ask again
+                    </Button>
+                  )}
                 </Inline>
-                <Text size="small">{graph ? graph.text : 'Asking what Jira links to this work item.'}</Text>
+                <Text size="small">
+                  {graph ? graph.text : asking ? 'Asking what Jira links to this work item.' : 'The Teamwork Graph did not answer. You can judge without it, or ask again.'}
+                </Text>
               </Stack>
             )}
             <Stack space="space.050">
