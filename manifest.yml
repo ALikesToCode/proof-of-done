@@ -1,0 +1,43 @@
+modules:
+  jira:issuePanel:
+    - key: proof-of-done-panel
+      resource: issue-panel
+      resolver:
+        function: resolver
+      render: native
+      title: Proof of Done
+      icon: resource:icons;proof-of-done.svg
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: on-installed
+      handler: index.onInstalled
+    - key: maintenance
+      handler: index.maintenance
+  trigger:
+    - key: app-installed
+      function: on-installed
+      events:
+        - avi:forge:installed:app
+  scheduledTrigger:
+    - key: daily-maintenance
+      function: maintenance
+      interval: day
+  sql:
+    - key: proof-store
+      engine: mysql
+resources:
+  - key: issue-panel
+    path: src/frontend/issue-panel.tsx
+  - key: icons
+    path: static/icons
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+app:
+  runtime:
+    name: nodejs24.x
+    memoryMB: 256
+    architecture: arm64
+  id: ari:cloud:ecosystem::app/8c9b1b0d-9480-40dc-b852-5f17375dd7fd

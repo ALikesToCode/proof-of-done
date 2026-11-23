@@ -1,0 +1,21 @@
+import { xcss } from '@forge/react';
+
+export const card = xcss({
+  borderColor: 'color.border',
+  borderStyle: 'solid',
+  borderWidth: 'border.width',
+  borderRadius: 'radius.medium',
+  padding: 'space.150',
+});
+
+export const evidenceBox = xcss({
+  backgroundColor: 'color.background.neutral.subtle',
+  borderInlineStartColor: 'color.border.bold',
+  borderLeftStyle: 'solid',
+  borderInlineStartWidth: 'border.width.selected',
+  paddingInlineStart: 'space.150',
+  paddingBlock: 'space.050',
+});
+
+export const grow = xcss({ flexGrow: 1 });
+export const kindSelect = xcss({ width: '210px' });

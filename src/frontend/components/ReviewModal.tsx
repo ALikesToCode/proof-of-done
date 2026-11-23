@@ -1,0 +1,147 @@
+import React, { useState } from 'react';
+import {
+  Button,
+  HelperMessage,
+  Label,
+  Link,
+  LoadingButton,
+  Lozenge,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  ModalTransition,
+  SectionMessage,
+  Stack,
+  Text,
+  TextArea,
+  User,
+  Inline,
+} from '@forge/react';
+import type { ContractView, CriterionView, EvidenceView } from '../../services/view';
+import { api, messageOf } from '../api';
+import { KIND, STANDING, channelLine, detailLines } from '../text';
+
+interface Props {
+  criterion: CriterionView;
+  evidence: EvidenceView;
+  onClose: () => void;
+  onSaved: (view: ContractView) => void;
+}
+
+/** Where a person decides whether a piece of evidence proves its criterion. */
+export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) => {
+  const [reason, setReason] = useState('');
+  const [saving, setSaving] = useState<'accepted' | 'rejected' | null>(null);
+  const [problem, setProblem] = useState<string | null>(null);
+  const standing = STANDING[evidence.standing];
+
+  const decide = async (decision: 'accepted' | 'rejected') => {
+    if (decision === 'rejected' && reason.trim().length < 3) {
+      setProblem('Say why this evidence does not prove the criterion.');
+      return;
+    }
+    setSaving(decision);
+    setProblem(null);
+    try {
+      onSaved(await api.recordVerdict({ evidenceId: evidence.id, decision, reason: reason.trim() || null }));
+    } catch (error) {
+      setProblem(messageOf(error));
+      setSaving(null);
+    }
+  };
+
+  return (
+    <ModalTransition>
+      <Modal onClose={onClose}>
+        <ModalHeader>
+          <ModalTitle>Review evidence</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Stack space="space.150">
+            <Stack space="space.050">
+              <Text size="small" color="color.text.subtle">
+                Criterion
+              </Text>
+              <Text weight="medium">{criterion.text}</Text>
+            </Stack>
+            <Stack space="space.050">
+              <Inline space="space.100" alignBlock="center" shouldWrap>
+                <Text size="small" color="color.text.subtle">
+                  Evidence
+                </Text>
+                <Lozenge appearance={standing.tone}>{standing.label}</Lozenge>
+                <Text size="small" color="color.text.subtle">
+                  {KIND[evidence.kind]}. {channelLine(evidence)}
+                </Text>
+                {evidence.actorAccountId && <User accountId={evidence.actorAccountId} />}
+              </Inline>
+              <Text>{evidence.summary}</Text>
+              {evidence.url && (
+                <Text>
+                  <Link href={evidence.url} openNewTab>
+                    {evidence.url}
+                  </Link>
+                </Text>
+              )}
+              {detailLines(evidence.details).map((line) => (
+                <Text key={line} size="small">
+                  {line}
+                </Text>
+              ))}
+              {evidence.details.text && (
+                <Text size="small" color="color.text.subtle">
+                  {evidence.details.text}
+                </Text>
+              )}
+            </Stack>
+            <Stack space="space.050">
+              <Text size="small" color="color.text.subtle">
+                Checks the app ran
+              </Text>
+              {evidence.checks.map((check) => (
+                <Text key={check.id} size="small">
+                  {check.note}
+                </Text>
+              ))}
+              <Text size="small" color="color.text.subtlest">
+                These only show the evidence is well-formed. Whether it proves the criterion is your call.
+              </Text>
+            </Stack>
+            <Stack space="space.050">
+              <Label labelFor="verdict-reason">Reason</Label>
+              <TextArea id="verdict-reason" name="reason" maxLength={2000} onChange={(event) => setReason(String(event.target.value ?? ''))} />
+              <HelperMessage>Needed to reject. Worth a line when you accept, so the next reader knows what you checked.</HelperMessage>
+            </Stack>
+            {evidence.acceptBlocked && (
+              <SectionMessage appearance="information">
+                <Text>{evidence.acceptBlocked}</Text>
+              </SectionMessage>
+            )}
+            {problem && (
+              <SectionMessage appearance="error">
+                <Text>{problem}</Text>
+              </SectionMessage>
+            )}
+          </Stack>
+        </ModalBody>
+        <ModalFooter>
+          <Button appearance="subtle" onClick={onClose}>
+            Cancel
+          </Button>
+          {evidence.canReject && (
+            <LoadingButton appearance="danger" isLoading={saving === 'rejected'} isDisabled={saving !== null} onClick={() => decide('rejected')}>
+              Reject
+            </LoadingButton>
+          )}
+          {evidence.canAccept && (
+            <LoadingButton appearance="primary" isLoading={saving === 'accepted'} isDisabled={saving !== null} onClick={() => decide('accepted')}>
+              Accept
+            </LoadingButton>
+          )}
+        </ModalFooter>
+      </Modal>
+    </ModalTransition>
+  );
+};

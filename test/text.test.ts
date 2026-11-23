@@ -1,0 +1,93 @@
+import { describe, expect, it } from 'vitest';
+import { criterionBadge, describeEvent, detailLines, proofLine, sourceLine, timeAgo } from '../src/frontend/text';
+
+const MINUTE = 60_000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
+describe('timeAgo', () => {
+  const now = Date.UTC(2026, 10, 23, 12, 0, 0);
+  it.each([
+    [10_000, 'just now'],
+    [70_000, 'a minute ago'],
+    [12 * MINUTE, '12 minutes ago'],
+    [70 * MINUTE, 'an hour ago'],
+    [5 * HOUR, '5 hours ago'],
+    [30 * HOUR, 'yesterday'],
+    [6 * DAY, '6 days ago'],
+    [60 * DAY, '24 Sep 2026'],
+  ])('%d ms ago reads "%s"', (elapsed, expected) => {
+    expect(timeAgo(now - elapsed, now)).toBe(expected);
+  });
+
+  it('does not go negative when clocks disagree', () => {
+    expect(timeAgo(now + 5_000, now)).toBe('just now');
+  });
+});
+
+describe('badges and lines', () => {
+  it('names each criterion state', () => {
+    expect(criterionBadge({ state: 'unproven', selfReviewed: false, needsIndependent: false }).label).toBe('No evidence');
+    expect(criterionBadge({ state: 'submitted', selfReviewed: false, needsIndependent: false }).label).toBe('Waiting for a check');
+    expect(criterionBadge({ state: 'submitted', selfReviewed: false, needsIndependent: true }).label).toBe('Needs a second person');
+    expect(criterionBadge({ state: 'rejected', selfReviewed: false, needsIndependent: false }).tone).toBe('removed');
+    expect(criterionBadge({ state: 'proven', selfReviewed: false, needsIndependent: false })).toEqual({ label: 'Proven', tone: 'success' });
+    expect(criterionBadge({ state: 'proven', selfReviewed: true, needsIndependent: false }).label).toBe('Proven, self-reviewed');
+  });
+
+  it('says where a criterion came from', () => {
+    expect(sourceLine('description', 'Acceptance Criteria')).toBe('From the description, under "Acceptance Criteria"');
+    expect(sourceLine('description', null)).toBe('From the description');
+    expect(sourceLine('manual', null)).toBe('Added by hand');
+    expect(sourceLine('project_rule', 'r1')).toBe('Project rule');
+  });
+
+  it('lists the structured fields of evidence', () => {
+    expect(detailLines({ passed: 120, failed: 0, skipped: 3, exitCode: 0, command: 'npm test' })).toEqual([
+      '120 passed, 0 failed, 3 skipped',
+      'Exit code 0',
+      'Command: npm test',
+    ]);
+    expect(detailLines({ status: 'passed', commit: 'abc123' })).toEqual(['Result: passed', 'Commit abc123']);
+    expect(detailLines({})).toEqual([]);
+  });
+
+  it('counts criteria in plain words', () => {
+    expect(proofLine(0, 0)).toBe('No criteria yet');
+    expect(proofLine(1, 1)).toBe('1 of 1 criterion proven');
+    expect(proofLine(2, 5)).toBe('2 of 5 criteria proven');
+  });
+});
+
+describe('describeEvent', () => {
+  it('reads as a phrase after a name', () => {
+    expect(describeEvent({ type: 'contract.created', data: { criteria: 3 } })).toBe('created the contract with 3 criteria');
+    expect(describeEvent({ type: 'contract.created', data: { criteria: 1 } })).toBe('created the contract with 1 criterion');
+    expect(describeEvent({ type: 'contract.created', data: { criteria: 0 } })).toBe('created an empty contract');
+    expect(describeEvent({ type: 'criterion.added', data: { text: 'Login works' } })).toBe('added the criterion "Login works"');
+    expect(describeEvent({ type: 'criterion.replaced', data: { text: 'B', previousText: 'A' } })).toBe('changed "A" to "B"');
+    expect(describeEvent({ type: 'criterion.replaced', data: { text: 'A', previousText: 'A' } })).toBe('changed what "A" needs');
+  });
+
+  it('describes evidence and verdicts', () => {
+    expect(describeEvent({ type: 'evidence.submitted', data: { kind: 'test_run', text: 'Tests pass', checksPassed: false } })).toBe(
+      'submitted test run evidence for "Tests pass". It failed its checks.',
+    );
+    expect(describeEvent({ type: 'verdict.recorded', data: { decision: 'rejected', by: 'ui', text: 'Tests pass', reason: 'Wrong branch' } })).toBe(
+      'rejected evidence for "Tests pass". Reason: Wrong branch',
+    );
+    expect(describeEvent({ type: 'verdict.recorded', data: { decision: 'accepted', by: 'ui', independent: false, text: 'Tests pass', reason: 'Accepted.' } })).toBe(
+      'accepted evidence for "Tests pass" as a self-review.',
+    );
+    expect(describeEvent({ type: 'verdict.recorded', data: { decision: 'accepted', by: 'verifier', independent: true, text: 'Tests pass', reason: 'Run is green' } })).toBe(
+      'asked the Proof Verifier, which accepted evidence for "Tests pass". Reason: Run is green',
+    );
+    expect(describeEvent({ type: 'verdict.recorded', data: { decision: 'accepted', by: 'attestation', text: 'Copy approved' } })).toBe('attested "Copy approved"');
+  });
+
+  it('shortens long text and survives unknown events', () => {
+    const long = 'x'.repeat(200);
+    expect(describeEvent({ type: 'criterion.removed', data: { text: long } }).length).toBeLessThan(130);
+    expect(describeEvent({ type: 'something.new', data: {} })).toBe('something.new');
+  });
+});
