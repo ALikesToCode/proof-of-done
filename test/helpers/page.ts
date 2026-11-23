@@ -114,6 +114,19 @@ export class Page {
     await this.run(() => (button.props['onClick'] as () => unknown)());
   }
 
+  /** Presses a button and comes back once the page has drawn, while the backend may still be working. */
+  async start(label: string): Promise<void> {
+    let button: ReactTestRendererJSON | null = null;
+    walk(this.nodes(), (node) => {
+      if (!button && PRESSABLE.includes(node.type) && textOf(node) === label) button = node;
+    });
+    if (!button) throw new Error(`No button "${label}" here. There is: ${this.buttons().join(' | ')}`);
+    const press = (button as ReactTestRendererJSON).props['onClick'] as () => unknown;
+    await act(async () => {
+      await press();
+    });
+  }
+
   /** The field with this id, name or label. */
   field(name: string): ReactTestRendererJSON {
     let found: ReactTestRendererJSON | null = null;

@@ -6,6 +6,7 @@ import type {
   ProofState,
   RequiredKind,
 } from '../core/types';
+import type { GraphFinding } from '../core/graph';
 import { awaitsReview } from '../core/proof';
 import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
 
@@ -30,6 +31,14 @@ export const STANDING: Record<EvidenceStanding, Badge> = {
   accepted: { label: 'Accepted', tone: 'success' },
   self_accepted: { label: 'Self-reviewed', tone: 'moved' },
   rejected: { label: 'Rejected', tone: 'removed' },
+};
+
+/** How a piece of evidence compares with what the Teamwork Graph links to its work item. */
+export const GRAPH_FINDING: Record<GraphFinding, Badge> = {
+  confirmed: { label: 'Confirmed', tone: 'success' },
+  differs: { label: 'Differs', tone: 'removed' },
+  not_linked: { label: 'Not linked', tone: 'moved' },
+  no_record: { label: 'No record', tone: 'default' },
 };
 
 export const KIND: Record<EvidenceKind, string> = {

@@ -1,4 +1,4 @@
-import { FakeJira, MemoryStore } from './fakes';
+import { FakeGraph, FakeJira, MemoryStore } from './fakes';
 
 /**
  * What the stand-ins for Forge share with a page test: the store and the Jira that
@@ -7,6 +7,7 @@ import { FakeJira, MemoryStore } from './fakes';
 export interface World {
   store: MemoryStore;
   jira: FakeJira;
+  graph: FakeGraph;
   accountId: string | null;
   /** The work item or the project the page is open on, as Forge passes it to a resolver. */
   extension: Record<string, unknown>;
@@ -23,6 +24,7 @@ export interface World {
 const fresh = (): World => ({
   store: new MemoryStore(),
   jira: new FakeJira(),
+  graph: new FakeGraph(),
   accountId: 'alice',
   extension: {},
   siteUrl: 'https://example.atlassian.net',

@@ -38,6 +38,16 @@ vi.mock('../src/jira/forge-gateway', async () => {
     },
   };
 });
+vi.mock('../src/graph/forge-graph', async () => {
+  const helpers = await import('./helpers/world');
+  return {
+    ForgeGraphGateway: class {
+      constructor() {
+        return helpers.forward(() => helpers.world().graph);
+      }
+    },
+  };
+});
 
 const DESCRIPTION = doc(
   p('As a user I want to log in.'),
@@ -52,6 +62,7 @@ const VERIFIER: Caller = { accountId: 'alice', via: 'verifier' };
 
 const TEST_RUN = { kind: 'test_run', summary: 'Full unit suite on the login branch', url: 'https://ci.example.com/runs/42', details: { passed: 120, failed: 0 } };
 const FAILED_RUN = { kind: 'test_run', summary: 'Unit suite after the login change', details: { passed: 118, failed: 2 } };
+const PULL_REQUEST = { kind: 'pull_request', summary: 'The change that adds the login form', url: 'https://github.com/acme/mobile/pull/12', details: { status: 'merged' } };
 
 let pages: Record<'panel' | 'project' | 'settings', ReactElement>;
 const mounted: Page[] = [];
@@ -108,6 +119,12 @@ async function contractWithAgentEvidence(): Promise<string> {
   const created = await contract();
   const view = await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[0]!.id, ...TEST_RUN });
   return view.criteria[0]!.evidence[0]!.id;
+}
+
+/** A contract whose first criterion has a merged pull request from Alice's coding agent. */
+async function contractWithPullRequest(): Promise<void> {
+  const created = await contract();
+  await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[0]!.id, ...PULL_REQUEST });
 }
 
 const count = (items: string[], wanted: string): number => items.filter((item) => item === wanted).length;
@@ -270,6 +287,74 @@ describe('the issue panel', () => {
     expect(page.all('Modal')).toHaveLength(0);
     expect(page.labels('Lozenge')).toEqual(['Not proven', 'Evidence rejected', 'Rejected', 'No evidence', 'No evidence']);
     expect(page.text()).toContain('just now. The run is from another branch.');
+  });
+
+  it('shows the reviewer what the Teamwork Graph holds about a pull request', async () => {
+    const { graph } = onWorkItem();
+    await contractWithPullRequest();
+    graph.link('10001', [{ state: 'open' }]);
+    const page = await show(pages.panel);
+
+    await page.press('Review');
+    expect(page.dialog.text()).toContain('Teamwork Graph');
+    expect(page.dialog.text()).toContain('The evidence says this pull request is merged, but the Teamwork Graph has it as open.');
+    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Differs']);
+    expect(world().calls).toEqual(['getContract', 'getGraphNote']);
+    expect(graph.asked).toEqual(['10001']);
+    // The note is advice. The decision stays with the reviewer.
+    expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
+    await page.dialog.press('Accept');
+    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+  });
+
+  it('says it is asking the graph until the answer is there', async () => {
+    const { graph } = onWorkItem();
+    await contractWithPullRequest();
+    graph.link('10001', [{}]);
+    const page = await show(pages.panel);
+    const answer = graph.hold();
+
+    await page.start('Review');
+    expect(page.dialog.text()).toContain('Asking what Jira links to this work item.');
+    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check']);
+    // The reviewer does not have to wait for it.
+    expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
+
+    answer();
+    await page.settle();
+    expect(page.dialog.text()).not.toContain('Asking what Jira links to this work item.');
+    expect(page.dialog.text()).toContain('The Teamwork Graph links this pull request to the work item and has it as merged.');
+    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Confirmed']);
+  });
+
+  it('reviews without the graph when it gives no answer', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { graph } = onWorkItem();
+    await contractWithPullRequest();
+    graph.mood = 'down';
+    const page = await show(pages.panel);
+
+    await page.press('Review');
+    expect(world().calls).toEqual(['getContract', 'getGraphNote']);
+    expect(page.dialog.text()).not.toContain('Teamwork Graph');
+    expect(page.dialog.text()).not.toContain('Asking what Jira links');
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    await page.dialog.press('Accept');
+    expect(page.all('Modal')).toHaveLength(0);
+    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+  });
+
+  it('does not ask the graph about a test run', async () => {
+    const { graph } = onWorkItem();
+    await contractWithAgentEvidence();
+    const page = await show(pages.panel);
+
+    await page.press('Review');
+    expect(page.dialog.text()).not.toContain('Teamwork Graph');
+    expect(page.dialog.text()).not.toContain('Asking what Jira links');
+    expect(world().calls).toEqual(['getContract']);
+    expect(graph.asked).toEqual([]);
   });
 
   it('checks evidence entered by hand before it stores it, and leaves the verdict to someone else', async () => {

@@ -1,5 +1,6 @@
 import { invoke } from '@forge/bridge';
 import type { ProjectSettings } from '../core/types';
+import type { GraphNoteView } from '../services/graph';
 import type { ProjectView, SampleRemoval, SampleStep } from '../services/project-view';
 import type { ContractView, EvidenceInput, HistoryEntry, VerdictInput } from '../services/view';
 
@@ -41,6 +42,7 @@ export const api = {
   submitEvidence: (input: EvidenceInput) => call<ContractView>('submitEvidence', { ...input }),
   recordVerdict: (input: VerdictInput) => call<ContractView>('recordVerdict', { ...input }),
   getHistory: () => call<HistoryEntry[]>('getHistory'),
+  getGraphNote: (evidenceId: string) => call<GraphNoteView>('getGraphNote', { evidenceId }),
 };
 
 export const projectApi = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   HelperMessage,
@@ -19,9 +19,11 @@ import {
   User,
   Inline,
 } from '@forge/react';
+import { graphCovers } from '../../core/graph';
+import type { GraphNote } from '../../core/graph';
 import type { ContractView, CriterionView, EvidenceView } from '../../services/view';
 import { api, messageOf } from '../api';
-import { KIND, STANDING, channelLine, detailLines } from '../text';
+import { GRAPH_FINDING, KIND, STANDING, channelLine, detailLines } from '../text';
 import { Excerpt } from './Excerpt';
 
 interface Props {
@@ -36,7 +38,28 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
   const [reason, setReason] = useState('');
   const [saving, setSaving] = useState<'accepted' | 'rejected' | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
+  const [graph, setGraph] = useState<GraphNote | null>(null);
+  const [asking, setAsking] = useState(graphCovers(evidence));
   const standing = STANDING[evidence.standing];
+
+  // For a pull request or a build, ask what Jira itself links to the work item.
+  // The answer is an extra: when the graph is silent the dialog goes on without it.
+  useEffect(() => {
+    if (!graphCovers(evidence)) return;
+    let open = true;
+    api
+      .getGraphNote(evidence.id)
+      .then((answer) => {
+        if (open) setGraph(answer.note);
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (open) setAsking(false);
+      });
+    return () => {
+      open = false;
+    };
+  }, [evidence.id]);
 
   const decide = async (decision: 'accepted' | 'rejected') => {
     if (decision === 'rejected' && reason.trim().length < 3) {
@@ -106,6 +129,17 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                 These only show the evidence is well-formed. Whether it proves the criterion is your call.
               </Text>
             </Stack>
+            {(asking || graph) && (
+              <Stack space="space.050">
+                <Inline space="space.100" alignBlock="center" shouldWrap>
+                  <Text size="small" color="color.text.subtle">
+                    Teamwork Graph
+                  </Text>
+                  {graph && <Lozenge appearance={GRAPH_FINDING[graph.finding].tone}>{GRAPH_FINDING[graph.finding].label}</Lozenge>}
+                </Inline>
+                <Text size="small">{graph ? graph.text : 'Asking what Jira links to this work item.'}</Text>
+              </Stack>
+            )}
             <Stack space="space.050">
               <Label labelFor="verdict-reason">Reason</Label>
               <TextArea id="verdict-reason" name="reason" maxLength={2000} onChange={(event) => setReason(String(event.target.value ?? ''))} />

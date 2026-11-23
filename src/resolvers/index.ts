@@ -1,8 +1,10 @@
 import { isForgePlatformError } from '@forge/api';
 import Resolver, { Request } from '@forge/resolver';
 import { PodError } from '../core/errors';
+import { ForgeGraphGateway } from '../graph/forge-graph';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { Caller, ContractService } from '../services/contracts';
+import { GraphService } from '../services/graph';
 import { ProjectService } from '../services/project';
 import { SampleService } from '../services/sample';
 import { SqlContractStore } from '../store/sql-store';
@@ -17,6 +19,7 @@ export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: { code: s
 const store = new SqlContractStore();
 const jira = new ForgeJiraGateway();
 const service = new ContractService(store, jira);
+const graphs = new GraphService(service, new ForgeGraphGateway());
 const projects = new ProjectService(store, jira);
 const samples = new SampleService(store, jira);
 const resolver = new Resolver();
@@ -106,6 +109,8 @@ define('recordVerdict', (issueId, caller, payload) =>
 );
 
 define('getHistory', (issueId) => service.history(issueId));
+
+define('getGraphNote', (issueId, caller, payload) => graphs.noteFor(issueId, caller, text(payload['evidenceId'])));
 
 defineProject('getProject', (projectId, _accountId, payload) => projects.overview(projectId, payload['windowDays']));
 
