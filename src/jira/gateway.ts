@@ -37,11 +37,42 @@ export const PROOF_PROPERTY_KEY = 'proof-of-done';
  */
 export type RunAs = 'user' | 'app';
 
+/** A project and the work item types it can create, sub-tasks left out. */
+export interface ProjectInfo {
+  id: string;
+  key: string;
+  name: string;
+  issueTypes: Array<{ id: string; name: string }>;
+}
+
+/** A work item as one row of a list. */
+export interface IssueRow {
+  id: string;
+  key: string;
+  summary: string;
+  issueType: string;
+  statusName: string;
+  statusCategory: string;
+  assigneeAccountId: string | null;
+  /** When it last moved between to do, in progress and done, in epoch milliseconds. */
+  statusCategoryChangedAt: number | null;
+}
+
+export interface NewIssue {
+  projectId: string;
+  issueTypeId: string;
+  summary: string;
+  description: AdfNode;
+  labels: string[];
+}
+
 export interface TransitionInfo {
   id: string;
   name: string;
   toStatusId: string;
   toStatusName: string;
+  /** Category key of the status it leads to. */
+  toCategory: string;
 }
 
 export interface JiraGateway {
@@ -57,4 +88,16 @@ export interface JiraGateway {
   transition(issueId: string, transitionId: string): Promise<void>;
   /** Adds a comment as the app, one paragraph per entry. */
   addComment(issueId: string, paragraphs: string[]): Promise<void>;
+  /** Returns null when the project does not exist or the caller may not see it. */
+  getProject(projectId: string, as: RunAs): Promise<ProjectInfo | null>;
+  /** Whether the calling user administers the project, as a project admin or as a Jira admin. */
+  canAdminister(projectId: string): Promise<boolean>;
+  /** How many work items match the JQL. Jira calls this count approximate. */
+  countIssues(jql: string, as: RunAs): Promise<number>;
+  /** The listed work items that exist and that the caller may see, at most 100 per call. */
+  getIssueRows(issueIds: string[], as: RunAs): Promise<IssueRow[]>;
+  /** Creates a work item as the app. */
+  createIssue(issue: NewIssue): Promise<{ id: string; key: string }>;
+  /** Deletes a work item as the app. False when Jira refused. A work item that is already gone counts as deleted. */
+  deleteIssue(issueId: string): Promise<boolean>;
 }

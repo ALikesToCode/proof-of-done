@@ -1,6 +1,6 @@
 import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
-import { IssueInfo, JiraGateway, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
+import { IssueInfo, IssueRow, JiraGateway, NewIssue, ProjectInfo, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
 import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../../src/store/types';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -168,9 +168,9 @@ export class FakeJira implements JiraGateway {
   ]);
   /** The transitions every work item offers. */
   transitions: TransitionInfo[] = [
-    { id: '11', name: 'To Do', toStatusId: '1', toStatusName: 'To Do' },
-    { id: '21', name: 'Start', toStatusId: '3', toStatusName: 'In Progress' },
-    { id: '31', name: 'Done', toStatusId: '5', toStatusName: 'Done' },
+    { id: '11', name: 'To Do', toStatusId: '1', toStatusName: 'To Do', toCategory: 'new' },
+    { id: '21', name: 'Start', toStatusId: '3', toStatusName: 'In Progress', toCategory: 'indeterminate' },
+    { id: '31', name: 'Done', toStatusId: '5', toStatusName: 'Done', toCategory: 'done' },
   ];
   comments: Array<{ issueId: string; paragraphs: string[] }> = [];
   statusLookups = 0;
@@ -192,13 +192,121 @@ export class FakeJira implements JiraGateway {
     const issue = this.issues.get(issueId);
     if (!transition || !issue) throw new Error('No such transition');
     if (this.failTransition) throw new Error('Jira returned 400 when moving the work item.');
+    const before = issue.statusCategory;
     issue.statusName = transition.toStatusName;
     issue.statusCategory = this.statuses.get(transition.toStatusId) ?? 'indeterminate';
+    const dates = this.dates.get(issueId);
+    if (dates && before !== issue.statusCategory) dates.statusCategoryChangedAt = this.clock();
   }
 
   async addComment(issueId: string, paragraphs: string[]): Promise<void> {
     if (this.failComment) throw new Error('Jira returned 403 when commenting.');
     this.comments.push({ issueId, paragraphs: [...paragraphs] });
+  }
+
+  projects = new Map<string, ProjectInfo>([
+    [
+      '10000',
+      {
+        id: '10000',
+        key: 'MOBL',
+        name: 'Mobile Dev',
+        issueTypes: [
+          { id: '1', name: 'Bug' },
+          { id: '2', name: 'Story' },
+          { id: '3', name: 'Task' },
+        ],
+      },
+    ],
+  ]);
+  admin = true;
+  /** The fake's idea of the present, for JQL with relative dates. */
+  clock: () => number = () => Date.now();
+  /** When each work item was created and when it last changed status category. */
+  dates = new Map<string, { createdAt: number; statusCategoryChangedAt: number | null }>();
+  labels = new Map<string, string[]>();
+  jqlSeen: string[] = [];
+  failCreate: string | null = null;
+  failDelete = false;
+  private nextIssue = 100;
+
+  async getProject(projectId: string, _as: RunAs): Promise<ProjectInfo | null> {
+    const project = this.projects.get(projectId);
+    return project ? clone(project) : null;
+  }
+
+  async canAdminister(): Promise<boolean> {
+    return this.admin;
+  }
+
+  /** Understands the two shapes of JQL the app writes: created in the last N days, and closed in the last N days. */
+  private match(jql: string): IssueInfo[] {
+    this.jqlSeen.push(jql);
+    const project = /project = (\d+)/.exec(jql)?.[1];
+    const createdDays = /created >= -(\d+)d/.exec(jql)?.[1];
+    const closedDays = /statusCategoryChangedDate >= -(\d+)d/.exec(jql)?.[1];
+    const day = 24 * 60 * 60 * 1000;
+    return [...this.issues.values()].filter((issue) => {
+      const dates = this.dates.get(issue.id);
+      if (project && issue.projectId !== project) return false;
+      if (createdDays && !(dates && dates.createdAt >= this.clock() - Number(createdDays) * day)) return false;
+      if (/statusCategory = Done/.test(jql) && issue.statusCategory !== 'done') return false;
+      if (closedDays && !(dates?.statusCategoryChangedAt && dates.statusCategoryChangedAt >= this.clock() - Number(closedDays) * day)) return false;
+      return true;
+    });
+  }
+
+  async countIssues(jql: string, _as: RunAs): Promise<number> {
+    return this.match(jql).length;
+  }
+
+  /** Work items the calling user may not see. */
+  hidden = new Set<string>();
+
+  async getIssueRows(issueIds: string[], _as: RunAs): Promise<IssueRow[]> {
+    return [...this.issues.values()]
+      .filter((issue) => issueIds.includes(issue.id) && !this.hidden.has(issue.id))
+      .map((issue) => ({
+        id: issue.id,
+        key: issue.key,
+        summary: issue.summary,
+        issueType: issue.issueType,
+        statusName: issue.statusName,
+        statusCategory: issue.statusCategory,
+        assigneeAccountId: issue.assigneeAccountId,
+        statusCategoryChangedAt: this.dates.get(issue.id)?.statusCategoryChangedAt ?? null,
+      }));
+  }
+
+  async createIssue(issue: NewIssue): Promise<{ id: string; key: string }> {
+    if (this.failCreate) throw new Error(this.failCreate);
+    const project = this.projects.get(issue.projectId);
+    if (!project) throw new Error('Jira returned 404 when creating a work item.');
+    const number = this.nextIssue++;
+    const id = String(20000 + number);
+    const key = `${project.key}-${number}`;
+    this.add(
+      issueInfo({
+        id,
+        key,
+        projectId: project.id,
+        projectKey: project.key,
+        summary: issue.summary,
+        description: clone(issue.description),
+        issueType: project.issueTypes.find((t) => t.id === issue.issueTypeId)?.name ?? 'Task',
+        statusName: 'To Do',
+        statusCategory: 'new',
+      }),
+    );
+    this.dates.set(id, { createdAt: this.clock(), statusCategoryChangedAt: null });
+    this.labels.set(id, [...issue.labels]);
+    return { id, key };
+  }
+
+  async deleteIssue(issueId: string): Promise<boolean> {
+    if (this.failDelete) return false;
+    this.issues.delete(issueId);
+    return true;
   }
 }
 
