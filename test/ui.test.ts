@@ -196,6 +196,20 @@ describe('the issue panel', () => {
     expect(page.text()).toContain('1 piece of evidence waits for a check.');
   });
 
+  it.each(['javascript:alert(document.domain)', 'data:text/html,<script>alert(1)</script>'])(
+    'shows evidence that came with the link %s without a link',
+    async (url) => {
+      onWorkItem();
+      const created = await contract();
+      await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[0]!.id, kind: 'document', summary: 'The release notes for the login change', url });
+      const page = await show(pages.panel);
+      expect(page.labels('Lozenge')).toContain('Failed checks');
+      expect(page.text()).toContain('The link must be an http or https address.');
+      expect(page.all('Link')).toEqual([]);
+      expect(page.text()).not.toContain(url);
+    },
+  );
+
   it('hands the waiting evidence to the Proof Verifier and picks up its verdict', async () => {
     vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
     onWorkItem();

@@ -250,6 +250,25 @@ describe('submitting evidence', () => {
     await expectError(service.recordVerdict('MOBL-1', BOB, { evidenceId: evidence.id, decision: 'accepted' }), 'invalid');
   });
 
+  it.each(['javascript:alert(document.domain)', 'data:text/html,<script>alert(1)</script>'])(
+    'stores the link %s, fails it, and shows it to nobody',
+    async (url) => {
+      const created = await service.createContract('MOBL-1', ALICE, { withSuggestions: true });
+      const view = await service.submitEvidence('MOBL-1', ALICES_AGENT, {
+        criterionId: criterionId(created),
+        kind: 'document',
+        summary: 'The release notes for the login change',
+        url,
+      });
+      const evidence = firstEvidence(view);
+      expect(store.evidence[0]!.url).toBe(url);
+      expect(evidence.url).toBeNull();
+      expect(evidence.standing).toBe('failed_checks');
+      expect(evidence.checks.filter((c) => !c.ok)).toEqual([{ id: 'url.valid', ok: false, note: 'The link must be an http or https address.' }]);
+      expect(firstEvidence(await service.view('MOBL-1', BOB)).url).toBeNull();
+    },
+  );
+
   it('holds evidence to the kind a criterion requires', async () => {
     const created = await service.addCriteria('MOBL-1', ALICE, [{ text: 'All unit tests pass', requiredKind: 'test_run' }]);
     const view = await service.submitEvidence('MOBL-1', ALICES_AGENT, {

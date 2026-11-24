@@ -32,6 +32,7 @@ export interface EvidenceView {
   id: string;
   kind: EvidenceKind;
   summary: string;
+  /** The link, when it is an http or https address. A stored link of any other kind is left out. */
   url: string | null;
   details: EvidenceDetails;
   channel: EvidenceChannel;

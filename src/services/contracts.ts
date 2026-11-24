@@ -1,4 +1,4 @@
-import { checksPassed, runChecks, sanitizeDetails } from '../core/checks';
+import { checksPassed, isHttpUrl, runChecks, sanitizeDetails } from '../core/checks';
 import { PodError } from '../core/errors';
 import { extractCriteria } from '../core/extract';
 import { newId } from '../core/ids';
@@ -509,7 +509,9 @@ function toEvidenceView(
     id: evidence.id,
     kind: evidence.kind,
     summary: evidence.summary,
-    url: evidence.url,
+    // The stored row keeps a link that failed its check. Only an http or https address
+    // leaves here, so no page and no tool can show anything else as a link.
+    url: evidence.url && isHttpUrl(evidence.url) ? evidence.url : null,
     details: evidence.details,
     channel: evidence.channel,
     actorAccountId: evidence.actorAccountId,

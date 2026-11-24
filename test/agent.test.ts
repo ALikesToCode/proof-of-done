@@ -151,6 +151,20 @@ describe('submitting evidence as an agent', () => {
     expect(result.next).toBe('Recorded, and turned away by the automatic checks. Fix what the problems say and submit again.');
   });
 
+  it.each(['javascript:alert(document.domain)', 'data:text/html,<script>alert(1)</script>'])(
+    'turns the link %s away and leaves it out of every answer',
+    async (url) => {
+      const [first] = (await agent.start('MOBL-1', AGENT)).criteria;
+      const result = await agent.submit({ criterionId: first!.id, kind: 'document', summary: 'The runbook for locked accounts.', url }, AGENT);
+      expect(result.passedChecks).toBe(false);
+      expect(result.problems).toEqual(['The link must be an http or https address.']);
+      expect(result.criterion.evidence[0]).not.toHaveProperty('url');
+      expect(store.evidence[0]!.url).toBe(url);
+      const answers = [result, await agent.contract('MOBL-1', AGENT), await agent.contextPack('MOBL-1', AGENT), await agent.reviewQueue('MOBL-1', VERIFIER)];
+      expect(JSON.stringify(answers)).not.toContain(url);
+    },
+  );
+
   it('forgives the way a model writes a kind', async () => {
     expect(toKind('Test run')).toBe('test_run');
     expect(toKind('pull-request')).toBe('pull_request');
