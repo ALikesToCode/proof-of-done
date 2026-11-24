@@ -130,6 +130,8 @@ Forge turns link sharing off for an app that was submitted for a Marketplace lis
 
 `forge deploy` takes the app id from `manifest.yml` and has no flag to override it. `scripts/deploy-marketplace.sh` exports the last commit to a temporary folder, swaps the id in that copy and deploys it to production. Pass `staging` as the first argument to deploy there. Arguments after the environment go to `forge deploy`. `forge install` and `forge uninstall` do take `--app-id-override`.
 
+The listing's documentation, support, privacy and terms pages are in a repository of their own, [proof-of-done-docs](https://github.com/ALikesToCode/proof-of-done-docs), published at https://alikestocode.github.io/proof-of-done-docs/. The privacy page and the listing's Privacy & Security answers both say what the app stores and where. Change both when the code changes that.
+
 The Teamwork Graph does not always answer on the development site. On 23 Nov 2026, a day on which Atlassian reported a degraded authentication service, it refused some of the app's queries for up to half an hour after each `forge deploy`. On 24 Nov it refused the first three asks of the day and answered the fourth, two and a half minutes after the first. Less than six minutes after a deploy that day, it answered the first ask. When the Review dialog says that the graph did not answer, press Ask again.
 
 | Path | What is in it |
