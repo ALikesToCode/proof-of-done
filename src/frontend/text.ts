@@ -107,15 +107,20 @@ export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'
   }
 }
 
+/** How the panel words the state a pull request was entered with. Anything else is shown as it came. */
+const PULL_REQUEST_STATE: Record<string, string> = { closed: 'closed without merging' };
+
 /** The structured fields of a piece of evidence as short lines. */
-export function detailLines(details: EvidenceDetails): string[] {
+export function detailLines(details: EvidenceDetails, kind?: EvidenceKind): string[] {
   const lines: string[] = [];
   if (details.passed !== undefined || details.failed !== undefined) {
     const parts = [`${details.passed ?? 0} passed`, `${details.failed ?? 0} failed`];
     if (details.skipped !== undefined) parts.push(`${details.skipped} skipped`);
     lines.push(parts.join(', '));
   }
-  if (details.status) lines.push(`Result: ${details.status}`);
+  if (details.status) {
+    lines.push(kind === 'pull_request' ? `State: ${PULL_REQUEST_STATE[details.status] ?? details.status}` : `Result: ${details.status}`);
+  }
   if (details.exitCode !== undefined) lines.push(`Exit code ${details.exitCode}`);
   if (details.command) lines.push(`Command: ${details.command}`);
   if (details.commit) lines.push(`Commit ${details.commit}`);

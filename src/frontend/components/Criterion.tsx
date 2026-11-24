@@ -37,7 +37,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
             </Link>
           </Line>
         )}
-        {detailLines(evidence.details).map((line) => (
+        {detailLines(evidence.details, evidence.kind).map((line) => (
           <Line key={line} size="small" color="color.text.subtle">
             {line}
           </Line>

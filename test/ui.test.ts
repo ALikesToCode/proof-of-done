@@ -506,7 +506,7 @@ describe('the issue panel', () => {
     await page.dialog.press('Add evidence');
     expect(page.all('Modal')).toHaveLength(0);
     expect(page.labels('Lozenge').slice(0, 4)).toEqual(['Not proven', 'Waiting for a check', 'Needs a pull request', 'Waiting for a check']);
-    expect(page.text()).toContain('Result: merged');
+    expect(page.text()).toContain('State: merged');
   });
 
   it('counts an attestation by the assignee as a self-review', async () => {

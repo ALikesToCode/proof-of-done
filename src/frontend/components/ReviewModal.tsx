@@ -113,7 +113,7 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                   </Link>
                 </Line>
               )}
-              {detailLines(evidence.details).map((line) => (
+              {detailLines(evidence.details, evidence.kind).map((line) => (
                 <Line key={line} size="small">
                   {line}
                 </Line>

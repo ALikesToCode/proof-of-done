@@ -65,6 +65,11 @@ describe('badges and lines', () => {
       'Command: npm test',
     ]);
     expect(detailLines({ status: 'passed', commit: 'abc123' })).toEqual(['Result: passed', 'Commit abc123']);
+    expect(detailLines({ status: 'passed' }, 'build')).toEqual(['Result: passed']);
+    // A pull request has a state. "Result: merged" reads as if merging were a test.
+    expect(detailLines({ status: 'merged' }, 'pull_request')).toEqual(['State: merged']);
+    expect(detailLines({ status: 'closed' }, 'pull_request')).toEqual(['State: closed without merging']);
+    expect(detailLines({ status: 'declined' }, 'pull_request')).toEqual(['State: declined']);
     expect(detailLines({})).toEqual([]);
   });
 
