@@ -683,7 +683,7 @@ describe('the project page', () => {
     expect(page.labels('Lozenge')).toEqual(expect.arrayContaining(['Busy, not climbing', 'Proven', 'Partly proven', 'Not proven', 'Done', 'In Progress']));
 
     await page.press('Remove sample data');
-    expect(page.text()).toContain('This deletes the 5 sample work items and their proof. Nothing else is touched.');
+    expect(page.text()).toContain('This deletes the 5 sample work items, their proof and any subtasks that someone added under them.');
     await page.press('Keep them');
     expect(fresh.jira.issues.size).toBe(SAMPLE_ITEMS.length);
 

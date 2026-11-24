@@ -92,7 +92,7 @@ export const SampleCard = ({ view, onChanged }: Props) => {
             {view.canAdmin && confirming && (
               <Inline space="space.100" alignBlock="center">
                 <Text>
-                  This deletes the {loaded} sample work {loaded === 1 ? 'item' : 'items'} and their proof. Nothing else is touched.
+                  This deletes the {loaded} sample work {loaded === 1 ? 'item' : 'items'}, their proof and any subtasks that someone added under them.
                 </Text>
                 <Button appearance="danger" onClick={remove}>
                   Delete them
