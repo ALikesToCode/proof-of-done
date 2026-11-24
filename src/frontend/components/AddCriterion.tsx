@@ -4,7 +4,7 @@ import { REQUIRED_KINDS, RequiredKind } from '../../core/types';
 import type { ContractView } from '../../services/view';
 import { api, messageOf } from '../api';
 import { REQUIRED } from '../text';
-import { grow, kindSelect } from './styles';
+import { kindSelect } from './styles';
 
 export const KIND_OPTIONS = REQUIRED_KINDS.map((kind) => ({ label: kind === 'any' ? 'Any evidence' : `Needs ${REQUIRED[kind].toLowerCase()}`, value: kind }));
 
@@ -12,7 +12,7 @@ interface Props {
   onChanged: (view: ContractView) => void;
 }
 
-/** One line to add a criterion by hand. */
+/** Where someone adds a criterion by hand. */
 export const AddCriterion = ({ onChanged }: Props) => {
   const [text, setText] = useState('');
   const [kind, setKind] = useState<RequiredKind>('any');
@@ -41,17 +41,15 @@ export const AddCriterion = ({ onChanged }: Props) => {
   };
 
   return (
-    <Stack space="space.050">
+    <Stack space="space.100">
+      <Textfield
+        key={`criterion-${round}`}
+        name="criterion"
+        placeholder="Add a criterion, for example: Login works with a passkey"
+        maxLength={500}
+        onChange={(event) => setText(String(event.target.value ?? ''))}
+      />
       <Inline space="space.100" alignBlock="center">
-        <Box xcss={grow}>
-          <Textfield
-            key={`criterion-${round}`}
-            name="criterion"
-            placeholder="Add a criterion, for example: Login works with a passkey"
-            maxLength={500}
-            onChange={(event) => setText(String(event.target.value ?? ''))}
-          />
-        </Box>
         <Box xcss={kindSelect}>
           <Select
             inputId="criterion-kind"
@@ -61,7 +59,7 @@ export const AddCriterion = ({ onChanged }: Props) => {
           />
         </Box>
         <LoadingButton isLoading={saving} onClick={add}>
-          Add
+          Add criterion
         </LoadingButton>
       </Inline>
       {problem && <ErrorMessage>{problem}</ErrorMessage>}

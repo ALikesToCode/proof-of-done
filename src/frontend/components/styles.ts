@@ -17,8 +17,8 @@ export const evidenceBox = xcss({
   paddingBlock: 'space.050',
 });
 
-export const grow = xcss({ flexGrow: 1 });
-export const kindSelect = xcss({ width: '210px' });
+// Wide enough for its longest option, "Needs a person's attestation", on one line.
+export const kindSelect = xcss({ width: '260px' });
 
 export const windowSelect = xcss({ width: '170px' });
 export const typeSelect = xcss({ width: '240px' });

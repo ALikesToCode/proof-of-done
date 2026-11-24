@@ -22,7 +22,7 @@ import { GATE_MODES } from '../../project-text';
 import { REQUIRED } from '../../text';
 import { KIND_OPTIONS } from '../AddCriterion';
 import { Line } from '../Line';
-import { card, grow, kindSelect, typeSelect } from '../styles';
+import { card, kindSelect, typeSelect } from '../styles';
 
 interface Props {
   view: ProjectView;
@@ -175,17 +175,15 @@ export const SettingsForm = ({ view, onSaved }: Props) => {
           </Box>
         ))}
         {!locked && (
-          <Stack space="space.050">
+          <Stack space="space.100">
+            <Textfield
+              key={`rule-${round}`}
+              name="rule"
+              placeholder="Add a rule, for example: All unit tests pass"
+              maxLength={500}
+              onChange={(event) => setRuleText(String(event.target.value ?? ''))}
+            />
             <Inline space="space.100" alignBlock="center" shouldWrap>
-              <Box xcss={grow}>
-                <Textfield
-                  key={`rule-${round}`}
-                  name="rule"
-                  placeholder="Add a rule, for example: All unit tests pass"
-                  maxLength={500}
-                  onChange={(event) => setRuleText(String(event.target.value ?? ''))}
-                />
-              </Box>
               <Box xcss={kindSelect}>
                 <Select
                   inputId="rule-kind"

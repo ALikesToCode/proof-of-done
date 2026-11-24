@@ -164,19 +164,19 @@ describe('the issue panel', () => {
     onWorkItem({ description: null });
     const page = await show(pages.panel);
     expect(page.text()).toContain('No acceptance criteria were found in the description.');
-    await page.press('Add');
+    await page.press('Add criterion');
     expect(page.text()).toContain('Write the criterion first (at least 3 characters).');
 
     await page.type('criterion', 'Login works with a passkey');
     await page.pick('criterion-kind', 'test_run');
-    await page.press('Add');
+    await page.press('Add criterion');
     expect(page.text()).toContain('0 of 1 criterion proven');
     expect(page.text()).toContain('Not ready to close. The one criterion has no evidence.');
     expect(page.labels('Lozenge')).toEqual(['Not proven', 'No evidence', 'Needs a test run']);
     expect(page.text()).toContain('Added by hand');
 
     await page.type('criterion', 'login works with a passkey');
-    await page.press('Add');
+    await page.press('Add criterion');
     expect(page.text()).toContain('"login works with a passkey" is already in the contract.');
   });
 
