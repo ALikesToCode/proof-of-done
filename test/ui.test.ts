@@ -85,6 +85,8 @@ afterEach(() => {
   for (const page of mounted.splice(0)) page.unmount();
   vi.useRealTimers();
   vi.restoreAllMocks();
+  // The panel notes in the tab's storage that it looks for verdicts. A new test is a new tab.
+  globalThis.sessionStorage?.clear();
 });
 
 async function show(page: ReactElement): Promise<Page> {
@@ -238,13 +240,45 @@ describe('the issue panel', () => {
     expect(world().calls).toHaveLength(calls);
   });
 
+  it('goes on looking for the verdict when Jira draws the panel again', async () => {
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+    onWorkItem();
+    const evidenceId = await contractWithAgentEvidence();
+    await (await show(pages.panel)).press('Ask Proof Verifier');
+
+    // Rovo chat opens beside the work item, and Jira puts a new panel where the old one was.
+    mounted.pop()!.unmount();
+    const page = await show(pages.panel);
+    expect(page.text()).toContain('The Proof Verifier has the evidence in Rovo chat. Its verdicts show up here.');
+
+    await elsewhere().recordVerdict('MOBL-1', VERIFIER, { evidenceId, decision: 'accepted', reason: 'The run covers the login path and nothing failed.' });
+    await page.run(() => vi.advanceTimersByTime(8_000));
+    expect(page.text()).toContain('Accepted by the Proof Verifier, asked by');
+
+    // With the verdict in, a panel drawn after this one has nothing left to look for.
+    mounted.pop()!.unmount();
+    const later = await show(pages.panel);
+    const calls = world().calls.length;
+    await later.run(() => vi.advanceTimersByTime(60_000));
+    expect(world().calls).toHaveLength(calls);
+  });
+
   it('says so when Rovo chat does not open', async () => {
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
     onWorkItem().rovoOpenFails = true;
     await contractWithAgentEvidence();
     const page = await show(pages.panel);
     await page.press('Ask Proof Verifier');
     expect(page.text()).toContain('Rovo chat did not open from here. Open Rovo chat yourself and choose the Proof Verifier agent.');
     expect(page.text()).toContain('1 piece of evidence waits for a check.');
+
+    // No chat has the evidence, so a panel drawn after this one does not look for verdicts either.
+    mounted.pop()!.unmount();
+    const later = await show(pages.panel);
+    expect(later.text()).toContain('1 piece of evidence waits for a check.');
+    const calls = world().calls.length;
+    await later.run(() => vi.advanceTimersByTime(60_000));
+    expect(world().calls).toHaveLength(calls);
   });
 
   it('leaves the Proof Verifier out where Rovo is off', async () => {
