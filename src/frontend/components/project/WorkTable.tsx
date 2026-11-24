@@ -12,12 +12,13 @@ interface Props {
 
 const STATUS_TONE: Record<string, Tone> = { new: 'default', indeterminate: 'inprogress', done: 'success' };
 
+// Widths in percent. Left to itself the table gives the proof column too little, and cuts its badge short.
 const head = {
   cells: [
-    { key: 'item', content: 'Work item' },
-    { key: 'status', content: 'Status' },
-    { key: 'proof', content: 'Proof' },
-    { key: 'needs', content: 'What it needs' },
+    { key: 'item', content: 'Work item', width: 40 },
+    { key: 'status', content: 'Status', width: 14 },
+    { key: 'proof', content: 'Proof', width: 21 },
+    { key: 'needs', content: 'What it needs', width: 25 },
   ],
 };
 
@@ -28,17 +29,11 @@ function toRow(row: WorkItemRow, siteUrl: string | null) {
     cells: [
       {
         key: 'item',
+        // One text, so the key stays whole and the summary wraps around it.
         content: (
-          <Inline space="space.100" alignBlock="center">
-            {siteUrl ? (
-              <Text>
-                <Link href={`${siteUrl}/browse/${row.key}`}>{row.key}</Link>
-              </Text>
-            ) : (
-              <Text weight="medium">{row.key}</Text>
-            )}
-            <Text>{row.summary}</Text>
-          </Inline>
+          <Text>
+            {siteUrl ? <Link href={`${siteUrl}/browse/${row.key}`}>{row.key}</Link> : row.key} {row.summary}
+          </Text>
         ),
       },
       { key: 'status', content: <Lozenge appearance={STATUS_TONE[row.statusCategory] ?? 'default'}>{row.statusName}</Lozenge> },
