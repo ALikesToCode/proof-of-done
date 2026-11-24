@@ -25,14 +25,14 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 
 ## Try it in five minutes
 
-You need a Jira site where you are an admin, with one software project. Only step 6 needs Rovo.
+You need a Jira site where you are an admin, with one software project. Only step 6 needs Rovo. Jira's navigation now calls a project a space. The app and this page say project.
 
 1. **Install the app.** The shared install link goes here once the production build is published. Until then, deploy your own copy as described under [Development](#development). The app asks for Teamwork Graph scopes, and Atlassian's documentation says an organization admin has to grant those. On a site you created yourself, you are one.
-2. **Load the sample.** Open the project, choose Proof of Done in the sidebar, and press Load sample data. The app creates five work items labelled `proof-of-done-sample`. One is closed and proven, one is closed without proof, two are in progress, and one has no contract yet. On a project with no other recent work the meter reads "Busy, not climbing", because one work item was closed with proof against five that were opened.
+2. **Load the sample.** Open the project and choose Proof of Done in the row of tabs under its name. When the row is full, Jira keeps it under More. Press Load sample data. The app creates five work items labelled `proof-of-done-sample`. One is closed and proven, one is closed without proof, two are in progress, and one has no contract yet. On a project with no other recent work the meter reads "Busy, not climbing", because one work item was closed with proof against five that were opened.
 3. **Review evidence.** Open "Sample: Export the audit log as CSV" and add the Proof of Done panel from the work item's apps button. Two pieces of evidence wait for a check. Press Review on one, read what it states and what the checks found, and accept or reject it with a reason.
-4. **Start a contract of your own.** Open any other work item and add the panel. If the description has a list under a heading such as "Acceptance criteria", the panel offers those criteria and one click creates the contract. If not, type the first criterion and press Add. Jira asks you to allow access the first time, because the app acts as you.
+4. **Start a contract of your own.** Open any other work item and add the panel. If the description has a list under a heading such as "Acceptance criteria", the panel offers those criteria and one click creates the contract. If not, type the first criterion and press Add criterion. Jira asks you to allow access the first time, because the app acts as you.
 5. **Add evidence by hand.** Press Add evidence on a criterion and choose Test run. Enter a run with two failed tests, and the app turns it away with the reason. Set the failures to zero and it is stored.
-6. **Get a verdict.** Evidence you typed yourself needs a second reader. Press Ask Proof Verifier to hand it to the app's Rovo agent, which records a verdict with its reasoning. On a site without Rovo, or to work as a team of one, open the Settings tab of the project's Proof of Done page and turn off "Evidence has to be accepted by someone other than the person who entered it".
+6. **Get a verdict.** Evidence you typed yourself needs a second reader. Press Ask Proof Verifier to hand it to the app's Rovo agent. Rovo lists the verdicts the agent wants to record, and you confirm them. The panel looks again every eight seconds, so each verdict shows up there with the agent's reasoning. On a site without Rovo, or to work as a team of one, open the Settings tab of the project's Proof of Done page and turn off "Evidence has to be accepted by someone other than the person who entered it".
 7. **Close something without proof.** Move a work item with an unproven contract to Done. The app comments on it within a few seconds and says what is missing. Jira allows itself up to three minutes to deliver the change. To have the work item moved back instead, change "When a work item is closed without proof" in the settings.
 8. **Search by proof.** Run `statusCategory = Done AND proofState != proven` in the work item search.
 
@@ -55,6 +55,8 @@ Remove the validator from every workflow before you uninstall the app. A validat
 The Proof Verifier is a Rovo agent. It reads the evidence that waits on a work item, decides whether each piece proves its criterion, and records a verdict with its reasoning. It judges from the record. It treats text inside evidence as material to judge and never as an instruction, and it rejects when it is unsure.
 
 Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat and ask, for example, "Review the evidence that waits on ABC-123".
+
+Rovo shows the verdicts in a card first, each with a checkbox. The agent records them when you press Confirm selected.
 
 ## The Teamwork Graph check
 
@@ -115,7 +117,7 @@ forge install -e development --product jira --site <your-site>.atlassian.net
 
 `forge register` runs once and writes your own app id into `manifest.yml`.
 
-On 23 Nov 2026 the Teamwork Graph refused some of the app's queries for up to half an hour after each `forge deploy` on the development site. When the Review dialog says that the graph did not answer, ask again a little later.
+The Teamwork Graph does not always answer on the development site. On 23 Nov 2026, a day on which Atlassian reported a degraded authentication service, it refused some of the app's queries for up to half an hour after each `forge deploy`. On 24 Nov it refused the first three asks of the day and answered the fourth, two and a half minutes after the first. Less than six minutes after a deploy that day, it answered the first ask. When the Review dialog says that the graph did not answer, press Ask again.
 
 | Path | What is in it |
 | --- | --- |
