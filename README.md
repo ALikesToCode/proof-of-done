@@ -77,7 +77,7 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
 
 1. A site admin opens Atlassian Administration, then Apps, Sites, the site, Connected apps, Proof of Done, and turns on its tools.
 2. Each person who will use an agent opens the Proof of Done panel on any work item once and chooses Allow access. The tools act as that person, so Jira decides what the agent may see and change.
-3. Connect the agent to `https://mcp.atlassian.com/forge/<app id>`. The shared build has the id `8c9b1b0d-9480-40dc-b852-5f17375dd7fd`. A copy you deployed yourself has its own, at the end of `app.id` in `manifest.yml`. In Claude Code:
+3. Connect the agent to `https://mcp.atlassian.com/forge/<app id>`. The shared build has the id `8c9b1b0d-9480-40dc-b852-5f17375dd7fd`, and the Marketplace build has `8e9618ee-0af4-4f2a-95af-436f5d28f0b9`. A copy you deployed yourself has its own, at the end of `app.id` in `manifest.yml`. In Claude Code:
 
    ```
    claude mcp add --transport http proof-of-done https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd
@@ -115,6 +115,19 @@ forge install -e development --product jira --site <your-site>.atlassian.net
 
 `forge register` runs once and writes your own app id into `manifest.yml`.
 
+### Two registrations
+
+The same code runs under two Forge app ids.
+
+| App id | What it is for | How it is deployed |
+| --- | --- | --- |
+| `8c9b1b0d-9480-40dc-b852-5f17375dd7fd` | The shared build, installed from a link. `manifest.yml` holds this id | `forge deploy -e production` |
+| `8e9618ee-0af4-4f2a-95af-436f5d28f0b9` | The Atlassian Marketplace listing | `scripts/deploy-marketplace.sh` |
+
+Forge turns link sharing off for an app that was submitted for a Marketplace listing, or that has a licence in its manifest. So the first registration is never submitted for listing and its manifest gets no `licensing` entry.
+
+`forge deploy` takes the app id from `manifest.yml` and has no flag to override it. `scripts/deploy-marketplace.sh` exports the last commit to a temporary folder, swaps the id in that copy and deploys it to production. Pass `staging` as the first argument to deploy there. Arguments after the environment go to `forge deploy`. `forge install` and `forge uninstall` do take `--app-id-override`.
+
 On 23 Nov 2026 the Teamwork Graph refused some of the app's queries for up to half an hour after each `forge deploy` on the development site. When the Review dialog says that the graph did not answer, ask again a little later.
 
 | Path | What is in it |
@@ -127,6 +140,7 @@ On 23 Nov 2026 the Teamwork Graph refused some of the app's queries for up to ha
 | `src/frontend/` | The issue panel, the project page and the settings page, in UI Kit |
 | `rovo/` | The Proof Verifier's prompt and its two skills |
 | `skills/proof-of-done/` | The open skill for coding agents |
+| `scripts/` | The deploy step for the Marketplace registration |
 | `test/` | Unit tests and page tests |
 
 ## Preview features
