@@ -21,6 +21,7 @@ import { messageOf, projectApi } from '../../api';
 import { GATE_MODES } from '../../project-text';
 import { REQUIRED } from '../../text';
 import { KIND_OPTIONS } from '../AddCriterion';
+import { Line } from '../Line';
 import { card, grow, kindSelect, typeSelect } from '../styles';
 
 interface Props {
@@ -160,10 +161,10 @@ export const SettingsForm = ({ view, onSaved }: Props) => {
           <Box key={rule.id || rule.text} xcss={card}>
             <Inline spread="space-between" alignBlock="center">
               <Stack space="space.025">
-                <Text weight="medium">{rule.text}</Text>
-                <Text size="small" color="color.text.subtle">
+                <Line weight="medium">{rule.text}</Line>
+                <Line size="small" color="color.text.subtle">
                   {ruleLine(rule)}
-                </Text>
+                </Line>
               </Stack>
               {!locked && (
                 <Button appearance="subtle" spacing="compact" onClick={() => change({ rules: draft.rules.filter((r) => r !== rule) })}>

@@ -25,6 +25,7 @@ import type { ContractView, CriterionView, EvidenceView } from '../../services/v
 import { api, messageOf } from '../api';
 import { GRAPH_FINDING, KIND, STANDING, channelLine, detailLines } from '../text';
 import { Excerpt } from './Excerpt';
+import { Line } from './Line';
 
 interface Props {
   criterion: CriterionView;
@@ -88,56 +89,56 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
         <ModalBody>
           <Stack space="space.150">
             <Stack space="space.050">
-              <Text size="small" color="color.text.subtle">
+              <Line size="small" color="color.text.subtle">
                 Criterion
-              </Text>
-              <Text weight="medium">{criterion.text}</Text>
+              </Line>
+              <Line weight="medium">{criterion.text}</Line>
             </Stack>
             <Stack space="space.050">
               <Inline space="space.100" alignBlock="center" shouldWrap>
-                <Text size="small" color="color.text.subtle">
+                <Line size="small" color="color.text.subtle">
                   Evidence
-                </Text>
+                </Line>
                 <Lozenge appearance={standing.tone}>{standing.label}</Lozenge>
-                <Text size="small" color="color.text.subtle">
+                <Line size="small" color="color.text.subtle">
                   {KIND[evidence.kind]}. {channelLine(evidence)}
-                </Text>
+                </Line>
                 {evidence.actorAccountId && <User accountId={evidence.actorAccountId} />}
               </Inline>
-              <Text>{evidence.summary}</Text>
+              <Line>{evidence.summary}</Line>
               {evidence.url && (
-                <Text>
+                <Line>
                   <Link href={evidence.url} openNewTab>
                     {evidence.url}
                   </Link>
-                </Text>
+                </Line>
               )}
               {detailLines(evidence.details).map((line) => (
-                <Text key={line} size="small">
+                <Line key={line} size="small">
                   {line}
-                </Text>
+                </Line>
               ))}
               {evidence.details.text && <Excerpt text={evidence.details.text} whole />}
             </Stack>
             <Stack space="space.050">
-              <Text size="small" color="color.text.subtle">
+              <Line size="small" color="color.text.subtle">
                 Checks the app ran
-              </Text>
+              </Line>
               {evidence.checks.map((check) => (
-                <Text key={check.id} size="small">
+                <Line key={check.id} size="small">
                   {check.note}
-                </Text>
+                </Line>
               ))}
-              <Text size="small" color="color.text.subtlest">
+              <Line size="small" color="color.text.subtlest">
                 These only show the evidence is well-formed. Whether it proves the criterion is your call.
-              </Text>
+              </Line>
             </Stack>
             {covered && (
               <Stack space="space.050">
                 <Inline space="space.100" alignBlock="center" shouldWrap>
-                  <Text size="small" color="color.text.subtle">
+                  <Line size="small" color="color.text.subtle">
                     Teamwork Graph
-                  </Text>
+                  </Line>
                   {graph && <Lozenge appearance={GRAPH_FINDING[graph.finding].tone}>{GRAPH_FINDING[graph.finding].label}</Lozenge>}
                   {!graph && !asking && (
                     <Button spacing="compact" appearance="subtle" onClick={() => setAsks(asks + 1)}>
@@ -145,9 +146,9 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                     </Button>
                   )}
                 </Inline>
-                <Text size="small">
+                <Line size="small">
                   {graph ? graph.text : asking ? 'Asking what Jira links to this work item.' : 'The Teamwork Graph did not answer. You can judge without it, or ask again.'}
-                </Text>
+                </Line>
               </Stack>
             )}
             <Stack space="space.050">
