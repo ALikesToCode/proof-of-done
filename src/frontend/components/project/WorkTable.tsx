@@ -39,8 +39,9 @@ function toRow(row: WorkItemRow, siteUrl: string | null) {
       { key: 'status', content: <Lozenge appearance={STATUS_TONE[row.statusCategory] ?? 'default'}>{row.statusName}</Lozenge> },
       {
         key: 'proof',
+        // In a narrow table the count goes under the badge, so the badge is not cut short.
         content: (
-          <Inline space="space.100" alignBlock="center">
+          <Inline space="space.100" rowSpace="space.025" alignBlock="center" shouldWrap>
             <Lozenge appearance={badge.tone} isBold={row.proofState === 'proven'}>
               {badge.label}
             </Lozenge>
