@@ -13,6 +13,7 @@ import { NoContract } from './components/NoContract';
 import { ReviewModal } from './components/ReviewModal';
 import { Summary } from './components/Summary';
 import { VERIFIER, verifierPrompt, waitingForReview } from './text';
+import { forgetWatch, recallWatch, rememberWatch } from './watch';
 
 type Dialog =
   | { type: 'evidence'; criterion: CriterionView }
@@ -59,28 +60,43 @@ const App = () => {
       .catch(() => setRovoOn(false));
   }, []);
 
+  // Jira draws the panel again when Rovo chat opens beside the work item. The new panel
+  // goes on looking where the one before it stopped.
+  const issueKey = view?.issue.key ?? null;
+  useEffect(() => {
+    if (issueKey) setWatchUntil((current) => current || recallWatch(issueKey, Date.now()));
+  }, [issueKey]);
+
   // The Proof Verifier records its verdicts from Rovo chat, and Jira does not tell the
   // panel about them. So after the chat opens, look again every few seconds for a while.
   const waiting = view ? waitingForReview(view) : 0;
   useEffect(() => {
-    if (!watchUntil) return undefined;
-    if (waiting === 0) {
+    if (!watchUntil || !issueKey) return undefined;
+    const stop = () => {
+      forgetWatch(issueKey);
       setWatchUntil(0);
+    };
+    if (waiting === 0) {
+      stop();
       return undefined;
     }
     const timer = setInterval(() => {
-      if (Date.now() > watchUntil) setWatchUntil(0);
+      if (Date.now() > watchUntil) stop();
       else void load();
     }, WATCH_EVERY_MS);
     return () => clearInterval(timer);
-  }, [watchUntil, waiting, load]);
+  }, [watchUntil, waiting, issueKey, load]);
 
   const askVerifier = async () => {
     if (!view) return;
+    const until = Date.now() + WATCH_FOR_MS;
+    // Noted before the chat opens, because Jira may draw the panel again as soon as it does.
+    rememberWatch(view.issue.key, until);
     try {
       await rovo.open({ type: 'forge', ...VERIFIER, prompt: verifierPrompt(view.issue.key) });
-      setWatchUntil(Date.now() + WATCH_FOR_MS);
+      setWatchUntil(until);
     } catch {
+      forgetWatch(view.issue.key);
       setProblem('Rovo chat did not open from here. Open Rovo chat yourself and choose the Proof Verifier agent.');
     }
   };

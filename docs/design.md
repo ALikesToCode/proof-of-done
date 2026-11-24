@@ -1,6 +1,6 @@
 # Proof of Done: design of the first version
 
-Written 23 Nov 2026. This is the smallest version a judge can install and use. Anything not listed here waits until this works on a fresh site.
+Written 23 Nov 2026. This is the smallest version a judge can install and use. Anything not listed here waits until this works on a fresh site. The pages were checked in a browser on 24 Nov 2026.
 
 ## The problem
 
@@ -66,7 +66,7 @@ Opened and closed counts come from JQL, so they work for the time before the app
 
 ## The project page
 
-Every project gets a Proof of Done page in its sidebar. The settings also sit under the project's own settings.
+Every project gets a Proof of Done page in the row of tabs under its name. Jira shows the tabs that fit and keeps the rest under More. The settings also sit under the project's own settings.
 
 - **Work under contract.** Every work item with a contract, and what it needs next. Closed without proof comes first, then rejected evidence, then evidence waiting for a check, then criteria with no evidence. Work items the viewer may not see are counted and not listed.
 - **Settings.** What the gate does, whether evidence needs a second person, whether a work item with no contract fails the gate, and the project rules. A project rule is a criterion the project adds to every new contract, for all work item types or for some. Project admins and Jira admins can change the settings. Everyone else can read them.
@@ -90,7 +90,7 @@ Every answer is written for a language model. States are plain words, empty fiel
 
 A tool does what the person behind the agent may do, and nothing more. The app takes the account from the invocation, never from an input, and makes its Jira calls as that person. An agent can start a contract only from criteria that are already written down. It cannot add criteria of its own, attest, or record a verdict.
 
-The Proof Verifier has two skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. The panel then looks for new verdicts every few seconds, for five minutes.
+The Proof Verifier has two skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. Rovo shows the verdicts the agent wants to record, and the person confirms them. The panel looks for new verdicts every eight seconds, for five minutes.
 
 `skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when the gate passes.
 
@@ -127,24 +127,28 @@ How the app reads the graph:
 
 On 23 Nov the development site had no code host connected, and the real query came back with empty lists, which the app reads as "No record". For one check, a temporary build of the app then reported two pull requests, two builds and a deployment for a scratch work item through Jira's development information API, the channel a code host uses. About a minute later the graph returned all five. The app gave the right note for seven pieces of sample evidence: confirmed, differs and not linked for pull requests and for builds, and "successful in production" for the deployment. That build and its data are gone. A pull request from a real code host has not been tried yet.
 
-The same test showed that the graph does not always answer. On 23 Nov it refused single lists with "User is not permitted to query this organization", under HTTP 200. That happened for about half an hour after each deploy of a new minor version, and again in the evening with no deploy near it. In between, four probes in a row got all of their lists. Atlassian reported a degraded authentication service that evening, so a normal day may look better. The calls were made on a person's behalf from a background function, so a call from the Review dialog may fare differently too. Either way the app asks again, and the dialog says when it got no answer. In the last live run the graph refused lists in most calls. The app still gave the right note for two of five pieces of evidence, said for two that its list was incomplete, and had no note for one. The context pack got all five linked items after asking again.
+The same test showed that the graph does not always answer. On 23 Nov it refused single lists with "User is not permitted to query this organization", under HTTP 200. That happened for about half an hour after each deploy of a new minor version, and again in the evening with no deploy near it. In between, four probes in a row got all of their lists. Atlassian reported a degraded authentication service that evening. The calls were made on a person's behalf from a background function. In the last live run that day the graph refused lists in most calls. The app still gave the right note for two of five pieces of evidence, said for two that its list was incomplete, and had no note for one. The context pack got all five linked items after asking again.
+
+On 24 Nov the Review dialog asked from a browser, and Atlassian's status page showed no open incident. The graph refused the first three asks, between 10:44 and 10:46 UTC, with the same message. The last deploy was almost 17 hours old. The fourth ask, at 10:47, got an answer, and the dialog showed "No record", which is right for a site with no code host. A new version went out at 11:18. At 11:24 the dialog got its answer on the first ask, in a little over a second. So the graph also refuses a call from a browser, with no deploy and no incident near it. The one ask that followed a deploy that day was answered. The app asks again by itself, and the dialog says when it got no answer and offers Ask again.
 
 ## How it is built
 
 The app is deterministic. It stores contracts, evidence and verdicts, runs the checks and enforces the gate. All language-model reasoning happens in Rovo agents or in the outside coding agent, so the app makes no LLM calls and costs nothing to run per verdict.
 
-| Part | Forge module | State on 23 Nov |
+| Part | Forge module | State on 24 Nov |
 | --- | --- | --- |
-| Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Not yet checked in a browser |
+| Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Checked in a browser on the development site |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 295 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 302 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
-| Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Not yet checked in a browser |
+| Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Checked in a browser on the development site |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
-| Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Not yet tried in Rovo chat |
-| Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. Verified on the development site against pull requests, builds and a deployment that a test provider reported to Jira. Not yet seen with a pull request from a real code host, and not yet checked in a browser |
+| Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Asked from the panel on the development site, it accepted a test run with no failures and rejected a pull request link that the Teamwork Graph had no record of. The panel showed both verdicts |
+| Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. Verified on the development site against pull requests, builds and a deployment that a test provider reported to Jira. The Review dialog showed its note in a browser. Not yet seen with a pull request from a real code host |
+
+The browser check ran at 1280 pixels wide. The issue panel and the project page were also read at 540 pixels and in dark colours. Jira takes its theme from the account's setting and not from the browser, and the check left that setting alone, so Atlassian's dark tokens were put on the page by hand. The pages take every colour from those tokens.
 
 ## Decisions and their reasons
 
@@ -159,6 +163,8 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 - **The Proof Verifier's verdict counts as an independent check.** It is a second reader with its own instructions, and it has no tool that submits evidence. The history names the person who asked it.
 - **The Teamwork Graph advises and never gates.** The graph can be empty for reasons that have nothing to do with the work. No development tool is connected, an admin withheld a scope, or the person may not see the repository. A gate that read it would fail teams for those reasons, so the graph informs the reviewer and stops there.
 - **A deleted work item takes its contract with it.** Jira tells the app about the deletion, and the app removes every row it stored for that work item. Nobody could reach those rows again.
+- **The panel keeps its watch in the tab's session storage.** Jira draws the issue panel again about a second and a half after Rovo chat opens beside the work item, and a panel that was just drawn remembers nothing. So the panel stores until when it looks for verdicts. Session storage outlives the redraw and ends with the tab.
+- **A short line of text sits in a Box of its own.** Jira's page styles put 12px above a UI Kit `Text` that follows another block. In a row that pushed the text below its neighbours, and in a list it added to the gap. A `Text` alone in a `Box` follows nothing, so the `Line` component wraps it that way.
 
 ## Preview features this relies on
 

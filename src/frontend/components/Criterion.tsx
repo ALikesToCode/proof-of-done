@@ -3,6 +3,7 @@ import { Box, Button, Inline, Link, Lozenge, Stack, Text, User } from '@forge/re
 import type { CriterionView, EvidenceView } from '../../services/view';
 import { KIND, REQUIRED, STANDING, channelLine, criterionBadge, detailLines, sourceLine, timeAgo } from '../text';
 import { Excerpt } from './Excerpt';
+import { Line } from './Line';
 import { card, evidenceBox } from './styles';
 
 const SHOWN_AT_FIRST = 2;
@@ -22,53 +23,53 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
       <Stack space="space.050">
         <Inline space="space.100" alignBlock="center" shouldWrap>
           <Lozenge appearance={standing.tone}>{standing.label}</Lozenge>
-          <Text weight="medium">{KIND[evidence.kind]}</Text>
-          <Text size="small" color="color.text.subtlest">
+          <Line weight="medium">{KIND[evidence.kind]}</Line>
+          <Line size="small" color="color.text.subtlest">
             {channelLine(evidence)}, {timeAgo(evidence.createdAt, now)}
-          </Text>
+          </Line>
           {evidence.actorAccountId && <User accountId={evidence.actorAccountId} />}
         </Inline>
-        <Text>{evidence.summary}</Text>
+        <Line>{evidence.summary}</Line>
         {evidence.url && (
-          <Text size="small">
+          <Line size="small">
             <Link href={evidence.url} openNewTab>
               {evidence.url}
             </Link>
-          </Text>
+          </Line>
         )}
-        {detailLines(evidence.details).map((line) => (
-          <Text key={line} size="small" color="color.text.subtle">
+        {detailLines(evidence.details, evidence.kind).map((line) => (
+          <Line key={line} size="small" color="color.text.subtle">
             {line}
-          </Text>
+          </Line>
         ))}
         {evidence.details.text && <Excerpt text={evidence.details.text} />}
         {failed.map((check) => (
-          <Text key={check.id} size="small" color="color.text.danger">
+          <Line key={check.id} size="small" color="color.text.danger">
             {check.note}
-          </Text>
+          </Line>
         ))}
         {verdict && verdict.channel !== 'attestation' && (
           <Inline space="space.050" alignBlock="center" shouldWrap>
-            <Text size="small" color="color.text.subtle">
+            <Line size="small" color="color.text.subtle">
               {verdict.decision === 'accepted' ? 'Accepted' : 'Rejected'}
               {verdict.channel === 'verifier' ? ' by the Proof Verifier, asked by' : verdict.channel === 'sample' ? ' in the sample data' : ' by'}
-            </Text>
+            </Line>
             {verdict.actorAccountId && <User accountId={verdict.actorAccountId} />}
-            <Text size="small" color="color.text.subtle">
+            <Line size="small" color="color.text.subtle">
               {timeAgo(verdict.createdAt, now)}
               {verdict.reason && verdict.reason !== 'Accepted.' ? `. ${verdict.reason}` : ''}
-            </Text>
+            </Line>
           </Inline>
         )}
         {verdict && verdict.channel === 'attestation' && (
-          <Text size="small" color="color.text.subtle">
+          <Line size="small" color="color.text.subtle">
             {verdict.reason}
-          </Text>
+          </Line>
         )}
         {evidence.acceptBlocked && (
-          <Text size="small" color="color.text.subtle">
+          <Line size="small" color="color.text.subtle">
             {evidence.acceptBlocked}
-          </Text>
+          </Line>
         )}
         {(evidence.canAccept || evidence.canReject) && (
           <Inline>
