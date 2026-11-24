@@ -1,3 +1,4 @@
+import { errorLine } from '../core/errors';
 import { gateDecision, summarize } from '../core/proof';
 import { newId } from '../core/ids';
 import { IssueInfo, JiraGateway } from '../jira/gateway';
@@ -145,7 +146,7 @@ export class GateService {
       await this.jira.transition(issue.id, back.id);
       return back.toStatusName;
     } catch (error) {
-      console.warn(`Proof of Done: could not move ${issue.key} back.`, error);
+      console.warn(`Proof of Done: could not move ${issue.key} back. ${errorLine(error)}`);
       return null;
     }
   }
@@ -156,7 +157,7 @@ export class GateService {
       await this.jira.addComment(issue.id, paragraphs);
       return true;
     } catch (error) {
-      console.warn(`Proof of Done: could not comment on ${issue.key}.`, error);
+      console.warn(`Proof of Done: could not comment on ${issue.key}. ${errorLine(error)}`);
       return false;
     }
   }

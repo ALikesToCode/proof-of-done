@@ -1,3 +1,4 @@
+import { errorLine } from '../core/errors';
 import { ProofSummary } from '../core/types';
 import { JiraGateway, ProofProperty } from '../jira/gateway';
 import { ContractStore } from '../store/types';
@@ -29,6 +30,6 @@ export async function saveProof(
   try {
     await jira.setProofProperty(issue.id, toProofProperty(summary, now));
   } catch (error) {
-    console.error(`Proof of Done: could not write the proof property of ${issue.key}.`, error);
+    console.error(`Proof of Done: could not write the proof property of ${issue.key}. ${errorLine(error)}`);
   }
 }

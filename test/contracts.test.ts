@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PodError } from '../src/core/errors';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import { Caller, ContractService } from '../src/services/contracts';
@@ -142,8 +142,10 @@ describe('creating a contract', () => {
 
   it('keeps working when the proof property cannot be written', async () => {
     jira.failPropertyWrites = true;
+    const logged = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const view = await service.createContract('MOBL-1', ALICE, { withSuggestions: true });
     expect(view.criteria).toHaveLength(3);
+    expect(logged).toHaveBeenCalledWith('Proof of Done: could not write the proof property of MOBL-1. Error: Jira is down');
   });
 });
 

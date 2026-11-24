@@ -1,4 +1,4 @@
-import { PodError } from '../core/errors';
+import { PodError, errorLine } from '../core/errors';
 import { AgentService } from '../services/agent';
 import { Caller } from '../services/contracts';
 
@@ -112,7 +112,7 @@ export async function runTool(agent: AgentService, name: ToolName, payload: unkn
       result = { ok: false, code: 'needs_access', error: NEEDS_ACCESS };
     } else {
       // One line, and never the payload: it can hold a ticket's text.
-      console.error(`Proof of Done: tool ${name} failed. ${error instanceof Error ? error.message : 'Unknown error.'}`);
+      console.error(`Proof of Done: tool ${name} failed. ${errorLine(error)}`);
       result = { ok: false, code: 'internal', error: 'Proof of Done could not finish this call. Try it again.' };
     }
   }

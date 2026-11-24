@@ -1,6 +1,6 @@
 import { isForgePlatformError } from '@forge/api';
 import Resolver, { Request } from '@forge/resolver';
-import { PodError } from '../core/errors';
+import { PodError, errorLine } from '../core/errors';
 import { ForgeGraphGateway } from '../graph/forge-graph';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { Caller, ContractService } from '../services/contracts';
@@ -38,7 +38,7 @@ function expose<T>(name: string, action: (request: Request, payload: Payload) =>
       if (error instanceof PodError) return { ok: false, error: { code: error.code, message: error.message } };
       // Platform errors carry the "allow access" prompt, so Forge has to see them.
       if (error instanceof Error && isForgePlatformError(error)) throw error;
-      console.error(`Proof of Done: ${name} failed.`, error);
+      console.error(`Proof of Done: ${name} failed. ${errorLine(error)}`);
       return { ok: false, error: { code: 'internal', message: 'Something went wrong on our side. Try again in a moment.' } };
     }
   });

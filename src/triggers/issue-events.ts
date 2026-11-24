@@ -1,3 +1,4 @@
+import { errorLine } from '../core/errors';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { GateService, StatusChange, ValidatorResult } from '../services/gate';
 import { SqlContractStore } from '../store/sql-store';
@@ -73,7 +74,7 @@ export async function validateDone(request: unknown): Promise<ValidatorResult> {
     return await gate.validate(ref, text(object(payload['user'])['accountId']) || null);
   } catch (error) {
     // A fault in this app must not lock a team out of its own workflow.
-    console.error(`Proof of Done: the validator failed for ${ref} and let the transition through.`, error);
+    console.error(`Proof of Done: the validator failed for ${ref} and let the transition through. ${errorLine(error)}`);
     return { result: true };
   }
 }

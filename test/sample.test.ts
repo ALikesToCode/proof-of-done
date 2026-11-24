@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { adfText } from '../src/core/adf';
 import { PodError } from '../src/core/errors';
 import { extractCriteria } from '../src/core/extract';
@@ -199,11 +199,13 @@ describe('the sample data', () => {
 
   it('still loads when the workflow will not move the work item', async () => {
     jira.failTransition = true;
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const step = await samples.loadOne('10000', 0);
     const issue = jira.issues.get((await store.listSampleIssues('10000'))[0]!.issueId)!;
     expect(issue.statusCategory).toBe('new');
     expect(step.existed).toBe(false);
     expect(store.eventTypes(issue.id)).not.toContain('issue.done');
+    expect(warn).toHaveBeenCalledWith(`Proof of Done: could not move sample work item ${issue.id}. Error: Jira returned 400 when moving the work item.`);
     expect((await contracts.view(issue.key, BOB)).summary.state).toBe('proven');
   });
 

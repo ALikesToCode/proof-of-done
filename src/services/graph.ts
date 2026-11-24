@@ -1,4 +1,4 @@
-import { PodError } from '../core/errors';
+import { PodError, errorLine } from '../core/errors';
 import { GraphNote, LinkedWork, compareWithGraph, graphCovers } from '../core/graph';
 import { GraphGateway } from '../graph/gateway';
 import { Caller, ContractService } from './contracts';
@@ -33,7 +33,7 @@ export class GraphService {
       return await Promise.race([this.graph.linkedWork(issueId), late]);
     } catch (error) {
       // One line, and never the answer: it can name a team's pull requests.
-      console.warn(`Proof of Done: the Teamwork Graph could not be read. ${error instanceof Error ? error.message.slice(0, 160) : ''}`.trim());
+      console.warn(`Proof of Done: the Teamwork Graph could not be read. ${errorLine(error)}`);
       return null;
     } finally {
       clearTimeout(timer);

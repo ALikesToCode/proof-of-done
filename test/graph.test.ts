@@ -584,7 +584,7 @@ describe('the graph service', () => {
   it('reads a graph that fails, stays silent or takes too long as no answer', async () => {
     graph.mood = 'down';
     expect(await graphs.linked('10001')).toBeNull();
-    expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph could not be read. The graph is down.');
+    expect(console.warn).toHaveBeenCalledWith('Proof of Done: the Teamwork Graph could not be read. Error: The graph is down.');
     graph.mood = 'silent';
     expect(await graphs.linked('10001')).toBeNull();
     graph.mood = 'slow';

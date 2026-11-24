@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import { GateMode } from '../src/core/types';
 import { Caller, ContractService } from '../src/services/contracts';
@@ -118,18 +118,22 @@ describe('the done gate on a status change', () => {
     await setMode('bounce');
     await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
     jira.failTransition = true;
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     expect(await gate.onStatusChange(closeIssue())).toBe('warned');
     expect(jira.issues.get('10001')!.statusName).toBe('Done');
     expect(jira.comments).toHaveLength(1);
     expect(store.events.at(-1)).toMatchObject({ type: 'gate.warned', data: { couldNotMoveBack: true, commented: true } });
+    expect(warn).toHaveBeenCalledWith('Proof of Done: could not move MOBL-1 back. Error: Jira returned 400 when moving the work item.');
   });
 
   it('still records an unproven close when Jira refuses the comment', async () => {
     await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
     jira.failComment = true;
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     expect(await gate.onStatusChange(closeIssue())).toBe('warned');
     expect(gateEvents()).toEqual(['issue.done', 'gate.warned']);
     expect(store.events.at(-1)).toMatchObject({ type: 'gate.warned', data: { commented: false } });
+    expect(warn).toHaveBeenCalledWith('Proof of Done: could not comment on MOBL-1. Error: Jira returned 403 when commenting.');
   });
 
   it('does nothing about an unproven work item when the gate is off', async () => {

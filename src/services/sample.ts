@@ -1,6 +1,6 @@
 import { AdfNode } from '../core/adf';
 import { checksPassed, runChecks, sanitizeDetails } from '../core/checks';
-import { PodError } from '../core/errors';
+import { PodError, errorLine } from '../core/errors';
 import { newId } from '../core/ids';
 import { gateDecision, summarize } from '../core/proof';
 import { SAMPLE_AGENT, SAMPLE_ITEMS, SAMPLE_LABEL, SampleItem } from '../core/sample';
@@ -202,7 +202,7 @@ export class SampleService {
       return { name: transition.toStatusName, category };
     } catch (error) {
       // The workflow may need a field or forbid the move. The sample still works, in the status it has.
-      console.warn(`Proof of Done: could not move sample work item ${issueId}.`, error);
+      console.warn(`Proof of Done: could not move sample work item ${issueId}. ${errorLine(error)}`);
       return null;
     }
   }
@@ -266,7 +266,7 @@ export class SampleService {
           await this.jira.addComment(issue.id, doneWithoutProofComment(issue.key, status.name, decision.reason));
         } catch (error) {
           commented = false;
-          console.warn(`Proof of Done: could not comment on sample work item ${issue.key}.`, error);
+          console.warn(`Proof of Done: could not comment on sample work item ${issue.key}. ${errorLine(error)}`);
         }
         events.push(event('gate.warned', { status: status.name, reason: decision.reason, commented, sample: true }));
       }

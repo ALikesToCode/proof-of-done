@@ -130,7 +130,7 @@ describe('running a tool', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const result = await runTool(agent, 'get-done-contract', { issueKey: 'MOBL-1', summary: 'secret plan' }, ALICE);
     expect(result).toEqual({ ok: false, code: 'internal', error: 'Proof of Done could not finish this call. Try it again.' });
-    expect(error).toHaveBeenCalledWith('Proof of Done: tool get-done-contract failed. socket hang up at 10.0.0.7');
+    expect(error).toHaveBeenCalledWith('Proof of Done: tool get-done-contract failed. Error: socket hang up at 10.0.0.7');
     expect(JSON.stringify(error.mock.calls)).not.toContain('secret plan');
   });
 });

@@ -653,6 +653,7 @@ describe('the issue panel', () => {
     expect(page.text()).toContain('Something went wrong on our side. Try again in a moment.');
     expect(page.text()).not.toContain('Jira is down');
     expect(logged).toHaveBeenCalledOnce();
+    expect(logged).toHaveBeenCalledWith('Proof of Done: getContract failed. Error: Jira is down');
   });
 });
 

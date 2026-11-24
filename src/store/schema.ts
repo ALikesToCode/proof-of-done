@@ -1,4 +1,5 @@
 import { migrationRunner } from '@forge/sql';
+import { errorLine } from '../core/errors';
 import { isSchemaBehind } from './sql-errors';
 
 /**
@@ -152,7 +153,7 @@ export async function withSchema<T>(operation: () => Promise<T>): Promise<T> {
       await migrate();
     } catch (migrationError) {
       // Another invocation may be migrating at the same moment. The retry below decides.
-      console.warn('Proof of Done: migration attempt failed, retrying the query once.', migrationError);
+      console.warn(`Proof of Done: migration attempt failed, retrying the query once. ${errorLine(migrationError)}`);
     }
     return operation();
   }
