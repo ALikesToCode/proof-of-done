@@ -26,7 +26,7 @@ The Proof Verifier is a Rovo agent. It reads the evidence that is waiting, decid
 
 - Evidence never proves itself. Someone other than whoever submitted it has to accept it.
 - The mechanical checks can only reject. Passing them earns a place in the review queue.
-- A person cannot accept evidence they typed in themselves, unless the project allows self-review. Self-reviewed proof is labelled as such everywhere.
+- A person cannot accept evidence they typed in themselves, unless the project allows self-review. The panel labels self-reviewed proof. The project page and the JQL field show it as proven.
 - A person reviewing what their own coding agent submitted counts as an independent check. That review is the point of the app.
 - A person's attestation counts when it comes from someone who is not the assignee.
 - A criterion can demand one kind of evidence. "All tests pass" set to need a test run cannot be attested away.
@@ -44,7 +44,7 @@ A work item with no contract passes both, unless the project requires a contract
 
 Every reaction goes into the event log as `issue.done`, `issue.reopened`, `gate.warned`, `gate.bounced` or `gate.blocked`, and the meter reads them from there. Jira can deliver one status change twice. The app recognises the repeat by Jira's change id and ignores it.
 
-Two things an admin should know. A validator left on a workflow after the app is uninstalled blocks that transition, so remove it first. And an error inside the app's check lets the transition through, because a broken app must not lock a team out of its own workflow.
+Two things an admin should know. A validator left on a workflow after the app is uninstalled blocks that transition, so remove it first. And an error inside the app's check lets the transition through, because a broken app must not lock a team out of its own workflow. Once the check has said no, the refusal stands, also when the app cannot store its `gate.blocked` event.
 
 ## JQL fields
 
@@ -139,7 +139,7 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | --- | --- | --- |
 | Issue panel | `jira:issuePanel`, UI Kit | Built and deployed. Page tests cover what it says and does. Checked in a browser on the development site |
 | Storage | `sql` (Forge SQL), seven tables | Built, verified on the development site |
-| Rules and services | plain TypeScript, no Forge imports in the core | Built, 302 unit tests |
+| Rules and services | plain TypeScript, no Forge imports in the core | Built, 319 unit tests |
 | Done gate | `trigger` on work item updates, `jira:workflowValidator` | Built, verified on the development site |
 | JQL fields | `jira:entityProperty` on the `proof-of-done` property | Built, verified on the development site |
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Checked in a browser on the development site |

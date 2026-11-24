@@ -56,7 +56,7 @@ An answer with `ok: false` has a `code` and an `error` sentence that says what t
 
 ## Connecting
 
-The tools come from the Proof of Done MCP server at `https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd`. Your client may show their names with a prefix.
+The tools come from the Proof of Done MCP server at `https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd`. Your client may show their names with a prefix. When the app was installed from the Atlassian Marketplace, that address ends in a different id, which the README in the app's repository lists.
 
 - In Claude Code, run `claude mcp add --transport http proof-of-done https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd`, then `/mcp` to sign in.
 - A site admin has to turn the tools on first, under Atlassian Administration, Apps, Sites, the site, Connected apps, Proof of Done, Tools.
