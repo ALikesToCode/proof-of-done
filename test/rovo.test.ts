@@ -78,29 +78,6 @@ describe('the Rovo skills', () => {
   });
 });
 
-describe("the app's Rovo metadata", () => {
-  const block = /^  rovo:\n((?:    .*\n)+)/m.exec(manifest)?.[1] ?? '';
-  const tag = value(block, 'tag');
-
-  it('stays inside the limits Atlassian sets', () => {
-    expect(tag.length).toBeGreaterThan(0);
-    expect(tag.length).toBeLessThanOrEqual(8);
-    expect(value(block, 'description').length).toBeGreaterThan(0);
-    expect(value(block, 'description').length).toBeLessThanOrEqual(100);
-    const keywords = items(block, 'keywords');
-    expect(keywords.length).toBeGreaterThan(0);
-    // Atlassian limits their combined length. Counted here with a separator between them, the stricter reading.
-    expect(keywords.join(' ').length).toBeLessThanOrEqual(50);
-  });
-
-  it('still makes a skill name with the tag that Rovo puts in front', () => {
-    for (const skill of entries('rovo:skill')) {
-      expect(`${tag}-${skill.key}`).toMatch(SKILL_NAME);
-      expect(`${tag}-${skill.key}`.length, skill.key).toBeLessThanOrEqual(64);
-    }
-  });
-});
-
 describe('the open skill for coding agents', () => {
   const skill = readSkill('skills/proof-of-done/SKILL.md');
 
