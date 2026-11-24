@@ -23,4 +23,5 @@ export const kindSelect = xcss({ width: '260px' });
 export const windowSelect = xcss({ width: '170px' });
 export const typeSelect = xcss({ width: '240px' });
 export const page = xcss({ padding: 'space.300' });
-export const tabBody = xcss({ paddingBlockStart: 'space.200' });
+// Jira lays a tab panel out as a row, so its body is only as wide as its content unless it asks for the whole width.
+export const tabBody = xcss({ paddingBlockStart: 'space.200', width: '100%' });
