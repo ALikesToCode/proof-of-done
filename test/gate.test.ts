@@ -200,6 +200,20 @@ describe('the workflow validator', () => {
     expect(store.events.at(-1)).toMatchObject({ type: 'gate.blocked', channel: 'jira', actorAccountId: 'bob' });
   });
 
+  it('still blocks when the refusal cannot be stored', async () => {
+    await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
+    store.insertEvent = async () => {
+      throw new Error('The storage of this installation is full.');
+    };
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({
+      result: false,
+      errorMessage: 'Proof of Done: 2 of 2 criteria are not proven (2 with no evidence). Add or review evidence in the Proof of Done panel.',
+    });
+    expect(store.eventTypes('10001')).not.toContain('gate.blocked');
+    expect(warn).toHaveBeenCalledWith('Proof of Done: could not record the refusal for MOBL-1. Error: The storage of this installation is full.');
+  });
+
   it('lets a proven work item through', async () => {
     await proveEverything();
     expect(await gate.validate('MOBL-1')).toEqual({ result: true });

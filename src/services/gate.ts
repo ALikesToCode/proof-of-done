@@ -120,17 +120,23 @@ export class GateService {
     const summary = summarize(bundle.criteria, bundle.evidence, bundle.verdicts, settings.requireIndependent);
     const decision = gateDecision(bundle.contract ? summary : null, settings);
     if (decision.pass) return { result: true };
-    const at = this.now();
-    await this.store.insertEvent({
-      id: newId(at),
-      projectId: issue.projectId,
-      issueId: issue.id,
-      type: 'gate.blocked',
-      at,
-      actorAccountId,
-      channel: 'jira',
-      data: { reason: decision.reason, status: issue.statusName },
-    });
+    try {
+      const at = this.now();
+      await this.store.insertEvent({
+        id: newId(at),
+        projectId: issue.projectId,
+        issueId: issue.id,
+        type: 'gate.blocked',
+        at,
+        actorAccountId,
+        channel: 'jira',
+        data: { reason: decision.reason, status: issue.statusName },
+      });
+    } catch (error) {
+      // The answer is no by now. The caller lets a transition through when this method
+      // throws, so an entry the store refuses must not turn the no into a yes.
+      console.warn(`Proof of Done: could not record the refusal for ${issue.key}. ${errorLine(error)}`);
+    }
     return { result: false, errorMessage: `Proof of Done: ${decision.reason} ${PANEL_HINT}` };
   }
 
