@@ -18,7 +18,7 @@ A Jira work item under Proof of Done has a done contract, which is a list of cri
 4. **Submit evidence one criterion at a time.** Call `submit-evidence` as soon as a criterion is met, with what you observed in this session.
 5. **Read the answer.** `passedChecks: false` means the app turned the evidence away, and `problems` says why. Fix the cause and submit again. `passedChecks: true` means the evidence now waits for a review. A `graph` line says what Jira's Teamwork Graph holds about your pull request or build. The reviewer gets the same line, read again when they review. Where it contradicts your evidence, submit evidence that states what is true now. Where it says Jira does not link the pull request or build to the work item, `next` says how to get it linked.
 6. **Check the contract.** Call `get-done-contract`. The loop is complete when every criterion is `proven` or `waiting_for_review`, or you have told the person which ones you cannot prove and why.
-7. **Report the state the contract shows.** Give the count of proven criteria, the ones that wait for a review, and the ones still open. Say "done" only when `gate.passes` is true.
+7. **Report the state the contract shows.** Give the count of proven criteria, the ones that wait for a review, and the ones still open. Say "done" only when `proof.state` is `proven`, which means every criterion is proven. `gate.passes` answers a different question, whether the work item may be closed. It is also true when the project turned its gate off, or when the work item has no contract.
 
 Asked what is left in a whole project, call `list-unproven-work` with the project key. It lists the work items that are not proven, most urgent first, and says whether the project is climbing, busy or stalled.
 
@@ -45,7 +45,7 @@ Passing the checks earns a place in the review queue. The Proof Verifier cannot 
 - **The verdict.** A person or the Proof Verifier accepts or rejects your evidence. Tell the person when evidence waits, so they can review it in the panel or ask the Proof Verifier in Rovo chat.
 - **Attestations.** A criterion that needs an `attestation` is proven by a person's word. Ask them for it.
 - **The contract.** A criterion that is wrong or cannot be met goes back to the person who gave you the work.
-- **The status.** Leave the work item out of a done status until `gate.passes` is true. The done gate comments on work that is closed without proof, or moves it back.
+- **The status.** Leave the work item out of a done status until `proof.state` is `proven`. The done gate comments on work that is closed without proof, or moves it back.
 
 ## When a tool says no
 

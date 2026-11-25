@@ -92,7 +92,7 @@ A tool does what the person behind the agent may do, and nothing more. The app t
 
 The Proof Verifier has two skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. Rovo shows the verdicts the agent wants to record, and the person confirms them. The panel looks for new verdicts every eight seconds, for five minutes.
 
-`skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when the gate passes.
+`skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when every criterion is proven. A gate that passes is not enough for that, because a gate that the project turned off also passes.
 
 ## The Teamwork Graph check
 

@@ -90,6 +90,11 @@ describe('the open skill for coding agents', () => {
     for (const tool of VERIFIER_TOOLS) expect(skill.body, tool).not.toContain(tool);
   });
 
+  it('ties "done" to proven criteria, not to a gate that may be off', () => {
+    expect(skill.body).toContain('Say "done" only when `proof.state` is `proven`');
+    expect(skill.body).not.toMatch(/only when `gate\.passes`|until `gate\.passes`/);
+  });
+
   it('names every input of submit-evidence and every kind an agent may send', () => {
     const submit = entries('action').find((action) => action.key === 'submit-evidence');
     const inputs = [...(submit?.block ?? '').matchAll(/^        ([A-Za-z]+):$/gm)].map((m) => m[1]!);
