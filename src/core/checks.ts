@@ -83,7 +83,7 @@ export function runChecks(input: CheckInput): CheckResult[] {
     case 'pull_request': {
       if (!url) {
         fail('pull_request.url', 'A pull request needs its link.');
-      } else if (!PULL_REQUEST_URL.test(url)) {
+      } else if (!isPullRequestUrl(url)) {
         fail('pull_request.url', 'The link does not look like a pull request.');
       } else {
         pass('pull_request.url', 'Link points at a pull request.');
@@ -134,6 +134,15 @@ export function checksPassed(results: CheckResult[]): boolean {
   return results.every((r) => r.ok);
 }
 
+/** Whether the path of the link names a pull request. A query string or a fragment that looks like one does not count. */
+export function isPullRequestUrl(value: string): boolean {
+  try {
+    return PULL_REQUEST_URL.test(new URL(value).pathname);
+  } catch {
+    return false;
+  }
+}
+
 export function isHttpUrl(value: string): boolean {
   try {
     const parsed = new URL(value);
@@ -161,9 +170,13 @@ export function sanitizeDetails(raw: unknown): EvidenceDetails {
   const source = raw as Record<string, unknown>;
   for (const field of INT_FIELDS) {
     const value = source[field];
-    if (value === undefined || value === null || value === '') continue;
-    const number = typeof value === 'number' ? value : Number(String(value).trim());
-    if (Number.isInteger(number) && number >= 0 && number <= 10_000_000) out[field] = number;
+    if (value === undefined || value === null) continue;
+    const text = typeof value === 'number' ? '' : String(value).trim();
+    if (typeof value !== 'number' && text === '') continue;
+    const number = typeof value === 'number' ? value : Number(text);
+    // An exit code can be negative, for a process that a signal ended. Dropping it would skip its check.
+    const lowest = field === 'exitCode' ? -10_000_000 : 0;
+    if (Number.isInteger(number) && number >= lowest && number <= 10_000_000) out[field] = number;
   }
   for (const field of Object.keys(TEXT_LIMITS) as Array<keyof typeof TEXT_LIMITS>) {
     const value = source[field];

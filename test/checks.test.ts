@@ -55,6 +55,10 @@ describe('runChecks', () => {
     expect(failures({ ...pr, details: { status: 'open' } })).toEqual([]);
     expect(failures({ ...pr, details: { status: 'closed' } })).toEqual(['pull_request.state']);
     expect(failures({ ...pr, url: 'https://github.com/acme/app' })).toEqual(['pull_request.url']);
+    // Only the path of the link counts. A query string or a fragment cannot dress a page up as a pull request.
+    expect(failures({ ...pr, url: 'https://example.com/?next=/pull/1' })).toEqual(['pull_request.url']);
+    expect(failures({ ...pr, url: 'https://example.com/docs#/pull/1' })).toEqual(['pull_request.url']);
+    expect(failures({ ...pr, url: 'https://gitlab.com/acme/app/-/merge_requests/12?tab=files' })).toEqual([]);
     expect(failures({ ...pr, url: 'https://bitbucket.org/acme/app/pull-requests/7', details: { status: 'merged' } })).toEqual([]);
   });
 
@@ -80,6 +84,9 @@ describe('runChecks', () => {
 describe('sanitizeDetails', () => {
   it('coerces numbers sent as strings and drops junk', () => {
     expect(sanitizeDetails({ passed: '12', failed: 0, exitCode: ' 0 ', skipped: 'many', nope: 1 })).toEqual({ passed: 12, failed: 0, exitCode: 0 });
+    // A blank is no number, and a negative exit code stays, so its check still runs.
+    expect(sanitizeDetails({ passed: '   ', failed: '', exitCode: -1 })).toEqual({ exitCode: -1 });
+    expect(sanitizeDetails({ passed: -3, exitCode: '-9' })).toEqual({ exitCode: -9 });
   });
 
   it('refuses negative and fractional counts', () => {
