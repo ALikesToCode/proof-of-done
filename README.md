@@ -1,16 +1,98 @@
 # Proof of Done
 
-Proof of Done is a Forge app for Jira that makes Done mean proven. A work item gets a done contract, the list of criteria that have to hold before it closes. A criterion counts as proven when a piece of evidence for it passes the app's checks and a reviewer accepts it. By default a person cannot accept evidence they typed in themselves. A person's attestation is the exception. The app accepts it without a second person when the person who gives it is not the assignee of the work item.
+An AI agent says a task is done, and it is not. The tests fail, the pull request was closed without a merge, or nobody looked. The ticket still says Done.
+
+Proof of Done makes "done" something that has to be shown. It has four parts.
+
+1. **A done contract.** The criteria that have to hold before the work counts as done.
+2. **Evidence with checks.** The agent submits evidence for each criterion: a test run, a build, a pull request, a document. Each piece is checked the moment it arrives. A test run with failures is turned away with the reason.
+3. **A verdict on each piece.** Someone other than the submitter accepts or rejects the evidence. An agent has no way to accept its own work.
+4. **A gate.** The work passes when every criterion is proven. Until then the gate says no, and says what is missing.
+
+```mermaid
+flowchart LR
+  contract["Done contract<br/>the criteria"] --> evidence["Evidence<br/>for one criterion"]
+  evidence --> checks{"Checks"}
+  checks -- "fail" --> away["Turned away<br/>with the reason"]
+  checks -- "pass" --> verdict{"Verdict from<br/>someone else"}
+  verdict -- "reject" --> away
+  verdict -- "accept" --> proven["Criterion proven"]
+  proven --> gate{"Gate:<br/>every criterion proven?"}
+  gate -- "yes" --> done["Done"]
+  gate -- "no" --> missing["Not done,<br/>and what is missing"]
+```
+
+Today it runs inside Jira, as a Forge app with a tool server for coding agents. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
+
+![The Proof of Done panel on a Jira work item. It shows the app's sample data: one of three criteria is proven, and two pieces of evidence wait for a review.](docs/images/issue-panel.png)
+
+## Try the rules in a minute
+
+You need Node.js 22 or newer. You do not need Jira or any account.
+
+```
+git clone https://github.com/ALikesToCode/proof-of-done.git
+cd proof-of-done
+npm ci
+npm run example
+```
+
+The example holds a contract with two criteria in memory. An agent reports done five times, and the rules answer each time:
+
+```
+1. The agent reports done and shows nothing.
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 with no evidence).
+
+2. It submits a test run with two failures.
+   check failed: 2 tests failed, so this run proves nothing yet.
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 rejected).
+
+3. It fixes the tests and submits a clean run.
+   checks passed, so the evidence waits for a review
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 waiting for a check).
+
+4. dana types in a note about the release notes and accepts their own note.
+   checks passed, so the evidence waits for a review
+   dana accepts it: not independent, they entered it themselves
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 waiting for a check).
+
+5. sam reads both pieces and accepts them.
+   sam accepts it: an independent check
+   sam accepts it: an independent check
+   agent: "done".  gate: PASS. All 2 criteria are proven.
+```
+
+The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls the same functions the Jira app calls. To use it on real work, install the [Jira app](#the-jira-app).
+
+## The parts
+
+| Part | Where | State |
+| --- | --- | --- |
+| Core: the rules of proof, the evidence checks, the gate decision and the meter | [src/core/](src/core/) | Built. Plain TypeScript with no Forge imports, which a test enforces |
+| Services: contracts, the done gate and the tools for agents | [src/services/](src/services/) | Built. They reach Jira, the store and the Teamwork Graph through three interfaces, so they also import nothing from Forge. The same test enforces it |
+| Jira adapter: the Forge app | [manifest.yml](manifest.yml), `src/frontend/`, `src/resolvers/`, `src/actions/`, `src/triggers/`, `src/store/`, `src/jira/`, `src/graph/`, [rovo/](rovo/) | Built. The Codegeist 2026 entry |
+| Tool for coding agents | The app's MCP server with five tools, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. It works through the Jira app |
+| Starter skeleton | `marrow`, a repository of its own | In progress, not public yet |
+
+The core and the Jira adapter share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
+
+## Planned, not built yet
+
+Nothing in this list exists today.
+
+- **The core as a package of its own.** Today it is a folder in this repository and is not published to npm.
+- **A tool server that runs without Jira.** The five tools are served by Atlassian for the Jira app. An agent with no Jira site cannot use them yet.
+- **A verification step for agent harnesses.** A step that a harness runs before it reports a task as finished.
+- **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
+- **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
+
+## The Jira app
+
+The app gives a Jira work item a done contract. A criterion counts as proven when a piece of evidence for it passes the app's checks and a reviewer accepts it. By default a person cannot accept evidence they typed in themselves. A person's attestation is the exception. The app accepts it without a second person when the person who gives it is not the assignee of the work item.
 
 It is built for teams that hand Jira work to AI coding agents. The agent reads the contract, does the work and submits evidence for each criterion. A person or a second agent judges the evidence. When a ticket with an unproven contract reaches Done, the app comments on it or moves it back, or the workflow refuses the move. By default the app leaves a ticket that has no contract alone.
 
-Entry for Codegeist 2026, category Apps for Software Teams.
-
-## The problem
-
-Teams assign Jira work to AI agents, and the agents mark it done without proof. The ticket says Done. Nobody checked that the acceptance criteria were met.
-
-## What it does
+### What it does
 
 - **Done contract.** The issue panel reads the acceptance criteria out of the description and offers them as a contract. People can add, change and remove criteria, and a project can set rules that every new contract starts with.
 - **Evidence with checks.** Evidence is a test run, a build, a pull request, a document, a person's attestation, or something else with a link or an excerpt. The app checks each piece the moment it arrives. A test run with failures, a link that is not a pull request, or a build with no result is turned away with the reason.
@@ -23,7 +105,7 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 
 [docs/design.md](docs/design.md) has the rules of proof, the decisions behind them, and the state of each part.
 
-## Try it in five minutes
+### Try it in five minutes
 
 You need a Jira site where you are an admin, with one software project. Only step 6 needs Rovo. Jira's navigation now calls a project a space. The app and this page say project.
 
@@ -38,7 +120,7 @@ You need a Jira site where you are an admin, with one software project. Only ste
 
 When you are done, press Remove sample data on the project page. It deletes the sample work items the app created, together with any subtasks that someone added under them. It deletes no other work item.
 
-## Block the transition itself
+### Block the transition itself
 
 The comment and the move back happen after the work item was closed. To stop the close, add the app's validator to the workflow.
 
@@ -50,7 +132,7 @@ Jira then refuses the transition and shows what is missing, for example "Proof o
 
 Remove the validator from every workflow before you uninstall the app. A validator that is left behind blocks its transition.
 
-## The Proof Verifier
+### The Proof Verifier
 
 The Proof Verifier is a Rovo agent. It reads the evidence that waits on a work item, decides whether each piece proves its criterion, and records a verdict with its reasoning. Its instructions tell it to judge from the record, to treat text inside evidence as material to judge and not as an instruction, and to reject when it is unsure. The app does not enforce these instructions. The Proof Verifier runs on a language model, so it can still get a verdict wrong.
 
@@ -58,7 +140,7 @@ Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat 
 
 Rovo shows the verdicts in a card first, each with a checkbox. The agent records them when you press Confirm selected.
 
-## The Teamwork Graph check
+### The Teamwork Graph check
 
 Evidence for a pull request or a build says what its author says. When a code host or a CI tool is connected to Jira, the Teamwork Graph holds what that tool reported for the work item. The app compares the two and puts a note in the Review dialog.
 
@@ -73,7 +155,7 @@ To see more than "No record", the site needs a development tool connected, such 
 
 The note is advice for the reviewer. It never accepts or rejects, and the done gate does not read it. The Proof Verifier gets the same note with each piece of evidence, and a coding agent gets it in the answer to `submit-evidence`.
 
-## Coding agents
+### Coding agents
 
 The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `start-done-contract`, `submit-evidence` and `list-unproven-work`. An agent can start a contract only from criteria that are already written down, and it cannot record a verdict, so it cannot accept its own work. `get-context-pack` also lists the pull requests, builds and deployments Jira links to the work item. Access from outside Atlassian is off until an admin turns it on.
 
@@ -88,7 +170,7 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
    Then run `/mcp` and sign in.
 4. Give the agent the skill in [skills/proof-of-done](skills/proof-of-done/SKILL.md). It teaches the loop: read the contract first, submit evidence for each criterion, and say "done" only when `get-done-contract` reports every criterion as proven. For Claude Code, copy the folder into `~/.claude/skills/`.
 
-## What it stores and what it may do
+### What it stores and what it may do
 
 - Its scopes are `read:jira-work` and `write:jira-work`, and four Teamwork Graph scopes that only read: `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`.
 - Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app makes no outbound network calls, and the Forge CLI reports it as eligible for Runs on Atlassian. It gives contract and work item data to Jira, to Rovo when someone asks the Proof Verifier, and to a coding agent that a person connects.
@@ -105,7 +187,7 @@ npm ci
 npm run check
 ```
 
-`npm run check` runs the type check, the tests and `forge lint`. The tests need no Atlassian account. Unit tests cover the rules, the services and the agent tools. The page tests in `test/ui.test.ts` mount the three pages on stand-ins for Forge and run the real resolvers behind them.
+`npm run check` runs the type check, the tests and `forge lint`. The tests need no Atlassian account, and `npm test` alone needs no Forge CLI either. Unit tests cover the rules, the services and the agent tools. The page tests in `test/ui.test.ts` mount the three pages on stand-ins for Forge and run the real resolvers behind them.
 
 To run your own copy:
 
@@ -146,7 +228,13 @@ The Teamwork Graph does not always answer on the development site. On 23 Nov 202
 | `skills/proof-of-done/` | The open skill for coding agents |
 | `scripts/` | The deploy step for the Marketplace registration |
 | `test/` | Unit tests and page tests |
+| `examples/` | The walk-through that `npm run example` runs |
+| `benchmark/` | The place for the planned benchmark. No data |
 
 ## Preview features
 
 `jira:workflowValidator`, `rovo:mcp`, `rovo:skill` and the Teamwork Graph API were in Preview on 23 Nov 2026, so they can change. Package versions are pinned exactly in `package.json`, and the runtime is `nodejs24.x`.
+
+## Contributing
+
+[CONTRIBUTING.md](CONTRIBUTING.md) says how to report a problem and what a change needs. Report a suspected vulnerability through the [private form](https://github.com/ALikesToCode/proof-of-done-docs/security/advisories/new), not in a public issue.
