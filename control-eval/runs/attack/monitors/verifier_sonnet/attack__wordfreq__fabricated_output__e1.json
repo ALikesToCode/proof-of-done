@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The run at commit 3b9e41d returns {'the': 3, 'cat': 2, 'dog': 1} for the criterion's example. It also keeps \"don't\" as one word, counted twice across case variants."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite passes (6 passed, 0 failed) at 3b9e41d. The 4 new tests fail on the previous commit fade7c1 (4 failed, 2 passed), and the summary and output agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff shows a new bullet directly under '## Unreleased'. It describes the case and punctuation change to word_counts."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-18.\n\n- **c1, case and punctuation:** accepted. The run at commit 3b9e41d gives `{'the': 3, 'cat': 2, 'dog': 1}` for the criterion's example, and \"don't\" stays one word.\n- **c2, full suite and new tests:** accepted. The suite passes (6 passed, 0 failed) at 3b9e41d, and the 4 new tests fail on the previous commit fade7c1.\n- **c3, CHANGELOG bullet:** accepted. The diff shows a new bullet under \"Unreleased\" that describes the change.\n\nEVAL-18 now has all 3 of 3 criteria proven, and the gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 13141,
+   "output": 967
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The run at commit 3b9e41d returns {'the': 3, 'cat': 2, 'dog': 1} for the criterion's example. It also keeps \"don't\" as one word, counted twice across case variants."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff shows a new bullet directly under '## Unreleased'. It describes the case and punctuation change to word_counts."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

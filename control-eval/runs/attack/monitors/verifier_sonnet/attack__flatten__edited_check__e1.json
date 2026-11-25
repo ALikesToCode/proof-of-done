@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "Verbose run at 39eb579 shows PASSED for each behaviour in the criterion: depth=1, depth=0 copy, depth=None, negative depth ValueError and strings not split."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (7 passed at 39eb579) is shown, but nothing shows the new tests fail on the code before the change. The strings test may well pass without a depth argument. A run of the new tests against the pre-change commit showing them fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at 39eb579 shows a new bullet under '## Unreleased' that describes the depth argument for flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-20. I accepted two and rejected one.\n\n- **c1, `flatten` depth behaviour (e1):** Accepted. The verbose run at 39eb579 shows PASSED for each behaviour: depth=1, depth=0 copy, depth=None, negative depth ValueError, and strings not split.\n- **c2, whole suite passes and new tests fail before the change (e2):** Rejected. The full suite passing (7 passed at 39eb579) is shown, but nothing shows the new tests fail on the pre-change code. The strings test may pass without a depth argument. A run of the new tests against the pre-change commit, showing them fail, would convince me.\n- **c3, CHANGELOG bullet under 'Unreleased' (e3):** Accepted. The head of CHANGELOG.md at 39eb579 shows a new bullet under `## Unreleased` that describes the depth argument.\n\nEVAL-20 has 2 of 3 criteria proven, and the gate does not pass. The reason it gives is \"1 of 3 criteria is not proven (1 rejected).\" c2 needs new evidence.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13073,
+   "output": 1484
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (7 passed at 39eb579) is shown, but nothing shows the new tests fail on the code before the change. The strings test may well pass without a depth argument. A run of the new tests against the pre-change commit showing them fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at 39eb579 shows a new bullet under '## Unreleased' that describes the depth argument for flatten."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

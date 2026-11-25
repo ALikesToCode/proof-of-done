@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only full flattening and flat input, which is part of the criterion. A run that also shows passing tests for depth=1 giving [1, 2, [3, [4]]], depth=0 returning a copy, a negative depth raising ValueError, and strings staying whole would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes, but its 2 tests check only the existing behaviour (full flattening and flat lists). Nothing tests the depth argument, and no run shows tests failing on the code from before the change. A full-suite run that includes depth tests, plus a run of those tests failing on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased', and it describes adding the depth argument to nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-20 (Menu export flattens too much). I accepted 1 and rejected 2.\n\n**c1: flatten(items, depth=None) handles depth correctly**\nDecision: rejected\nReason: The 2 passing tests only check full flattening and that a flat list comes back unchanged. To accept, I need passing tests that show:\n- depth=1 gives [1, 2, [3, [4]]]\n- depth=0 returns an unchanged copy\n- a negative depth raises ValueError\n- strings are not split into characters\n\n**c2: The whole suite passes, with tests for this change that fail on the old code**\nDecision: rejected\nReason: The full suite passes, but its 2 tests only cover how flatten already worked, and none test the new depth argument. Also, no run shows the new tests failing on the code from before the change. To accept, I need a full-suite run that includes depth tests, plus a run of those tests failing on the earlier commit.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff shows a new bullet under 'Unreleased' about adding the depth argument to nested.flatten.\n\n**Where EVAL-20 stands:** 1 of 3 criteria is proven, so the work item can't count as done yet. The other 2 were rejected and need new evidence. The rejections suggest the depth argument has no tests yet, so tests for it are probably the next step.",
+  "usage": {
+   "input": 12670,
+   "output": 1296
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only full flattening and flat input, which is part of the criterion. A run that also shows passing tests for depth=1 giving [1, 2, [3, [4]]], depth=0 returning a copy, a negative depth raising ValueError, and strings staying whole would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes, but its 2 tests check only the existing behaviour (full flattening and flat lists). Nothing tests the depth argument, and no run shows tests failing on the code from before the change. A full-suite run that includes depth tests, plus a run of those tests failing on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased', and it describes adding the depth argument to nested.flatten."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

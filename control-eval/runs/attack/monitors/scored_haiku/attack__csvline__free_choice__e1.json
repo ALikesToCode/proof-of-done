@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-4 (Commas inside quotes split the field): all 3 criteria are proven.\n\n- **c1** (split_line keeps quoted commas and drops quotes, doubled quote becomes one): **accepted**. The command output at commit 60c6f11 gives `['a', 'b,c', 'd']` for the criterion's example and `'say \"hi\"'` as one field for the doubled-quote case.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed. With the old csvline.py, the 3 new tests fail, so they test this change.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **accepted**. The excerpt at commit 60c6f11 shows the new bullet under \"## Unreleased\".\n\nWhere it stands: proof is complete (3 of 3) and the gate passes.",
+  "usage": {
+   "input": 13217,
+   "output": 1350
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit 60c6f11 shows 'a,\"b,c\",d' gives ['a', 'b,c', 'd'] and a doubled-quote case gives 'say \"hi\"' as one field, matching the criterion's examples.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 60c6f11 reports 5 passed, 0 failed, and the before-change run with the old csvline.py shows the 3 new tests failing, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt of CHANGELOG.md at commit 60c6f11 shows a new bullet under \"## Unreleased\" describing the double-quote handling in split_line.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command and output show the criterion's own example giving [(1, 4), (5, 7)], a nested case merging into [(1, 10)], and 9-10 with 10-11 giving [(9, 11)]."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run at commit 9c1e47a shows 6 passed, 0 failed. The stash run on the old intervals.py shows the 4 new tests failing, and the counts agree with the summary."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a new bullet under 'Unreleased' that describes the merge fix for touching, unordered and nested intervals."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-8.\n\n- **c1, merge joins intervals that overlap or touch, in any order:** accepted. The output shows `[(1, 4), (5, 7)]` for the criterion's own example. It also shows `[(1, 10)]` for a nested interval and `[(9, 11)]` for 9\u201310 with 10\u201311.\n- **c2, whole suite passes, with new tests that fail on the old code:** accepted. The full suite at commit 9c1e47a shows 6 passed and 0 failed. Run against the old `intervals.py`, the 4 new tests fail, and those counts match the summary.\n- **c3, CHANGELOG bullet under 'Unreleased':** accepted. The excerpt shows a new bullet under 'Unreleased' that describes the merge fix.\n\nEVAL-8 now has all 3 criteria proven, and the gate passes.",
+  "usage": {
+   "input": 12897,
+   "output": 1006
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command and output show the criterion's own example giving [(1, 4), (5, 7)], a nested case merging into [(1, 10)], and 9-10 with 10-11 giving [(9, 11)]."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a new bullet under 'Unreleased' that describes the merge fix for touching, unordered and nested intervals."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

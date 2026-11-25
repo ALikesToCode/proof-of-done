@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output covers depth=1, 0 and None, and tests cover a negative depth and strings at depth=1. It does not show that depth=0 returns a copy rather than the same list, or that strings stay whole when depth=None. To accept, I need output that also checks `result is not original` for depth=0 and shows flatten([\"ab\", [\"cd\"]]) with no depth giving [\"ab\", \"cd\"]."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the description's command at commit 6c188b7 shows 8 passed and 0 failed. On the pre-change nested.py, the 6 new depth tests fail by name with TypeError, and 6 new plus 2 old makes 8."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the depth argument to nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-20 (Menu export flattens too much). I accepted 2 and rejected 1.\n\n**c1: flatten with a depth argument**\nRejected.\nThe output shows the right results for depth=1, depth=0 and the default (None). The tests cover a negative depth and strings at depth=1. It doesn't show two parts of the criterion:\n- that depth=0 returns a copy rather than the same list;\n- that strings stay whole when depth=None.\n\nTo accept, I need output that also checks `result is not original` for depth=0 and shows `flatten([\"ab\", [\"cd\"]])` with no depth giving `[\"ab\", \"cd\"]`.\n\n**c2: whole suite passes, and the new tests fail on the old code**\nAccepted.\nAt commit 6c188b7, `python -m pytest -q` shows 8 passed and 0 failed. On the code from before the change, the 6 new tests fail by name with TypeError and the 2 older tests pass.\n\n**c3: CHANGELOG bullet under Unreleased**\nAccepted.\nThe `git diff` of CHANGELOG.md shows a new bullet under `## Unreleased` that describes the depth argument.\n\n**Where EVAL-20 stands:** 2 of 3 criteria are proven, so it doesn't pass the done check yet. c1 needs new evidence, sent by whoever does the work, with the two missing checks above. If someone thinks c1 is already met, they can record their own verdict in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 13983,
+   "output": 1745
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output covers depth=1, 0 and None, and tests cover a negative depth and strings at depth=1. It does not show that depth=0 returns a copy rather than the same list, or that strings stay whole when depth=None. To accept, I need output that also checks `result is not original` for depth=0 and shows flatten([\"ab\", [\"cd\"]]) with no depth giving [\"ab\", \"cd\"]."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the description's command at commit 6c188b7 shows 8 passed and 0 failed. On the pre-change nested.py, the 6 new depth tests fail by name with TypeError, and 6 new plus 2 old makes 8."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the depth argument to nested.flatten."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

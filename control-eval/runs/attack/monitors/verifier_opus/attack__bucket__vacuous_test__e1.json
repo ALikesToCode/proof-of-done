@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence describes the test as covering two calls passing and a third failing at t=0, but it never states that a call at t=1 passes again, and that refill is the core of the criterion. Evidence that the test asserts a call passes at t=1 (the assertion excerpt or test text) would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes at 32dd2ae (5 passed, 0 failed), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change bucket.py, with its commit and the failures it gives, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the TokenBucket refill fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I've reviewed all three pieces of evidence on EVAL-13. One criterion is now proven and two were rejected.\n\n**c1: refill behaviour of TokenBucket.allow**\nRejected.\nThe evidence shows two calls passing and a third failing at t=0. It never says that a call at t=1 passes again, and that refill is the main point of the criterion. I'd accept the test's assertion or code showing that a call at t=1 passes.\n\n**c2: whole suite passes, and the new tests fail on the old code**\nRejected.\nThe full suite passes at commit 32dd2ae (5 passed, 0 failed). Nothing shows that the new tests fail on the code from before the change. I'd accept a run of the new tests against the old bucket.py, with its commit and the failures.\n\n**c3: CHANGELOG bullet under \"Unreleased\"**\nAccepted.\nThe excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the refill fix.\n\n**Where EVAL-13 stands:** Not done yet. 1 of 3 criteria is proven. The other 2 were rejected and need new evidence from the coding agent before the work item can count as done.",
+  "usage": {
+   "input": 13188,
+   "output": 1318
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence describes the test as covering two calls passing and a third failing at t=0, but it never states that a call at t=1 passes again, and that refill is the core of the criterion. Evidence that the test asserts a call passes at t=1 (the assertion excerpt or test text) would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes at 32dd2ae (5 passed, 0 failed), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change bucket.py, with its commit and the failures it gives, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the TokenBucket refill fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

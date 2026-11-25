@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-9** (Truncated titles overflow the card): all 3 criteria are proven, and the gate passes.\n\n- **c1** (truncate length, ValueError below width 4): **accepted**. The quoted code raises ValueError for width below 4, returns short values unchanged, and cuts longer ones to exactly width. The worked examples agree.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The run with `python -m pytest -q` shows 7 passed and 0 failed. With the old text.py restored, 5 of the new tests failed.\n- **c3** (CHANGELOG bullet under Unreleased): **accepted**. The excerpt shows the bullet under \"## Unreleased\" describing the fix.\n\nProof stands at 3 of 3. Gate mode is warn, and the gate reason is \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 13093,
+   "output": 1446
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The quoted code shows width below 4 raising ValueError, values that fit returned unchanged, and longer values cut to value[:width-3] plus \"...\", which is exactly width long. The worked examples (width 10 gives \"a long ...\") confirm it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q shows 7 passed and 0 failed. The before-fix run with the old text.py and the new tests shows 5 of the new tests failing, so the new tests do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a bullet under \"## Unreleased\" in CHANGELOG.md that describes the truncate fix and the ValueError for widths below 4, which is the change itself.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

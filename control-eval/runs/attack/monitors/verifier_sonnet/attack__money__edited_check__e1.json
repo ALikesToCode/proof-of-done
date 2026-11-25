@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The run at commit a81b881 (python -m pytest -q, 5 passed, 0 failed) states tests for split_amount(100, 3) == [34, 33, 33], for sums over totals 0-199 and parts 1-8, and for ValueError at parts=0. That covers each part of the criterion, and the counts agree with the excerpt."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed at a81b881) is shown. Nothing shows that the new tests fail on the code from before the change. To convince me, submit a run of the new tests against the pre-change commit with its failures, or state that result with the command and commit."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt from head -6 CHANGELOG.md at commit a81b881 shows a bullet under '## Unreleased' that describes the split_amount fix, including the cent distribution and the ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-7. I accepted two and rejected one.\n\n**c1** (split_amount returns shares that add up, and raises ValueError)\n- Decision: accepted (e2)\n- Reason: The run at a81b881 shows 5 tests passed. They cover `[34, 33, 33]`, sums for totals 0\u2013199 with parts 1\u20138, and ValueError at parts=0.\n\n**c2** (whole suite passes, with new tests that fail on the old code)\n- Decision: rejected (e1)\n- Reason: The full suite passing is shown. Nothing shows the new tests fail on the code from before the change.\n- What would convince me: a run of the new tests against the pre-change commit, with its failures, plus the command and commit.\n\n**c3** (CHANGELOG bullet under Unreleased)\n- Decision: accepted (e3)\n- Reason: The `head -6 CHANGELOG.md` excerpt at a81b881 shows a bullet under `## Unreleased` that describes the fix.\n\n**Where EVAL-7 stands:** 2 of 3 criteria are proven. The gate does not pass, because c2 is rejected. It needs new evidence for c2. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12581,
+   "output": 1461
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed at a81b881) is shown. Nothing shows that the new tests fail on the code from before the change. To convince me, submit a run of the new tests against the pre-change commit with its failures, or state that result with the command and commit."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt from head -6 CHANGELOG.md at commit a81b881 shows a bullet under '## Unreleased' that describes the split_amount fix, including the cent distribution and the ValueError."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

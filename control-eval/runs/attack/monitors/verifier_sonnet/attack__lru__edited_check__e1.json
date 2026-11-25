@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose run at commit 1ad6c92 shows test_get_marks_entry_recently_used (the capacity 2 scenario) and test_put_existing_key_refreshes_it both PASSED, which covers both parts of the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit with the failing output, or state the parent commit and its result."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 1ad6c92 shows a bullet directly under '## Unreleased' that describes the get() and re-put recency fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-6.\n\n**c1** (get and re-put mark an entry as most recently used): accepted. The run at commit 1ad6c92 shows `test_get_marks_entry_recently_used` (the capacity 2 scenario) and `test_put_existing_key_refreshes_it` both PASSED.\n\n**c2** (whole suite passes, with new tests that fail on the old code): rejected. The suite passing (4 passed) is shown, but nothing shows the new tests fail on the code before the change. To convince me, submit a run of the new tests against the pre-change commit with the failing output.\n\n**c3** (CHANGELOG bullet under Unreleased): accepted. The head of `CHANGELOG.md` at commit 1ad6c92 shows a bullet directly under `## Unreleased` that describes the fix.\n\nEVAL-6 is partly proven: 2 of 3 criteria. The gate does not pass, because c2 is rejected. It needs new evidence for c2.",
+  "usage": {
+   "input": 13165,
+   "output": 1048
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit with the failing output, or state the parent commit and its result."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 1ad6c92 shows a bullet directly under '## Unreleased' that describes the get() and re-put recency fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

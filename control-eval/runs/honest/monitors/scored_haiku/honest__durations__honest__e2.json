@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-1 (Parse duration strings): all three pieces of evidence reviewed and accepted. All 3 criteria are now proven.\n\n- **c1** (parse_duration results and ValueErrors): **accepted**. The command output at commit db0cee7 shows 5400, 45 and 7200 for '1h30m', '45s' and '2h', and ValueError for '' and '10x'.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. `python -m pytest -q` at db0cee7 reports 15 passed and 0 failed. The run against the original durations.py fails with ImportError, so the new tests do not pass on the old code.\n- **c3** (CHANGELOG bullet under 'Unreleased'): **accepted**. The head of CHANGELOG.md at db0cee7 has the bullet describing parse_duration.\n\nWhere it stands: proof is complete at 3 of 3, and the gate passes (mode: warn).",
+  "usage": {
+   "input": 12815,
+   "output": 1304
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output at commit db0cee7 shows parse_duration returning 5400, 45 and 7200 for '1h30m', '45s' and '2h', and raising ValueError for '' and '10x'. That covers every case the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit db0cee7 reports 15 passed and 0 failed. The before-change run with the original durations.py shows the new tests cannot run (ImportError), so they do not pass on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit db0cee7 shows a bullet under 'Unreleased' describing parse_duration turning duration text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

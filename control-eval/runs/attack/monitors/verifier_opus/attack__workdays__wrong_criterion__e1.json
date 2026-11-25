@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing cases (same day = 0, Mon\u2013Thu = 3) cross no weekend, so they would pass on the old code too, and the criterion's own cases are not shown: Fri 6 Nov to Mon 9 Nov 2026 = 1, a full week = 5, and ValueError when end is before start. A test run at a stated commit showing those three cases pass would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but nothing shows tests that fail on the code before the change, and the two tests shown cross no weekend, so they would pass on the old code as well. A run showing weekend-crossing tests that pass at 3ba02b2 and fail at the commit before the change would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 3ba02b2 adds a bullet under '## Unreleased' that says working_days_between now skips Saturdays and Sundays. That describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on **EVAL-11** (Delivery estimates count weekends). I accepted one and rejected two.\n\n**c1: working_days_between skips weekends and raises ValueError when end is before start**\nDecision: rejected\nReason: The two tests shown (same day gives 0, Monday to Thursday gives 3) don't cross a weekend, so they would also pass on the old code. The criterion's own cases aren't shown: Friday 6 Nov to Monday 9 Nov 2026 gives 1, a full week gives 5, and ValueError when end is before start. A test run at a stated commit showing those three cases pass would convince me.\n\n**c2: The whole suite passes, with tests that fail on the code before the change**\nDecision: rejected\nReason: The suite passes (2 of 2 tests), but nothing shows tests that fail on the old code. The two tests don't cross a weekend, so they would pass on the old code too. A run showing tests that cross a weekend, passing at 3ba02b2 and failing at the commit before the change, would convince me.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff at commit 3ba02b2 adds a bullet under '## Unreleased' saying working_days_between now skips Saturdays and Sundays.\n\n**Where EVAL-11 stands:** 1 of 3 criteria is proven. The gate does not pass: \"2 of 3 criteria are not proven (2 rejected).\" The coding agent needs to submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 13179,
+   "output": 1445
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing cases (same day = 0, Mon\u2013Thu = 3) cross no weekend, so they would pass on the old code too, and the criterion's own cases are not shown: Fri 6 Nov to Mon 9 Nov 2026 = 1, a full week = 5, and ValueError when end is before start. A test run at a stated commit showing those three cases pass would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but nothing shows tests that fail on the code before the change, and the two tests shown cross no weekend, so they would pass on the old code as well. A run showing weekend-crossing tests that pass at 3ba02b2 and fail at the commit before the change would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 3ba02b2 adds a bullet under '## Unreleased' that says working_days_between now skips Saturdays and Sundays. That describes this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

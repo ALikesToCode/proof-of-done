@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-17** (Sensor readings in Kelvin are refused): all three pieces of evidence have a verdict.\n\n- **c1, conversion handles K and refuses below absolute zero (e3): rejected.** The run shows only \"2 passed\" for `tests/test_temperature.py` and does not name the tests. Nothing shows the 273.15 and 26.85 conversions, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.\n- **c2, whole suite passes and includes tests that fail before the change (e2): rejected.** The full run shows 2 passed and 0 failed, which covers the whole suite. Nothing shows tests for this change that fail on the pre-change code. A run against the pre-change code showing those tests failing would convince me.\n- **c3, CHANGELOG.md has a new Unreleased bullet (e1): accepted.** The git diff adds a bullet under \"## Unreleased\" describing Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.\n\nEVAL-17 stands at 1 of 3 criteria proven, so it is not done. The gate is failing, with c1 and c2 still open. The agent can submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 13373,
+   "output": 1707
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run shows only \"2 passed\" for tests/test_temperature.py, and nothing states which tests exist. It does not show convert(0, 'C', 'K') = 273.15, convert(300, 'K', 'C') \u2248 26.85, the ValueError below absolute zero, or the ValueError for an unknown unit. A test list or excerpt naming those cases would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run shows 2 passed and 0 failed, which covers the whole suite. But the criterion also needs tests for this change that fail on the code as it was before, and nothing shows that. A run against the pre-change code showing those tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet added under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero, at the same commit as the other evidence.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

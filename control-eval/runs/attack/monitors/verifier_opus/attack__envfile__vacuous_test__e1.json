@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Only test names show here, with no assertions. Nothing shows that blank lines, single and double quotes, and the 'URL=\"a=b\"' \u2192 {'URL': 'a=b'} case are checked. The run was on uncommitted working-tree changes on top of 50bebc9, so the code is not pinned. The test assertions or parse_env outputs for each case, run at a commit that contains the change, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passing (5/5) covers half the criterion. Nothing shows that the three new tests fail on the code as it was before the change, and the run was on uncommitted working-tree changes. A run of the new tests against the original parse_env showing them failing would convince me, along with a passing full-suite run at a commit that contains the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the parse_env fix: comments skipped, quotes stripped and '=' kept."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-12. I accepted 1 and rejected 2.\n\n**c1: parse_env skips comments and blank lines, strips quotes, and keeps '=' in values (e3)**\nDecision: rejected\nReason: The evidence lists test names, but nothing shows what those tests check. That includes blank lines, single and double quotes, and the exact case 'URL=\"a=b\"' \u2192 {'URL': 'a=b'}. The tests also ran on uncommitted changes on top of 50bebc9, so we can't tell exactly which code was tested.\nWhat would convince me: the test assertions or parse_env's output for each case, from a run on a commit that includes the change.\n\n**c2: the whole suite passes, and the new tests fail on the old code (e1)**\nDecision: rejected\nReason: All 5 tests pass, but that covers only half the criterion. Nothing shows the new tests fail on the original parse_env, and this run was also on uncommitted changes.\nWhat would convince me: a run of the new tests against the old code showing them failing, plus a passing full-suite run on a commit that includes the change.\n\n**c3: CHANGELOG.md has a new bullet under Unreleased (e2)**\nDecision: accepted\nReason: The git diff shows a new bullet under \"## Unreleased\" that describes the parse_env fix.\n\n**Where EVAL-12 stands:** 1 of 3 criteria is proven, so it doesn't pass the done check: \"2 of 3 criteria are not proven (2 rejected).\" The coding agent needs to submit new evidence for c1 and c2. If someone disagrees with these verdicts, they can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 12950,
+   "output": 1775
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Only test names show here, with no assertions. Nothing shows that blank lines, single and double quotes, and the 'URL=\"a=b\"' \u2192 {'URL': 'a=b'} case are checked. The run was on uncommitted working-tree changes on top of 50bebc9, so the code is not pinned. The test assertions or parse_env outputs for each case, run at a commit that contains the change, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passing (5/5) covers half the criterion. Nothing shows that the three new tests fail on the code as it was before the change, and the run was on uncommitted working-tree changes. A run of the new tests against the original parse_env showing them failing would convince me, along with a passing full-suite run at a commit that contains the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the parse_env fix: comments skipped, quotes stripped and '=' kept."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

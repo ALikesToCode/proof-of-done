@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-7: \"Split bills lose a cent\" has 2 of 3 criteria proven. c2 is still rejected, so the work item is not done.\n\n- **c1** (split_amount returns shares that add up, remainder to first shares, ValueError for parts below 1): **accepted**. The test run at a81b881 shows 5 passed, 0 failed, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], the sum-to-total ranges, and ValueError for parts=0. The test names are not in the excerpt, so my doubt is 2 out of 10.\n- **c2** (whole suite passes, and includes tests that fail on the pre-change code): **rejected**. The suite passes, but nothing shows the new tests fail on the code before the change. To convince me, run test_remainder_goes_to_first_shares, test_shares_add_up and test_zero_parts_raises against the pre-change commit and submit the output showing those failures. My doubt is 6 out of 10.\n- **c3** (CHANGELOG.md has a bullet under 'Unreleased'): **accepted**. The excerpt shows the bullet under \"## Unreleased\" describing the fix. My doubt is 1 out of 10.\n\nGate: not passing (warn mode). One criterion is rejected. Resubmit evidence for c2 to move the work item forward.",
+  "usage": {
+   "input": 12985,
+   "output": 1721
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit a81b881 reports 5 passed, 0 failed with the suite command, and the summary names the checks for split_amount(100, 3) == [34, 33, 33], sum-to-total across the stated ranges, and ValueError for parts=0. The test names are not in the excerpt, but the run is the full suite and the claim is checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (5 passed, 0 failed at a81b881), but nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests (test_remainder_goes_to_first_shares, test_shares_add_up, test_zero_parts_raises) against the pre-change commit and submit the output showing those failures.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" describing the split_amount fix, including the remainder rule and the ValueError, at commit a81b881.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command runs is_valid_ipv4 on all eight addresses named in the criterion. Its output shows True for the two valid ones and False for each of the six invalid ones."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q at commit a41c9e7) shows 8 passed and 0 failed. Run against the pre-change netaddr.py, the 6 new tests fail (6 failed, 2 passed), and those numbers match the summary."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet directly under '## Unreleased'. The bullet describes the stricter is_valid_ipv4 validation for EVAL-19."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-19, so every criterion is now proven.\n\n**c1: is_valid_ipv4 accepts only well-formed addresses**\nAccepted.\nThe command runs the check on all eight addresses named in the criterion. The two valid ones return True and the six invalid ones return False.\n\n**c2: The whole test suite passes, and the new tests fail on the old code**\nAccepted.\nThe full suite (`python -m pytest -q`, commit a41c9e7) shows 8 passed and 0 failed. With the old netaddr.py, the 6 new tests fail (6 failed, 2 passed). Those numbers match the summary.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nThe diff of CHANGELOG.md adds one bullet directly under \"## Unreleased\" that describes the stricter check for EVAL-19.\n\n**Where EVAL-19 stands:** 3 of 3 criteria are proven, and the done check passes.",
+  "usage": {
+   "input": 13300,
+   "output": 1030
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command runs is_valid_ipv4 on all eight addresses named in the criterion. Its output shows True for the two valid ones and False for each of the six invalid ones."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 8 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet directly under '## Unreleased'. The bullet describes the stricter is_valid_ipv4 validation for EVAL-19."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 8 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

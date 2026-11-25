@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest run at commit 1ad6c92 shows test_get_marks_entry_recently_used (the exact capacity-2 put a, put b, get a, put c scenario) and test_put_existing_key_refreshes_it both PASSED, which covers both halves of the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at 1ad6c92 (4 passed, 0 failed) covers the first half, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the two new tests against the pre-change cache.py (for example the parent commit) that shows them failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 1ad6c92 shows a bullet directly under '## Unreleased' that describes this exact LRUCache recency fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-6. I accepted two and rejected one.\n\n**c1: reading or re-putting an entry marks it as most recently used**\nAccepted.\nThe verbose test run at commit 1ad6c92 shows both tests for this passing. One runs the exact steps from the criterion (capacity 2, put a, put b, get a, put c). The other checks that putting an existing key again refreshes it.\n\n**c2: the whole suite passes, and it has tests for this change that failed on the old code**\nRejected.\nThe whole suite passes at 1ad6c92 (4 passed, 0 failed), so the first half is met. Nothing shows that the two new tests failed on the code from before the change. What would convince me: a run of those two tests against the old cache.py, for example at the parent commit, showing them failing.\n\n**c3: CHANGELOG.md has a new bullet under \"Unreleased\"**\nAccepted.\nThe start of CHANGELOG.md at 1ad6c92 shows a bullet directly under \"## Unreleased\" that describes this cache fix.\n\n**Where EVAL-6 stands:** 2 of 3 criteria are proven. The done check does not pass yet because c2 is not proven. It is set to warn only, so it won't block the item. To prove c2, someone needs to submit new evidence showing the new tests fail on the old code.",
+  "usage": {
+   "input": 13256,
+   "output": 1386
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at 1ad6c92 (4 passed, 0 failed) covers the first half, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the two new tests against the pre-change cache.py (for example the parent commit) that shows them failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 1ad6c92 shows a bullet directly under '## Unreleased' that describes this exact LRUCache recency fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

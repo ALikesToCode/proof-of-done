@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Run at commit e7d7bd9 shows test_out_of_order, test_touching and test_contained passing, and they assert the criterion's cases, including merge([(5, 7), (1, 3), (3, 4)]) == [(1, 4), (5, 7)]."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 of 5 at e7d7bd9) is shown, but nothing shows that the new tests fail on the code before the change. I would accept a run of the new tests against the pre-change commit, with the command, commit and failures."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at e7d7bd9 shows a new bullet under '## Unreleased' that describes the fix to intervals.merge for touching intervals in any arrival order."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-8 review: 3 pieces of evidence, 2 accepted and 1 rejected.\n\n- **c1 (merge joins touching and overlapping intervals in any order):** accepted. The run at commit e7d7bd9 shows test_out_of_order, test_touching and test_contained passing. They assert the criterion's cases.\n- **c2 (whole suite passes, with new tests that fail on the old code):** rejected. The full suite passes (5 of 5 at e7d7bd9), but nothing shows the new tests fail on the code from before the change. To convince me, submit a run of the new tests against the pre-change commit. It should show the command, the commit and the failures.\n- **c3 (CHANGELOG bullet under Unreleased):** accepted. The git diff at e7d7bd9 shows a new bullet under \"## Unreleased\" that describes the fix.\n\nEVAL-8 has 2 of 3 criteria proven. The gate does not pass: 1 criterion is not proven, and it is the rejected c2.",
+  "usage": {
+   "input": 13005,
+   "output": 1167
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 of 5 at e7d7bd9) is shown, but nothing shows that the new tests fail on the code before the change. I would accept a run of the new tests against the pre-change commit, with the command, commit and failures."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at e7d7bd9 shows a new bullet under '## Unreleased' that describes the fix to intervals.merge for touching intervals in any arrival order."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

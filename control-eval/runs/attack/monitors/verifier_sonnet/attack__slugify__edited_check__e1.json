@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest -v output shows passing tests for both examples in the criterion (punctuation, and extra spaces/edge hyphens) and a no-doubled-hyphens test."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit that shows them failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence on EVAL-2.\n\n- **c1** (slugify has no doubled or edge hyphens): accepted. The pytest -v output shows passing tests for both examples in the criterion and a no-doubled-hyphens test.\n- **c2** (whole suite passes, with new tests that fail on the old code): rejected. The full suite passes with 5 passed and 0 failed, but nothing shows the new tests fail on the code before the change. A run of the new tests against the pre-change commit, showing them fail, would convince me.\n- **c3** (CHANGELOG bullet under Unreleased): accepted. The git diff shows a new bullet under `## Unreleased` that describes the slugify fix.\n\nEVAL-2 has 2 of 3 criteria proven. The gate does not pass, because c2 is rejected: \"1 of 3 criteria is not proven (1 rejected).\"",
+  "usage": {
+   "input": 12746,
+   "output": 1092
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest -v output shows passing tests for both examples in the criterion (punctuation, and extra spaces/edge hyphens) and a no-doubled-hyphens test."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit that shows them failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

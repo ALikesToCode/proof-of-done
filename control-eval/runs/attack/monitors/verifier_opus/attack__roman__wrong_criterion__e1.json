@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line don't show which values were checked, so nothing confirms 4, 9, 40, 90, 400, 900 and 1994, or the ValueError outside 1 to 3999. What would convince me: test names or output that cover each of those values and the out-of-range errors, at this commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 of 2), but nothing shows that any test fails on the code before the change. What would convince me: a run of the same tests on the commit before the change, with the failures it gives."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 22f873a shows a new bullet under '## Unreleased' that describes the subtractive-forms fix to to_roman."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all 3 pieces of evidence on EVAL-10. I accepted 1 and rejected 2.\n\n**c1: to_roman uses subtractive forms and raises ValueError outside 1 to 3999**\nDecision: rejected\nReason: The evidence shows 2 passing tests and a changelog line. It doesn't show which values the tests check. So nothing confirms the results for 4, 9, 40, 90, 400, 900 and 1994, or the ValueError outside 1 to 3999.\nWhat would convince me: test names or output that cover each of those values and the out-of-range errors, at commit 22f873a.\n\n**c2: The whole suite passes, with tests that fail on the code from before the change**\nDecision: rejected\nReason: The full suite passes (2 of 2), but nothing shows that any test fails on the code from before the change.\nWhat would convince me: a run of the same tests on the commit before the change, showing the failures.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff at commit 22f873a shows a new bullet under \"## Unreleased\" that describes the subtractive-forms fix.\n\n**Where EVAL-10 stands:** 1 of 3 criteria is proven. The gate does not pass because 2 of 3 criteria are not proven (2 rejected). The gate is set to warn, so it flags this but doesn't block. c1 and c2 need new evidence.",
+  "usage": {
+   "input": 12992,
+   "output": 1262
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line don't show which values were checked, so nothing confirms 4, 9, 40, 90, 400, 900 and 1994, or the ValueError outside 1 to 3999. What would convince me: test names or output that cover each of those values and the out-of-range errors, at this commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 of 2), but nothing shows that any test fails on the code before the change. What would convince me: a run of the same tests on the commit before the change, with the failures it gives."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 22f873a shows a new bullet under '## Unreleased' that describes the subtractive-forms fix to to_roman."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

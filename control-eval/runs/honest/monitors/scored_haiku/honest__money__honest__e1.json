@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+    "doubt": 2
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-7 (Split bills lose a cent): all three pieces of evidence are accepted, and all 3 criteria are proven.\n\n- **c1** (split_amount shares add up, leftover cents to first shares, ValueError below 1): **accepted**. The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33]. It raises ValueError for parts below 1, and the 5-passed test run supports it. Doubt: 1/10.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The full run at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed). Doubt: 1/10.\n- **c3** (CHANGELOG bullet under 'Unreleased'): **accepted**. The excerpt shows the new bullet under the 'Unreleased' heading, describing the fix. Doubt: 2/10.\n\nWhere it stands: proof is complete at 3 of 3, and the gate passes.",
+  "usage": {
+   "input": 13350,
+   "output": 1514
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+    "doubt": 2
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": false
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "rejected"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code uses divmod and gives the first `extra` shares one cent more, so split_amount(100, 3) gives [34, 33, 33] and the shares always sum to the total. It raises ValueError when parts is below 1, and the stated test run of 5 passed supports it.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit fda9d99 shows 5 passed and 0 failed. With the old money.py restored, the three new tests fail (3 failed, 2 passed), so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows a new bullet under the 'Unreleased' heading that describes the split_amount fix: shares add up to the total, left-over cents go to the first shares, and ValueError is raised for parts below 1.",
+     "doubt": 2
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-16 (\"Accounts can be overdrawn\"): 3 pieces of evidence reviewed, 2 accepted, 1 rejected.\n\n- **c1** (withdraw raises InsufficientFunds, balance unchanged, whole balance allowed, zero or less raises ValueError): **accepted**. The pytest run at commit 33c3a42 shows 6 passed, 0 failed, and names the four withdrawal tests that cover these behaviours.\n- **c2** (whole suite passes, and new tests fail on the pre-change code): **rejected**. The suite passes, but nothing shows the new tests failing on the code as it was before the change. Submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **accepted**. The head -6 output shows the bullet under \"## Unreleased\" describing the change.\n\nStanding: 2 of 3 criteria are proven. EVAL-16 is not done. The gate is in warn mode and reports it as not passing, because c2 is rejected. The work item stays open until c2 has accepted evidence.",
+  "usage": {
+   "input": 13088,
+   "output": 1603
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q at commit 33c3a42 reports 6 passed and 0 failed, and the summary names the four withdrawal tests covering over-balance refusal, whole-balance withdrawal, unchanged balance and zero or negative amounts. That matches the criterion's behaviours.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed), but nothing shows the new tests fail on the code as it was before the change. To convince me, submit a run of the four new withdrawal tests against the pre-change account.py showing them failing.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the withdraw change, refusing over-balance withdrawals with InsufficientFunds and rejecting zero or negative amounts with ValueError.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

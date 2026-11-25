@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-8: all three pieces of evidence are reviewed and accepted. Every criterion is now proven, 3 of 3.\n\n- **c1 (merge joins overlapping/touching intervals in any order, contained intervals absorbed): accepted.** The pytest run shows 6 passed, and the intervals.py excerpt sorts the input, merges when start \u2264 previous end, and keeps the max end. The test assertions match the criterion's examples. Doubt: 2/10.\n- **c2 (whole suite passes, and new tests fail on the old code): accepted.** `python -m pytest -q` at commit 6faac28 gives 6 passed, 0 failed. With the old intervals.py, test_touching, test_out_of_order and test_contained fail. Doubt: 1/10.\n- **c3 (CHANGELOG bullet under Unreleased): accepted.** The `head -6 CHANGELOG.md` excerpt shows the bullet under \"## Unreleased\" describing the fix. Doubt: 1/10.\n\nThe gate passes in warn mode. The work item's status is still \"In Progress\" and it is not marked done; moving it is for the team.",
+  "usage": {
+   "input": 13222,
+   "output": 1494
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows 6 passed, and the excerpt of intervals.py sorts the input, merges when start <= previous end, and keeps the max end, which covers touching and contained intervals in any order. The stated test assertions match the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6faac28 shows 6 passed and 0 failed, and the counts agree across summary, details and output. The before-change run with the old intervals.py reports 3 failed (test_touching, test_out_of_order, test_contained), so the new tests fail on the old code.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` excerpt shows a new bullet directly under \"## Unreleased\" describing the merge fix for touching, out-of-order and contained intervals.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

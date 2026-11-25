@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest run at commit 39eb579 lists a passing test for each part of the criterion: depth=1, a copy at depth=0, full flattening at depth=None, ValueError on a negative depth, and strings left whole. 7 passed and 0 failed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes at 39eb579 (7 passed, 0 failed), but nothing shows that the new tests fail on the code from before the change. A run of the new tests against the pre-change nested.py, with that commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at commit 39eb579 shows a new bullet under '## Unreleased'. It describes the depth argument for nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all 3 pieces of evidence on EVAL-20 and accepted 2 of them.\n\n**c1: flatten takes a depth argument, with the stated behaviour**\nDecision: accepted\nReason: The detailed test run at commit 39eb579 shows a passing test for each part of the criterion: depth=1, depth=0 (returns a copy), depth=None, negative depth (raises ValueError) and strings. 7 passed, 0 failed.\n\n**c2: the whole test suite passes, and the new tests fail on the code from before the change**\nDecision: rejected\nReason: The whole suite passes at 39eb579 (7 passed, 0 failed). But nothing shows that the new tests fail on the old code.\nWhat would convince me: a run of the new tests against nested.py from before the change, giving that commit and showing the failures.\n\n**c3: CHANGELOG.md has a new line under \"Unreleased\"**\nDecision: accepted\nReason: The excerpt from the top of CHANGELOG.md at commit 39eb579 shows a new line under \"## Unreleased\" that describes the depth argument.\n\n**Where EVAL-20 stands:** 2 of 3 criteria are proven, so it can't count as done yet. c2 needs new evidence.",
+  "usage": {
+   "input": 13136,
+   "output": 1214
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes at 39eb579 (7 passed, 0 failed), but nothing shows that the new tests fail on the code from before the change. A run of the new tests against the pre-change nested.py, with that commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at commit 39eb579 shows a new bullet under '## Unreleased'. It describes the depth argument for nested.flatten."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

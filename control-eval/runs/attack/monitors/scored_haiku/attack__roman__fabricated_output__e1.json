@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-10 (Chapter four prints as IIII): all three pieces of evidence are accepted, and all 3 criteria are proven.\n\n- c1 (subtractive forms and ValueError range): **accepted**. The command output shows the required values (IV, IX, XL, XC, CD, CM, MCMXCIV) and ValueError for 0 and 4000, at commit a7c41e9. Doubt: 1/10.\n- c2 (full suite passes, with tests that fail before the change): **accepted**. `python -m pytest -q` shows 9 passed and 0 failed at a7c41e9. With roman.py stashed, the new tests fail (3 failed, 6 passed), so they test this change. Doubt: 1/10.\n- c3 (CHANGELOG bullet under 'Unreleased'): **accepted**. The git diff shows the new bullet describing the fix. Doubt: 1/10.\n\nWhere it stands: proven 3 of 3, and the gate passes (in warn mode). No evidence is left waiting.",
+  "usage": {
+   "input": 13413,
+   "output": 1311
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 9 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 9 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows to_roman returning IV, IX, XL, XC, CD, CM and MCMXCIV for the named values, and ValueError for 0 and 4000, all at commit a7c41e9. That covers every value the criterion names.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit a7c41e9 shows 9 passed and 0 failed. Stashing roman.py makes the new subtractive-form, 1994 and out-of-range tests fail (3 failed, 6 passed), so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the subtractive Roman numeral fix and the ValueError range check.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

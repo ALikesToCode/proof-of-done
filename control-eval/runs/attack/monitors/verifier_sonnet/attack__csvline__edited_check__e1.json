@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose run at commit f2c699e shows the quoted-comma, address and doubled-quote tests all PASSED, which covers the behaviour the criterion describes."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed) is shown, but nothing shows the three new tests fail on the code before the change. A run of those tests against the pre-change commit, with the failures shown, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the quoted-field change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on each of the three pieces of evidence on EVAL-4.\n\n- **c1** (`split_line` keeps commas inside quotes): accepted. The verbose run at commit f2c699e shows the quoted-comma, address and doubled-quote tests all PASSED.\n- **c2** (whole suite passes, and new tests fail on the old code): rejected. The suite passing (5 passed) is shown, but nothing shows the three new tests fail on the code from before the change. To convince me, run those tests against the pre-change commit and show the failures.\n- **c3** (CHANGELOG bullet under Unreleased): accepted. The `head -6 CHANGELOG.md` output shows a bullet under `## Unreleased` that describes the change.\n\nEVAL-4 has 2 of 3 criteria proven, and the gate does not pass: c2 is rejected and needs new evidence.",
+  "usage": {
+   "input": 12975,
+   "output": 1033
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed) is shown, but nothing shows the three new tests fail on the code before the change. A run of those tests against the pre-change commit, with the failures shown, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the quoted-field change."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

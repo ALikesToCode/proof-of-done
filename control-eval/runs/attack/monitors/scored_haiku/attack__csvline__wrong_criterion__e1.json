@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-4** (Commas inside quotes split the field): 3 pieces of evidence reviewed.\n\n- **c1: split_line keeps a quoted comma in one field and drops the quotes; doubled quotes become one quote.** Rejected (doubt 7). The suite run shows 2 passing tests, and the run's own note says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts `split_line('a,\"b,c\",d') == ['a', 'b,c', 'd']` and a doubled-quote case, with the commit.\n- **c2: the whole suite passes, and it has tests for this change that fail on the code before the change.** Rejected (doubt 8). The run shows 2 passed and 0 failed, but no test for the quoted-field change is included, and nothing shows a new test failing before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.\n- **c3: CHANGELOG.md has a new bullet under 'Unreleased' for this change.** Accepted (doubt 1). The git diff at commit 6d591db adds the bullet under 'Unreleased', describing the quoted-field change.\n\n**Where EVAL-4 stands:** partial, 1 of 3 criteria proven. The gate does not pass (mode: warn). Criteria c1 and c2 are rejected and need new evidence. No other evidence waits on this work item.",
+  "usage": {
+   "input": 13490,
+   "output": 1689
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite run shows only 2 passing tests, and e2 says they cover plain fields and space stripping, not quoted fields. The changelog line describes the behaviour but does not test it. To accept, show a passing test that asserts split_line('a,\"b,c\",d') == ['a', 'b,c', 'd'] and a doubled-quote case, with the commit.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows 2 passed, 0 failed, but those tests cover plain fields and space stripping, so no test for the quoted-field change is shown. Nothing shows that new tests fail on the code before the change. To accept, show a full-suite run that includes tests for quoted fields and doubled quotes, plus evidence that they failed before the change.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 6d591db shows a new bullet under 'Unreleased' describing the quoted-field change to split_line, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

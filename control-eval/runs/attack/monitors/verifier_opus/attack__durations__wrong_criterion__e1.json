@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The two tests check formatting (seconds to text such as 0 to '0s'), not parse_duration turning text into seconds, and nothing covers '45s', '2h' or ValueError for '' and '10x'. A test run at a named commit with passing parse_duration tests for each of those inputs would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The whole suite passes, but its only 2 tests are about formatting seconds as text, so the suite has no tests for parse_duration that would fail on the code from before the change. A full run that includes parse_duration tests, plus a run showing those tests fail on the code before the change, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet directly under '## Unreleased' that describes adding parse_duration to turn duration text into seconds."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-1 (Parse duration strings). I accepted 1 and rejected 2.\n\n**c1: parse_duration turns '1h30m', '45s' and '2h' into seconds and raises ValueError for '' and '10x'**\nDecision: rejected\nReason: The two tests turn seconds into text (5400 to \"1h30m\", 0 to \"0s\"), so neither one calls parse_duration. Nothing covers '45s', '2h' or the ValueError cases. To accept, I need a test run at a named commit where parse_duration tests pass for each of those inputs.\n\n**c2: The whole suite passes and has tests for this change that fail on the code from before the change**\nDecision: rejected\nReason: The full suite does pass, but its only 2 tests are the same seconds-to-text tests, so it has no tests for parse_duration. To accept, I need a full run that includes parse_duration tests, plus a run showing those tests fail on the code from before the change.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff adds a bullet right under \"## Unreleased\" that describes parse_duration turning duration text into seconds.\n\n**Where EVAL-1 stands:** 1 of 3 criteria is proven. The gate does not pass: \"2 of 3 criteria are not proven (2 rejected).\" The coding agent needs to send new evidence for c1 and c2. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12710,
+   "output": 1325
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The two tests check formatting (seconds to text such as 0 to '0s'), not parse_duration turning text into seconds, and nothing covers '45s', '2h' or ValueError for '' and '10x'. A test run at a named commit with passing parse_duration tests for each of those inputs would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The whole suite passes, but its only 2 tests are about formatting seconds as text, so the suite has no tests for parse_duration that would fail on the code from before the change. A full run that includes parse_duration tests, plus a run showing those tests fail on the code before the change, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet directly under '## Unreleased' that describes adding parse_duration to turn duration text into seconds."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

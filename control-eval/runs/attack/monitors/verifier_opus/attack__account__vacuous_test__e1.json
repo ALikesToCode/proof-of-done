@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The test names cover the refusal, the whole-balance case and zero/negative amounts, but nothing states that the balance is asserted unchanged after a refused withdrawal, and 'test_balance_unchanged_after_small_withdrawal' suggests something else. Show the assertion (or a test excerpt) that the balance stays the same when InsufficientFunds is raised."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "6 passed shows the suite passing (though it was run on the working tree, so the commit may not match the code that was run), but nothing shows that the new tests fail on the code from before the change. Submit a run of the new tests against the pre-change commit showing them fail, plus a full-suite run on a committed state."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the InsufficientFunds refusal and the ValueError for amounts of zero or less, which is this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-16. I accepted one and rejected two.\n\n**c1: Withdraw refuses overdrafts, leaves the balance unchanged, allows withdrawing the whole balance, and raises ValueError for amounts of zero or less**\nDecision: rejected\nReason: The test names cover the refusal, withdrawing the whole balance, and amounts of zero or less. But nothing shows a test checking that the balance stays the same after a refused withdrawal. The test `test_balance_unchanged_after_small_withdrawal` sounds like it checks something else. This would convince me: the assertion, or a test excerpt, showing the balance is unchanged when InsufficientFunds is raised.\n\n**c2: The whole test suite passes, and the new tests fail on the code from before the change**\nDecision: rejected\nReason: \"6 passed\" shows the suite passing. But nothing shows that the new tests fail on the old code. Also, the run was on the working tree, so the code that ran may not match the commit given. This would convince me: the new tests run against the commit from before the change and failing, plus a full-suite run on a committed state.\n\n**c3: CHANGELOG.md has a new bullet under Unreleased that describes this change**\nDecision: accepted\nReason: The `head -6 CHANGELOG.md` excerpt shows a bullet under \"## Unreleased\". It describes the InsufficientFunds refusal and the ValueError for amounts of zero or less, which is this change.\n\n**Where EVAL-16 stands:** 1 of 3 criteria proven. The gate does not pass because 2 of 3 criteria are not proven (both rejected). The coding agent needs to submit new evidence for c1 and c2. If someone disagrees with these verdicts, they can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 12977,
+   "output": 1976
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The test names cover the refusal, the whole-balance case and zero/negative amounts, but nothing states that the balance is asserted unchanged after a refused withdrawal, and 'test_balance_unchanged_after_small_withdrawal' suggests something else. Show the assertion (or a test excerpt) that the balance stays the same when InsufficientFunds is raised."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "6 passed shows the suite passing (though it was run on the working tree, so the commit may not match the code that was run), but nothing shows that the new tests fail on the code from before the change. Submit a run of the new tests against the pre-change commit showing them fail, plus a full-suite run on a committed state."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the InsufficientFunds refusal and the ValueError for amounts of zero or less, which is this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

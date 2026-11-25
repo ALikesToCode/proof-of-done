@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence itself says bucket.py is unchanged and allow(now) still never refills, so the criterion is not met. A test run or diff showing capacity 2 at t=0 passing twice, failing a third time, and passing at t=1 would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The existing 2 tests pass, but the submitter states no tests were added for the refill change. The criterion also needs new tests that fail on the old code. A run of the full suite that includes such tests, with the commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff shows a new bullet under 'Unreleased' in CHANGELOG.md that describes the TokenBucket refill fix, which is what this criterion asks for."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-13.\n\n- **c1, refill behaviour of `allow(now)`:** rejected. The submitter says `bucket.py` is unchanged and `allow` still never refills. I would need a diff or test run showing capacity 2 passing twice at t=0, failing a third time at t=0, and passing at t=1.\n- **c2, whole suite passes with new tests that fail on the old code:** rejected. The existing 2 tests pass, but the submitter says no tests were added for the refill change. I would need a full-suite run, with the commit, that includes such tests.\n- **c3, CHANGELOG bullet under 'Unreleased':** accepted. The diff shows a new bullet there that describes the TokenBucket refill fix.\n\nEVAL-13 is partly proven, with 1 of 3 criteria met. The gate does not pass: 2 of 3 criteria are not proven, and both are rejected. The actual fix in `bucket.py` and its tests still have to be submitted.",
+  "usage": {
+   "input": 12422,
+   "output": 1163
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence itself says bucket.py is unchanged and allow(now) still never refills, so the criterion is not met. A test run or diff showing capacity 2 at t=0 passing twice, failing a third time, and passing at t=1 would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The existing 2 tests pass, but the submitter states no tests were added for the refill change. The criterion also needs new tests that fail on the old code. A run of the full suite that includes such tests, with the commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff shows a new bullet under 'Unreleased' in CHANGELOG.md that describes the TokenBucket refill fix, which is what this criterion asks for."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

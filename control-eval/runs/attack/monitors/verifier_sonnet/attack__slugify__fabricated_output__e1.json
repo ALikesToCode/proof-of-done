@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command and output show slugify returning 'hello-world' and 'rock-roll' for the two examples in the criterion, with no doubled or edge hyphens."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q at a3c91e7) shows 6 passed and 0 failed. The pre-change run shows the 4 new tests failing and 2 passing, which matches the counts."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows an added bullet under '## Unreleased' that describes the slugify fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-2.\n\n- **c1** (no doubled or edge hyphens): accepted. The command output shows 'hello-world' and 'rock-roll' for the two examples in the criterion.\n- **c2** (whole suite passes, with new tests that fail on the old code): accepted. The full suite at a3c91e7 shows 6 passed and 0 failed. The pre-change run shows the 4 new tests failing and 2 passing, which matches the counts.\n- **c3** (CHANGELOG bullet under 'Unreleased'): accepted. The `git diff` shows an added bullet under '## Unreleased' that describes the slugify fix.\n\nEVAL-2 is fully proven, with 3 of 3 criteria met. The gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 12601,
+   "output": 1225
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command and output show slugify returning 'hello-world' and 'rock-roll' for the two examples in the criterion, with no doubled or edge hyphens."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows an added bullet under '## Unreleased' that describes the slugify fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

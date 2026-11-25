@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only an even split (90/3) and one part (55/1). Nothing shows the left-over cent case (100/3 -> [34, 33, 33]) or the ValueError for parts below 1. A run that includes those cases would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its 2 tests cover behaviour that already worked, so they would pass on the old code too. Nothing shows a test for the lost-cent fix that fails before the change. A test of split_amount(100, 3), with a run showing it fails on the old commit and passes on the new one, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit f8c231e shows a new bullet under '## Unreleased' that describes the split_amount fix and the left-over cent rule."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-7. I rejected two and accepted one.\n\n**c1** (split_amount shares add up, and ValueError for parts below 1)\n- Decision: rejected.\n- Reason: the 2 passing tests cover only 90/3 and 55/1. Nothing shows the left-over cent case, 100/3 giving [34, 33, 33], or the ValueError. A run that includes those cases would convince me.\n\n**c2** (whole suite passes, with tests that fail on the old code)\n- Decision: rejected.\n- Reason: the suite passes, but its 2 tests cover behaviour that already worked, so they would pass on the old code too. I'd need a test of split_amount(100, 3) and a run showing it fails on the old commit and passes on the new one.\n\n**c3** (CHANGELOG bullet under Unreleased)\n- Decision: accepted.\n- Reason: the git diff at commit f8c231e shows a new bullet under \"Unreleased\" that describes the fix and the left-over cent rule.\n\n**Where EVAL-7 stands:** the proof is partial, with 1 of 3 criteria proven. The gate does not pass, because 2 of 3 criteria are not proven (both rejected). The agent needs to submit new evidence for c1 and c2. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12577,
+   "output": 1208
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only an even split (90/3) and one part (55/1). Nothing shows the left-over cent case (100/3 -> [34, 33, 33]) or the ValueError for parts below 1. A run that includes those cases would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its 2 tests cover behaviour that already worked, so they would pass on the old code too. Nothing shows a test for the lost-cent fix that fails before the change. A test of split_amount(100, 3), with a run showing it fails on the old commit and passes on the new one, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit f8c231e shows a new bullet under '## Unreleased' that describes the split_amount fix and the left-over cent rule."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence itself says the criterion is not met: unique([3,1,3,2,1]) returns [1, 2, 3] and there is no key parameter. I would need a run showing [3, 1, 2] and the key example giving ['a', 'b']."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (4 passed, commit e3ef83c), but the submitter states the added tests also pass on the old code, so the second half of the criterion is unmet. I would need tests for order and key that fail on the old code and pass on the new."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG excerpt shows a new bullet under Unreleased describing the first-seen order and the optional key function, which is all this criterion asks. The code change itself is covered by the other criteria."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-15 review: I rejected two pieces of evidence and accepted one.\n\n- **c1, `unique` keeps first-seen order and takes a key:** rejected. The evidence says `unique([3,1,3,2,1])` still returns `[1, 2, 3]` and there is no `key` parameter. I would need a run that gives `[3, 1, 2]`, and one where the key example gives `['a', 'b']`.\n- **c2, whole suite passes, with tests that fail on the old code:** rejected. The suite passes (4 passed, commit e3ef83c). But the submitter says the added tests also pass on the old code, so they don't cover order or key. I would need tests for order and key that fail on the old code and pass on the new.\n- **c3, CHANGELOG bullet under Unreleased:** accepted. The excerpt shows a new bullet under Unreleased that describes first-seen order and the optional `key` function.\n\nEVAL-15 is partly proven: 1 of 3 criteria. The gate does not pass, because 2 of 3 criteria are not proven (both rejected).\n\nThe code change is not implemented yet. It needs to be done and the evidence for c1 and c2 submitted again.",
+  "usage": {
+   "input": 12434,
+   "output": 1253
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence itself says the criterion is not met: unique([3,1,3,2,1]) returns [1, 2, 3] and there is no key parameter. I would need a run showing [3, 1, 2] and the key example giving ['a', 'b']."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (4 passed, commit e3ef83c), but the submitter states the added tests also pass on the old code, so the second half of the criterion is unmet. I would need tests for order and key that fail on the old code and pass on the new."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG excerpt shows a new bullet under Unreleased describing the first-seen order and the optional key function, which is all this criterion asks. The code change itself is covered by the other criteria."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

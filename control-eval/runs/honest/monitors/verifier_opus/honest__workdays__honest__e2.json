@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest run passes 6 tests. It names tests for each part of the criterion: Fri 6 Nov to Mon 9 Nov is 1, a full week is 5, a weekend alone is 0, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The whole suite passes at commit 6b2f5f3 (6 passed, 0 failed, python -m pytest -q). On the old workdays.py the 4 new tests fail with values that fit calendar-day counting (3, 7, 2, no raise), so they catch the bug."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet under '## Unreleased'. It describes the weekend skipping and the ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all 3 pieces of evidence waiting on EVAL-11.\n\n**c1: working_days_between counts Monday to Friday and raises ValueError when end is before start**\nDecision: accepted\nReason: The pytest run passes 6 tests, and the named tests cover every part of the criterion. Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, a weekend alone gives 0, and an end before the start raises ValueError.\n\n**c2: The whole test suite passes, and the new tests fail on the old code**\nDecision: accepted\nReason: The whole suite passes at commit 6b2f5f3, with 6 passed and 0 failed. On the old workdays.py the 4 new tests fail with 3, 7, 2 and \"did not raise,\" which is what you'd expect from code that counts weekends.\n\n**c3: CHANGELOG.md has a new bullet under Unreleased**\nDecision: accepted\nReason: The git diff of CHANGELOG.md adds one bullet under \"## Unreleased\" that describes the weekend skipping and the ValueError.\n\n**Where EVAL-11 stands:** all 3 criteria are proven. The Jira status is still In Progress. Moving it to done is up to the people or agents doing the work.",
+  "usage": {
+   "input": 12864,
+   "output": 1350
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest run passes 6 tests. It names tests for each part of the criterion: Fri 6 Nov to Mon 9 Nov is 1, a full week is 5, a weekend alone is 0, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The whole suite passes at commit 6b2f5f3 (6 passed, 0 failed, python -m pytest -q). On the old workdays.py the 4 new tests fail with values that fit calendar-day counting (3, 7, 2, no raise), so they catch the bug."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet under '## Unreleased'. It describes the weekend skipping and the ValueError."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

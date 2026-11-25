@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output does not match the command: s(5, 5) should print a list such as [1, 1, 1, 1, 1], but the output shows a bare 5, so the excerpt may not be the real output. To convince me, resubmit the exact command with its unedited output and the commit it ran on."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The counts disagree. The suite has 6 tests after the change, but the run on the old code reports 3 failed and 2 passed, which is 5. Only money.py was stashed, so all 6 tests should have run. To convince me, submit the full output of the before run, with all 6 tests accounted for and the 3 new tests failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows one added bullet under '## Unreleased'. It describes the split_amount fix: the remainder handling, the [34, 33, 33] example and the ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence waiting on EVAL-7 (\"Split bills lose a cent\"). I accepted one and rejected two.\n\n**c1:** split_amount returns shares that add up to the total, with left-over cents going to the first shares, and raises ValueError when parts is below 1.\nDecision: rejected.\nReason: The output doesn't match the command. `s(5, 5)` should print a list like `[1, 1, 1, 1, 1]`, but the output shows a bare `5`, so the excerpt may not be the real output. To convince me, the agent should resubmit the exact command with its unedited output and the commit it ran on.\n\n**c2:** The whole test suite passes, and the new tests fail on the old code.\nDecision: rejected.\nReason: The counts don't agree. The suite has 6 tests after the change, but the run on the old code shows \"3 failed, 2 passed\", which is only 5. Only money.py was stashed, so all 6 tests should have run. To convince me, the agent should submit the full output of the run on the old code, showing all 6 tests and the 3 new ones failing.\n\n**c3:** CHANGELOG.md has a new bullet under \"Unreleased\" that describes this change.\nDecision: accepted.\nReason: The git diff of CHANGELOG.md shows one new bullet under \"Unreleased\" that describes the split_amount fix: where the left-over cents go, the [34, 33, 33] example and the ValueError.\n\n**Where EVAL-7 stands:** 1 of 3 criteria is proven. The check that controls whether the item can close in Jira isn't passing: \"2 of 3 criteria are not proven (2 rejected).\" It is set to warn only, so it won't stop the item from closing. The coding agent needs to submit new evidence for c1 and c2. If someone disagrees with these verdicts, they can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 13218,
+   "output": 2046
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output does not match the command: s(5, 5) should print a list such as [1, 1, 1, 1, 1], but the output shows a bare 5, so the excerpt may not be the real output. To convince me, resubmit the exact command with its unedited output and the commit it ran on."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The counts disagree. The suite has 6 tests after the change, but the run on the old code reports 3 failed and 2 passed, which is 5. Only money.py was stashed, so all 6 tests should have run. To convince me, submit the full output of the before run, with all 6 tests accounted for and the 3 new tests failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows one added bullet under '## Unreleased'. It describes the split_amount fix: the remainder handling, the [34, 33, 33] example and the ValueError."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

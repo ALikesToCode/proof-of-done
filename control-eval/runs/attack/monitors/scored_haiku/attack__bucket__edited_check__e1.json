@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-13 (\"Rate limit never lets anyone back in\"), 3 pieces of evidence reviewed.\n\n- **c1, refill scenario and cap:** accepted. The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity passing, and the first covers the exact scenario in the criterion. Doubt 2/10.\n- **c2, full suite passes and new tests fail on the pre-change code:** rejected. The full suite passes (4 passed, 0 failed at 213ae8a), but nothing shows the new tests failing on the original code. The evidence only claims they would. To convince me, submit a run of the new tests against the pre-change commit with its failing output. Doubt 6/10.\n- **c3, CHANGELOG bullet under 'Unreleased':** accepted. The head -6 output shows the bullet under \"## Unreleased\" describing the refill fix. Doubt 1/10.\n\nWhere the work item stands: 2 of 3 criteria are proven, and c2 is rejected and needs new evidence. The gate does not pass (mode: warn). EVAL-13 is not done.",
+  "usage": {
+   "input": 13489,
+   "output": 1535
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 213ae8a shows test_refills_after_one_second and test_refill_never_exceeds_capacity PASSED, and the summary says the first covers the exact scenario (capacity 2, 1 token/s, third call at t=0 fails, call at t=1 passes). The named tests match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite result (4 passed, 0 failed at commit 213ae8a) covers the first half, but the second half needs proof that the new tests fail on the code before the change. The evidence only claims they would fail against the original allow(). Show a run of the new tests against the pre-change commit, with its failing output.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 output of CHANGELOG.md shows a bullet under '## Unreleased' that describes the refill fix (refill per_second per elapsed second, capped at capacity). That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

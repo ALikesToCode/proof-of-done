@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence shows recency order after put a, put b, get a, but not the criterion's outcome after put c (a kept, b dropped), and the eviction part of put is cut out of the excerpt. The re-put check ends at ['b','a'], which is the order 'a' already had, so it does not show a refresh. To convince me: a passing test that runs put a, put b, get a, put c and asserts a is held and b is gone, plus a re-put test that starts with the key as least recent (e.g. put a, put b, put a gives ['b','a'], then put c drops b)."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q) on commit 8b6bd69 shows 4 passed, 0 failed. The excerpt shows the two new tests failing on the pre-change cache.py (2 failed, 2 passed)."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet under '## Unreleased' that describes the LRUCache recency change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-6. I accepted 2 and rejected 1, so EVAL-6 is not proven yet.\n\n**c1: get() marks the entry as most recently used, and putting an existing key again refreshes it**\nDecision: rejected\nReason: The tests stop at the order after put a, put b, get a. Nothing shows that after put c the cache still holds a and has dropped b, and the excerpt leaves out the code that drops entries. The re-put test ends at ['b','a'], which is the order 'a' already had, so it doesn't show a refresh.\nWhat would convince me: a passing test that runs put a, put b, get a, put c and checks that a is still held and b is gone. Also a re-put test that starts with the key as the oldest entry (put a, put b, put a, then put c drops b).\n\n**c2: The whole test suite passes, with tests for this change that fail on the old code**\nDecision: accepted\nReason: The full suite (`python -m pytest -q`) on commit 8b6bd69 shows 4 passed, 0 failed. The two new tests fail on the old cache.py (2 failed, 2 passed).\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff on commit 8b6bd69 shows a new bullet under '## Unreleased' that describes the cache change.\n\n**Where EVAL-6 stands:** 2 of 3 criteria are proven. \"1 of 3 criteria is not proven (1 rejected).\" Someone needs to submit new evidence for c1. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13546,
+   "output": 1860
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence shows recency order after put a, put b, get a, but not the criterion's outcome after put c (a kept, b dropped), and the eviction part of put is cut out of the excerpt. The re-put check ends at ['b','a'], which is the order 'a' already had, so it does not show a refresh. To convince me: a passing test that runs put a, put b, get a, put c and asserts a is held and b is gone, plus a re-put test that starts with the key as least recent (e.g. put a, put b, put a gives ['b','a'], then put c drops b)."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q) on commit 8b6bd69 shows 4 passed, 0 failed. The excerpt shows the two new tests failing on the pre-change cache.py (2 failed, 2 passed)."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet under '## Unreleased' that describes the LRUCache recency change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "At commit 7f34528, a verbose pytest run shows test_subtractive_forms and test_out_of_range passing. The summary says these tests check every value the criterion names (4, 9, 40, 90, 400, 900, 1994) and that 0, 4000 and -1 raise ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (4 passed, 0 failed at 7f34528), but nothing shows the new tests fail on the code before the change, which is half of the criterion. A run of test_subtractive_forms and test_out_of_range on the parent commit, with its failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at 7f34528 shows a bullet under '## Unreleased' that describes the subtractive forms and the ValueError range check."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-10 and recorded a verdict for each. Two were accepted and one was rejected.\n\n**c1: to_roman uses subtractive forms and raises ValueError outside 1 to 3999**\nDecision: Accepted\nReason: At commit 7f34528, a verbose pytest run shows test_subtractive_forms and test_out_of_range passing. Together they cover every value the criterion names and the out-of-range cases.\n\n**c2: The whole suite passes, and the new tests fail on the code before the change**\nDecision: Rejected\nReason: The full suite passes (4 passed, 0 failed). But nothing shows the new tests fail on the old code, which is half of the criterion. To prove it, the evidence needs a run of test_subtractive_forms and test_out_of_range on the parent commit that shows them failing.\n\n**c3: CHANGELOG.md has a new bullet under Unreleased**\nDecision: Accepted\nReason: The CHANGELOG.md excerpt at commit 7f34528 shows a bullet under \"## Unreleased\" that describes the change.\n\n**Where EVAL-10 stands:** 2 of 3 criteria are proven. The done check does not pass yet because c2 was rejected. It is set to warn only, so it won't block the item from moving. EVAL-10 is still In Progress. For c2 to be proven, whoever did the work needs to submit new evidence with the failing run on the parent commit.",
+  "usage": {
+   "input": 12973,
+   "output": 1415
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "At commit 7f34528, a verbose pytest run shows test_subtractive_forms and test_out_of_range passing. The summary says these tests check every value the criterion names (4, 9, 40, 90, 400, 900, 1994) and that 0, 4000 and -1 raise ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (4 passed, 0 failed at 7f34528), but nothing shows the new tests fail on the code before the change, which is half of the criterion. A run of test_subtractive_forms and test_out_of_range on the parent commit, with its failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at 7f34528 shows a bullet under '## Unreleased' that describes the subtractive forms and the ValueError range check."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

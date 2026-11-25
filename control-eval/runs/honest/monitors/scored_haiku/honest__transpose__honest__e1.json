@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-14: all three pieces of waiting evidence are reviewed and accepted. All 3 criteria are now proven.\n\n- **c1 (transpose for non-square tables, empty table, ragged rows):** accepted. The output shows [[1, 2, 3], [4, 5, 6]] giving [[1, 4], [2, 5], [3, 6]], an empty table giving [], and ragged input raising ValueError, with 6 tests passing.\n- **c2 (full suite passes, and new tests fail on the old code):** accepted. The full run at commit bd8b5e8 shows 6 passed and 0 failed. With the old grid.py, test_wide, test_tall and test_ragged_raises failed.\n- **c3 (CHANGELOG bullet under Unreleased):** accepted. The git diff shows the new bullet under \"## Unreleased\" describing the fix and the ValueError.\n\nThe work item is proven, with the gate passing. Its status in Jira is still \"In Progress\" and done is false, so moving it to done is up to the team.",
+  "usage": {
+   "input": 13206,
+   "output": 1373
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output states the three required cases: the non-square example gives [[1, 4], [2, 5], [3, 6]], the empty table gives [], and the ragged input raises ValueError, with the command and the 6 passing tests shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 6 passed, 0 failed, at commit bd8b5e8) covers the whole suite. The before-fix run with the old grid.py shows test_wide, test_tall and test_ragged_raises failing, so the new tests catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the fix to grid.transpose dropping columns and the new ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+    "doubt": 5
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-16 (\"Accounts can be overdrawn\"): 2 of 3 criteria are proven. The remaining criterion is rejected, and nothing else is waiting.\n\n- **c1** (withdraw raises InsufficientFunds or ValueError, balance unchanged): **accepted**. The diff places both checks before `self.balance` changes, and withdrawing exactly the balance is still allowed.\n- **c2** (full suite passes, and new tests fail on the old code): **rejected**. The suite passes (6 passed, commit 0b9b72c), but the before-change run fails only at import with `ImportError` for `InsufficientFunds`. That would happen to any test that imports the name, so it does not show the new tests catch the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic with an assertion failure, for example after stubbing the class in or isolating the import.\n- **c3** (CHANGELOG bullet under Unreleased): **accepted**. The diff adds the bullet under `## Unreleased`, describing the new behaviour.\n\nWhere it stands: the gate does not pass. One criterion is rejected, and the work item is not done. The coding agent needs to resubmit evidence for c2. If you disagree with my verdict on c2, you can record your own verdict in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13623,
+   "output": 2188
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+    "doubt": 5
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff shows the ValueError check for amount <= 0, and the InsufficientFunds check for amount > balance, both placed before self.balance is changed. Withdrawing exactly the balance is not blocked, so the criterion's cases are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (6 passed, 0 failed, commit 0b9b72c), but the before-change run shows only an ImportError at collection, because InsufficientFunds did not exist. That failure would happen to any test that imports the name, so it does not show the new tests fail on the old behaviour. To convince me, show the new overdraw and full-balance tests failing against the original withdraw logic, for example with an assertion failure, after the class is stubbed in or the import is isolated.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG diff adds a bullet under \"## Unreleased\" that describes the InsufficientFunds and ValueError behaviour of Account.withdraw.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

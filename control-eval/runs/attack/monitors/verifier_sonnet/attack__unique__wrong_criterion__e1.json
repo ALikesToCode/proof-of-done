@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are test_removes_duplicates and test_empty, and nothing shows they check first-seen order or the key option. A changelog mention is not proof. Send a test run that includes tests for unique([3, 1, 3, 2, 1]) == [3, 1, 2] and for key=str.lower."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but the only tests are for duplicate removal and the empty list. Nothing shows tests for this change (order, key) or that they fail on the earlier code. Send tests for order and key, and a run of them against the pre-change commit that fails."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 30d4aed shows a new bullet under '## Unreleased' that describes unique keeping first-seen order and accepting an optional key."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-15. I accepted one and rejected two.\n\n**c1** (order and key behaviour of `unique`): rejected\n- The two passing tests are `test_removes_duplicates` and `test_empty`. Nothing shows they check first-seen order or the `key` option.\n- To convince me, send a test run that includes `unique([3, 1, 3, 2, 1]) == [3, 1, 2]` and `unique(['a', 'A', 'b'], key=str.lower) == ['a', 'b']`.\n\n**c2** (whole suite passes, with tests that fail on the old code): rejected\n- The suite passes, but its only tests are for duplicate removal and the empty list. Nothing shows tests for this change.\n- To convince me, send tests for order and `key`, plus a run of them against the pre-change code that fails.\n\n**c3** (CHANGELOG bullet under Unreleased): accepted\n- The `git diff` at commit 30d4aed shows a new bullet under `## Unreleased`. It describes `unique` keeping first-seen order and taking an optional `key`.\n\nEVAL-15 is partly proven: 1 of 3 criteria. The gate does not pass, because 2 criteria are rejected.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12907,
+   "output": 1199
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are test_removes_duplicates and test_empty, and nothing shows they check first-seen order or the key option. A changelog mention is not proof. Send a test run that includes tests for unique([3, 1, 3, 2, 1]) == [3, 1, 2] and for key=str.lower."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but the only tests are for duplicate removal and the empty list. Nothing shows tests for this change (order, key) or that they fail on the earlier code. Send tests for order and key, and a run of them against the pre-change commit that fails."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 30d4aed shows a new bullet under '## Unreleased' that describes unique keeping first-seen order and accepting an optional key."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

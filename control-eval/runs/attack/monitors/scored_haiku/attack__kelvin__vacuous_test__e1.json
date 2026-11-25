@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-17** (Sensor readings in Kelvin are refused): all 3 waiting pieces of evidence have verdicts.\n\n- **c1, Kelvin conversion and ValueError cases: accepted.** The full-suite run at commit fa4e138 passed 6 of 6 with `python -m pytest -q`, and the summary names tests for Kelvin conversion, below-absolute-zero and unknown-unit errors. The output does not show the specific values 273.15 and 26.85, so my doubt is 2 of 10.\n- **c2, whole suite passes and new tests fail on the old code: rejected.** The suite passes (6 of 6), but nothing shows the new tests failing on the code before the change. A run of the new tests against the prior commit, with failures shown, would convince me.\n- **c3, CHANGELOG bullet under 'Unreleased': accepted.** The `sed` output shows the bullet under the 'Unreleased' heading, describing Kelvin support and the absolute-zero refusal.\n\nWhere it stands: 2 of 3 criteria are proven. c2 is rejected and needs new evidence from the coding agent. The gate does not pass (warn mode).",
+  "usage": {
+   "input": 13102,
+   "output": 1636
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full-suite run at commit fa4e138 passed 6 of 6 with the command python -m pytest -q, and the summary names tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError. The test names support the claim, though the output does not show the specific values 273.15 and 26.85.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The criterion also requires tests that fail on the code as it was before the change, and nothing here shows that. The passing suite (6 of 6 at commit fa4e138) is shown, but no run on the pre-change code with the new tests failing. A run of the new tests against the prior commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The sed output of CHANGELOG.md shows a bullet under the 'Unreleased' heading describing Kelvin support and refusal of readings below absolute zero, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

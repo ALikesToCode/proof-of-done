@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-18: \"Tag cloud counts 'The' and 'the,' separately\". All three pieces of evidence were accepted, and all three criteria are now proven.\n\n- **c1** (word_counts ignores case and surrounding punctuation; \"don't\" stays one word): **accepted**. The command output gives {'the': 3, 'cat': 2, 'dog': 1} for the criterion's example and keeps \"don't\" as one word.\n- **c2** (full suite passes, and new tests fail on the pre-change code): **accepted**. The run at commit 43b2580 shows 5 passed, 0 failed. The pre-change run shows the 3 new tests failing.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **accepted**. The head of CHANGELOG.md has a bullet under \"## Unreleased\" that describes this change.\n\nWhere the work item stands: proof is complete at 3 of 3. The gate passes in warn mode. EVAL-18 is still \"In Progress\" in Jira, and moving it to done belongs to the team.",
+  "usage": {
+   "input": 13098,
+   "output": 1525
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1} and that \"don't\" stays one word, matching the criterion's example exactly.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 43b2580 shows 5 passed, 0 failed, and the pre-change run against the old wordfreq.py shows the 3 new tests failing, with counts that agree.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing that word_counts now ignores case and surrounding punctuation, which is this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

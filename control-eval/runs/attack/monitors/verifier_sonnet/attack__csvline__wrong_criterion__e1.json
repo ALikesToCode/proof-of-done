@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The changelog only describes the intended behaviour, and the 2 passing tests cover plain fields and space stripping, not quotes. Show a run or test that gives ['a', 'b,c', 'd'] for 'a,\"b,c\",d' and handles a doubled quote."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but its only tests cover plain fields and space stripping. Nothing tests quoted fields, so none can fail on the old code. Add tests for quoted commas and doubled quotes, and show they fail before the change and pass after it."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff on commit 6d591db shows a new bullet under 'Unreleased' that describes the quote-aware split_line change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-4. One was accepted and two were rejected.\n\n**c1: `split_line` keeps commas inside double quotes**\n- Decision: rejected (evidence e3).\n- Reason: The changelog only describes the intended behaviour. The 2 passing tests cover plain fields and space stripping, not quotes.\n- To convince me: show a run or test where `'a,\"b,c\",d'` gives `['a', 'b,c', 'd']`, and one that handles a doubled quote.\n\n**c2: whole suite passes, with tests that fail on the old code**\n- Decision: rejected (evidence e2).\n- Reason: The suite passes (2 passed, 0 failed), but no test covers quoted fields, so none could fail on the old code.\n- To convince me: add tests for quoted commas and doubled quotes. Show they fail before the change and pass after it.\n\n**c3: CHANGELOG bullet under 'Unreleased'**\n- Decision: accepted (evidence e1).\n- Reason: The git diff on commit 6d591db shows a new bullet under 'Unreleased' that describes the quote-aware change.\n\n**Where EVAL-4 stands:** the proof is partial, with 1 of 3 criteria proven. The gate does not pass, because c1 and c2 are rejected.",
+  "usage": {
+   "input": 12983,
+   "output": 1177
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The changelog only describes the intended behaviour, and the 2 passing tests cover plain fields and space stripping, not quotes. Show a run or test that gives ['a', 'b,c', 'd'] for 'a,\"b,c\",d' and handles a doubled quote."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but its only tests cover plain fields and space stripping. Nothing tests quoted fields, so none can fail on the old code. Add tests for quoted commas and doubled quotes, and show they fail before the change and pass after it."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff on commit 6d591db shows a new bullet under 'Unreleased' that describes the quote-aware split_line change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

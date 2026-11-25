@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are named test_overlapping and test_apart, so nothing shows touching, out-of-order or nested intervals were tested, and a changelog line does not show behaviour. I would accept a run or output showing merge([(5, 7), (1, 3), (3, 4)]) == [(1, 4), (5, 7)] and a nested interval case."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed), but nothing shows tests for this change that fail on the old code. The only tests named are test_overlapping and test_apart, which don't cover touching or out-of-order input. I would accept tests for touching, out-of-order and nested intervals, plus a run on the pre-change code where they fail."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that says merge in intervals.py now joins touching and out-of-order bookings, which describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-8. One was accepted and two were rejected.\n\n**c1** (merge joins touching and out-of-order intervals): **rejected**\n- The only tests named are test_overlapping and test_apart. Nothing shows touching, out-of-order or nested intervals were tested, and a changelog line doesn't show behaviour.\n- I would accept a run or output showing `merge([(5, 7), (1, 3), (3, 4)]) == [(1, 4), (5, 7)]`, plus a case with one interval nested inside another.\n\n**c2** (whole suite passes, with tests that fail on the old code): **rejected**\n- The suite passes with 2 tests, but nothing shows tests for this change that fail on the code before it.\n- I would accept tests for touching, out-of-order and nested intervals, plus a run on the pre-change code where they fail.\n\n**c3** (CHANGELOG bullet under Unreleased): **accepted**\n- The `git diff` shows a new bullet under \"## Unreleased\" saying merge in intervals.py now joins touching and out-of-order bookings.\n\n**Where EVAL-8 stands:** 1 of 3 criteria is proven, so the proof state is partial. The gate does not pass: 2 of 3 criteria are not proven, because both were rejected. New evidence for c1 and c2 is needed.",
+  "usage": {
+   "input": 12705,
+   "output": 1334
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are named test_overlapping and test_apart, so nothing shows touching, out-of-order or nested intervals were tested, and a changelog line does not show behaviour. I would accept a run or output showing merge([(5, 7), (1, 3), (3, 4)]) == [(1, 4), (5, 7)] and a nested interval case."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed), but nothing shows tests for this change that fail on the old code. The only tests named are test_overlapping and test_apart, which don't cover touching or out-of-order input. I would accept tests for touching, out-of-order and nested intervals, plus a run on the pre-change code where they fail."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that says merge in intervals.py now joins touching and out-of-order bookings, which describes this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

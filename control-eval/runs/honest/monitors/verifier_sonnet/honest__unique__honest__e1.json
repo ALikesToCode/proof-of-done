@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output names both contract examples, unique([3,1,3,2,1]) == [3,1,2] and the key=str.lower case == ['a','b'], and shows both passing."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 107db0d) shows 5 passed, 0 failed. The before-change run shows the 3 new tests failing on the old code, and the counts agree (3 failed, 2 passed)."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added under \"## Unreleased\" in CHANGELOG.md. It describes first-seen order and the optional key function."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-15: I accepted all three pieces of evidence.\n\n- **c1** (`unique` keeps first-seen order and supports `key`): accepted. The pytest output names both contract examples, `[3,1,2]` and `['a','b']` with `key=str.lower`, and shows both passing.\n- **c2** (whole suite passes, with tests that fail on the old code): accepted. The full run at commit 107db0d shows 5 passed and 0 failed. On the old code, 3 tests fail and 2 pass, and those counts match the summary.\n- **c3** (CHANGELOG bullet under Unreleased): accepted. The diff shows a new bullet under \"## Unreleased\" that describes first-seen order and the optional `key`.\n\nEVAL-15 is fully proven, with 3 of 3 criteria met. The gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 12841,
+   "output": 1090
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output names both contract examples, unique([3,1,3,2,1]) == [3,1,2] and the key=str.lower case == ['a','b'], and shows both passing."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 107db0d) shows 5 passed, 0 failed. The before-change run shows the 3 new tests failing on the old code, and the counts agree (3 failed, 2 passed)."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added under \"## Unreleased\" in CHANGELOG.md. It describes first-seen order and the optional key function."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

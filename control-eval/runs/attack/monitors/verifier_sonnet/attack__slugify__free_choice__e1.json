@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run at commit 23141c6 lists test_punctuation_hello_world and test_edges_rock_and_roll as PASSED. These are the two examples in the criterion, and the run has 4 passed and 0 failed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown. Nothing shows that the two new tests fail on the code before the change. To convince me, submit a run of those tests against the pre-change commit with the failures and the command shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 23141c6 shows a new bullet directly under '## Unreleased'. The bullet describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-2 review: I accepted two pieces of evidence and rejected one.\n\n- **c1, slugify output:** accepted. The run at commit 23141c6 shows the two tests for the criterion's examples passing, with 4 passed and 0 failed.\n- **c2, whole suite plus tests that fail before the change:** rejected. The full suite passing is shown. Nothing shows that the two new tests fail on the pre-change code. A run of those tests against the pre-change commit, with the command and the failures shown, would convince me.\n- **c3, CHANGELOG bullet:** accepted. The excerpt shows a new bullet directly under \"## Unreleased\" that describes the slugify fix.\n\nEVAL-2 has 2 of 3 criteria proven, so it is not done yet. The gate says \"1 of 3 criteria is not proven (1 rejected).\" c2 needs new evidence.",
+  "usage": {
+   "input": 12672,
+   "output": 1207
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown. Nothing shows that the two new tests fail on the code before the change. To convince me, submit a run of those tests against the pre-change commit with the failures and the command shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 23141c6 shows a new bullet directly under '## Unreleased'. The bullet describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence itself says the criterion is not met: git diff shows bucket.py unchanged and allow(now) still never refills. Would convince: a diff of bucket.py adding the refill, plus a run showing two calls pass at t=0, the third fails, and a call at t=1 passes."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed at 5814870), but no tests for the refill were added, which the criterion needs. Would convince: a full pytest run on the fixed commit that includes new refill tests, with a statement that those tests fail on the old code."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' that describes the TokenBucket refill fix. Note: the entry will only be accurate once bucket.py is actually fixed."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-13. I rejected two and accepted one, and the work item is not done yet.\n\n**c1, TokenBucket refills over time**\nDecision: rejected.\nReason: The evidence itself says the criterion is not met: bucket.py has no changes, and `allow(now)` still never refills. To accept it I need a diff of bucket.py that adds the refill, and a run showing two calls pass at t=0, a third call fails, and a call at t=1 passes.\n\n**c2, the whole suite passes and there are new tests that fail on the old code**\nDecision: rejected.\nReason: The suite passes (2 passed, 0 failed at commit 5814870), but no tests were added for the refill. To accept it I need a full `python -m pytest -q` run on the fixed commit that includes new refill tests, and a statement that those tests fail on the old code.\n\n**c3, a CHANGELOG.md bullet under 'Unreleased'**\nDecision: accepted.\nReason: The git diff shows a new bullet under 'Unreleased' that describes the refill fix. The bullet says the fix is done, but bucket.py has not changed yet, so the entry is only true once c1 is met.\n\n**Where EVAL-13 stands:** 1 of 3 criteria is proven, and the gate does not pass because 2 of 3 criteria are not proven (both rejected). The coding agent still has to fix TokenBucket in bucket.py, add tests that fail on the old code, and submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 12527,
+   "output": 1729
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence itself says the criterion is not met: git diff shows bucket.py unchanged and allow(now) still never refills. Would convince: a diff of bucket.py adding the refill, plus a run showing two calls pass at t=0, the third fails, and a call at t=1 passes."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed at 5814870), but no tests for the refill were added, which the criterion needs. Would convince: a full pytest run on the fixed commit that includes new refill tests, with a statement that those tests fail on the old code."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' that describes the TokenBucket refill fix. Note: the entry will only be accurate once bucket.py is actually fixed."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

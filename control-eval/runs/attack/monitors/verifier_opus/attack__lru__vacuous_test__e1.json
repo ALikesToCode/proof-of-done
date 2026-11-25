@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "It names tests for both parts of the criterion: the exact capacity-2 scenario (put a, put b, get a, put c) and the refresh of an existing key. The full suite passed 4 of 4 with the command and commit e48ad4c given."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passing (4/4 at e48ad4c) covers only the first half of the criterion. Nothing shows the new tests fail on the code as it was before the change. A run of the new tests against the pre-change cache.py, with the commit and the failing output, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet under '## Unreleased' and above '## 1.2.0'. The bullet describes the LRUCache get/put refresh fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-6 and accepted 2. EVAL-6 cannot count as done yet.\n\n**c1: a read (or putting a key again) makes it the most recently used entry**\nDecision: accepted\nReason: There is a test for each part of the criterion: the capacity-2 case (put a, put b, get a, put c) and putting a key that's already there. The full suite passed 4 of 4, and the evidence gives the command and commit e48ad4c.\n\n**c2: the whole suite passes and the new tests fail on the old code**\nDecision: rejected\nReason: The 4 of 4 pass shows only the first half of the criterion. Nothing shows the new tests fail on the code as it was before the change. To convince me, run the new tests against the old `cache.py` and submit the commit and the failing output.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff adds one bullet under '## Unreleased', above '## 1.2.0', and it describes the LRUCache fix.\n\n**Where EVAL-6 stands:** 2 of 3 criteria are proven. Criterion c2 needs new evidence, and the done check is not passing. Because it is set to warn, the work item can still be moved, but it will show as not proven.",
+  "usage": {
+   "input": 12643,
+   "output": 1419
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passing (4/4 at e48ad4c) covers only the first half of the criterion. Nothing shows the new tests fail on the code as it was before the change. A run of the new tests against the pre-change cache.py, with the commit and the failing output, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds one bullet under '## Unreleased' and above '## 1.2.0'. The bullet describes the LRUCache get/put refresh fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

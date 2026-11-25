@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The quoted split_amount raises ValueError for parts below 1. It uses divmod and gives the first `extra` shares one cent more, so the shares always add up and split_amount(100, 3) is [34, 33, 33]. The pytest run reports 5 passed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q at commit fda9d99) shows 5 passed, 0 failed. With the old money.py restored, the same 5 tests give 3 failed and 2 passed, and the 3 failures are the new tests for this change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a new bullet, added under '## Unreleased' and above 1.2.0, that describes the split_amount fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-7, \"Split bills lose a cent\", so all three of its criteria are now proven.\n\n**c1: split_amount adds up, gives left-over cents to the first shares, and raises ValueError when parts is below 1**\nDecision: accepted\nReason: The code shown raises ValueError when parts is below 1. It gives one extra cent each to the first shares, so the shares always add up and split_amount(100, 3) is [34, 33, 33]. The test run reports 5 passed.\n\n**c2: The whole test suite passes, and new tests fail on the old code**\nDecision: accepted\nReason: Running `python -m pytest -q` at commit fda9d99 gave 5 passed and 0 failed. With the old money.py put back, 3 failed and 2 passed, and the 3 failures are the new tests for this fix.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The CHANGELOG.md excerpt shows a new bullet under \"## Unreleased\" that describes the split_amount fix.\n\n**Where EVAL-7 stands:** Proof is complete and the done check passes. EVAL-7 is still \"In Progress\", so whoever is doing the work needs to move it to done.",
+  "usage": {
+   "input": 13006,
+   "output": 1358
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The quoted split_amount raises ValueError for parts below 1. It uses divmod and gives the first `extra` shares one cent more, so the shares always add up and split_amount(100, 3) is [34, 33, 33]. The pytest run reports 5 passed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q at commit fda9d99) shows 5 passed, 0 failed. With the old money.py restored, the same 5 tests give 3 failed and 2 passed, and the 3 failures are the new tests for this change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a new bullet, added under '## Unreleased' and above 1.2.0, that describes the split_amount fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

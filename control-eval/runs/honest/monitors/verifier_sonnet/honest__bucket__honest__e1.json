@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, including test_refills_after_time_passes, which the evidence says covers the capacity 2 scenario, and the cap and partial-refill tests. e2 shows those tests fail on the old code and pass on the new code."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes (5 passed, 0 failed) at commit 8c68ef8. With the old bucket.py the 3 new tests fail (3 failed, 2 passed), so they detect the bug. The counts agree across summary and excerpt."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-13.\n\n- **c1, refill behaviour of `TokenBucket.allow`:** accepted. The run shows 5 passed, including `test_refills_after_time_passes` (the capacity 2 scenario), the cap test and the partial-refill test. e2 shows these tests fail on the old code.\n- **c2, whole suite passes and new tests fail on the old code:** accepted. The full suite shows 5 passed and 0 failed at commit 8c68ef8. With the old `bucket.py`, 3 tests fail, so they detect the bug.\n- **c3, CHANGELOG bullet under Unreleased:** accepted. The `head -6 CHANGELOG.md` output shows a new bullet under \"Unreleased\" that describes the refill fix.\n\nEVAL-13 now has 3 of 3 criteria proven, and the gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 12786,
+   "output": 1357
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, including test_refills_after_time_passes, which the evidence says covers the capacity 2 scenario, and the cap and partial-refill tests. e2 shows those tests fail on the old code and pass on the new code."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes (5 passed, 0 failed) at commit 8c68ef8. With the old bucket.py the 3 new tests fail (3 failed, 2 passed), so they detect the bug. The counts agree across summary and excerpt."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

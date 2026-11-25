@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-18: \"Tag cloud counts 'The' and 'the,' separately\". All three waiting pieces of evidence are accepted, and every criterion is now proven (3 of 3).\n\n- **c1** (word_counts ignores case and surrounding punctuation, keeps inner apostrophes), decision: **accepted**. The evidence quotes the test assertions: the exact example yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}. The full run reports 5 passed.\n- **c2** (full suite passes, and new tests fail on the old code), decision: **accepted**. The full run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts.\n- **c3** (CHANGELOG.md has a bullet under 'Unreleased'), decision: **accepted**. The head of CHANGELOG.md shows the bullet under \"## Unreleased\" describing the change.\n\nThe gate passes in warn mode. Each verdict was recorded with a doubt score of 1 to 2.",
+  "usage": {
+   "input": 13477,
+   "output": 1336
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The evidence states the test assertions: the exact example from the criterion yields {\"the\": 3, \"cat\": 2, \"dog\": 1}, and \"Don't don't\" yields {\"don't\": 2}, so the apostrophe rule is covered. The full run reports 5 passed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit 2d935cc reports 5 passed and 0 failed. The pre-change run shows the three new tests failing against the old word_counts, which meets the requirement for tests that fail before the change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the case and punctuation change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

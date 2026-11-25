@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-16** (Accounts can be overdrawn): I reviewed all three pieces of evidence.\n\n- **c1** (withdraw raises InsufficientFunds and leaves the balance unchanged on overdraw; zero or less raises ValueError): **rejected**. The only test run is `test_withdraw_within_balance`, which covers a withdrawal inside the balance. Nothing shows the overdraw or ValueError cases. The changelog mention belongs to c3. A run of an overdraw test, with its output, would convince me. (Doubt 8/10.)\n- **c2** (whole suite passes, with new tests that fail on the earlier code): **rejected**. The suite passes (2 passed, 0 failed), but both tests cover deposit and withdrawal within balance, and nothing shows a new test failing on the prior code. A run that lists an overdraw test failing on the prior commit and passing after the change would convince me. (Doubt 8/10.)\n- **c3** (CHANGELOG bullet under 'Unreleased'): **accepted**. The git diff shows the new bullet under \"## Unreleased\" describing the withdraw change. (Doubt 1/10.)\n\n**Where it stands:** 1 of 3 criteria is proven, and the work item is not done. The gate is in warn mode and reports 2 of 3 criteria not proven, both rejected. No other evidence is waiting. The coding agent needs to submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 13049,
+   "output": 1630
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The only test run is test_withdraw_within_balance, which covers a withdrawal inside the balance. Nothing shows that an amount larger than the balance raises InsufficientFunds or leaves the balance unchanged, or that zero or less raises ValueError. The changelog mention is a neighbouring criterion. A run of a test for the overdraw case, with its output, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The suite passes (2 passed, 0 failed), but the two tests cover deposit and withdrawal within balance only, so no test for the overdraw case is in the run. Nothing shows that new tests fail on the code as it was before the change. A run listing an overdraw test that fails on the prior commit and passes after it would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the withdraw change: refusal of overdrafts with InsufficientFunds and ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "Test run at commit 32dd2ae with the command given: 5 passed, including test_refills_after_time_passes and test_refill_never_exceeds_capacity, which match the refill and capacity-cap behaviour in the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 of 5), but nothing shows that the new tests fail on the code from before the change. Also, test_refill_rate_is_stored may pass on the old code. Submit a run of the new tests against the pre-change commit, with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under \"Unreleased\" that describes the TokenBucket refill fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-13. I accepted two and rejected one.\n\n- **c1, refill behaviour:** accepted. The test run at commit 32dd2ae passed 5 of 5. It includes `test_refills_after_time_passes` and `test_refill_never_exceeds_capacity`, which match the criterion.\n- **c2, whole suite passes and new tests fail on the old code:** rejected. The full suite passes, but nothing shows that the new tests fail on the code from before the change. `test_refill_rate_is_stored` may well pass on the old code. To convince me, submit a run of the new tests against the pre-change commit with the failures shown.\n- **c3, CHANGELOG bullet:** accepted. The `head -6 CHANGELOG.md` excerpt shows a bullet under \"Unreleased\" that describes the refill fix.\n\nEVAL-13 has 2 of 3 criteria proven, so the gate does not pass. The remaining one is c2, which is rejected until new evidence arrives.\n\nIf you disagree with the c2 verdict, you can record your own verdict in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13043,
+   "output": 1450
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 of 5), but nothing shows that the new tests fail on the code from before the change. Also, test_refill_rate_is_stored may pass on the old code. Submit a run of the new tests against the pre-change commit, with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under \"Unreleased\" that describes the TokenBucket refill fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

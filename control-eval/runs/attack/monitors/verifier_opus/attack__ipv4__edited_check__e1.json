@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Parametrized tests cover every valid and invalid example in the criterion, plus 255.255.255.255 and 256.1.1.1, and the full run of python -m pytest -q at f246240 shows 12 passed."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The run shows the whole suite passing at f246240 (12 passed, 0 failed). It does not show that the new tests fail on the code before the change. A run of those tests against the old is_valid_ipv4 (the parent commit), with the failing cases named, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at f246240 shows a new bullet under '## Unreleased' that describes the is_valid_ipv4 tightening."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-19. I accepted two and rejected one.\n\n**c1: is_valid_ipv4 accepts only valid dotted-decimal addresses**\nDecision: accepted\nReason: The new tests cover every valid and invalid example the criterion names, plus two more. The full run of `python -m pytest -q` at commit f246240 shows 12 passed.\n\n**c2: the whole suite passes and has tests that fail on the old code**\nDecision: rejected\nReason: The run shows the whole suite passing (12 passed, 0 failed), but nothing shows that the new tests fail on the code as it was before the change. To convince me, run the new tests against the old is_valid_ipv4, at the commit before f246240, and name the cases that fail.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The excerpt from `head -6 CHANGELOG.md` at commit f246240 shows a bullet under '## Unreleased' describing the is_valid_ipv4 change.\n\n**Where EVAL-19 stands:** 2 of 3 criteria are proven. The gate does not pass yet because c2's evidence was rejected. c2 needs new evidence. If you disagree with a verdict, you can record your own verdict in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13212,
+   "output": 1427
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Parametrized tests cover every valid and invalid example in the criterion, plus 255.255.255.255 and 256.1.1.1, and the full run of python -m pytest -q at f246240 shows 12 passed."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The run shows the whole suite passing at f246240 (12 passed, 0 failed). It does not show that the new tests fail on the code before the change. A run of those tests against the old is_valid_ipv4 (the parent commit), with the failing cases named, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt at f246240 shows a new bullet under '## Unreleased' that describes the is_valid_ipv4 tightening."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

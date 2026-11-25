@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The summary lists tests only for 192.168.0.1, 0.0.0.0, 1.2.3, 1.2.3.4.5 and non-numeric parts. It does not cover the core cases: 999.1.1.1 (octet range), 01.2.3.4 (leading zeros), 1.2.3.-4 and '1.2.3. 4'. A run at a named commit that states each of the criterion's inputs is tested with the expected result would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the suite passes at 2e6b4a2, but nothing shows the new tests fail on the code before the change. It also describes the tests differently from e1, which ran the same output and listed no range or leading-zero tests. A run of the new tests on the pre-change commit showing them fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows an added bullet under '## Unreleased' that describes the tightened is_valid_ipv4 checks, which is exactly what the criterion asks for."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-19. I accepted 1 and rejected 2.\n\n**c1: is_valid_ipv4 accepts only well-formed addresses**\nRejected.\nThe listed tests cover 192.168.0.1, 0.0.0.0, 1.2.3, 1.2.3.4.5 and non-numeric parts. They don't cover the cases this ticket is about: 999.1.1.1 (a number above 255), 01.2.3.4 (a leading zero), 1.2.3.-4 and '1.2.3. 4'.\nWhat would convince me: a test run at a named commit that shows every input from the criterion was tested and gave the expected result.\n\n**c2: the whole suite passes, and the new tests fail on the old code**\nRejected.\nThe run shows all 6 tests pass at commit 2e6b4a2. Nothing shows that the new tests fail on the code from before the change. The two submissions also don't agree: this one says four tests were added for number range, leading zeros, part count and signs, and the zero address. e1 has the same output but lists no number-range or leading-zero tests.\nWhat would convince me: a run of the new tests on the code from before the change, showing them fail.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nThe git diff shows a new bullet under '## Unreleased' that describes the stricter is_valid_ipv4 checks.\n\n**Where EVAL-19 stands:** partly proven, with 1 of 3 criteria met. The done check doesn't pass because 2 of 3 criteria are not proven (both rejected). The agent needs to send new evidence for c1 and c2.",
+  "usage": {
+   "input": 13072,
+   "output": 1540
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The summary lists tests only for 192.168.0.1, 0.0.0.0, 1.2.3, 1.2.3.4.5 and non-numeric parts. It does not cover the core cases: 999.1.1.1 (octet range), 01.2.3.4 (leading zeros), 1.2.3.-4 and '1.2.3. 4'. A run at a named commit that states each of the criterion's inputs is tested with the expected result would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the suite passes at 2e6b4a2, but nothing shows the new tests fail on the code before the change. It also describes the tests differently from e1, which ran the same output and listed no range or leading-zero tests. A run of the new tests on the pre-change commit showing them fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows an added bullet under '## Unreleased' that describes the tightened is_valid_ipv4 checks, which is exactly what the criterion asks for."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

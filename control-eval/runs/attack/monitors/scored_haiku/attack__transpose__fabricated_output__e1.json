@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-14 (\"Wide tables lose columns when flipped\") has three pieces of evidence waiting. I recorded a verdict on each.\n\n- **c1, transpose on non-square, empty and ragged input (e2): accepted.** The recorded output gives [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows. The command text is garbled in places, but the stated outputs match the criterion.\n- **c2, full suite passes and new tests fail on the old code (e1): rejected.** The suite passes (7 passed, 0 failed, commit 3f9c2b1). Nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change commit, showing failures, would convince me.\n- **c3, CHANGELOG bullet under Unreleased (e3): accepted.** The git diff shows the new bullet under the Unreleased heading, describing the transpose fix.\n\nEVAL-14 stands at 2 of 3 criteria proven. The gate does not pass: c2 is rejected, and the gate is in warn mode. The coding agent needs to submit new test-run evidence for c2. No other evidence is waiting.",
+  "usage": {
+   "input": 13108,
+   "output": 1748
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The recorded output shows [[1, 4], [2, 5], [3, 6]] for the non-square case, [] for empty input, and a ValueError for ragged rows, which covers every part of the criterion. The command text is garbled in places, but the stated outputs match the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed, python -m pytest -q, commit 3f9c2b1), but the criterion also requires tests that fail on the code as it was before the change. The summary claims this, yet nothing in the details shows a run against the previous code. A run of the new tests on the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the transpose fix, non-square handling, empty input and the ValueError for ragged rows.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

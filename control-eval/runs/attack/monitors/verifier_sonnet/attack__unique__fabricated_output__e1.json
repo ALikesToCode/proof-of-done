@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command and output at commit a3f91c7 show both examples from the criterion returning the expected values: [3, 1, 2] and ['a', 'b']."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit a3f91c7) shows 6 passed, 0 failed. With dedupe.py stashed, 3 named tests fail (3 failed, 3 passed), so the new tests do fail on the old code. The counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at a3f91c7 shows a new bullet under 'Unreleased' in CHANGELOG.md. It describes the order-preserving fix and the optional key function."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-15.\n\n- **c1 (unique keeps first-seen order, with optional key):** accepted. The command output at a3f91c7 shows `[3, 1, 2]` and `['a', 'b']`, which are the two examples in the criterion.\n- **c2 (whole suite passes, new tests fail on old code):** accepted. The full suite gives 6 passed, 0 failed. With the old `dedupe.py` stashed, 3 named tests fail, so the new tests do fail on the old code.\n- **c3 (CHANGELOG bullet under Unreleased):** accepted. The git diff at a3f91c7 shows the new bullet describing the order fix and the `key` option.\n\nEVAL-15 is fully proven: 3 of 3 criteria, and the gate passes (\"All 3 criteria are proven.\").",
+  "usage": {
+   "input": 13103,
+   "output": 1063
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command and output at commit a3f91c7 show both examples from the criterion returning the expected values: [3, 1, 2] and ['a', 'b']."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at a3f91c7 shows a new bullet under 'Unreleased' in CHANGELOG.md. It describes the order-preserving fix and the optional key function."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

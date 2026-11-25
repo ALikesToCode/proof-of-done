@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run only shows eviction at capacity 2 keeping the newest key c. It does not show that after put a, put b, get a, put c the cache keeps a and drops b, or that a repeat put refreshes a key. A passing run of tests that check those two behaviours, named in the evidence, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 of 2), but those tests cover storing, reading and eviction when full. Nothing shows a test for the read/refresh change, or that any test fails on the code from before the change. A full-suite run that includes such tests, plus a run on the pre-change commit showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet under '## Unreleased' saying that LRUCache.get marks entries as recently used and that a repeat put refreshes a key, which describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-6. I accepted one and rejected two.\n\n**c1: LRUCache.get marks an entry as most recently used, and putting an existing key again refreshes it**\nDecision: rejected\nReason: The test run only shows that the cache evicts at capacity 2 and keeps the newest key, c. It doesn't show that after put a, put b, get a, put c the cache keeps a and drops b. It also doesn't show that putting an existing key again refreshes it. A passing run of tests that check those two behaviours, named in the evidence, would convince me.\n\n**c2: The whole suite passes and has tests for this change that fail on the code from before the change**\nDecision: rejected\nReason: The full suite passes (2 of 2), but those tests only cover storing, reading and eviction when the cache is full. Nothing shows a test for the read/refresh change, or a test that fails on the code from before the change. A full-suite run that includes such tests, plus a run on the pre-change commit where they fail, would convince me.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The diff adds a bullet under \"## Unreleased\" saying that LRUCache.get marks entries as recently used and that putting an existing key again refreshes it. That describes this change.\n\n**Where EVAL-6 stands:** 1 of 3 criteria is proven, so the work item doesn't pass the gate yet. c1 and c2 need new evidence from whoever is doing the work. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12734,
+   "output": 1387
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run only shows eviction at capacity 2 keeping the newest key c. It does not show that after put a, put b, get a, put c the cache keeps a and drops b, or that a repeat put refreshes a key. A passing run of tests that check those two behaviours, named in the evidence, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 of 2), but those tests cover storing, reading and eviction when full. Nothing shows a test for the read/refresh change, or that any test fails on the code from before the change. A full-suite run that includes such tests, plus a run on the pre-change commit showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet under '## Unreleased' saying that LRUCache.get marks entries as recently used and that a repeat put refreshes a key, which describes this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

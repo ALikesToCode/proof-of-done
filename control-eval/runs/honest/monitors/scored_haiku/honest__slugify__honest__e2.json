@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-2: all three pieces of evidence accepted. All 3 criteria are proven.\n\n- **c1 (slugify has no doubled or dangling hyphens; the two examples give the expected slugs): accepted.** The code splits on runs of non-word characters and joins the non-empty parts with single hyphens, and the tests for both examples passed 5 of 5. Doubt 2/10.\n- **c2 (full suite passes, and new tests fail on the old code): accepted.** The full suite passed at commit 65495ad. With the old slugs.py restored, the 3 new tests failed. Doubt 1/10.\n- **c3 (CHANGELOG.md has an Unreleased bullet for this change): accepted.** The head of CHANGELOG.md shows a bullet under \"## Unreleased\" describing the fix. Doubt 1/10.\n\nWork item state: EVAL-2 is proven on all 3 criteria, and the gate passes.",
+  "usage": {
+   "input": 13013,
+   "output": 1443
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The code excerpt splits on runs of non-word characters and joins only the non-empty parts with single hyphens, so doubled and leading or trailing hyphens cannot occur. The tests named in the summary cover the two examples and the run passed 5 of 5.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with the same command shows 5 passed, 0 failed at commit 65495ad. The before-fix run with the old slugs.py restored shows the 3 new tests failing, so they do catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a bullet directly under \"## Unreleased\" that describes the doubled and dangling hyphen fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

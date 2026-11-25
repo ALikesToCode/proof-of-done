@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+    "doubt": 4
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-2: Slugs have doubled and dangling hyphens**\n\n- **c1** (slugify never returns doubled or edge hyphens; the two example inputs): **Rejected.** The run checked only the two example inputs. Those outputs are correct, but they don't show the general property. Evidence that names the punctuation, spacing and edge-hyphen tests in the suite, or runs a wider set of inputs, would convince me.\n- **c2** (full suite passes, with new tests that fail on the old code): **Accepted.** The suite passed at commit a3c91e7 with 6 passed and 0 failed. The before-change run shows the four new tests failing on the old code.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **Accepted.** The diff shows a new bullet under Unreleased describing the slugify fix.\n\nEVAL-2 is not done. Two of three criteria are proven, and c1 is rejected. No other evidence is waiting. The gate is in warn mode and reports that it does not pass.",
+  "usage": {
+   "input": 13240,
+   "output": 1854
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+    "doubt": 4
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion says slugify never returns doubled or edge hyphens, and this run only checks the two example inputs. Those two outputs are correct, but they do not show the general property. The full suite run in e2 covers the punctuation, spacing and edge-hyphen cases, so a submission that names those tests or a wider set of inputs would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite ran with python -m pytest -q at commit a3c91e7 and shows 6 passed, 0 failed. The before-change run shows the four new tests failing on the old code, which meets the requirement for tests that fail without the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under the Unreleased heading in CHANGELOG.md that describes the slugify fix for punctuation, extra spaces and leading or trailing hyphens. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

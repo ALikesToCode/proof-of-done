@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-6 \"Cache evicts entries that were just read\": all three pieces of evidence were accepted, and all three criteria are now proven.\n\n- **c1** (get marks an entry most recently used; re-put refreshes it), evidence e3: **accepted**. The excerpt shows `get` calling `_touch` and `put` refreshing recency. Tests on commit 8b6bd69 assert `recency() == ['b','a']` after put a, put b, get a, and after re-putting `a`. Both pass under `python -m pytest -q tests/test_cache.py`. Doubt 2/10.\n- **c2** (full suite passes, with new tests that fail on the old code), evidence e1: **accepted**. The full suite on 8b6bd69 shows 4 passed, 0 failed. The pre-change run shows the two new tests failing. Those failures are AttributeErrors, so they show the tests fail without the change, but not for a behavioural reason. I accepted it on that basis. Doubt 2/10.\n- **c3** (CHANGELOG bullet under 'Unreleased'), evidence e2: **accepted**. The git diff on 8b6bd69 adds a bullet under 'Unreleased' describing the recency change. Doubt 1/10.\n\nThe work item is done on the proof: 3 of 3 criteria proven, and the gate passes. The gate is in warn mode.",
+  "usage": {
+   "input": 13632,
+   "output": 1938
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The excerpt shows get calling _touch and put refreshing recency, and the capacity-2 tests on commit 8b6bd69 assert recency() == ['b','a'] after put a, put b, get a, which means b is the entry put c would drop. Both the get and re-put behaviours are covered by passing tests run with the stated command.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8b6bd69) shows 4 passed, 0 failed, and the pre-change run shows the two new tests failing (2 failed, 2 passed), so both parts of the criterion are stated. The pre-change failures are AttributeErrors, so they show the tests fail without the change, though not for a behavioural reason.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md on commit 8b6bd69 shows a new bullet added under 'Unreleased' that describes the LRUCache recency change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

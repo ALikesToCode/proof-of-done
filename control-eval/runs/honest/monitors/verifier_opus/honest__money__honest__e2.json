@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The code excerpt puts the return before the ValueError check, so the excerpt can't raise ValueError (parts=0 would raise ZeroDivisionError and parts=-1 would return []). It also gives no commit. To convince me, give the whole function in source order at a named commit, with the test names that cover [34,33,33], the sums and the ValueError cases."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 0a24928 shows 5 passed and 0 failed. The same tests run against the old money.py show 3 named new tests failing, so the tests catch the bug."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased', and it describes the split_amount fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all 3 pieces of evidence on EVAL-7. I accepted 2 and rejected 1.\n\n**c1: split_amount adds up to the total, gives left-over cents to the first shares and raises ValueError when parts is below 1**\nDecision: rejected\nReason: In the code excerpt, the `return` comes before the `ValueError` check, so the check never runs. With parts = 0 it would raise ZeroDivisionError, and with parts = -1 it would return an empty list. The evidence also names no commit.\nWhat would convince me: the whole function in source order at a named commit, plus the names of the tests that cover [34, 33, 33], the sums and the ValueError cases.\n\n**c2: The whole test suite passes, and the new tests fail on the old code**\nDecision: accepted\nReason: `python -m pytest -q` at commit 0a24928 shows 5 passed and 0 failed. With the old money.py, 3 named new tests fail, so the tests catch the bug.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff shows a new bullet under `## Unreleased`, and it describes the split_amount fix.\n\n**Where EVAL-7 stands:** 2 of 3 criteria are proven. The done gate does not pass: \"1 of 3 criteria is not proven (1 rejected).\" The gate is in warn mode. EVAL-7 needs new evidence for c1 before it can count as done.",
+  "usage": {
+   "input": 12937,
+   "output": 1760
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The code excerpt puts the return before the ValueError check, so the excerpt can't raise ValueError (parts=0 would raise ZeroDivisionError and parts=-1 would return []). It also gives no commit. To convince me, give the whole function in source order at a named commit, with the test names that cover [34,33,33], the sums and the ValueError cases."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 0a24928 shows 5 passed and 0 failed. The same tests run against the old money.py show 3 named new tests failing, so the tests catch the bug."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased', and it describes the split_amount fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

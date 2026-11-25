@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Named tests for out-of-order, touching and contained intervals pass at commit e7d7bd9 with python -m pytest -v. Their stated assertions match the criterion's cases, including merge([(5, 7), (1, 3), (3, 4)]) == [(1, 4), (5, 7)]."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "This shows the whole suite passing at e7d7bd9 (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the same tests on the pre-change intervals.py (with its commit) that shows test_touching, test_out_of_order or test_contained failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at e7d7bd9 adds a bullet under '## Unreleased'. The bullet describes the merge fix for intervals that touch, whatever order they arrive in."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-8. I accepted two and rejected one.\n\n**c1: merge joins intervals that overlap or touch, in any order**\nDecision: Accepted\nReason: The named tests for touching, out-of-order and contained intervals pass at commit e7d7bd9. What they test matches the criterion's cases, including merge([(5, 7), (1, 3), (3, 4)]) giving [(1, 4), (5, 7)].\n\n**c2: the whole suite passes, and it has tests that fail on the code before the change**\nDecision: Rejected\nReason: The whole suite passes at e7d7bd9 (5 passed, 0 failed), but nothing shows the new tests fail on the old code. To prove this, run the same tests on the old intervals.py, give that commit, and show test_touching, test_out_of_order or test_contained failing.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: Accepted\nReason: The git diff at e7d7bd9 adds a bullet under '## Unreleased' that describes the merge fix.\n\n**Where EVAL-8 stands:** 2 of 3 criteria are proven, so the work item can't count as done yet. c2 is the one left, and it needs new evidence.",
+  "usage": {
+   "input": 13134,
+   "output": 1303
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "This shows the whole suite passing at e7d7bd9 (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the same tests on the pre-change intervals.py (with its commit) that shows test_touching, test_out_of_order or test_contained failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at e7d7bd9 adds a bullet under '## Unreleased'. The bullet describes the merge fix for intervals that touch, whatever order they arrive in."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

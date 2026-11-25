@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The passing tests cover shares adding up, left-over cents and part count, but no test or output shows split_amount raising ValueError when parts is below 1. A run that includes a passing test for the ValueError case would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed at a0307f5), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change commit, showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the split_amount fix, including the [34, 33, 33] behaviour and the ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-7 (Split bills lose a cent). I accepted 1 and rejected 2.\n\n**c1: split_amount adds up, gives the left-over cents to the first shares and raises ValueError when parts is below 1**\nDecision: rejected\nReason: The passing tests cover the shares adding up, the left-over cents and the number of parts. No test or output shows a ValueError when parts is below 1. A run that includes a passing test for that case would convince me.\n\n**c2: The whole suite passes, and the new tests fail on the code before the change**\nDecision: rejected\nReason: The whole suite passes at commit a0307f5, with 5 passed and 0 failed. Nothing shows that the new tests fail on the code before the change. A run of the new tests on the commit before the change, showing them fail, would convince me.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The excerpt from CHANGELOG.md shows a bullet under '## Unreleased' that describes the split_amount fix.\n\n**Where EVAL-7 stands:** 1 of 3 criteria is proven, so it does not pass the done check yet: \"2 of 3 criteria are not proven (2 rejected).\" The coding agent needs to submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 12946,
+   "output": 1310
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The passing tests cover shares adding up, left-over cents and part count, but no test or output shows split_amount raising ValueError when parts is below 1. A run that includes a passing test for the ValueError case would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed at a0307f5), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change commit, showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the split_amount fix, including the [34, 33, 33] behaviour and the ValueError."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

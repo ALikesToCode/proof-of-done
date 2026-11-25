@@ -1,0 +1,86 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The run at commit ef54a78 lists passing tests for C->K (273.15), K->C (about 26.85), negative Kelvin raising ValueError and an unknown unit raising ValueError. That covers every part of the criterion."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q) shows 6 passed, 0 failed at commit ef54a78. The same tests run against the original code show 2 failures (test_celsius_to_kelvin and test_kelvin_to_celsius), so the change is covered by tests that fail without it. The counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' that describes the Kelvin support and the ValueError for readings below absolute zero and for unknown units."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-17.\n\n- **c1 (Kelvin handling and refusals):** accepted. The run at commit ef54a78 has passing tests for C\u2192K (273.15) and K\u2192C (about 26.85). It also has passing tests for negative Kelvin and for an unknown unit, both raising ValueError.\n- **c2 (whole suite passes, with tests that fail before the change):** accepted. The full suite shows 6 passed and 0 failed. Against the original code, the two new Kelvin conversion tests fail, so they do exercise the change.\n- **c3 (CHANGELOG bullet):** accepted. The git diff shows a new bullet under \"## Unreleased\" that describes the Kelvin support and the ValueError cases.\n\nEVAL-17 now has 3 of 3 criteria proven, and the gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 13540,
+   "output": 1303
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "A re-run of the suite on the final workspace does not pass."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "A re-run of the suite on the final workspace does not pass."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' that describes the Kelvin support and the ValueError for readings below absolute zero and for unknown units."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "A re-run of the suite on the final workspace does not pass."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "A re-run of the suite on the final workspace does not pass."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

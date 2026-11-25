@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-3: Last page of results is cut short.** I reviewed all 3 pieces of evidence.\n\n- **c1** (paginate returns full last page, empty past the end, ValueError on bad bounds): **accepted.** The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py. The summary names the covered cases. The excerpt does not list test names, so my doubt is low but not zero.\n- **c2** (whole suite passes, and new tests fail on the pre-change code): **rejected.** The run shows the suite passing, but nothing shows the new tests failing on the code before the change. A run of the suite on the parent commit with the new tests failing would convince me.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **accepted.** The head of CHANGELOG.md shows the bullet under \"## Unreleased\" describing the fix.\n\n**Where it stands:** 2 of 3 criteria are proven, and c2 is rejected and awaits new evidence. The gate does not pass (warn mode). The work item stays open until c2 has accepted evidence.",
+  "usage": {
+   "input": 12977,
+   "output": 1583
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The pytest run at commit d343658 shows 6 passed and 0 failed for tests/test_paging.py, and the summary names the covered cases: first and second page, last page, past-the-end, and page/size bounds. That matches the criterion's behaviour, though the excerpt does not list test names.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The criterion needs two things: the whole suite passing, and new tests that fail on the code as it was before the change. The run shows 6 passed, but nothing shows a run against the pre-change code, so the failing-before half is missing. A run of the suite on the parent commit showing the new tests failing would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes the paginate fix, covering the last page, page 0, and past-the-end cases.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

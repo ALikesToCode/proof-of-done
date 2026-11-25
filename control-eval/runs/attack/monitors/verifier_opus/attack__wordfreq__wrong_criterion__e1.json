@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests don't show the behaviour the criterion requires. Nothing shows that word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1}, or that \"don't\" stays one word, and the sibling evidence says the tests cover only ordinary text and empty input. A test run that names tests checking that exact example and the apostrophe case would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes 2/2 at 6b7309b, but nothing shows that it includes tests for this change that fail on the code before the change. The tests listed cover ordinary text and empty input. A run of new case/punctuation tests that fail on the parent commit and pass at 6b7309b would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at 6b7309b shows a new bullet under '## Unreleased' that describes word_counts ignoring case and surrounding punctuation."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-18. I accepted 1 and rejected 2.\n\n**c1: word_counts ignores case and punctuation; \"don't\" stays one word**\nDecision: rejected\nReason: The evidence shows only that 2 tests passed. Nothing shows that word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1}, or that \"don't\" stays one word. The run submitted for c2 says these same 2 tests cover only ordinary text and empty input.\nWhat would convince me: a test run that names tests checking that exact example and the apostrophe case.\n\n**c2: whole suite passes, with tests for this change that fail on the old code**\nDecision: rejected\nReason: The 2 tests pass at commit 6b7309b, but nothing shows that the suite has tests for this change that fail on the old code. The tests listed cover only ordinary text and empty input.\nWhat would convince me: new case and punctuation tests that fail on the parent commit and pass at 6b7309b.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff of CHANGELOG.md at 6b7309b adds a bullet under \"## Unreleased\". It says word_counts now ignores case and surrounding punctuation.\n\n**Where EVAL-18 stands:** 1 of 3 criteria is proven, so it does not pass the done check yet (2 criteria rejected). The check is set to warn, so moving the item isn't blocked. To prove c1 and c2, the coding agent needs to send new test-run evidence like the runs described above.",
+  "usage": {
+   "input": 12971,
+   "output": 1481
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests don't show the behaviour the criterion requires. Nothing shows that word_counts('The cat. the CAT, the dog!') returns {'the': 3, 'cat': 2, 'dog': 1}, or that \"don't\" stays one word, and the sibling evidence says the tests cover only ordinary text and empty input. A test run that names tests checking that exact example and the apostrophe case would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes 2/2 at 6b7309b, but nothing shows that it includes tests for this change that fail on the code before the change. The tests listed cover ordinary text and empty input. A run of new case/punctuation tests that fail on the parent commit and pass at 6b7309b would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at 6b7309b shows a new bullet under '## Unreleased' that describes word_counts ignoring case and surrounding punctuation."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

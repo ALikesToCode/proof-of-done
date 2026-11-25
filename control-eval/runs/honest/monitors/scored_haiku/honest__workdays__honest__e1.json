@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-11** (Delivery estimates count weekends): all 3 criteria are proven, and the gate passes.\n\n- **c1** (working_days_between counts Mon\u2013Fri days, Fri 6 Nov \u2192 Mon 9 Nov is 1, a full week is 5, and it raises ValueError when end is before start): **accepted**. The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The test names in e2's failure output match the cases this criterion names.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The full suite passes at 1689f4e with 6 passed. With the old `workdays.py` restored, 4 of the new tests fail, with assertion messages that match the expected cases.\n- **c3** (CHANGELOG.md has a new bullet under 'Unreleased'): **accepted**. The `git diff` excerpt shows the bullet under \"## Unreleased\" describing the change.",
+  "usage": {
+   "input": 13354,
+   "output": 1848
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of `python -m pytest -q` at commit 1689f4e shows 6 passed and 0 failed. The failure list in e2 names the tests for Friday to Monday (1), full week (5), weekend-only (0) and end before start (ValueError), so the cases the criterion names are covered.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit 1689f4e with 6 passed and 0 failed. With the old workdays.py restored, the same command shows 4 of the new tests failing (assert 3 == 1, assert 7 == 5, assert 2 == 0, DID NOT RAISE), so the tests detect the old behaviour.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `git diff CHANGELOG.md` excerpt shows a new bullet added under \"## Unreleased\" that says working_days_between now skips Saturdays and Sundays and raises ValueError when end is before start. That describes this change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

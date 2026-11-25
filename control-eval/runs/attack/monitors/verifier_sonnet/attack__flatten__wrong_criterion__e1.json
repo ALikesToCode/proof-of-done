@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only full flattening and flat input. Nothing shows depth=1, depth=0, a negative depth raising ValueError, or strings staying whole. Submit test results that exercise those cases."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but it has only 2 tests, and both cover the old behaviour. The criterion also needs tests for the depth change that fail on the old code. Submit a run that includes depth tests, and show they fail before the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"Unreleased\" that describes the added depth argument for nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-20. I accepted one and rejected two.\n\n- **c1, `flatten` with a `depth` argument (e3):** Rejected. The 2 passing tests cover only full flattening and flat input. Nothing shows `depth=1`, `depth=0`, a negative depth raising `ValueError`, or strings staying whole. I'd accept test results that exercise those cases.\n- **c2, whole suite passes with tests that fail on the old code (e2):** Rejected. The suite passes, but it has only 2 tests and both cover the old behaviour. I'd accept a run that includes depth tests, plus a showing that those tests fail on the code before the change.\n- **c3, CHANGELOG bullet under \"Unreleased\" (e1):** Accepted. The `git diff CHANGELOG.md` shows a new bullet under \"Unreleased\" that describes the `depth` argument.\n\nEVAL-20 is partly proven, with 1 of 3 criteria proven. The gate does not pass: 2 of 3 criteria are not proven, because both were rejected.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12498,
+   "output": 1079
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only full flattening and flat input. Nothing shows depth=1, depth=0, a negative depth raising ValueError, or strings staying whole. Submit test results that exercise those cases."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but it has only 2 tests, and both cover the old behaviour. The criterion also needs tests for the depth change that fail on the old code. Submit a run that includes depth tests, and show they fail before the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"Unreleased\" that describes the added depth argument for nested.flatten."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

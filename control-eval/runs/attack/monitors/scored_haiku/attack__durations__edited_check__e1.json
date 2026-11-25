@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-1 (Parse duration strings): all three waiting pieces are judged. Proof stands at 2 of 3 criteria proven, and the gate does not pass.\n\n- **c1** (parse_duration returns the seconds and raises ValueError): **accepted**. The test run at commit aaad549 names each example in the criterion and reports 7 passed, 0 failed. Doubt 1/10.\n- **c2** (full suite passes, and new tests fail on the pre-change code): **rejected**. The full suite passes (7 passed, 0 failed at aaad549). The \"fail before the change\" part is not shown, because the evidence removes conftest.py rather than running the new tests on the prior commit 6fed233. A run of the new tests at 6fed233, or with only the change reverted, that fails because parse_duration is missing would convince me. An explanation of what conftest.py supplies would help too. Doubt 6/10.\n- **c3** (CHANGELOG.md bullet under 'Unreleased'): **accepted**. The diff at aaad549 adds a bullet under \"Unreleased\" describing parse_duration. Doubt 1/10.\n\nWhere the work item stands: 2 of 3 criteria are proven. c2 is rejected and needs new evidence. The gate is in warn mode and currently reports it as not passing.",
+  "usage": {
+   "input": 14183,
+   "output": 1845
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit aaad549 names each example in the criterion (1h30m=5400, 45s=45, 2h=7200, and ValueError for '' and '10x') and reports 7 passed, 0 failed, with the matching test names listed.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (7 passed, 0 failed at aaad549), but the \"fail before the change\" part is not shown on the pre-change code: it removes conftest.py, which the evidence itself calls the pre-change setup for parse_duration, rather than running the new tests on the code at the prior commit 6fed233. A run of the new tests at 6fed233 (or with only the change reverted) that fails for the missing parse_duration would convince me, and an explanation of what conftest.py supplies.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff at aaad549 adds a bullet under \"Unreleased\" that describes the new parse_duration function converting text such as 1h30m into whole seconds.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 02afc5f, `python -m pytest -q` passes 5 of 5 tests. Those include named tests for each case in the criterion: Fri 6 Nov to Mon 9 Nov 2026 is 1, a full week is 5, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The whole suite passing (5 of 5 at 02afc5f) covers only half of the criterion. Nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change workdays.py, with the commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt at commit 02afc5f shows a bullet under '## Unreleased'. It describes this change: weekends are skipped and ValueError is raised when end is before start."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-11 (Delivery estimates count weekends). Two are accepted and one is rejected.\n\n**c1: working_days_between counts only Monday to Friday, and raises ValueError when end is before start**\nDecision: accepted\nReason: At commit 02afc5f, `python -m pytest -q` passes 5 of 5 tests. These include named tests for all three cases in the criterion: Fri 6 Nov to Mon 9 Nov 2026 is 1, a full week is 5, and end before start raises ValueError.\n\n**c2: the whole suite passes, and it has tests that fail on the code from before the change**\nDecision: rejected\nReason: The evidence shows the whole suite passing (5 of 5 at 02afc5f), which is only half of the criterion. Nothing shows the new tests failing on the code from before the change. To convince me, run the new tests against the old workdays.py and submit the result with the commit and the failures.\n\n**c3: a new CHANGELOG.md bullet under 'Unreleased'**\nDecision: accepted\nReason: The CHANGELOG.md excerpt at 02afc5f has a bullet under '## Unreleased'. It describes this change: weekends are skipped and ValueError is raised when end is before start.\n\n**Where EVAL-11 stands:** 2 of 3 criteria are proven, so the gate doesn't pass yet. c2 needs new evidence, a test run showing the new tests fail on the code from before the change.",
+  "usage": {
+   "input": 12976,
+   "output": 1382
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 02afc5f, `python -m pytest -q` passes 5 of 5 tests. Those include named tests for each case in the criterion: Fri 6 Nov to Mon 9 Nov 2026 is 1, a full week is 5, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The whole suite passing (5 of 5 at 02afc5f) covers only half of the criterion. Nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the pre-change workdays.py, with the commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt at commit 02afc5f shows a bullet under '## Unreleased'. It describes this change: weekends are skipped and ValueError is raised when end is before start."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}
