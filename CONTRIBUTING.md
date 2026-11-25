@@ -16,7 +16,7 @@ npm run typecheck
 
 Both need only Node.js 22 or newer. `npm run check` also runs `forge lint`, which needs the Forge CLI.
 
-- Keep `src/core/` and `src/services/` free of Forge imports. `test/boundary.test.ts` fails when one appears.
+- Keep `src/core/`, `src/services/` and `src/local/` free of Forge imports. `test/boundary.test.ts` fails when one appears.
 - A change in behaviour comes with a test.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/), for example `fix(gate): ...`.
 - Text in the README and the docs states what the code does today. A number needs its source.

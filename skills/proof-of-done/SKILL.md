@@ -1,7 +1,7 @@
 ---
 name: proof-of-done
-description: Prove Jira work before reporting it done, through the Proof of Done MCP tools. Use when you are given a Jira work item to implement, fix or finish, or asked what a work item still needs before it can close.
-compatibility: Needs the Proof of Done app on the Jira site and its MCP server connected to this agent.
+description: Prove work before reporting it done, through the Proof of Done MCP tools. Use when you are given a work item under Proof of Done to implement, fix or finish, in Jira or as a task file, or asked what a work item still needs before it can close.
+compatibility: Needs the Proof of Done MCP server connected to this agent, from the Jira app or from the local command.
 ---
 
 # Proof of Done
@@ -57,6 +57,8 @@ An answer with `ok: false` has a `code` and an `error` sentence that says what t
 ## Connecting
 
 The tools come from the Proof of Done MCP server at `https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd`. Your client may show their names with a prefix. When the app was installed from the Atlassian Marketplace, that address ends in a different id, which the README in the app's repository lists.
+
+Without Jira, the same five tools come from the command `proof-of-done mcp`, run in the repository that holds the `.proof-of-done` folder. A work item is then a task file, and a person reviews with the `proof-of-done` command.
 
 - In Claude Code, run `claude mcp add --transport http proof-of-done https://mcp.atlassian.com/forge/8c9b1b0d-9480-40dc-b852-5f17375dd7fd`, then `/mcp` to sign in.
 - A site admin has to turn the tools on first, under Atlassian Administration, Apps, Sites, the site, Connected apps, Proof of Done, Tools.

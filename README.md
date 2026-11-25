@@ -24,7 +24,7 @@ flowchart LR
   gate -- "no" --> missing["Not done,<br/>and what is missing"]
 ```
 
-Today the guard runs inside Jira, as a Forge app. Coding agents reach it through a tool server that lets them read the contract and submit evidence, and nothing more. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
+The guard runs in two places today. Inside Jira it is a Forge app. In a repository with no Jira site it is a command line over a folder of task files. In both, coding agents reach it through a tool server that lets them read the contract and submit evidence, and nothing more. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
 
 ![The Proof of Done panel on a Jira work item. It shows the app's sample data: one of three criteria is proven, and two pieces of evidence wait for a review.](docs/images/issue-panel.png)
 
@@ -64,7 +64,7 @@ The example holds a contract with two criteria in memory. An agent reports done 
    agent: "done".  gate: PASS. All 2 criteria are proven.
 ```
 
-The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls the same functions the Jira app calls. To use it on real work, install the [Jira app](#the-jira-app).
+The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls the same functions the Jira app calls. To use the guard on real work, install the [Jira app](#the-jira-app), or put it on a repository [without Jira](#without-jira).
 
 ## The parts
 
@@ -73,20 +73,35 @@ The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls
 | Core: the rules of proof, the evidence checks, the gate decision and the meter | [src/core/](src/core/) | Built. Plain TypeScript with no Forge imports, which a test enforces |
 | Services: contracts, the done gate and the tools for agents | [src/services/](src/services/) | Built. They reach Jira, the store and the Teamwork Graph through three interfaces, so they also import nothing from Forge. The same test enforces it |
 | Jira adapter: the Forge app | [manifest.yml](manifest.yml), `src/frontend/`, `src/resolvers/`, `src/actions/`, `src/triggers/`, `src/store/`, `src/jira/`, `src/graph/`, [rovo/](rovo/) | Built. The Codegeist 2026 entry |
-| The agent's side of the guard | The app's MCP server with five tools, none of which records a verdict, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. It works through the Jira app |
+| Local adapter: the guard without Jira | [src/local/](src/local/), described in [docs/local.md](docs/local.md) | Built. Task files, a file store, a command line for people, a gate for harnesses and pipelines |
+| The agent's side of the guard | An MCP server with five tools, none of which records a verdict, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. Atlassian serves it for the Jira app, and `proof-of-done mcp` serves it locally |
 | Starter skeleton | `marrow`, a repository of its own | In progress, not public yet |
 
-The core and the Jira adapter share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
+The core and the two adapters share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
 
 ## Planned, not built yet
 
 Nothing in this list exists today.
 
-- **The core as a package of its own.** Today it is a folder in this repository and is not published to npm.
-- **A tool server that runs without Jira.** The five tools are served by Atlassian for the Jira app. A team with no Jira site cannot put its agents under the guard yet.
-- **A gate for agent harnesses.** A step that a harness has to pass before it may report a task as finished.
+- **A package on npm.** Today you build the command from a clone of this repository.
+- **Verdicts signed by the reviewer.** The local adapter cannot tell a person from an agent that runs commands as that person. [docs/local.md](docs/local.md) lists what it cannot promise.
 - **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
 - **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
+
+## Without Jira
+
+You need Node.js 22 or newer.
+
+```
+npm ci && npm run build && npm link
+cd /path/to/your/repository
+proof-of-done init
+proof-of-done new "Export the audit log as CSV" -c "All unit tests pass" -c "Release notes are updated"
+proof-of-done start POD-1
+claude mcp add proof-of-done -- proof-of-done mcp
+```
+
+The agent now reads the contract and submits evidence through the tool server. A person reviews it with `proof-of-done review`, `accept` and `reject`. `proof-of-done move POD-1 done` refuses while a criterion is unproven, and `proof-of-done gate` gives a harness or a pipeline the answer as an exit code. [docs/local.md](docs/local.md) has every command, the hook for an agent harness, and what this adapter cannot promise.
 
 ## The Jira app
 
@@ -189,7 +204,7 @@ npm ci
 npm run check
 ```
 
-`npm run check` runs the type check, the tests and `forge lint`. The tests need no Atlassian account, and `npm test` alone needs no Forge CLI either. Unit tests cover the rules, the services and the agent tools. The page tests in `test/ui.test.ts` mount the three pages on stand-ins for Forge and run the real resolvers behind them.
+`npm run check` runs the type check, the tests and `forge lint`. `npm run build` compiles the local command into `dist/`. The tests need no Atlassian account, and `npm test` alone needs no Forge CLI either. Unit tests cover the rules, the services and the agent tools. The page tests in `test/ui.test.ts` mount the three pages on stand-ins for Forge and run the real resolvers behind them.
 
 To run your own copy:
 
@@ -230,6 +245,7 @@ The Teamwork Graph does not always answer on the development site. On 23 Nov 202
 | `skills/proof-of-done/` | The open skill for coding agents |
 | `scripts/` | The deploy step for the Marketplace registration |
 | `test/` | Unit tests and page tests |
+| `src/local/` | The local adapter: task files, the file store, the command line and the stdio tool server |
 | `examples/` | The walk-through that `npm run example` runs |
 | `benchmark/` | The place for the planned benchmark. No data |
 

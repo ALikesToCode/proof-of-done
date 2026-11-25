@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
  * through interfaces. The files that implement those interfaces on Forge, and the files
  * that wire them together, live in the other folders of src.
  */
-const FORGE_FREE = ['src/core', 'src/services'];
+const FORGE_FREE = ['src/core', 'src/services', 'src/local'];
 const FORGE_BACKED = /\/(forge-graph|forge-gateway|sql-store|schema|resolvers|frontend)(\/|$)/;
 const IMPORT = /(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g;
 
