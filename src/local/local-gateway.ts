@@ -163,10 +163,7 @@ export class LocalWorkGateway implements JiraGateway {
   async createIssue(issue: NewIssue): Promise<{ id: string; key: string }> {
     const project = await this.getProject(issue.projectId);
     if (!project) throw new Error('No such project.');
-    const key = this.tasks.nextKey(project.key);
-    this.tasks.save({
-      key,
-      projectKey: project.key,
+    const { key } = this.tasks.create(project.key, {
       summary: issue.summary,
       body: adfText(issue.description).trim(),
       status: 'todo',

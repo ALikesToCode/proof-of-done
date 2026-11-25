@@ -205,11 +205,8 @@ const COMMANDS: Record<string, (ctx: Context) => Promise<number>> = {
     const project = (flag(ctx.args, 'project') ?? ctx.app.tasks.keys().at(-1)?.replace(/-\d+$/, '') ?? 'POD').toUpperCase();
     if (!/^[A-Z][A-Z0-9_]{0,63}$/.test(project)) throw new UsageError('A project key starts with a letter and has letters, digits and underscores.');
     const criteria = ctx.args.flags.get('criterion') ?? [];
-    const key = ctx.app.tasks.nextKey(project);
     const body = criteria.length > 0 ? `## Acceptance criteria\n\n${criteria.map((c) => `- ${c.trim()}`).join('\n')}` : '## Acceptance criteria\n\n- ';
-    ctx.app.tasks.save({
-      key,
-      projectKey: project,
+    const { key } = ctx.app.tasks.create(project, {
       summary,
       body,
       status: 'todo',
@@ -383,7 +380,9 @@ const COMMANDS: Record<string, (ctx: Context) => Promise<number>> = {
         proven: view.summary.proven,
         total: view.summary.total,
         // What the agent can still act on: criteria with no evidence, or only evidence that was turned away.
-        needsEvidence: view.criteria.filter((c) => c.state === 'unproven' || c.state === 'rejected').map((c) => c.text),
+        // A criterion that needs an attestation is a person's to prove, so it is not among them.
+        needsEvidence: open(view).filter((c) => c.requiredKind !== 'attestation').map((c) => c.text),
+        needsAttestation: open(view).filter((c) => c.requiredKind === 'attestation').length,
         waitsForReview: view.summary.submitted,
       });
     }
@@ -415,6 +414,9 @@ const COMMANDS: Record<string, (ctx: Context) => Promise<number>> = {
   },
 };
 
+/** The criteria of a contract that have no evidence, or only evidence that was turned away. */
+const open = (view: ContractView): CriterionView[] => view.criteria.filter((c) => c.state === 'unproven' || c.state === 'rejected');
+
 /** Exit code a harness reads as "do not stop yet". Claude Code's Stop hook uses 2 and passes stderr to the agent. */
 export const HOOK_BLOCK = 2;
 
@@ -423,7 +425,7 @@ export const HOOK_BLOCK = 2;
  * only while the agent can do something about it. Evidence that waits for a person's
  * review is not the agent's to settle, so that lets it stop, with a note.
  */
-function hookAnswer(ctx: Context, failed: Array<{ key: string; needsEvidence: string[]; waitsForReview: number }>): number {
+function hookAnswer(ctx: Context, failed: Array<{ key: string; needsEvidence: string[]; needsAttestation: number; waitsForReview: number }>): number {
   const open = failed.filter((r) => r.needsEvidence.length > 0);
   if (open.length > 0) {
     ctx.io.err('Proof of Done: this work is not proven, so do not report it as done.');
@@ -433,6 +435,8 @@ function hookAnswer(ctx: Context, failed: Array<{ key: string; needsEvidence: st
   }
   const waiting = failed.filter((r) => r.waitsForReview > 0);
   if (waiting.length > 0) ctx.io.out(`Proof of Done: ${waiting.map((r) => r.key).join(', ')} wait${waiting.length === 1 ? 's' : ''} for a person's review. Not done yet.`);
+  const attest = failed.filter((r) => r.needsAttestation > 0);
+  if (attest.length > 0) ctx.io.out(`Proof of Done: ${attest.map((r) => r.key).join(', ')} need${attest.length === 1 ? 's' : ''} a person's attestation. Not done yet.`);
   return EXIT.ok;
 }
 

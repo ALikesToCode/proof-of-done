@@ -103,8 +103,8 @@ export function markdownToAdf(markdown: string): AdfNode {
       continue;
     }
     const last = stack[stack.length - 1];
-    if (last && /^\s+\S/.test(raw)) {
-      // An indented line under a list item continues that item.
+    if (last) {
+      // A line right under a list item continues that item, indented or not. Only a blank line ends a list.
       last.text = `${last.text} ${raw.trim()}`;
       continue;
     }

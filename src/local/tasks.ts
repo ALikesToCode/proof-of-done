@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 
@@ -58,7 +58,11 @@ const toTime = (raw: string | undefined): number | null => {
   return Number.isNaN(time) ? null : time;
 };
 
-export function parseTask(key: string, source: string, fallbackCreated: number): Task {
+/**
+ * Reads a task file. `fileTime` stands in where a file written by hand gives no date:
+ * for when the task was created, and for when it was closed if it says `status: done`.
+ */
+export function parseTask(key: string, source: string, fileTime: number): Task {
   const text = source.replace(/\r\n?/g, '\n');
   const fields: Record<string, string> = {};
   const front = FRONT.exec(text);
@@ -69,12 +73,14 @@ export function parseTask(key: string, source: string, fallbackCreated: number):
   const rest = front ? text.slice(front[0].length) : text;
   const title = /^\s*#\s+(.+?)\s*$/m.exec(rest);
   const body = title ? rest.slice(rest.indexOf(title[0]) + title[0].length) : rest;
+  const status = toStatus(fields['status']);
+  const created = toTime(fields['created']) ?? fileTime;
   return {
     key,
     projectKey: TASK_KEY.exec(key)?.[1] ?? key,
     summary: (title?.[1] ?? key).trim().slice(0, 255),
     body: body.trim(),
-    status: toStatus(fields['status']),
+    status,
     type: fields['type'] || 'Task',
     assignee: fields['assignee'] || null,
     parent: fields['parent'] && TASK_KEY.test(fields['parent']) ? fields['parent'] : null,
@@ -82,8 +88,8 @@ export function parseTask(key: string, source: string, fallbackCreated: number):
       .split(',')
       .map((label) => label.trim())
       .filter(Boolean),
-    created: toTime(fields['created']) ?? fallbackCreated,
-    statusChanged: toTime(fields['status-changed']),
+    created,
+    statusChanged: toTime(fields['status-changed']) ?? (status === 'done' ? Math.max(fileTime, created) : null),
   };
 }
 
@@ -126,7 +132,8 @@ export class TaskFolder {
     if (!TASK_KEY.test(key)) return null;
     const actual = existsSync(this.path(key)) ? key : this.keys().find((k) => k.toLowerCase() === key.toLowerCase());
     if (!actual) return null;
-    return parseTask(actual, readFileSync(this.path(actual), 'utf8'), 0);
+    const file = this.path(actual);
+    return parseTask(actual, readFileSync(file, 'utf8'), Math.floor(statSync(file).mtimeMs));
   }
 
   all(): Task[] {
@@ -140,6 +147,25 @@ export class TaskFolder {
     const temp = `${this.path(task.key)}.${process.pid}.tmp`;
     writeFileSync(temp, formatTask(task));
     renameSync(temp, this.path(task.key));
+  }
+
+  /**
+   * Creates the file of a new task under the next free key of its project. Two
+   * commands that run at once cannot get the same key: the file is created only if
+   * it does not exist, and the loser takes the next number.
+   */
+  create(projectKey: string, task: Omit<Task, 'key' | 'projectKey'>): Task {
+    mkdirSync(this.dir, { recursive: true });
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const created: Task = { ...task, key: this.nextKey(projectKey), projectKey };
+      try {
+        writeFileSync(this.path(created.key), formatTask(created), { flag: 'wx' });
+        return created;
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+      }
+    }
+    throw new Error(`Could not find a free key in project ${projectKey}.`);
   }
 
   /** The next free key of a project, as in `POD-8`. */

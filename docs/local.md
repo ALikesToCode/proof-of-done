@@ -48,7 +48,7 @@ assignee: dana
 - Release notes are updated
 ```
 
-The file name is the key. `status` is `todo`, `in-progress` or `done`. Write a task in any editor. The app reads criteria from a list under a heading or a label such as "Acceptance criteria", "Definition of done" or "Done when", the same way the Jira app reads a description.
+The file name is the key. `status` is `todo`, `in-progress` or `done`. Write a task in any editor. The commands add `created` and `status-changed` dates. A file without them counts as created, and as closed if it says `done`, when the file was last changed. The app reads criteria from a list under a heading or a label such as "Acceptance criteria", "Definition of done" or "Done when", the same way the Jira app reads a description.
 
 Commit `.proof-of-done/` with the code. The store, `state.json`, then shows in a pull request who accepted what.
 

@@ -11,7 +11,7 @@ import { EXIT, HOOK_BLOCK, Io, run } from '../src/local/cli';
 import { FileStore, STATE_VERSION, StoreError } from '../src/local/file-store';
 import { markdownToAdf } from '../src/local/markdown';
 import { PROTOCOL_VERSIONS, handleMessage, serve } from '../src/local/mcp-server';
-import { formatTask, parseTask, projectIdOf } from '../src/local/tasks';
+import { TaskFolder, formatTask, parseTask, projectIdOf } from '../src/local/tasks';
 import { AGENT_TOOL_DEFS } from '../src/local/tool-defs';
 import { localWording } from '../src/local/wording';
 import { entries } from './helpers/manifest';
@@ -103,6 +103,36 @@ describe('task files', () => {
 
   it('reads a file with no front matter as an open task', () => {
     expect(parseTask('POD-2', '# Just a title\n\nText.', 5)).toMatchObject({ status: 'todo', summary: 'Just a title', body: 'Text.', created: 5 });
+  });
+
+  it('reads a criterion that wraps onto the next line as one criterion, and keeps the ones after it', () => {
+    const doc = markdownToAdf(['## Acceptance criteria', '- The exported report contains all', 'records matching the query.', '- No private records are exposed'].join('\n'));
+    expect(extractCriteria(doc).map((c) => c.text)).toEqual(['The exported report contains all records matching the query.', 'No private records are exposed']);
+  });
+
+  it('dates a file written by hand from the file itself', () => {
+    const at = Date.UTC(2026, 10, 24);
+    expect(parseTask('POD-3', '# Written in an editor', at)).toMatchObject({ created: at, statusChanged: null });
+    expect(parseTask('POD-3', '---\nstatus: done\n---\n# Closed in an editor', at)).toMatchObject({ created: at, statusChanged: at });
+  });
+
+  it('never gives two new tasks the same key', () => {
+    const folder = new TaskFolder(join(root, 'tasks'));
+    const blank = { summary: 'One', body: '', status: 'todo' as const, type: 'Task', assignee: null, parent: null, labels: [], created: 1, statusChanged: null };
+    expect(folder.create('POD', blank).key).toBe('POD-1');
+    // Another command took POD-2 between the look and the write.
+    const next = folder.nextKey.bind(folder);
+    let first = true;
+    folder.nextKey = (project: string) => {
+      const key = next(project);
+      if (first) {
+        first = false;
+        writeFileSync(join(root, 'tasks', `${key}.md`), '# Taken by someone else\n');
+      }
+      return key;
+    };
+    expect(folder.create('POD', { ...blank, summary: 'Two' }).key).toBe('POD-3');
+    expect(folder.get('POD-2')!.summary).toBe('Taken by someone else');
   });
 
   it('gives a project the same numeric id on every machine', () => {
@@ -362,6 +392,24 @@ describe('the command line', () => {
     expect(waiting).toMatchObject({ code: EXIT.ok, err: '' });
     expect(waiting.out).toContain("POD-1 waits for a person's review. Not done yet.");
     expect((await pod(['gate', '--in-progress'])).code).toBe(EXIT.notProven);
+  });
+
+  it('does not hold an agent for a criterion that only a person can prove', async () => {
+    await pod(['init']);
+    await pod(['new', 'Ship the export']);
+    await pod(['criterion', 'POD-1', 'The product owner signed off', '--needs', 'attestation']);
+    await pod(['move', 'POD-1', 'in-progress']);
+    const answer = await pod(['gate', '--in-progress', '--hook']);
+    expect(answer).toMatchObject({ code: EXIT.ok, err: '' });
+    expect(answer.out).toContain("POD-1 needs a person's attestation. Not done yet.");
+  });
+
+  it('counts a task written in an editor in the meter', async () => {
+    await pod(['init']);
+    mkdirSync(join(root, 'tasks'), { recursive: true });
+    writeFileSync(join(root, 'tasks', 'POD-1.md'), '# Written by hand\n\n## Acceptance criteria\n- It works\n');
+    clock = Date.now();
+    expect((await pod(['meter', 'POD'])).out).toContain('opened 1,');
   });
 
   it('reports the version of the package', async () => {
