@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run example
+      - run: npm run build
+      - name: Run the built command
+        run: |
+          work="$(mktemp -d)"
+          cd "$work"
+          pod() { node "$GITHUB_WORKSPACE/dist/local/cli.js" "$@"; }
+          pod init
+          pod new "Smoke test" -c "It runs"
+          POD_ALLOW_NONINTERACTIVE=1 pod start POD-1
+          if pod gate POD-1; then echo "The gate passed unproven work." >&2; exit 1; fi
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | pod mcp | grep -q '"submit-evidence"'
