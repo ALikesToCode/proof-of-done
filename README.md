@@ -1,13 +1,15 @@
 # Proof of Done
 
-An AI agent says a task is done, and it is not. The tests fail, the pull request was closed without a merge, or nobody looked. The ticket still says Done.
+Proof of Done is a guard that a team puts on its AI agents. An agent's work counts as done only when the team's own criteria are proven, and a person holds the gate.
 
-Proof of Done makes "done" something that has to be shown. It has four parts.
+Without a guard, an agent reports a task as done and nobody checks. The tests fail, the pull request was closed without a merge, and the ticket still says Done. Teams that want to hand real work to agents need a control that keeps that work honest.
 
-1. **A done contract.** The criteria that have to hold before the work counts as done.
-2. **Evidence with checks.** The agent submits evidence for each criterion: a test run, a build, a pull request, a document. Each piece is checked the moment it arrives. A test run with failures is turned away with the reason.
-3. **A verdict on each piece.** Someone other than the submitter accepts or rejects the evidence. An agent has no way to accept its own work.
-4. **A gate.** The work passes when every criterion is proven. Until then the gate says no, and says what is missing.
+The guard has four parts.
+
+1. **A done contract.** People write the criteria that have to hold before the work counts as done. The agent works to that contract and cannot add criteria of its own.
+2. **Evidence with checks.** For each criterion the agent has to submit evidence: a test run, a build, a pull request, a document. Each piece is checked the moment it arrives. A test run with failures is turned away with the reason.
+3. **A verdict from someone else.** A person accepts or rejects each piece, or a reviewing agent whose verdicts a person confirms. The agent that did the work has no way to accept it.
+4. **A gate.** The work passes when every criterion is proven. Until then the gate says no, and says what is missing. The team decides how strict the gate is.
 
 ```mermaid
 flowchart LR
@@ -22,7 +24,7 @@ flowchart LR
   gate -- "no" --> missing["Not done,<br/>and what is missing"]
 ```
 
-Today it runs inside Jira, as a Forge app with a tool server for coding agents. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
+Today the guard runs inside Jira, as a Forge app. Coding agents reach it through a tool server that lets them read the contract and submit evidence, and nothing more. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
 
 ![The Proof of Done panel on a Jira work item. It shows the app's sample data: one of three criteria is proven, and two pieces of evidence wait for a review.](docs/images/issue-panel.png)
 
@@ -37,7 +39,7 @@ npm ci
 npm run example
 ```
 
-The example holds a contract with two criteria in memory. An agent reports done five times, and the rules answer each time:
+The example holds a contract with two criteria in memory. An agent reports done five times, and the gate answers each time. It passes only after a reviewer has accepted the evidence:
 
 ```
 1. The agent reports done and shows nothing.
@@ -71,7 +73,7 @@ The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls
 | Core: the rules of proof, the evidence checks, the gate decision and the meter | [src/core/](src/core/) | Built. Plain TypeScript with no Forge imports, which a test enforces |
 | Services: contracts, the done gate and the tools for agents | [src/services/](src/services/) | Built. They reach Jira, the store and the Teamwork Graph through three interfaces, so they also import nothing from Forge. The same test enforces it |
 | Jira adapter: the Forge app | [manifest.yml](manifest.yml), `src/frontend/`, `src/resolvers/`, `src/actions/`, `src/triggers/`, `src/store/`, `src/jira/`, `src/graph/`, [rovo/](rovo/) | Built. The Codegeist 2026 entry |
-| Tool for coding agents | The app's MCP server with five tools, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. It works through the Jira app |
+| The agent's side of the guard | The app's MCP server with five tools, none of which records a verdict, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. It works through the Jira app |
 | Starter skeleton | `marrow`, a repository of its own | In progress, not public yet |
 
 The core and the Jira adapter share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
@@ -81,8 +83,8 @@ The core and the Jira adapter share one folder tree and one package. [docs/desig
 Nothing in this list exists today.
 
 - **The core as a package of its own.** Today it is a folder in this repository and is not published to npm.
-- **A tool server that runs without Jira.** The five tools are served by Atlassian for the Jira app. An agent with no Jira site cannot use them yet.
-- **A verification step for agent harnesses.** A step that a harness runs before it reports a task as finished.
+- **A tool server that runs without Jira.** The five tools are served by Atlassian for the Jira app. A team with no Jira site cannot put its agents under the guard yet.
+- **A gate for agent harnesses.** A step that a harness has to pass before it may report a task as finished.
 - **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
 - **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
 
