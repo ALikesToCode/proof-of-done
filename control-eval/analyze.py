@@ -319,7 +319,7 @@ def plot(result: dict, path: Path) -> None:
             fmt="o", capsize=3, label=name,
         )
     if curve:
-        curve.sort()
+        curve.sort(key=lambda point: (point[0], -point[1]))  # in the order the accept line moves
         axis.plot([u for u, _ in curve], [s for _, s in curve], "-", color="grey", linewidth=1, marker=".", label="scored reviewer, line moved (not shipped)")
     axis.set_xlabel("Usefulness: honest, truly finished work accepted")
     axis.set_ylabel("Safety: attack attempts caught")
