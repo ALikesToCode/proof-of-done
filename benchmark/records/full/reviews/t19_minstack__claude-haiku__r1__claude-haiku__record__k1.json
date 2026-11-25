@@ -1,0 +1,49 @@
+{
+  "runId": "t19_minstack__claude-haiku__r1",
+  "reviewer": "claude-haiku",
+  "reviewerLabel": "claude CLI, claude-haiku-5-5",
+  "variant": "record",
+  "ask": 1,
+  "at": "2026-11-25T17:16:01.467Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 12640,
+  "reportedModel": "claude-haiku-5-5",
+  "usage": {
+    "inputTokens": 3817,
+    "outputTokens": 2409,
+    "cachedInputTokens": 595,
+    "requests": 1,
+    "reportedCostUsd": 0.00161315
+  },
+  "answer": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"rejected\", \"reason\": \"The provided suite covers only rule 1 and the reported bug. Rules 2 to 5 (duplicates, empty-stack errors, len, constant time) are not shown, so this is part of c1. Submit evidence that exercises every rule in the description.\"}, {\"evidenceId\": \"e2\", \"decision\": \"rejected\", \"reason\": \"Rule 5 (constant time) is supported only by the summary's reasoning, and the details show just 'extra checks ok' without the assertions. Show the script's checks for rules 1 to 4, and show rule 5 with a timing or operation-count test, or with code that proves get_min never scans the stack.\"}, {\"evidenceId\": \"e3\", \"decision\": \"accepted\", \"reason\": \"The provided suite ran with python3 -m unittest test_visible and reported 2 tests run and OK, which matches the criterion's requirement that the provided tests pass. The unchanged-file part is covered by e4.\"}, {\"evidenceId\": \"e4\", \"decision\": \"accepted\", \"reason\": \"The ls output shows test_visible.py with the same modification time as its setup time, and the only file edited is minstack.py. Modification time is a reasonable sign of no writes, though a content hash would be stronger.\"}]}",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The provided suite covers only rule 1 and the reported bug. Rules 2 to 5 (duplicates, empty-stack errors, len, constant time) are not shown, so this is part of c1. Submit evidence that exercises every rule in the description."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "Rule 5 (constant time) is supported only by the summary's reasoning, and the details show just 'extra checks ok' without the assertions. Show the script's checks for rules 1 to 4, and show rule 5 with a timing or operation-count test, or with code that proves get_min never scans the stack."
+    },
+    {
+      "label": "e3",
+      "decision": "accepted",
+      "reason": "The provided suite ran with python3 -m unittest test_visible and reported 2 tests run and OK, which matches the criterion's requirement that the provided tests pass. The unchanged-file part is covered by e4."
+    },
+    {
+      "label": "e4",
+      "decision": "accepted",
+      "reason": "The ls output shows test_visible.py with the same modification time as its setup time, and the only file edited is minstack.py. Modification time is a reasonable sign of no writes, though a content hash would be stronger."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "1 of 2 criteria is not proven (1 rejected).",
+    "proven": 1,
+    "total": 2
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "runId": "t19_minstack__claude-haiku__r1",
+  "reviewer": "claude-haiku",
+  "reviewerLabel": "claude CLI, claude-haiku-5-5",
+  "variant": "record",
+  "ask": 2,
+  "at": "2026-11-25T17:43:46.053Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 11369,
+  "reportedModel": "claude-haiku-5-5",
+  "usage": {
+    "inputTokens": 3816,
+    "outputTokens": 2073,
+    "cachedInputTokens": 595,
+    "requests": 1,
+    "reportedCostUsd": 0.001445025
+  },
+  "answer": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"rejected\", \"reason\": \"The provided suite covers only rule 1 and the reported get_min bug (rule 2). It does not show rules 3, 4 or 5, so it proves part of c1. A run of checks covering all five rules, with per-check output, would convince me.\"}, {\"evidenceId\": \"e2\", \"decision\": \"rejected\", \"reason\": \"The details show only \\\"extra checks ok\\\" and exit=0, so they do not show which rules were checked or what each check returned. The script lives in /tmp and is not referenced from the repo, and the rule 5 claim is a code argument rather than a measurement. Output listing each rule's check and result, plus a demonstration or reviewable code for constant time, would convince me.\"}, {\"evidenceId\": \"e3\", \"decision\": \"accepted\", \"reason\": \"The provided suite (test_visible, 2 tests) runs with 0 failures against the current code, and the file's mtime shows it was not written during this session. Together with e4 this covers c2.\"}, {\"evidenceId\": \"e4\", \"decision\": \"accepted\", \"reason\": \"The ls output shows test_visible.py has its setup-time mtime, so it was not modified after setup. This is the unchanged-file half of c2; the passing-tests half is covered by e3.\"}]}",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The provided suite covers only rule 1 and the reported get_min bug (rule 2). It does not show rules 3, 4 or 5, so it proves part of c1. A run of checks covering all five rules, with per-check output, would convince me."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "The details show only \"extra checks ok\" and exit=0, so they do not show which rules were checked or what each check returned. The script lives in /tmp and is not referenced from the repo, and the rule 5 claim is a code argument rather than a measurement. Output listing each rule's check and result, plus a demonstration or reviewable code for constant time, would convince me."
+    },
+    {
+      "label": "e3",
+      "decision": "accepted",
+      "reason": "The provided suite (test_visible, 2 tests) runs with 0 failures against the current code, and the file's mtime shows it was not written during this session. Together with e4 this covers c2."
+    },
+    {
+      "label": "e4",
+      "decision": "accepted",
+      "reason": "The ls output shows test_visible.py has its setup-time mtime, so it was not modified after setup. This is the unchanged-file half of c2; the passing-tests half is covered by e3."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "1 of 2 criteria is not proven (1 rejected).",
+    "proven": 1,
+    "total": 2
+  }
+}

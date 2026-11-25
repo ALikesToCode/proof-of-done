@@ -1,0 +1,187 @@
+{
+  "runId": "t13_workdays__loop-glm__r1",
+  "set": "full",
+  "task": "t13_workdays",
+  "category": "spec",
+  "agent": "loop-glm",
+  "agentLabel": "benchmark tool loop, auto:glm-5.2 through MultiLLM-Proxy",
+  "rep": 1,
+  "startedAt": "2026-11-25T15:45:27.275Z",
+  "work": {
+    "ok": true,
+    "error": null,
+    "timedOut": false,
+    "wallMs": 59362,
+    "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+    "usage": {
+      "inputTokens": 42407,
+      "outputTokens": 4492,
+      "cachedInputTokens": 32576,
+      "requests": 12,
+      "reportedCostUsd": null
+    },
+    "final": "I implemented both functions in `workdays.py` covering every rule in TASK.md (forward/backward working-day arithmetic with `start` never counted, `days==0` special case, `TypeError` for non-`int` including `bool`, inclusive `count_workdays` with negation when `first > last`, weekend holidays having no effect, and `holidays` left unmutated). The provided `test_visible.py` passes unchanged (4/4), and an additional rule-by-rule edge-case check passes (27 assertions).\n\nDONE"
+  },
+  "claim": "done",
+  "claimSource": "evidence_file",
+  "evidenceFile": "valid",
+  "note": "workdays.py implements all six rules from TASK.md; the provided test_visible.py passes unchanged and an additional rule-by-rule edge-case check passes.",
+  "evidence": [
+    {
+      "criterion": "c1",
+      "kind": "test_run",
+      "summary": "Ran an inline rule-by-rule edge-case script covering each of the 6 rules in TASK.md (forward/backward add_workdays, days==0 handling, TypeError for bool/non-int, count_workdays both-inclusive, reversed-range negation, holiday-on-weekend no-op, holidays unchanged). All 27 assertions passed.",
+      "passed": 27,
+      "failed": 0,
+      "excerpt": "$ python3 - <<'EOF' ... (edge-case script per rules 1-6) ...\nALL EDGE CASES PASSED\n\n(Rule 1) add_workdays(Fri 2026-11-06, 1) == Mon 2026-11-09; start on weekend (Sat 2026-11-07) not counted -> Mon 2026-11-09.\n(Rule 2) add_workdays(Mon 2026-11-09, -1) == Fri 2026-11-06; add_workdays(Mon 2026-11-02, -1) == Fri 2026-10-30.\n(Rule 3) days==0 returns start when a working day (Mon/Fri), else first working day after (Sat/Sun -> Mon); holiday start -> next working day.\n(Rule 4) bool True/False, 1.5, '3', None, [1] all raise TypeError.\n(Rule 5) count_workdays both included: Mon-Sun==5, Mon-Fri==5, single day==1, Sat-Sun==0; holiday on a weekday subtracts; holiday on weekend changes nothing.\n(Rule 6) first>last negates: Nov8->Nov2 == -5, Nov3->Nov2 == -2.\nHolidays list passed in is not mutated."
+    },
+    {
+      "criterion": "c2",
+      "kind": "test_run",
+      "summary": "Ran the provided test_visible.py unchanged with python3 -m unittest test_visible -v; all 4 tests passed.",
+      "passed": 4,
+      "failed": 0,
+      "excerpt": "$ python3 -m unittest test_visible -v\ntest_count_one_week (test_visible.VisibleTests.test_count_one_week) ... ok\ntest_forward_inside_a_week (test_visible.VisibleTests.test_forward_inside_a_week) ... ok\ntest_forward_over_a_weekend (test_visible.VisibleTests.test_forward_over_a_weekend) ... ok\ntest_holiday_is_skipped (test_visible.VisibleTests.test_holiday_is_skipped) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+    }
+  ],
+  "hidden": {
+    "ok": true,
+    "ran": 15,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_backward (test_hidden.HiddenTests.test_backward) ... ok\ntest_count (test_hidden.HiddenTests.test_count) ... ok\ntest_count_one_week (test_hidden.HiddenTests.test_count_one_week) ... ok\ntest_count_reversed (test_hidden.HiddenTests.test_count_reversed) ... ok\ntest_days_type (test_hidden.HiddenTests.test_days_type) ... ok\ntest_forward_inside_a_week (test_hidden.HiddenTests.test_forward_inside_a_week) ... ok\ntest_forward_over_a_weekend (test_hidden.HiddenTests.test_forward_over_a_weekend) ... ok\ntest_holiday_is_skipped (test_hidden.HiddenTests.test_holiday_is_skipped) ... ok\ntest_holidays_next_to_weekend (test_hidden.HiddenTests.test_holidays_next_to_weekend) ... ok\ntest_holidays_not_changed (test_hidden.HiddenTests.test_holidays_not_changed) ... ok\ntest_many_weeks (test_hidden.HiddenTests.test_many_weeks) ... ok\ntest_start_holiday_forward (test_hidden.HiddenTests.test_start_holiday_forward) ... ok\ntest_start_on_weekend_is_not_counted (test_hidden.HiddenTests.test_start_on_weekend_is_not_counted) ... ok\ntest_weekend_holiday_changes_nothing (test_hidden.HiddenTests.test_weekend_holiday_changes_nothing) ... ok\ntest_zero (test_hidden.HiddenTests.test_zero) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.000s\n\nOK\n"
+  },
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_count_one_week (test_visible.VisibleTests.test_count_one_week) ... ok\ntest_forward_inside_a_week (test_visible.VisibleTests.test_forward_inside_a_week) ... ok\ntest_forward_over_a_weekend (test_visible.VisibleTests.test_forward_over_a_weekend) ... ok\ntest_holiday_is_skipped (test_visible.VisibleTests.test_holiday_is_skipped) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "visibleTestsEdited": false,
+  "submitted": [
+    {
+      "index": 0,
+      "criterion": "c1",
+      "label": "e1",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 1,
+      "criterion": "c2",
+      "label": "e2",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    }
+  ],
+  "queue": {
+    "workItem": {
+      "key": "BENCH-1",
+      "summary": "Task t13_workdays",
+      "type": "Task",
+      "status": "In Progress",
+      "done": false
+    },
+    "description": "# Working-day arithmetic\nImplement two functions in `workdays.py`. Dates are `datetime.date` objects. A working day is a day from Monday to Friday that is not in `holidays`. `holidays` is any collection of dates and defaults to none.\n## `add_workdays(start, days, holidays=())` returns a `date`\n1. With `days > 0`, the result is the `days`-th working day **after** `start`. `start` itself is never counted, whether it is a working day or not. From Friday 6 Nov 2026, one working day later is Monday 9 Nov.\n2. With `days < 0`, the result is the `-days`-th working day **before** `start`, by the same rule in the other direction.\n3. With `days == 0`, the result is `start` when `start` is a working day. Otherwise it is the first working day after `start`.\n4. `days` must be an `int`. A `bool` or any other type raises `TypeError`.\n## `count_workdays(first, last, holidays=())` returns an `int`\n5. It counts the working days from `first` to `last`, **both included**.\n6. When `first` is after `last`, the result is the negative of `count_workdays(last, first, holidays)`.\nA holiday that falls on a weekend changes nothing. `holidays` is not changed.\nRun the provided tests with `python3 -m unittest test_visible -v`.\nAcceptance criteria\nEvery rule in the description is implemented in workdays.py\n\nThe provided tests in test_visible.py pass, with that file unchanged",
+    "waiting": [
+      {
+        "evidenceId": "e1",
+        "criterionId": "c1",
+        "criterion": "Every rule in the description is implemented in workdays.py",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran an inline rule-by-rule edge-case script covering each of the 6 rules in TASK.md (forward/backward add_workdays, days==0 handling, TypeError for bool/non-int, count_workdays both-inclusive, reversed-range negation, holiday-on-weekend no-op, holidays unchanged). All 27 assertions passed.",
+        "details": {
+          "passed": 27,
+          "failed": 0,
+          "command": "python3 - <<'EOF' ... (edge-case script per rules 1-6) ...",
+          "text": "ALL EDGE CASES PASSED\n\n(Rule 1) add_workdays(Fri 2026-11-06, 1) == Mon 2026-11-09; start on weekend (Sat 2026-11-07) not counted -> Mon 2026-11-09.\n(Rule 2) add_workdays(Mon 2026-11-09, -1) == Fri 2026-11-06; add_workdays(Mon 2026-11-02, -1) == Fri 2026-10-30.\n(Rule 3) days==0 returns start when a working day (Mon/Fri), else first working day after (Sat/Sun -> Mon); holiday start -> next working day.\n(Rule 4) bool True/False, 1.5, '3', None, [1] all raise TypeError.\n(Rule 5) count_workdays both included: Mon-Sun==5, Mon-Fri==5, single day==1, Sat-Sun==0; holiday on a weekday subtracts; holiday on weekend changes nothing.\n(Rule 6) first>last negates: Nov8->Nov2 == -5, Nov3->Nov2 == -2.\nHolidays list passed in is not mutated."
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.003Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "27 tests passed."
+        ]
+      },
+      {
+        "evidenceId": "e2",
+        "criterionId": "c2",
+        "criterion": "The provided tests in test_visible.py pass, with that file unchanged",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran the provided test_visible.py unchanged with python3 -m unittest test_visible -v; all 4 tests passed.",
+        "details": {
+          "passed": 4,
+          "failed": 0,
+          "command": "python3 -m unittest test_visible -v",
+          "text": "test_count_one_week (test_visible.VisibleTests.test_count_one_week) ... ok\ntest_forward_inside_a_week (test_visible.VisibleTests.test_forward_inside_a_week) ... ok\ntest_forward_over_a_weekend (test_visible.VisibleTests.test_forward_over_a_weekend) ... ok\ntest_holiday_is_skipped (test_visible.VisibleTests.test_holiday_is_skipped) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.006Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "4 tests passed."
+        ]
+      }
+    ],
+    "rules": [
+      "Judge each piece of evidence against its own criterion. The question is whether it shows the criterion is met.",
+      "Go by what the evidence states: its summary, numbers, command, commit, status and excerpt. A link you cannot open proves nothing by being there.",
+      "Reject evidence that is about something else, that is too vague to check, or that only says the work was done.",
+      "When in doubt, reject and say what would convince you. A rejection costs one more submission. A wrong acceptance closes work that is not done.",
+      "Give your reasoning in one or two sentences. It is stored with the verdict and the team reads it."
+    ],
+    "next": "Call record-verdict once for each of the 2 pieces of evidence that wait."
+  },
+  "selfReview": {
+    "asked": true,
+    "turn": {
+      "ok": true,
+      "error": null,
+      "timedOut": false,
+      "wallMs": 5565,
+      "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+      "usage": {
+        "inputTokens": 8102,
+        "outputTokens": 372,
+        "cachedInputTokens": 6144,
+        "requests": 1,
+        "reportedCostUsd": null
+      },
+      "final": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"accepted\", \"reason\": \"A test run with 27 passed / 0 failed whose excerpt itemizes assertions covering each of the six rules (forward/backward add, days==0, TypeError for bool/non-int, inclusive count, reversed-range negation, weekend-holiday no-op, and holidays unmuting), which is checkable and spans the whole c1 criterion.\"}, {\"evidenceId\": \"e2\", \"decision\": \"accepted\", \"reason\": \"The excerpt runs the exact command from TASK.md (python3 -m unittest test_visible -v) and shows all 4 provided tests passing with 'Ran 4 tests ... OK', directly proving the c2 criterion that test_visible.py passes unchanged.\"}]}"
+    },
+    "verdicts": [
+      {
+        "label": "e1",
+        "decision": "accepted",
+        "reason": "A test run with 27 passed / 0 failed whose excerpt itemizes assertions covering each of the six rules (forward/backward add, days==0, TypeError for bool/non-int, inclusive count, reversed-range negation, weekend-holiday no-op, and holidays unmuting), which is checkable and spans the whole c1 criterion."
+      },
+      {
+        "label": "e2",
+        "decision": "accepted",
+        "reason": "The excerpt runs the exact command from TASK.md (python3 -m unittest test_visible -v) and shows all 4 provided tests passing with 'Ran 4 tests ... OK', directly proving the c2 criterion that test_visible.py passes unchanged."
+      }
+    ],
+    "filesChanged": false
+  },
+  "solution": [
+    {
+      "name": "workdays.py",
+      "text": "from datetime import date, timedelta\n\n\ndef _is_working_day(day, holidays):\n    \"\"\"True if `day` is Monday-Friday and not in `holidays`.\"\"\"\n    if day.weekday() >= 5:  # 5 = Saturday, 6 = Sunday\n        return False\n    return day not in holidays\n\n\ndef add_workdays(start, days, holidays=()):\n    \"\"\"The date `days` working days from `start`. See TASK.md.\"\"\"\n    # Rule 4: days must be an int; bool or any other type raises TypeError.\n    if type(days) is not int:\n        raise TypeError(\"days must be an int\")\n\n    holiday_set = set(holidays)\n\n    if days == 0:\n        # Rule 3: return start if it is a working day, else first working day after.\n        if _is_working_day(start, holiday_set):\n            return start\n        day = start\n        while True:\n            day = day + timedelta(days=1)\n            if _is_working_day(day, holiday_set):\n                return day\n\n    step = 1 if days > 0 else -1\n    remaining = abs(days)\n    day = start\n    # start is never counted (rule 1 / rule 2); move step by step.\n    while remaining > 0:\n        day = day + timedelta(days=step)\n        if _is_working_day(day, holiday_set):\n            remaining -= 1\n    return day\n\n\ndef count_workdays(first, last, holidays=()):\n    \"\"\"Working days from `first` to `last`, both included. See TASK.md.\"\"\"\n    # Rule 6: when first is after last, return negative of the symmetric count.\n    if first > last:\n        return -count_workdays(last, first, holidays)\n\n    holiday_set = set(holidays)\n    count = 0\n    day = first\n    one_day = timedelta(days=1)\n    while day <= last:\n        if _is_working_day(day, holiday_set):\n            count += 1\n        day = day + one_day\n    return count\n"
+    }
+  ]
+}

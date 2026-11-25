@@ -1,0 +1,39 @@
+{
+  "runId": "t22_base__claude-haiku__r1",
+  "reviewer": "claude-haiku",
+  "reviewerLabel": "claude CLI, claude-haiku-5-5",
+  "variant": "record",
+  "ask": 2,
+  "at": "2026-11-25T17:45:12.727Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 8149,
+  "reportedModel": "claude-haiku-5-5",
+  "usage": {
+    "inputTokens": 3147,
+    "outputTokens": 1315,
+    "cachedInputTokens": 595,
+    "requests": 1,
+    "reportedCostUsd": 0.0009824
+  },
+  "answer": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"rejected\", \"reason\": \"The criterion covers every rule in the description, but the evidence checks only some of them. It shows round-trips and rejection of a space, and points to test_bad_base for the base range. It does not show from_base rejecting the empty string or a lone '-', accepting upper-case digits, or to_base returning '0' for zero and a leading '-' for negatives. A run of explicit checks for each rule, such as from_base('', 2), from_base('-', 2), from_base('A', 16) == 10, to_base(0, 2) == '0' and to_base(-5, 2) == '-101', would convince me.\"}, {\"evidenceId\": \"e2\", \"decision\": \"rejected\", \"reason\": \"The test output proves the four visible tests pass, but the criterion also requires test_visible.py to be unchanged, and the evidence only asserts that in its summary. Please add a diff or checksum that compares test_visible.py with the provided original, such as `git diff --exit-code test_visible.py` or matching sha256 hashes, and I will accept it.\"}]}",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The criterion covers every rule in the description, but the evidence checks only some of them. It shows round-trips and rejection of a space, and points to test_bad_base for the base range. It does not show from_base rejecting the empty string or a lone '-', accepting upper-case digits, or to_base returning '0' for zero and a leading '-' for negatives. A run of explicit checks for each rule, such as from_base('', 2), from_base('-', 2), from_base('A', 16) == 10, to_base(0, 2) == '0' and to_base(-5, 2) == '-101', would convince me."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "The test output proves the four visible tests pass, but the criterion also requires test_visible.py to be unchanged, and the evidence only asserts that in its summary. Please add a diff or checksum that compares test_visible.py with the provided original, such as `git diff --exit-code test_visible.py` or matching sha256 hashes, and I will accept it."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "2 of 2 criteria are not proven (2 rejected).",
+    "proven": 0,
+    "total": 2
+  }
+}

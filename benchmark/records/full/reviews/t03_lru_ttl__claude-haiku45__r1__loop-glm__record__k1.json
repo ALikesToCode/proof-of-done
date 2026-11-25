@@ -1,0 +1,44 @@
+{
+  "runId": "t03_lru_ttl__claude-haiku45__r1",
+  "reviewer": "loop-glm",
+  "reviewerLabel": "benchmark tool loop, auto:glm-5.2 through MultiLLM-Proxy",
+  "variant": "record",
+  "ask": 1,
+  "at": "2026-11-25T16:48:31.173Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 34723,
+  "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+  "usage": {
+    "inputTokens": 2466,
+    "outputTokens": 3817,
+    "cachedInputTokens": 1024,
+    "requests": 1,
+    "reportedCostUsd": null
+  },
+  "answer": "```json\n{\"verdicts\": [\n  {\n    \"evidenceId\": \"e1\",\n    \"decision\": \"rejected\",\n    \"reason\": \"Three passing tests (entry_expires, lru_eviction, no_ttl_never_expires) cover only part of the criterion. They do not show that every rule is implemented, such as ValueError on ttl <= 0, put on an existing key, or peek's non-mutating behaviour. What would convince me: a test run or other evidence covering all eight rules in the description.\"\n  },\n  {\n    \"evidenceId\": \"e2\",\n    \"decision\": \"rejected\",\n    \"reason\": \"The evidence addresses most rules but does not state that peek changes nothing (rule 8) or that put on an existing key makes it most recently used (rule 7). What would convince me: code excerpts or a test run also showing those two behaviours.\"\n  },\n  {\n    \"evidenceId\": \"e3\",\n    \"decision\": \"accepted\",\n    \"reason\": \"The test run uses the exact command from the description and shows all 3 provided tests passing with 0 failures, directly meeting the criterion that the provided tests in test_visible.py pass.\"\n  }\n]}\n```",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "Three passing tests (entry_expires, lru_eviction, no_ttl_never_expires) cover only part of the criterion. They do not show that every rule is implemented, such as ValueError on ttl <= 0, put on an existing key, or peek's non-mutating behaviour. What would convince me: a test run or other evidence covering all eight rules in the description."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "The evidence addresses most rules but does not state that peek changes nothing (rule 8) or that put on an existing key makes it most recently used (rule 7). What would convince me: code excerpts or a test run also showing those two behaviours."
+    },
+    {
+      "label": "e3",
+      "decision": "accepted",
+      "reason": "The test run uses the exact command from the description and shows all 3 provided tests passing with 0 failures, directly meeting the criterion that the provided tests in test_visible.py pass."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "1 of 2 criteria is not proven (1 rejected).",
+    "proven": 1,
+    "total": 2
+  }
+}

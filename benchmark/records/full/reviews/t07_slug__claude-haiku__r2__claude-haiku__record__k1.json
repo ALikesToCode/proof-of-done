@@ -1,0 +1,44 @@
+{
+  "runId": "t07_slug__claude-haiku__r2",
+  "reviewer": "claude-haiku",
+  "reviewerLabel": "claude CLI, claude-haiku-5-5",
+  "variant": "record",
+  "ask": 1,
+  "at": "2026-11-25T16:54:58.643Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 16314,
+  "reportedModel": "claude-haiku-5-5",
+  "usage": {
+    "inputTokens": 4633,
+    "outputTokens": 3193,
+    "cachedInputTokens": 595,
+    "requests": 1,
+    "reportedCostUsd": 0.00210715
+  },
+  "answer": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"rejected\", \"reason\": \"The 22 checks pass, but none tests rule 9. With \\\"hello\\\" and \\\"hello-2\\\" taken, unique_slug(\\\"Hello\\\", [\\\"hello\\\", \\\"hello-2\\\"]) should return \\\"hello-3\\\", skipping the taken suffix. A check of that case with its command output would convince me.\"}, {\"evidenceId\": \"e3\", \"decision\": \"rejected\", \"reason\": \"It reports that no Edit or Write call targeted test_visible.py, which is a record of tool calls, not of the file. A shell command could still have changed it, and nothing shows the file matches its original. A git diff or a before-and-after checksum of test_visible.py would convince me.\"}, {\"evidenceId\": \"e2\", \"decision\": \"accepted\", \"reason\": \"The run of `python3 -m unittest test_visible -v` shows 5 tests run, 0 failed, with the command the description specifies, so the provided tests pass. Its statement that the file was not edited is only an assertion here; that part of the criterion depends on proof like the diff or checksum requested for e3.\"}]}",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The 22 checks pass, but none tests rule 9. With \"hello\" and \"hello-2\" taken, unique_slug(\"Hello\", [\"hello\", \"hello-2\"]) should return \"hello-3\", skipping the taken suffix. A check of that case with its command output would convince me."
+    },
+    {
+      "label": "e3",
+      "decision": "rejected",
+      "reason": "It reports that no Edit or Write call targeted test_visible.py, which is a record of tool calls, not of the file. A shell command could still have changed it, and nothing shows the file matches its original. A git diff or a before-and-after checksum of test_visible.py would convince me."
+    },
+    {
+      "label": "e2",
+      "decision": "accepted",
+      "reason": "The run of `python3 -m unittest test_visible -v` shows 5 tests run, 0 failed, with the command the description specifies, so the provided tests pass. Its statement that the file was not edited is only an assertion here; that part of the criterion depends on proof like the diff or checksum requested for e3."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "1 of 2 criteria is not proven (1 rejected).",
+    "proven": 1,
+    "total": 2
+  }
+}

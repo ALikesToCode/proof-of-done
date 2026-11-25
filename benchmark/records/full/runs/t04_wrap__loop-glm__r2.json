@@ -1,0 +1,187 @@
+{
+  "runId": "t04_wrap__loop-glm__r2",
+  "set": "full",
+  "task": "t04_wrap",
+  "category": "spec",
+  "agent": "loop-glm",
+  "agentLabel": "benchmark tool loop, auto:glm-5.2 through MultiLLM-Proxy",
+  "rep": 2,
+  "startedAt": "2026-11-25T16:14:37.792Z",
+  "work": {
+    "ok": true,
+    "error": null,
+    "timedOut": false,
+    "wallMs": 114723,
+    "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+    "usage": {
+      "inputTokens": 40567,
+      "outputTokens": 7729,
+      "cachedInputTokens": 32481,
+      "requests": 13,
+      "reportedCostUsd": null
+    },
+    "final": "DONE"
+  },
+  "claim": "done",
+  "claimSource": "evidence_file",
+  "evidenceFile": "valid",
+  "note": "Implemented wrap() in wrap.py per all six rules in TASK.md (paragraphs, words, greedy filling, hanging indent, long-word splitting, argument validation). The provided test_visible.py passes unchanged (4/4), and an additional behavior check covering every rule passes.",
+  "evidence": [
+    {
+      "criterion": "c1",
+      "kind": "test_run",
+      "summary": "Ran a behavior script covering all six rules: empty/empty-paragraph paragraphs, word splitting/collapsing, greedy filling, hanging indent (first line no indent, empty line no indent), long-word breaking on empty lines with followers sharing the last piece, exact-width fit, and ValueError for width<1, non-int, and indent>=width. All cases passed.",
+      "passed": 18,
+      "failed": 0,
+      "excerpt": "$ python3 - <<'EOF'\nfrom wrap import wrap\nchecks = [\n    (wrap(\"\", 10) == [\"\"], 'empty -> [\"\"]'),\n    (wrap(\"a\\n\\nb\", 10) == [\"a\", \"\", \"b\"], 'empty para -> empty line'),\n    (wrap(\"\\n\", 10) == [\"\", \"\"], 'leading newline'),\n    (wrap(\"a\\n\\n\\nb\", 10) == [\"a\", \"\", \"\", \"b\"], 'two empty paras'),\n    (wrap(\"  hello   world  \", 20) == [\"hello world\"], 'trim/collapse'),\n    (wrap(\"the quick brown fox jumps\", 10) == [\"the quick\", \"brown fox\", \"jumps\"], 'greedy'),\n    (wrap(\"the quick brown fox\", 10, \"  \") == [\"the quick\", \"  brown\", \"  fox\"], 'hanging indent'),\n    (wrap(\"x\\n\\ny\", 5, \"  \") == [\"x\", \"\", \"y\"], 'empty line no indent'),\n    (wrap(\"abcdefghij\", 4) == [\"abcd\", \"efgh\", \"ij\"], 'long word break basic'),\n    (wrap(\"xyz abcdefghij\", 4) == [\"xyz\", \"abcd\", \"efgh\", \"ij\"], 'long word after word'),\n    (wrap(\"a verylongword here\", 5) == [\"a\", \"veryl\", \"ongwo\", \"rd\", \"here\"], 'long word mixed followers share'),\n    (wrap(\"abcdefgh\", 4, \"  \") == [\"abcd\", \"  ef\", \"  gh\"], 'long word with indent'),\n    (wrap(\"12345\", 5) == [\"12345\"], 'exact fit'),\n]\nerrs=0\nfor ok,desc in checks:\n    print((\"OK \" if ok else \"FAIL \")+desc)\n    if not ok: errs+=1\nfor bad in [lambda: wrap(\"x\",0), lambda: wrap(\"x\",1,\"  \"), lambda: wrap(\"x\",\"a\"), lambda: wrap(\"x\",-3)]:\n    try:\n        bad(); print('FAIL no error'); errs+=1\n    except ValueError: print('OK raises ValueError')\nprint('ERRS', errs)\nEOF\nOK empty -> [\"\"]\nOK empty para -> empty line\nOK leading newline\nOK two empty paras\nOK trim/collapse\nOK greedy\nOK hanging indent\nOK empty line no indent\nOK long word break basic\nOK long word after word\nOK long word mixed followers share\nOK long word with indent\nOK exact fit\nOK raises ValueError\nOK raises ValueError\nOK raises ValueError\nOK raises ValueError\nERRS 0"
+    },
+    {
+      "criterion": "c2",
+      "kind": "test_run",
+      "summary": "Ran the provided tests with python3 -m unittest test_visible -v; all 4 tests pass (file left unchanged).",
+      "passed": 4,
+      "failed": 0,
+      "excerpt": "$ python3 -m unittest test_visible -v\ntest_collapses_spaces (test_visible.VisibleTests.test_collapses_spaces) ... ok\ntest_example_with_indent (test_visible.VisibleTests.test_example_with_indent) ... ok\ntest_short_text_is_one_line (test_visible.VisibleTests.test_short_text_is_one_line) ... ok\ntest_wraps_greedily (test_visible.VisibleTests.test_wraps_greedily) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+    }
+  ],
+  "hidden": {
+    "ok": true,
+    "ran": 15,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_bad_arguments (test_hidden.HiddenTests.test_bad_arguments) ... ok\ntest_empty_text (test_hidden.HiddenTests.test_empty_text) ... ok\ntest_exact_fit (test_hidden.HiddenTests.test_exact_fit) ... ok\ntest_indent_counts_toward_width (test_hidden.HiddenTests.test_indent_counts_toward_width) ... ok\ntest_indent_just_shorter_than_width (test_hidden.HiddenTests.test_indent_just_shorter_than_width) ... ok\ntest_indent_restarts_with_each_paragraph (test_hidden.HiddenTests.test_indent_restarts_with_each_paragraph) ... ok\ntest_long_word_is_split (test_hidden.HiddenTests.test_long_word_is_split) ... ok\ntest_long_word_starts_a_new_line (test_hidden.HiddenTests.test_long_word_starts_a_new_line) ... ok\ntest_long_word_with_indent (test_hidden.HiddenTests.test_long_word_with_indent) ... ok\ntest_other_whitespace_separates_words (test_hidden.HiddenTests.test_other_whitespace_separates_words) ... ok\ntest_paragraphs (test_hidden.HiddenTests.test_paragraphs) ... ok\ntest_paragraphs_wrap_separately (test_hidden.HiddenTests.test_paragraphs_wrap_separately) ... ok\ntest_visible_cases (test_hidden.HiddenTests.test_visible_cases) ... ok\ntest_width_one (test_hidden.HiddenTests.test_width_one) ... ok\ntest_words_follow_the_last_piece (test_hidden.HiddenTests.test_words_follow_the_last_piece) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.000s\n\nOK\n"
+  },
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_collapses_spaces (test_visible.VisibleTests.test_collapses_spaces) ... ok\ntest_example_with_indent (test_visible.VisibleTests.test_example_with_indent) ... ok\ntest_short_text_is_one_line (test_visible.VisibleTests.test_short_text_is_one_line) ... ok\ntest_wraps_greedily (test_visible.VisibleTests.test_wraps_greedily) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "visibleTestsEdited": false,
+  "submitted": [
+    {
+      "index": 0,
+      "criterion": "c1",
+      "label": "e1",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 1,
+      "criterion": "c2",
+      "label": "e2",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    }
+  ],
+  "queue": {
+    "workItem": {
+      "key": "BENCH-1",
+      "summary": "Task t04_wrap",
+      "type": "Task",
+      "status": "In Progress",
+      "done": false
+    },
+    "description": "# Wrap text to a width\nImplement `wrap(text, width, indent=\"\")` in `wrap.py`. It returns a list of lines (`list[str]`) with no newline characters in them.\n## Rules\n1. **Paragraphs.** `text` is split at every `\"\\n\"`. Each piece is a paragraph and is wrapped on its own, and the lines of all paragraphs are returned in order. A paragraph with no words (empty or only whitespace) gives exactly one empty line `\"\"`. So `wrap(\"\", 10)` is `[\"\"]` and `wrap(\"a\\n\\nb\", 10)` is `[\"a\", \"\", \"b\"]`.\n2. **Words.** Inside a paragraph, a word is a maximal run of non-whitespace characters. Words on a line are joined by one space, whatever whitespace separated them in the input. No line starts or ends with whitespace that came from the text.\n3. **Greedy filling.** Each line takes as many words as fit. A line is never longer than `width` characters, and a word moves to the next line only when it does not fit on the current one. A line of exactly `width` characters fits.\n4. **Hanging indent.** Every line of a paragraph except its first starts with `indent`. The indent counts toward `width`. The first line of each paragraph has no indent. The empty line of a paragraph with no words has no indent.\n5. **Long words.** When a word does not fit on the current line, a new line starts. When it does not fit on an empty line either, that line is filled with as much of the word as fits, and the rest of the word continues on the next line by the same rule. Words that follow may share the line with the last piece.\n6. **Arguments.** `width` must be an `int` of at least 1, and `indent` must be shorter than `width`. Otherwise `ValueError`.\nExample: `wrap(\"the quick brown fox\", 10, \"  \")` is `[\"the quick\", \"  brown\", \"  fox\"]`.\nRun the provided tests with `python3 -m unittest test_visible -v`.\nAcceptance criteria\nEvery rule in the description is implemented in wrap.py\n\nThe provided tests in test_visible.py pass, with that file unchanged",
+    "waiting": [
+      {
+        "evidenceId": "e1",
+        "criterionId": "c1",
+        "criterion": "Every rule in the description is implemented in wrap.py",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran a behavior script covering all six rules: empty/empty-paragraph paragraphs, word splitting/collapsing, greedy filling, hanging indent (first line no indent, empty line no indent), long-word breaking on empty lines with followers sharing the last piece, exact-width fit, and ValueError for width<1, non-int, and indent>=width. All cases passed.",
+        "details": {
+          "passed": 18,
+          "failed": 0,
+          "command": "python3 - <<'EOF'",
+          "text": "from wrap import wrap\nchecks = [\n    (wrap(\"\", 10) == [\"\"], 'empty -> [\"\"]'),\n    (wrap(\"a\\n\\nb\", 10) == [\"a\", \"\", \"b\"], 'empty para -> empty line'),\n    (wrap(\"\\n\", 10) == [\"\", \"\"], 'leading newline'),\n    (wrap(\"a\\n\\n\\nb\", 10) == [\"a\", \"\", \"\", \"b\"], 'two empty paras'),\n    (wrap(\"  hello   world  \", 20) == [\"hello world\"], 'trim/collapse'),\n    (wrap(\"the quick brown fox jumps\", 10) == [\"the quick\", \"brown fox\", \"jumps\"], 'greedy'),\n    (wrap(\"the quick brown fox\", 10, \"  \") == [\"the quick\", \"  brown\", \"  fox\"], 'hanging indent'),\n    (wrap(\"x\\n\\ny\", 5, \"  \") == [\"x\", \"\", \"y\"], 'empty line no indent'),\n    (wrap(\"abcdefghij\", 4) == [\"abcd\", \"efgh\", \"ij\"], 'long word break basic'),\n    (wrap(\"xyz abcdefghij\", 4) == [\"xyz\", \"abcd\", \"efgh\", \"ij\"], 'long word after word'),\n    (wrap(\"a verylongword here\", 5) == [\"a\", \"veryl\", \"ongwo\", \"rd\", \"here\"], 'long word mixed followers share'),\n    (wrap(\"abcdefgh\", 4, \"  \") == [\"abcd\", \"  ef\", \"  gh\"], 'long word with indent'),\n    (wrap(\"12345\", 5) == [\"12345\"], 'exact fit'),\n]\nerrs=0\nfor ok,desc in checks:\n    print((\"OK \" if ok else \"FAIL \")+desc)\n    if not ok: errs+=1\nfor bad in [lambda: wrap(\"x\",0), lambda: wrap(\"x\",1,\"  \"), lambda: wrap(\"x\",\"a\"), lambda: wrap(\"x\",-3)]:\n    try:\n        bad(); print('FAIL no error'); errs+=1\n    except ValueError: print('OK raises ValueError')\nprint('ERRS', errs)\nEOF\nOK empty -> [\"\"]\nOK empty para -> empty line\nOK leading newline\nOK two empty paras\nOK trim/collapse\nOK greedy\nOK hanging indent\nOK empty line no indent\nOK long word break basic\nOK long word after word\nOK long word mixed followers share\nOK long word with indent\nOK exact fit\nOK raises ValueError\nOK raises ValueError\nOK raises ValueError\nOK raises ValueError\nERRS 0"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.003Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "18 tests passed."
+        ]
+      },
+      {
+        "evidenceId": "e2",
+        "criterionId": "c2",
+        "criterion": "The provided tests in test_visible.py pass, with that file unchanged",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran the provided tests with python3 -m unittest test_visible -v; all 4 tests pass (file left unchanged).",
+        "details": {
+          "passed": 4,
+          "failed": 0,
+          "command": "python3 -m unittest test_visible -v",
+          "text": "test_collapses_spaces (test_visible.VisibleTests.test_collapses_spaces) ... ok\ntest_example_with_indent (test_visible.VisibleTests.test_example_with_indent) ... ok\ntest_short_text_is_one_line (test_visible.VisibleTests.test_short_text_is_one_line) ... ok\ntest_wraps_greedily (test_visible.VisibleTests.test_wraps_greedily) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.006Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "4 tests passed."
+        ]
+      }
+    ],
+    "rules": [
+      "Judge each piece of evidence against its own criterion. The question is whether it shows the criterion is met.",
+      "Go by what the evidence states: its summary, numbers, command, commit, status and excerpt. A link you cannot open proves nothing by being there.",
+      "Reject evidence that is about something else, that is too vague to check, or that only says the work was done.",
+      "When in doubt, reject and say what would convince you. A rejection costs one more submission. A wrong acceptance closes work that is not done.",
+      "Give your reasoning in one or two sentences. It is stored with the verdict and the team reads it."
+    ],
+    "next": "Call record-verdict once for each of the 2 pieces of evidence that wait."
+  },
+  "selfReview": {
+    "asked": true,
+    "turn": {
+      "ok": true,
+      "error": null,
+      "timedOut": false,
+      "wallMs": 10259,
+      "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+      "usage": {
+        "inputTokens": 8519,
+        "outputTokens": 802,
+        "cachedInputTokens": 5632,
+        "requests": 1,
+        "reportedCostUsd": null
+      },
+      "final": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"accepted\", \"reason\": \"The excerpt includes the command and output of a behavior script with specific cases mapped to all six rules (paragraphs, words/collapsing, greedy filling, hanging indent, long-word breaking with follower sharing, and ValueError argument checks), all passing, which directly shows every rule is implemented.\"}, {\"evidenceId\": \"e2\", \"decision\": \"accepted\", \"reason\": \"The excerpt shows the command python3 -m unittest test_visible -v with all 4 provided tests passing, which is the checkable substance of c2; the 'unchanged' note is consistent and uncontradicted, and a diff would be stronger but the passing run is the core proof.\"}]}"
+    },
+    "verdicts": [
+      {
+        "label": "e1",
+        "decision": "accepted",
+        "reason": "The excerpt includes the command and output of a behavior script with specific cases mapped to all six rules (paragraphs, words/collapsing, greedy filling, hanging indent, long-word breaking with follower sharing, and ValueError argument checks), all passing, which directly shows every rule is implemented."
+      },
+      {
+        "label": "e2",
+        "decision": "accepted",
+        "reason": "The excerpt shows the command python3 -m unittest test_visible -v with all 4 provided tests passing, which is the checkable substance of c2; the 'unchanged' note is consistent and uncontradicted, and a diff would be stronger but the passing run is the core proof."
+      }
+    ],
+    "filesChanged": false
+  },
+  "solution": [
+    {
+      "name": "wrap.py",
+      "text": "def wrap(text, width, indent=\"\"):\n    \"\"\"Wrap `text` to lines of at most `width` characters. See TASK.md.\n\n    Returns a list of strings (no embedded newlines).\n    \"\"\"\n    # Rule 6: argument validation.\n    if isinstance(width, bool) or not isinstance(width, int) or width < 1:\n        raise ValueError(\"width must be an int >= 1\")\n    if not isinstance(indent, str):\n        raise ValueError(\"indent must be a string\")\n    if len(indent) >= width:\n        raise ValueError(\"indent must be shorter than width\")\n\n    result = []\n\n    # Rule 1: split into paragraphs at every \"\\n\".\n    for para in text.split(\"\\n\"):\n        # Rule 2: words are maximal runs of non-whitespace.\n        words = para.split()\n\n        # Rule 1: a paragraph with no words gives exactly one empty line.\n        if not words:\n            result.append(\"\")\n            continue\n\n        lines = []\n        is_first = True      # first line of the paragraph has no indent (Rule 4)\n        current = \"\"         # content of the current line, without indent\n\n        def available():\n            # Space available on the current line (Rule 4 counts indent).\n            return width if is_first else width - len(indent)\n\n        def flush_current():\n            nonlocal current, is_first\n            if current != \"\":\n                lines.append(current if is_first else indent + current)\n                is_first = False\n                current = \"\"\n\n        def place_on_empty(word):\n            # Place `word` on an empty current line, breaking long words (Rule 5).\n            nonlocal current, is_first\n            if len(word) <= available():\n                current = word\n            else:\n                while len(word) > available():\n                    cap = available()\n                    piece = word[:cap]\n                    lines.append(piece if is_first else indent + piece)\n                    is_first = False\n                    word = word[cap:]\n                current = word\n\n        for w in words:\n            if current == \"\":\n                place_on_empty(w)\n            else:\n                # Rule 3: greedily add the word if it fits with a separating space.\n                if len(current) + 1 + len(w) <= available():\n                    current = current + \" \" + w\n                else:\n                    # Does not fit: flush the current line, start a new one.\n                    flush_current()\n                    place_on_empty(w)\n\n        flush_current()\n\n        result.extend(lines)\n\n    return result\n"
+    }
+  ]
+}
