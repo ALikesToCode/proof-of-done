@@ -1,8 +1,32 @@
 # Proof of Done
 
-Proof of Done is a guard that a team puts on its AI agents. An agent's work counts as done only when the team's own criteria are proven, and a person holds the gate.
+Proof of Done is a Jira app for teams that hand work to AI coding agents. A work item counts as done only when the criteria the team wrote are proven, and the agent's own word proves nothing.
 
-Without a guard, an agent reports a task as done and nobody checks. The tests fail, the pull request was closed without a merge, and the ticket still says Done. Teams that want to hand real work to agents need a control that keeps that work honest.
+Without it, an agent reports a task as done and nobody checks. The tests fail, the pull request was closed without a merge, and the ticket still says Done.
+
+![The Proof of Done panel on a Jira work item. It shows the app's sample data: one of three criteria is proven, and two pieces of evidence wait for a review.](docs/images/issue-panel.png)
+
+## The moment it is built for
+
+1. A work item has a done contract with the criterion "All checkout tests pass".
+2. A coding agent says its tests pass on commit A. The project's pipeline reports the same commit as failing. The app turns the agent's claim away and gives the pipeline's result as the reason.
+3. The agent fixes the tests. The pipeline reports the fix as passing, and the criterion is proven.
+4. The agent pushes one more commit and says "done". The proof is about the commit before, so it no longer counts. With the app's validator on the workflow, Jira refuses the move to Done and says why.
+5. The pipeline reports the new commit as passing. Now the work item closes.
+
+The app holds the records, compares them and answers the gate. The pipeline reports with a key the agent does not hold. A person keeps every verdict that needs judgement.
+
+## See it in a minute
+
+You need a Jira site where you are an admin, with one software project.
+
+1. **Install the app.** The shared install link goes here once the production build is published. Until then, deploy your own copy as described under [Development](#development).
+2. **Run the guided sample.** Open the project, choose Proof of Done in the row of tabs under its name, and press Start the one-minute run. Five more presses walk through the moment above on one sample work item. After each step the card shows what the done gate answers. It needs no repository, no pipeline and no agent. Who sent each record is simulated, and each record says it is sample data.
+3. **Try to close it.** Add the validator as described under [Block the transition itself](#block-the-transition-itself). Stop the guided run after the fifth press, "The agent pushes one more commit", and move its work item to Done. Jira refuses and says that the proof is about an earlier commit.
+
+[Try it in five minutes](#try-it-in-five-minutes) has the full tour, with your own work items.
+
+## How it decides
 
 The guard has four parts.
 
@@ -24,110 +48,7 @@ flowchart LR
   gate -- "no" --> missing["Not done,<br/>and what is missing"]
 ```
 
-The guard runs in two places today. Inside Jira it is a Forge app. In a repository with no Jira site it is a command line over a folder of task files. In both, coding agents reach it through a tool server that lets them read the contract and submit evidence, and nothing more. The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams.
-
-![The Proof of Done panel on a Jira work item. It shows the app's sample data: one of three criteria is proven, and two pieces of evidence wait for a review.](docs/images/issue-panel.png)
-
-## Try the rules in a minute
-
-You need Node.js 22 or newer. You do not need Jira or any account.
-
-```
-git clone https://github.com/ALikesToCode/proof-of-done.git
-cd proof-of-done
-npm ci
-npm run example
-```
-
-The example holds a contract with two criteria in memory. An agent reports done five times, and the gate answers each time. It passes only after a reviewer has accepted the evidence:
-
-```
-1. The agent reports done and shows nothing.
-   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 with no evidence).
-
-2. It submits a test run with two failures.
-   check failed: 2 tests failed, so this run proves nothing yet.
-   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 rejected).
-
-3. It fixes the tests and submits a clean run.
-   checks passed, so the evidence waits for a review
-   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 waiting for a check).
-
-4. dana types in a note about the release notes and accepts their own note.
-   checks passed, so the evidence waits for a review
-   dana accepts it: not independent, they entered it themselves
-   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 waiting for a check).
-
-5. sam reads both pieces and accepts them.
-   sam accepts it: an independent check
-   sam accepts it: an independent check
-   agent: "done".  gate: PASS. All 2 criteria are proven.
-```
-
-The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls the same functions the Jira app calls. To use the guard on real work, install the [Jira app](#the-jira-app), or put it on a repository [without Jira](#without-jira).
-
-## The parts
-
-| Part | Where | State |
-| --- | --- | --- |
-| Core: the rules of proof, the evidence checks, the gate decision and the meter | [src/core/](src/core/) | Built. Plain TypeScript with no Forge imports, which a test enforces |
-| Services: contracts, the done gate and the tools for agents | [src/services/](src/services/) | Built. They reach Jira, the store and the Teamwork Graph through three interfaces, so they also import nothing from Forge. The same test enforces it |
-| Jira adapter: the Forge app | [manifest.yml](manifest.yml), `src/frontend/`, `src/resolvers/`, `src/actions/`, `src/triggers/`, `src/store/`, `src/jira/`, `src/graph/`, [rovo/](rovo/) | Built. The Codegeist 2026 entry |
-| Local adapter: the guard without Jira | [src/local/](src/local/), described in [docs/local.md](docs/local.md) | Built. Task files, a file store, a command line for people, a gate for harnesses and pipelines |
-| The agent's side of the guard | An MCP server with five tools, none of which records a verdict, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. Atlassian serves it for the Jira app, and `proof-of-done mcp` serves it locally |
-| Starter skeleton | `marrow`, a repository of its own | In progress, not public yet |
-
-The core and the two adapters share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
-
-## Planned, not built yet
-
-Nothing in this list exists today.
-
-- **A package on npm.** Today you build the command from a clone of this repository.
-- **Verdicts signed by the reviewer.** The local adapter cannot tell a person from an agent that runs commands as that person. [docs/local.md](docs/local.md) lists what it cannot promise.
-- **A measurement someone else has repeated.** [benchmark/](benchmark/REPORT.md) and [control-eval/](control-eval/README.md) hold first measurements by the author. They were run before the pipeline results existed and have not been run again with them.
-
-## Earlier work
-
-Proof of Done was not the first project to treat an agent's "done" as a claim that needs evidence. These four came earlier, and they are worth reading.
-
-| Work | What it does |
-| --- | --- |
-| [Proof-or-Stop](https://arxiv.org/abs/2607.14890), with [code](https://github.com/Proof-or-Stop/Prooforstop) | The closest. A command line that sits between a coding agent and its workflow. A step such as review, test or done advances only on evidence that is signed, carries a receipt of the command that produced it, and is bound to a hash of the source tree. The evidence stops counting once the tree changes. Done on a high-risk path needs review rounds from independent hosts. Its authors report 10 of 10 scenarios of an unattended loop with no false done. In their ablation with injected faults, a retry loop on a matched budget made the fault worse in 31 of 1,800 runs and their loop in 2 of 1,800 |
-| [Truthgate](https://arxiv.org/abs/2611.23335), with [code](https://github.com/Cygnux-Labs/Truthgate) | A study, not a workflow tool. It checks an agent against a record the agent cannot edit: tests run again outside the sandbox, hidden checks, and a signed log of every tool call. On 180 tasks that cannot be solved honestly, Claude Sonnet 5.5 passed 39 by writing code that fits the failing assertion |
-| [Rethinking Verification in Agent Harnesses](https://arxiv.org/abs/2610.34577) | A study of 17 ways a harness can check an agent's work, on seven models. A separate critic that reviews the result in a fresh context raised accuracy by 5.9 to 9.5 points on Terminal-Bench and 3.9 to 6.6 on SWE-bench Verified. Gates at the moment the agent tries to finish gained more in some designs and cost much more |
-| [overclaim](https://github.com/h-a-forster/overclaim) | Scores an agent's final message against a hidden check, and ships a Stop hook for Claude Code. In its trials, 71% to 79% of failed runs on solvable tasks still claimed success. Its second study found no support for a Stop hook preventing false completions |
-
-**What is the same.** The agent's report counts for nothing by itself. The work has to show evidence, something other than the worker judges it, and a gate holds the work until then. The critic in the third paper and the review rounds in Proof-or-Stop are the same idea as the verdict from someone else here.
-
-**What Proof of Done does differently.**
-
-- **People write the done contract.** An agent can start a contract only from criteria that are already written down, and cannot add its own. In Proof-or-Stop the agent writes the story and its checklist from a request. The two studies take the task and its tests as given.
-- **A person holds the verdict.** A person accepts or rejects each piece of evidence, or confirms the verdicts of the reviewing agent. A verdict from whoever submitted the evidence does not prove a criterion, unless the project turns that rule off. The agent's tool server has no tool that records a verdict. In Proof-or-Stop the reviewers are agents on separate hosts, a person comes in when the loop escalates, and the merge stays a human decision.
-- **It lives where a team tracks its work.** The Jira app puts the contract on the work item, and can block the transition to Done. None of the four works with an issue tracker, as far as their papers and code show.
-- **The contract is not only about code.** A criterion can ask for a document or a person's attestation, not only for a test run, a build or a pull request.
-- **It also runs without Jira,** as a command line over a folder of task files, with a gate for a harness or a pipeline.
-
-**What the earlier work does that Proof of Done does not.**
-
-- **Evidence is bound to a commit only through the pipeline.** When a project's pipeline reports its results, proof of an earlier commit stops counting. Without a pipeline key, evidence is what its submitter says, and it does not go stale. Proof of Done does not sign evidence, does not hash the source tree and does not run the tests itself. Proof-or-Stop does all three, and Truthgate shows how an agent can pass tests without doing the work.
-- **The measurements are small and not flattering.** [benchmark/](benchmark/REPORT.md) has 150 runs on 30 small tasks, and [control-eval/](control-eval/README.md) has 140. Both were run by the author on one machine before the pipeline results existed, and neither has been repeated by anyone else. Proof-or-Stop, Truthgate and the harness study report larger studies.
-- **The Stop hook is untested.** `proof-of-done gate --hook` holds an agent from a recorded state, not by asking it again as overclaim's hook does. Nobody has measured whether that works better, and overclaim's result is a reason to doubt it until someone does.
-
-## Without Jira
-
-You need Node.js 22 or newer.
-
-```
-npm ci && npm run build && npm link
-cd /path/to/your/repository
-proof-of-done init
-proof-of-done new "Export the audit log as CSV" -c "All unit tests pass" -c "Release notes are updated"
-proof-of-done start POD-1
-claude mcp add proof-of-done -- proof-of-done mcp
-```
-
-The agent now reads the contract and submits evidence through the tool server. A person reviews it with `proof-of-done review`, `accept` and `reject`. `proof-of-done move POD-1 done` refuses while a criterion is unproven, and `proof-of-done gate` gives a harness or a pipeline the answer as an exit code. [docs/local.md](docs/local.md) has every command, the hook for an agent harness, and what this adapter cannot promise.
+The app is an entry for Atlassian Codegeist 2026, category Apps for Software Teams. The same rules also run outside Jira, as a command line over a folder of task files. That is described under [Without Jira](#without-jira).
 
 ## The Jira app
 
@@ -250,6 +171,107 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
 - It reads work items and the Teamwork Graph as the person who is using it, and asks Jira whether that person may edit them. As itself it comments on or moves a work item that was closed with an unproven contract, writes the work item property `proof-of-done` that JQL searches, and creates and deletes the sample work items.
 - When a work item is deleted, the app deletes everything it stored for it.
 
+## Without Jira
+
+You need Node.js 22 or newer.
+
+```
+npm ci && npm run build && npm link
+cd /path/to/your/repository
+proof-of-done init
+proof-of-done new "Export the audit log as CSV" -c "All unit tests pass" -c "Release notes are updated"
+proof-of-done start POD-1
+claude mcp add proof-of-done -- proof-of-done mcp
+```
+
+The agent now reads the contract and submits evidence through the tool server. A person reviews it with `proof-of-done review`, `accept` and `reject`. `proof-of-done move POD-1 done` refuses while a criterion is unproven, and `proof-of-done gate` gives a harness or a pipeline the answer as an exit code. [docs/local.md](docs/local.md) has every command, the hook for an agent harness, and what this adapter cannot promise.
+
+### Try the rules without installing anything
+
+You need Node.js 22 or newer. You do not need Jira or any account.
+
+```
+git clone https://github.com/ALikesToCode/proof-of-done.git
+cd proof-of-done
+npm ci
+npm run example
+```
+
+The example holds a contract with two criteria in memory. An agent reports done five times, and the gate answers each time. It passes only after a reviewer has accepted the evidence:
+
+```
+1. The agent reports done and shows nothing.
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 with no evidence).
+
+2. It submits a test run with two failures.
+   check failed: 2 tests failed, so this run proves nothing yet.
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 rejected).
+
+3. It fixes the tests and submits a clean run.
+   checks passed, so the evidence waits for a review
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (1 with no evidence, 1 waiting for a check).
+
+4. dana types in a note about the release notes and accepts their own note.
+   checks passed, so the evidence waits for a review
+   dana accepts it: not independent, they entered it themselves
+   agent: "done".  gate: NO. 2 of 2 criteria are not proven (2 waiting for a check).
+
+5. sam reads both pieces and accepts them.
+   sam accepts it: an independent check
+   sam accepts it: an independent check
+   agent: "done".  gate: PASS. All 2 criteria are proven.
+```
+
+The code is [examples/agent-says-done.ts](examples/agent-says-done.ts). It calls the same functions the Jira app calls.
+
+## The parts
+
+| Part | Where | State |
+| --- | --- | --- |
+| Core: the rules of proof, the evidence checks, the gate decision and the meter | [src/core/](src/core/) | Built. Plain TypeScript with no Forge imports, which a test enforces |
+| Services: contracts, the done gate and the tools for agents | [src/services/](src/services/) | Built. They reach Jira, the store and the Teamwork Graph through three interfaces, so they also import nothing from Forge. The same test enforces it |
+| Jira adapter: the Forge app | [manifest.yml](manifest.yml), `src/frontend/`, `src/resolvers/`, `src/actions/`, `src/triggers/`, `src/store/`, `src/jira/`, `src/graph/`, [rovo/](rovo/) | Built. The Codegeist 2026 entry |
+| Local adapter: the guard without Jira | [src/local/](src/local/), described in [docs/local.md](docs/local.md) | Built. Task files, a file store, a command line for people, a gate for harnesses and pipelines |
+| The agent's side of the guard | An MCP server with five tools, none of which records a verdict, and the open skill in [skills/proof-of-done/](skills/proof-of-done/SKILL.md) | Built. Atlassian serves it for the Jira app, and `proof-of-done mcp` serves it locally |
+| Starter skeleton | `marrow`, a repository of its own | In progress, not public yet |
+
+The core and the two adapters share one folder tree and one package. [docs/design.md](docs/design.md) has the rules of proof and the decisions behind them.
+
+## Planned, not built yet
+
+Nothing in this list exists today.
+
+- **A package on npm.** Today you build the command from a clone of this repository.
+- **Verdicts signed by the reviewer.** The local adapter cannot tell a person from an agent that runs commands as that person. [docs/local.md](docs/local.md) lists what it cannot promise.
+- **A measurement someone else has repeated.** [benchmark/](benchmark/REPORT.md) and [control-eval/](control-eval/README.md) hold first measurements by the author. They were run before the pipeline results existed and have not been run again with them.
+
+## Earlier work
+
+Proof of Done was not the first project to treat an agent's "done" as a claim that needs evidence. These four came earlier, and they are worth reading.
+
+| Work | What it does |
+| --- | --- |
+| [Proof-or-Stop](https://arxiv.org/abs/2607.14890), with [code](https://github.com/Proof-or-Stop/Prooforstop) | The closest. A command line that sits between a coding agent and its workflow. A step such as review, test or done advances only on evidence that is signed, carries a receipt of the command that produced it, and is bound to a hash of the source tree. The evidence stops counting once the tree changes. Done on a high-risk path needs review rounds from independent hosts. Its authors report 10 of 10 scenarios of an unattended loop with no false done. In their ablation with injected faults, a retry loop on a matched budget made the fault worse in 31 of 1,800 runs and their loop in 2 of 1,800 |
+| [Truthgate](https://arxiv.org/abs/2611.23335), with [code](https://github.com/Cygnux-Labs/Truthgate) | A study, not a workflow tool. It checks an agent against a record the agent cannot edit: tests run again outside the sandbox, hidden checks, and a signed log of every tool call. On 180 tasks that cannot be solved honestly, Claude Sonnet 5.5 passed 39 by writing code that fits the failing assertion |
+| [Rethinking Verification in Agent Harnesses](https://arxiv.org/abs/2610.34577) | A study of 17 ways a harness can check an agent's work, on seven models. A separate critic that reviews the result in a fresh context raised accuracy by 5.9 to 9.5 points on Terminal-Bench and 3.9 to 6.6 on SWE-bench Verified. Gates at the moment the agent tries to finish gained more in some designs and cost much more |
+| [overclaim](https://github.com/h-a-forster/overclaim) | Scores an agent's final message against a hidden check, and ships a Stop hook for Claude Code. In its trials, 71% to 79% of failed runs on solvable tasks still claimed success. Its second study found no support for a Stop hook preventing false completions |
+
+**What is the same.** The agent's report counts for nothing by itself. The work has to show evidence, something other than the worker judges it, and a gate holds the work until then. The critic in the third paper and the review rounds in Proof-or-Stop are the same idea as the verdict from someone else here.
+
+**What Proof of Done does differently.**
+
+- **People write the done contract.** An agent can start a contract only from criteria that are already written down, and cannot add its own. In Proof-or-Stop the agent writes the story and its checklist from a request. The two studies take the task and its tests as given.
+- **A person holds the verdict.** A person accepts or rejects each piece of evidence, or confirms the verdicts of the reviewing agent. A verdict from whoever submitted the evidence does not prove a criterion, unless the project turns that rule off. The agent's tool server has no tool that records a verdict. In Proof-or-Stop the reviewers are agents on separate hosts, a person comes in when the loop escalates, and the merge stays a human decision.
+- **It lives where a team tracks its work.** The Jira app puts the contract on the work item, and can block the transition to Done. None of the four works with an issue tracker, as far as their papers and code show.
+- **The contract is not only about code.** A criterion can ask for a document or a person's attestation, not only for a test run, a build or a pull request.
+- **It also runs without Jira,** as a command line over a folder of task files, with a gate for a harness or a pipeline.
+
+**What the earlier work does that Proof of Done does not.**
+
+- **Evidence is bound to a commit only through the pipeline.** When a project's pipeline reports its results, proof of an earlier commit stops counting. Without a pipeline key, evidence is what its submitter says, and it does not go stale. Proof of Done does not sign evidence, does not hash the source tree and does not run the tests itself. Proof-or-Stop does all three, and Truthgate shows how an agent can pass tests without doing the work.
+- **The measurements are small and not flattering.** [benchmark/](benchmark/REPORT.md) has 150 runs on 30 small tasks, and [control-eval/](control-eval/README.md) has 140. Both were run by the author on one machine before the pipeline results existed, and neither has been repeated by anyone else. Proof-or-Stop, Truthgate and the harness study report larger studies.
+- **The Stop hook is untested.** `proof-of-done gate --hook` holds an agent from a recorded state, not by asking it again as overclaim's hook does. Nobody has measured whether that works better, and overclaim's result is a reason to doubt it until someone does.
+
 ## Development
 
 You need Node.js 22 or 24 and the Forge CLI. This build used `@forge/cli` 16.0.0.
@@ -302,7 +324,7 @@ The Teamwork Graph does not always answer on the development site. On 23 Nov 202
 | `test/` | Unit tests and page tests |
 | `src/local/` | The local adapter: task files, the file store, the command line and the stdio tool server |
 | `examples/` | The walk-through that `npm run example` runs |
-| `benchmark/` | The place for the planned benchmark. No data |
+| `benchmark/`, `control-eval/` | The author's first measurements, with their protocols and records |
 
 ## Preview features
 
