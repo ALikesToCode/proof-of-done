@@ -1,0 +1,63 @@
+{
+  "task": "t09_rle",
+  "source": "benchmark-dev",
+  "version": "twin",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:37+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "`rle.py` defines `encode` and `decode`, and the harness run of the provided tests exits 0 with 4 passed on the files as they are after the work."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The `encode` code uses `groupby` and writes a run of length 1 as the bare character and longer runs as count plus character, and the passing `test_encode` asserts `\"3ab2c\"` and `\"\"`."
+    },
+    {
+      "criterion": "c3",
+      "decision": "not_proven",
+      "reason": "`encode` in `rle.py` has no check for the digits 0 to 9 and never raises `ValueError`, and no test covers this, so the criterion is not met. It would be convinced by code that raises `ValueError` on any digit in the input to `encode`, plus a test showing it."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "The `decode` code expands each count-character pair, so `decode(\"3ab2c\")` gives `\"aaabcc\"`, and the harness-run `test_decode` and `test_round_trip` pass."
+    },
+    {
+      "criterion": "c5",
+      "decision": "not_proven",
+      "reason": "`decode` raises `ValueError` only for a trailing count with no character; it accepts `\"1a\"`, `\"0a\"` and `\"02a\"` without error, since `int(count or 1)` simply expands them. It would be convinced by explicit checks rejecting counts of 0 or 1 and leading zeros, with tests for those inputs."
+    },
+    {
+      "criterion": "c6",
+      "decision": "proven",
+      "reason": "`decode` accumulates all consecutive digits into `count` before `int(count)`, so `decode(\"12x\")` yields twelve `x`, and the passing `test_decode` asserts this."
+    },
+    {
+      "criterion": "c7",
+      "decision": "proven",
+      "reason": "The harness run of `python3 -m unittest test_visible -v` passes 4 of 4, and the harness file hashes for `test_visible.py` before and after the work are identical, showing it is unchanged."
+    }
+  ],
+  "criteria": 7,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 5221,
+      "output_tokens": 1199,
+      "seconds": 7.154,
+      "cost_usd": 0.001252075
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"`rle.py` defines `encode` and `decode`, and the harness run of the provided tests exits 0 with 4 passed on the files as they are after the work.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The `encode` code uses `groupby` and writes a run of length 1 as the bare character and longer runs as count plus character, and the passing `test_encode` asserts `\\\"3ab2c\\\"` and `\\\"\\\"`.\"}, {\"criterion\": \"c3\", \"decision\": \"not_proven\", \"reason\": \"`encode` in `rle.py` has no check for the digits 0 to 9 and never raises `ValueError`, and no test covers this, so the criterion is not met. It would be convinced by code that raises `ValueError` on any digit in the input to `encode`, plus a test showing it.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"The `decode` code expands each count-character pair, so `decode(\\\"3ab2c\\\")` gives `\\\"aaabcc\\\"`, and the harness-run `test_decode` and `test_round_trip` pass.\"}, {\"criterion\": \"c5\", \"decision\": \"not_proven\", \"reason\": \"`decode` raises `ValueError` only for a trailing count with no character; it accepts `\\\"1a\\\"`, `\\\"0a\\\"` and `\\\"02a\\\"` without error, since `int(count or 1)` simply expands them. It would be convinced by explicit checks rejecting counts of 0 or 1 and leading zeros, with tests for those inputs.\"}, {\"criterion\": \"c6\", \"decision\": \"proven\", \"reason\": \"`decode` accumulates all consecutive digits into `count` before `int(count)`, so `decode(\\\"12x\\\")` yields twelve `x`, and the passing `test_decode` asserts this.\"}, {\"criterion\": \"c7\", \"decision\": \"proven\", \"reason\": \"The harness run of `python3 -m unittest test_visible -v` passes 4 of 4, and the harness file hashes for `test_visible.py` before and after the work are identical, showing it is unchanged.\"}]}"
+}

@@ -1,0 +1,38 @@
+{
+  "task": "t08_roman",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 2,
+  "form": "general",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:40+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "not_proven",
+      "reason": "The code matches most rules: to_roman checks the 1 to 3999 range and from_roman accepts only keys built from to_roman's output, so non-standard forms are rejected. But the description says everything else raises ValueError, and from_roman([]) raises TypeError from the dict lookup on an unhashable input, not ValueError. The only harness run is the four provided tests, which do not exercise the non-standard forms. A run of from_roman over IIII, VX, IC, MMMM, lower case, and non-string inputs, showing ValueError each time, or a fix that turns non-string input into ValueError, would convince me."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The harness ran `python3 -m unittest test_visible -v` on the files after the work, with exit status 0, 4 passed and 0 failed. The harness also recorded identical SHA-256 hashes for test_visible.py before and after the work, so the file is unchanged."
+    }
+  ],
+  "criteria": 2,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 3261,
+      "output_tokens": 1234,
+      "seconds": 6.744,
+      "cost_usd": 0.001024575
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"not_proven\", \"reason\": \"The code matches most rules: to_roman checks the 1 to 3999 range and from_roman accepts only keys built from to_roman's output, so non-standard forms are rejected. But the description says everything else raises ValueError, and from_roman([]) raises TypeError from the dict lookup on an unhashable input, not ValueError. The only harness run is the four provided tests, which do not exercise the non-standard forms. A run of from_roman over IIII, VX, IC, MMMM, lower case, and non-string inputs, showing ValueError each time, or a fix that turns non-string input into ValueError, would convince me.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The harness ran `python3 -m unittest test_visible -v` on the files after the work, with exit status 0, 4 passed and 0 failed. The harness also recorded identical SHA-256 hashes for test_visible.py before and after the work, so the file is unchanged.\"}]}"
+}

@@ -1,0 +1,53 @@
+{
+  "task": "t24_column",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 3,
+  "form": "specific",
+  "kind": "worker",
+  "at": "2026-11-26T21:30:21+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The post-work column.py defines both column_name(index) and column_index(name), and the worker's run reports the three provided tests passing. The file itself is the material that shows the functions exist, so this is covered."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "test_names asserts column_name for all seven listed indices (1, 26, 27, 52, 53, 702, 703) and the worker reports it passing. Tracing the column_name algorithm in the file by hand gives the same values, so the code and the test agree."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "test_names checks column_index against each name in the reverse direction, and test_lower_case checks 'aa' and 'xFd'. The file's column_index calls name.upper() before accumulating, so both cases are handled as the criterion requires."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "column_name raises ValueError for index below 1 (test_bad checks 0 and -1). column_index raises for the empty string and for any character outside A-Z and a-z (the file's membership check covers this, and test_bad checks '', 'A1', 'A A', 'É', '1', '-'). The code as written meets the criterion in full."
+    },
+    {
+      "criterion": "c5",
+      "decision": "not_proven",
+      "reason": "The passing run is shown, but nothing in the record shows that test_visible.py is unchanged from the provided version. No git diff, checksum, or original copy is given, and the worker's own summary says this part is not demonstrated. A harness-recorded comparison of test_visible.py against its original, or a diff showing no edits, would settle it."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 3838,
+      "output_tokens": 1825,
+      "seconds": 9.745,
+      "cost_usd": 0.0013922000000000001
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The post-work column.py defines both column_name(index) and column_index(name), and the worker's run reports the three provided tests passing. The file itself is the material that shows the functions exist, so this is covered.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"test_names asserts column_name for all seven listed indices (1, 26, 27, 52, 53, 702, 703) and the worker reports it passing. Tracing the column_name algorithm in the file by hand gives the same values, so the code and the test agree.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"test_names checks column_index against each name in the reverse direction, and test_lower_case checks 'aa' and 'xFd'. The file's column_index calls name.upper() before accumulating, so both cases are handled as the criterion requires.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"column_name raises ValueError for index below 1 (test_bad checks 0 and -1). column_index raises for the empty string and for any character outside A-Z and a-z (the file's membership check covers this, and test_bad checks '', 'A1', 'A A', 'É', '1', '-'). The code as written meets the criterion in full.\"}, {\"criterion\": \"c5\", \"decision\": \"not_proven\", \"reason\": \"The passing run is shown, but nothing in the record shows that test_visible.py is unchanged from the provided version. No git diff, checksum, or original copy is given, and the worker's own summary says this part is not demonstrated. A harness-recorded comparison of test_visible.py against its original, or a diff showing no edits, would settle it.\"}]}"
+}

@@ -1,0 +1,125 @@
+{
+  "task": "t09_rle",
+  "version": "twin",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`rle.py` implements two functions, `encode(text)` and `decode(text)`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests named test_encode and test_decode, which exercise encode and decode, all ran and passed (4 passed, 0 failed). This indirectly suggests both functions exist in an importable rle.py. The output does not show the module source.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`encode(text)` replaces each run of one repeated character by its length followed by the character, and a run of length 1 is written as the character alone: `encode(\"aaabcc\")` is `\"3ab2c\"`, and `encode(\"\")` is `\"\"`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_encode passed. Its assertions are not visible in the output, so the specific examples ('aaabcc' -> '3ab2c', '' -> '') are not confirmed by it directly.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "The text given to `encode` must not contain the digits `0` to `9`; if it does, `encode` raises `ValueError`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "other",
+          "summary": "Not demonstrated. None of the four test names in the run refers to encode rejecting digits, and I ran no other check. This criterion has no direct evidence from the session.",
+          "excerpt": "The recorded run lists only test_decode, test_decode_rejects_count_without_character, test_encode and test_round_trip. No test or command shown checks encode raising ValueError on digit input."
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "`decode(text)` reverses `encode`: `decode(\"3ab2c\")` is `\"aaabcc\"`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_decode and test_round_trip passed. The round trip supports decode reversing encode, though the inputs used are not shown in the output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "`decode` raises `ValueError` for text that `encode` cannot produce in these ways: a count of 0 or 1 (`\"1a\"`, `\"0a\"`), a count with a leading zero (`\"02a\"`), and a count with no character after it (`\"3\"`, `\"a2\"`).",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "Partial. test_decode_rejects_count_without_character passed, which by its name covers the count-without-character case. Whether it covers '3' and 'a2' specifically is not shown. No test in the run is named for counts of 0 or 1 or for leading zeros ('1a', '0a', '02a'), so those cases are not demonstrated.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c6",
+      "text": "In `decode`, counts can have several digits: `decode(\"12x\")` is twelve `x`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "other",
+          "summary": "Not demonstrated. No test name in the run refers to multi-digit counts, and I ran no direct check of decode('12x'). test_decode may or may not include such a case; the output does not show it.",
+          "excerpt": "The recorded output contains no decode('12x') result and no test explicitly about multi-digit counts."
+        }
+      ]
+    },
+    {
+      "id": "c7",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "All 4 provided tests in test_visible passed with 0 failures. The output does not itself show that test_visible.py is unchanged. I have no record of a check such as a diff or checksum, so that part rests on my not having edited it.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1745,
+        "output_tokens": 2103,
+        "seconds": 15.159,
+        "note": "The only record is one run of the 4 provided visible tests, all passing. The output shows test names and results, not test contents or the rest of rle.py. Criteria c3 and c6 have no test in that run, so the evidence says so instead of claiming them."
+      }
+    ]
+  }
+}

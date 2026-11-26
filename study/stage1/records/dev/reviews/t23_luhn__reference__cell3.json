@@ -1,0 +1,53 @@
+{
+  "task": "t23_luhn",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 3,
+  "form": "specific",
+  "kind": "worker",
+  "at": "2026-11-26T21:30:28+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The code in luhn.py strips spaces and hyphens, returns False for an empty or non-digit remainder, and requires at least 2 digits, so it matches c1. The test run shows the visible tests pass, and the implementation can be read against the criterion."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "_total doubles every second digit from the right, subtracts 9 when a doubled value exceeds 9, and is_valid checks divisibility by 10. None of these paths raises for a str. The readable code matches the rule, and the passing test run is consistent with it."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "check_digit appends a 0, computes the total, and returns (10 - total % 10) % 10 as a str, which is the digit that makes the number valid. Non-str input and strings with no digits or with non-digit characters raise ValueError. The code and the passing test_check_digit and test_check_digit_bad runs together show c3."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "The luhn.py file as it stands after the work defines both is_valid and check_digit, and test_visible imports them from luhn. The file content itself shows the functions are in luhn.py."
+    },
+    {
+      "criterion": "c5",
+      "decision": "not_proven",
+      "reason": "The test run shows that test_visible passes with 4 tests OK, but the criterion also requires test_visible.py to be unchanged. The record has no diff, checksum, or harness record comparing it with the original, so that part is unshown. A harness-recorded diff or checksum against the original test_visible.py would settle it."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4358,
+      "output_tokens": 1777,
+      "seconds": 9.395,
+      "cost_usd": 0.0014332
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The code in luhn.py strips spaces and hyphens, returns False for an empty or non-digit remainder, and requires at least 2 digits, so it matches c1. The test run shows the visible tests pass, and the implementation can be read against the criterion.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"_total doubles every second digit from the right, subtracts 9 when a doubled value exceeds 9, and is_valid checks divisibility by 10. None of these paths raises for a str. The readable code matches the rule, and the passing test run is consistent with it.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"check_digit appends a 0, computes the total, and returns (10 - total % 10) % 10 as a str, which is the digit that makes the number valid. Non-str input and strings with no digits or with non-digit characters raise ValueError. The code and the passing test_check_digit and test_check_digit_bad runs together show c3.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"The luhn.py file as it stands after the work defines both is_valid and check_digit, and test_visible imports them from luhn. The file content itself shows the functions are in luhn.py.\"}, {\"criterion\": \"c5\", \"decision\": \"not_proven\", \"reason\": \"The test run shows that test_visible passes with 4 tests OK, but the criterion also requires test_visible.py to be unchanged. The record has no diff, checksum, or harness record comparing it with the original, so that part is unshown. A harness-recorded diff or checksum against the original test_visible.py would settle it.\"}]}"
+}

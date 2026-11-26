@@ -1,0 +1,53 @@
+{
+  "task": "t23_luhn",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:24+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": true,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The harness ran test_visible and all 4 tests passed. The code in luhn.py removes spaces and hyphens, rejects empty or non-0-9 input, and requires at least 2 digits, which matches the bad-input cases in test_invalid such as \"0\", \"5\", \"\", \" \", \"--\", and fullwidth \"１８\"."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The harness test run passed, and _total in luhn.py doubles every second digit from the right, subtracts 9 when the result exceeds 9, and checks the sum mod 10. is_valid returns a bool and does not raise for str input."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "The harness test run passed test_check_digit and test_check_digit_bad. The code appends a 0, computes (10 - total % 10) % 10 and returns it as a str, and raises ValueError for non-str input and for input with no digits or with non-digit characters."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "The post-work luhn.py defines both is_valid and check_digit, and the harness run of the tests that import them passed."
+    },
+    {
+      "criterion": "c5",
+      "decision": "proven",
+      "reason": "The harness ran test_visible with exit status 0 and 4 passed, 0 failed. The harness-recorded SHA-256 of test_visible.py is identical before and after the work, so the file is unchanged."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4465,
+      "output_tokens": 1226,
+      "seconds": 6.881,
+      "cost_usd": 0.0011710750000000002
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The harness ran test_visible and all 4 tests passed. The code in luhn.py removes spaces and hyphens, rejects empty or non-0-9 input, and requires at least 2 digits, which matches the bad-input cases in test_invalid such as \\\"0\\\", \\\"5\\\", \\\"\\\", \\\" \\\", \\\"--\\\", and fullwidth \\\"１８\\\".\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The harness test run passed, and _total in luhn.py doubles every second digit from the right, subtracts 9 when the result exceeds 9, and checks the sum mod 10. is_valid returns a bool and does not raise for str input.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"The harness test run passed test_check_digit and test_check_digit_bad. The code appends a 0, computes (10 - total % 10) % 10 and returns it as a str, and raises ValueError for non-str input and for input with no digits or with non-digit characters.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"The post-work luhn.py defines both is_valid and check_digit, and the harness run of the tests that import them passed.\"}, {\"criterion\": \"c5\", \"decision\": \"proven\", \"reason\": \"The harness ran test_visible with exit status 0 and 4 passed, 0 failed. The harness-recorded SHA-256 of test_visible.py is identical before and after the work, so the file is unchanged.\"}]}"
+}

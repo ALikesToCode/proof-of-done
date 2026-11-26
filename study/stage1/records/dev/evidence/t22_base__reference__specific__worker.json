@@ -1,0 +1,101 @@
+{
+  "task": "t22_base",
+  "version": "reference",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`to_base(number, base)` in `base.py` returns the `int` `number` written in `base` (2 to 36), with the digits `0`-`9` then lower-case `a`-`z`; zero is returned as `\"0\"`, and a negative number gets a leading `-`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_to_base passed, and its name indicates it exercises to_base. The test source was not recorded, so the specific cases (zero, negatives, digit set) are not shown by this output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`from_base(text, base)` in `base.py` reverses `to_base`; it accepts lower-case and upper-case digits and one optional leading `-`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_from_base passed, and its name indicates it exercises from_base. The test source was not recorded, so the specific cases (upper-case digits, optional leading '-', round trip) are not shown by this output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "Both `to_base` and `from_base` raise `ValueError` when the base is outside 2 to 36.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_bad_base passed, and its name indicates it checks the base-range ValueError. The test source was not recorded, so it is not shown whether both functions and both ends of the range are covered.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "`from_base` raises `ValueError` for the empty string, a lone `-`, a digit that is not valid in the base, and any other character, spaces included.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_bad_text passed, and its name indicates it checks from_base rejecting invalid text. The test source was not recorded, so it is not shown which inputs (empty string, lone '-', out-of-base digit, spaces) are covered.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "Running python3 -m unittest test_visible -v gave 4 tests run, all ok, final status OK, 0 failures. This output does not show that test_visible.py is unchanged from the provided version, so that part of c5 is not demonstrated here.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_bad_base (test_visible.VisibleTests.test_bad_base) ... ok\ntest_bad_text (test_visible.VisibleTests.test_bad_text) ... ok\ntest_from_base (test_visible.VisibleTests.test_from_base) ... ok\ntest_to_base (test_visible.VisibleTests.test_to_base) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1559,
+        "output_tokens": 1913,
+        "seconds": 12.391,
+        "note": "The only evidence is one run of the provided visible tests, in which all 4 passed. I did not record the test source or any separate checks, so coverage of each criterion is inferred from the test names. The output also does not show whether test_visible.py was left unchanged."
+      }
+    ]
+  }
+}

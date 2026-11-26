@@ -1,0 +1,59 @@
+{
+  "task": "t25_chunks",
+  "version": "reference",
+  "form": "general",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "Every rule in the description is implemented in chunks.py",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests for chunk, sliding, bad arguments (test_bad) and argument not changed all pass (4 run, 0 failed). This is indirect evidence for c1: it shows that the behaviour those tests exercise works. It does not show that every rule is implemented, because I did not record what the tests assert or the contents of chunks.py. Rules the tests do not cover, such as a custom step, a list shorter than size, or every invalid size/step type, are not shown by this output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "Running the provided test module test_visible with the given command gave 4 tests run, 4 ok, 0 failed, and the overall result was OK. The output does not show that test_visible.py is unchanged, since I did not record a diff or checksum. That part of c2 rests on my not having edited the file, not on this output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1350,
+        "output_tokens": 1044,
+        "seconds": 8.339,
+        "note": "The only evidence is one run of `python3 -m unittest test_visible -v`, which ran 4 tests and all passed. I did not record the contents of chunks.py or a check that test_visible.py is unmodified."
+      }
+    ]
+  }
+}

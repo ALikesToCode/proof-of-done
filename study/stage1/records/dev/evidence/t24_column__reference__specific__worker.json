@@ -1,0 +1,101 @@
+{
+  "task": "t24_column",
+  "version": "reference",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`column.py` implements two functions: `column_name(index)` and `column_index(name)`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The 3 provided tests ran and passed. The output does not show the contents of column.py. That both functions exist is inferred only because tests named test_names, test_lower_case and test_bad pass, and these presumably call column_name and column_index; the test bodies are not shown.",
+          "passed": 3,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_lower_case (test_visible.VisibleTests.test_lower_case) ... ok\ntest_names (test_visible.VisibleTests.test_names) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`column_name(index)` returns the spreadsheet name of the column with the 1-based `index`: 1 is `A`, 26 is `Z`, 27 is `AA`, 52 is `AZ`, 53 is `BA`, 702 is `ZZ`, 703 is `AAA`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_names passed, which is the provided test for the column naming. The output does not show which indices it checks, so it does not by itself confirm each listed value (1, 26, 27, 52, 53, 702, 703).",
+          "passed": 3,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_names (test_visible.VisibleTests.test_names) ... ok\nRan 3 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "`column_index(name)` reverses `column_name`, returning the 1-based index for a column name, and accepts both upper-case and lower-case letters.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_names and test_lower_case passed. The names suggest they cover the name-to-index direction and lower-case input, but the output does not show their contents.",
+          "passed": 3,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_lower_case (test_visible.VisibleTests.test_lower_case) ... ok\ntest_names (test_visible.VisibleTests.test_names) ... ok\nRan 3 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "`column_name` raises `ValueError` for an index below 1, and `column_index` raises `ValueError` for the empty string and for any character that is not one of the letters A to Z or a to z.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_bad passed, which by its name covers invalid input. The output does not show which cases it checks (index below 1, empty string, non A-Z/a-z characters), so coverage of each is not confirmed by this output.",
+          "passed": 3,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\nRan 3 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "Running test_visible with unittest gave 3 tests run, all ok, final status OK, 0 failures. The output does not show whether test_visible.py was left unmodified; that part is not demonstrated by this record.",
+          "passed": 3,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_lower_case (test_visible.VisibleTests.test_lower_case) ... ok\ntest_names (test_visible.VisibleTests.test_names) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 3,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_lower_case (test_visible.VisibleTests.test_lower_case) ... ok\ntest_names (test_visible.VisibleTests.test_names) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1535,
+        "output_tokens": 1446,
+        "seconds": 10.674,
+        "note": "The only evidence is one run of the provided test suite (3 tests, all OK). The output shows test names and results, not the test bodies, `column.py` source, or whether `test_visible.py` was left unmodified."
+      }
+    ]
+  }
+}

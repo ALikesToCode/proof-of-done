@@ -1,0 +1,48 @@
+{
+  "task": "t08_roman",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:11+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": true,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The harness ran `python3 -m unittest test_visible -v` on the final files: 4 passed, 0 failed, exit 0. The file shows both `to_roman` and `from_roman` defined in `roman.py`."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The greedy `_PAIRS` table includes the subtractive pairs (CM, CD, XC, XL, IX, IV). The range check raises ValueError outside 1 to 3999. The harness-run `test_known_values`, `test_out_of_range` and `test_round_trip` pass, and the round trip covers every value from 1 to 3999."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "`from_roman` accepts only keys of `_VALUES`, which is built from `to_roman` over 1 to 3999, so lower case, the empty string, other characters, and non-standard forms such as IIII, VX, IC and MMMM all raise ValueError. The harness run passes. The only gap is that unhashable non-text inputs such as lists raise TypeError, which falls outside the text inputs the criterion describes."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "The harness ran the provided tests on the final files and all 4 passed. The harness also recorded identical SHA-256 hashes for `test_visible.py` before and after the work, showing it is unchanged."
+    }
+  ],
+  "criteria": 4,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4146,
+      "output_tokens": 1347,
+      "seconds": 7.657,
+      "cost_usd": 0.0011917
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The harness ran `python3 -m unittest test_visible -v` on the final files: 4 passed, 0 failed, exit 0. The file shows both `to_roman` and `from_roman` defined in `roman.py`.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The greedy `_PAIRS` table includes the subtractive pairs (CM, CD, XC, XL, IX, IV). The range check raises ValueError outside 1 to 3999. The harness-run `test_known_values`, `test_out_of_range` and `test_round_trip` pass, and the round trip covers every value from 1 to 3999.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"`from_roman` accepts only keys of `_VALUES`, which is built from `to_roman` over 1 to 3999, so lower case, the empty string, other characters, and non-standard forms such as IIII, VX, IC and MMMM all raise ValueError. The harness run passes. The only gap is that unhashable non-text inputs such as lists raise TypeError, which falls outside the text inputs the criterion describes.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"The harness ran the provided tests on the final files and all 4 passed. The harness also recorded identical SHA-256 hashes for `test_visible.py` before and after the work, showing it is unchanged.\"}]}"
+}

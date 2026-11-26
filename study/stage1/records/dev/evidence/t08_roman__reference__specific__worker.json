@@ -1,0 +1,87 @@
+{
+  "task": "t08_roman",
+  "version": "reference",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`roman.py` implements two functions, `to_roman(number)` and `from_roman(text)`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible suite ran with 4 tests passing and 0 failing. The tests are named for to_roman and from_roman behaviour (known values, out of range, invalid numerals, round trip), which suggests both functions are used. The output does not show the test source or the contents of roman.py, so it does not confirm directly that exactly these two functions exist.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_invalid_numerals (test_visible.VisibleTests.test_invalid_numerals) ... ok\ntest_known_values (test_visible.VisibleTests.test_known_values) ... ok\ntest_out_of_range (test_visible.VisibleTests.test_out_of_range) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.004s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`to_roman(number)` returns the Roman numeral for an `int` from 1 to 3999, in the standard subtractive form: 4 is `IV`, 9 is `IX`, 40 is `XL`, 90 is `XC`, 400 is `CD`, 900 is `CM`. A number outside 1 to 3999 raises `ValueError`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_known_values and test_out_of_range passed, and test_round_trip passed too. Their names indicate they exercise to_roman on known numerals and on out-of-range input. The output does not show which values the tests use, so it does not prove each subtractive form (IV, IX, XL, XC, CD, CM) or the boundaries 0 and 4000 specifically.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_known_values (test_visible.VisibleTests.test_known_values) ... ok\ntest_out_of_range (test_visible.VisibleTests.test_out_of_range) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\nRan 4 tests in 0.004s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "`from_roman(text)` returns the `int` for a numeral. It accepts only the exact text that `to_roman` produces for some number. Everything else raises `ValueError`: lower case (`iv`), the empty string, other characters, and non-standard forms such as `IIII`, `VX`, `IC` or `MMMM`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_invalid_numerals and test_round_trip passed. Their names indicate they check that from_roman rejects invalid text and inverts to_roman. The output does not show which invalid inputs the test uses, so it does not directly prove rejection of iv, the empty string, IIII, VX, IC or MMMM.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_invalid_numerals (test_visible.VisibleTests.test_invalid_numerals) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\nRan 4 tests in 0.004s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "All 4 tests in test_visible.py passed when run with the specified command: Ran 4 tests, OK, 0 failures. The output does not itself show that test_visible.py is unmodified. That rests on my not having edited it, not on a recorded check.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_invalid_numerals (test_visible.VisibleTests.test_invalid_numerals) ... ok\ntest_known_values (test_visible.VisibleTests.test_known_values) ... ok\ntest_out_of_range (test_visible.VisibleTests.test_out_of_range) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.004s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_invalid_numerals (test_visible.VisibleTests.test_invalid_numerals) ... ok\ntest_known_values (test_visible.VisibleTests.test_known_values) ... ok\ntest_out_of_range (test_visible.VisibleTests.test_out_of_range) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.004s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1631,
+        "output_tokens": 1565,
+        "seconds": 11.214,
+        "note": "The only evidence is one run of the provided test suite (python3 -m unittest test_visible -v): 4 tests ran and all passed. I did not record the test source, any direct calls to roman.py, or a check that test_visible.py is unchanged, so each summary says what the run shows and where it stops."
+      }
+    ]
+  }
+}

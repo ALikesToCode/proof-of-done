@@ -1,0 +1,48 @@
+{
+  "task": "t08_roman",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 3,
+  "form": "specific",
+  "kind": "worker",
+  "at": "2026-11-26T21:30:30+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The file roman.py as it stands defines both to_roman and from_roman, and the passing run of test_visible exercises both."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The _PAIRS table includes all six subtractive forms, to_roman rejects values outside 1 to 3999, and test_known_values in the shipped test file checks 4, 9, 40, 90, 400 and 900 while test_out_of_range checks 0 and 4000; the run passed."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "from_roman looks text up in a dictionary built only from to_roman's outputs for 1 to 3999, so lower case, the empty string, IIII, VX, IC, MMMM and other non-members raise ValueError. The shipped tests cover only \"\" and \"ABC\", but the code itself settles the rest. Non-string inputs such as lists would raise TypeError rather than ValueError, a gap the criterion's examples do not touch."
+    },
+    {
+      "criterion": "c4",
+      "decision": "not_proven",
+      "reason": "The passing run is recorded by the worker, and the claim that test_visible.py is unchanged rests only on the worker's own statement that it did not edit the file. A harness-recorded check, such as a diff against the original or a checksum, is needed to show the file is unchanged."
+    }
+  ],
+  "criteria": 4,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4111,
+      "output_tokens": 2104,
+      "seconds": 11.414,
+      "cost_usd": 0.0015658249999999999
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The file roman.py as it stands defines both to_roman and from_roman, and the passing run of test_visible exercises both.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The _PAIRS table includes all six subtractive forms, to_roman rejects values outside 1 to 3999, and test_known_values in the shipped test file checks 4, 9, 40, 90, 400 and 900 while test_out_of_range checks 0 and 4000; the run passed.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"from_roman looks text up in a dictionary built only from to_roman's outputs for 1 to 3999, so lower case, the empty string, IIII, VX, IC, MMMM and other non-members raise ValueError. The shipped tests cover only \\\"\\\" and \\\"ABC\\\", but the code itself settles the rest. Non-string inputs such as lists would raise TypeError rather than ValueError, a gap the criterion's examples do not touch.\"}, {\"criterion\": \"c4\", \"decision\": \"not_proven\", \"reason\": \"The passing run is recorded by the worker, and the claim that test_visible.py is unchanged rests only on the worker's own statement that it did not edit the file. A harness-recorded check, such as a diff against the original or a checksum, is needed to show the file is unchanged.\"}]}"
+}

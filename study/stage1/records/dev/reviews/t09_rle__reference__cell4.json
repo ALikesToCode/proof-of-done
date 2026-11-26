@@ -1,0 +1,63 @@
+{
+  "task": "t09_rle",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:31+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": true,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The harness ran the provided tests on the final files and they pass, and rle.py defines both `encode` and `decode` as module-level functions."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The passing visible tests check `encode(\"aaabcc\")` == `\"3ab2c\"` and `encode(\"\")` == `\"\"`, and the code writes a run of length 1 as the bare character."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "The visible tests do not exercise the digit check, but rle.py's `encode` runs `re.search(r\"[0-9]\", text)` and raises `ValueError` on a match, which the code shows directly."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "`test_decode` passes `decode(\"3ab2c\")` == `\"aaabcc\"`, and `test_round_trip` passes `decode(encode(text))` == text for several inputs."
+    },
+    {
+      "criterion": "c5",
+      "decision": "proven",
+      "reason": "The visible test covers `\"3\"` and `\"a2\"`. The code raises for a count of 0 or 1 (`\"0a\"`, `\"1a\"`) and for a leading zero (`\"02a\"`) through the `startswith(\"0\")` and `int(count) < 2` check, so every listed case is handled."
+    },
+    {
+      "criterion": "c6",
+      "decision": "proven",
+      "reason": "The regex `[0-9]*` captures multi-digit counts, and `test_decode` passes `decode(\"12x\")` == `\"x\" * 12`."
+    },
+    {
+      "criterion": "c7",
+      "decision": "proven",
+      "reason": "The harness run of `python3 -m unittest test_visible -v` exits 0 with 4 passed and 0 failed, and the harness SHA-256 of test_visible.py is identical before and after the work."
+    }
+  ],
+  "criteria": 7,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 5355,
+      "output_tokens": 1519,
+      "seconds": 7.517,
+      "cost_usd": 0.0014288249999999999
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The harness ran the provided tests on the final files and they pass, and rle.py defines both `encode` and `decode` as module-level functions.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The passing visible tests check `encode(\\\"aaabcc\\\")` == `\\\"3ab2c\\\"` and `encode(\\\"\\\")` == `\\\"\\\"`, and the code writes a run of length 1 as the bare character.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"The visible tests do not exercise the digit check, but rle.py's `encode` runs `re.search(r\\\"[0-9]\\\", text)` and raises `ValueError` on a match, which the code shows directly.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"`test_decode` passes `decode(\\\"3ab2c\\\")` == `\\\"aaabcc\\\"`, and `test_round_trip` passes `decode(encode(text))` == text for several inputs.\"}, {\"criterion\": \"c5\", \"decision\": \"proven\", \"reason\": \"The visible test covers `\\\"3\\\"` and `\\\"a2\\\"`. The code raises for a count of 0 or 1 (`\\\"0a\\\"`, `\\\"1a\\\"`) and for a leading zero (`\\\"02a\\\"`) through the `startswith(\\\"0\\\")` and `int(count) < 2` check, so every listed case is handled.\"}, {\"criterion\": \"c6\", \"decision\": \"proven\", \"reason\": \"The regex `[0-9]*` captures multi-digit counts, and `test_decode` passes `decode(\\\"12x\\\")` == `\\\"x\\\" * 12`.\"}, {\"criterion\": \"c7\", \"decision\": \"proven\", \"reason\": \"The harness run of `python3 -m unittest test_visible -v` exits 0 with 4 passed and 0 failed, and the harness SHA-256 of test_visible.py is identical before and after the work.\"}]}"
+}

@@ -1,0 +1,53 @@
+{
+  "task": "t25_chunks",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 3,
+  "form": "specific",
+  "kind": "worker",
+  "at": "2026-11-26T21:30:34+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The files show `chunk` and `sliding` returning lists built from slices, with `list()` copies that never touch the argument. The worker's run of the four visible tests, including test_argument_not_changed, passed."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The `chunk` code yields consecutive slices with a shorter last piece and returns [] for an empty list. test_chunk asserts both cases, and the visible run passed."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "The `sliding` range `range(0, len-size+1, step)` gives windows at 0, step, 2*step, drops partial windows, and returns [] when the list is shorter than size. test_sliding asserts these cases and the run passed."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "`_check` raises ValueError for non-int, bool, and values below 1, and both functions apply it to size (step too in `sliding`). test_bad exercises size 0, -1, 1.5 and step 0, and the run passed."
+    },
+    {
+      "criterion": "c5",
+      "decision": "not_proven",
+      "reason": "The four provided tests pass, but nothing in the record shows test_visible.py was left unchanged. The worker's own summary says this is not demonstrated. A harness-recorded hash or diff of test_visible.py against its original, or a run of the original file, would convince me."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4120,
+      "output_tokens": 1425,
+      "seconds": 8.526,
+      "cost_usd": 0.0012274500000000002
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The files show `chunk` and `sliding` returning lists built from slices, with `list()` copies that never touch the argument. The worker's run of the four visible tests, including test_argument_not_changed, passed.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The `chunk` code yields consecutive slices with a shorter last piece and returns [] for an empty list. test_chunk asserts both cases, and the visible run passed.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"The `sliding` range `range(0, len-size+1, step)` gives windows at 0, step, 2*step, drops partial windows, and returns [] when the list is shorter than size. test_sliding asserts these cases and the run passed.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"`_check` raises ValueError for non-int, bool, and values below 1, and both functions apply it to size (step too in `sliding`). test_bad exercises size 0, -1, 1.5 and step 0, and the run passed.\"}, {\"criterion\": \"c5\", \"decision\": \"not_proven\", \"reason\": \"The four provided tests pass, but nothing in the record shows test_visible.py was left unchanged. The worker's own summary says this is not demonstrated. A harness-recorded hash or diff of test_visible.py against its original, or a run of the original file, would convince me.\"}]}"
+}
