@@ -246,3 +246,18 @@ describe('a project that takes test runs only from its pipeline', () => {
     expect((await receipts.accept(key, body({}))).outcome).toBe('recorded');
   });
 });
+
+describe('what a coding agent is told', () => {
+  it('learns the commit, that its proof went stale, and what only the pipeline can prove', async () => {
+    const { toAgentContract } = await import('../src/services/agent');
+    store.settings.set('10000', { ...DEFAULT_SETTINGS, pipelineOnly: true });
+    await receipts.accept(key, body({}));
+    await receipts.accept(key, JSON.stringify({ issue: 'MOBL-1', commit: B, status: 'failed' }));
+    const contract = toAgentContract(await contracts.view('MOBL-1', AGENT));
+    expect(contract.commit).toBe(B);
+    expect(contract.criteria[0]!.next).toMatch(/^Open again\. The pipeline is at commit bbbbbbbbbbbb now\..*Wait for the pipeline/);
+    expect(contract.criteria[0]!.evidence[0]!.standing).toBe('stale_commit');
+    expect(contract.criteria[1]!.next).toMatch(/^Only the project's pipeline can prove this one\..*failed/s);
+    expect(contract.criteria[2]!.next).toBe('Submit evidence.');
+  });
+});

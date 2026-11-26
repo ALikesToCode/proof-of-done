@@ -67,6 +67,8 @@ export interface AgentContract {
   hasContract: boolean;
   proof: AgentProof;
   gate: AgentGate;
+  /** The commit the project's pipeline last reported on for this work item. Evidence about an earlier commit does not count. */
+  commit?: string;
   criteria: AgentCriterion[];
   /** Criteria found in the description or the project rules that are not in the contract. */
   suggested?: Array<{ text: string; needs: RequiredKind; from: string }>;
