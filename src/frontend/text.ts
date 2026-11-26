@@ -330,6 +330,10 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
       return `moved the work item on while the workflow validator could not check it. The project lets that through.${sentence(data['reason'])}`;
     case 'gate.pass_granted':
       return `let the work item through the done gate for ${PASS_MINUTES} minutes, without proof.${sentence(reasonOf(data['reason']))}`;
+    case 'brief.written':
+      return `asked the Proof Verifier, which wrote a repair brief for the coding agent: ${quote(data['text'])}`;
+    case 'brief.removed':
+      return 'removed the repair brief';
     case 'gate.let_through':
       return `moved the work item on with that pass. Without it the validator would have refused.${sentence(data['instead'])}`;
     default:
@@ -383,6 +387,24 @@ export function waitingLine(waiting: number): string {
 /** What the panel says to the Proof Verifier when it opens Rovo chat. */
 export function verifierPrompt(issueKey: string): string {
   return `Review the evidence that waits for a verdict on ${issueKey}.`;
+}
+
+/** What the panel says to the Proof Verifier when someone asks why a work item is blocked. */
+export function blockedPrompt(issueKey: string): string {
+  return `Explain what blocks ${issueKey} and write a repair brief for the coding agent.`;
+}
+
+/** Whether something went wrong that is worth explaining: evidence was turned away, or proof went stale. */
+export function hasTrouble(view: Pick<ContractView, 'criteria'>): boolean {
+  return view.criteria.some((criterion) => criterion.stale || criterion.state === 'rejected');
+}
+
+/** The line under a repair brief: what it is, and whether the pipeline has moved on since. */
+export function briefNote(brief: { commit: string | null; outdated: boolean }, commit: string | null): string {
+  const base = 'The coding agent gets this brief with the contract. It is advice and proves nothing. The verdicts stay with you.';
+  if (!brief.outdated || !commit) return base;
+  const from = brief.commit ? `at commit ${shortCommit(brief.commit)}` : 'before the pipeline reported';
+  return `${base} It was written ${from}, and the pipeline has since reported ${shortCommit(commit)}, so it may no longer apply.`;
 }
 
 export function proofLine(proven: number, total: number): string {

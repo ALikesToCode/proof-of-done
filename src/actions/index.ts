@@ -26,3 +26,5 @@ export const submitEvidence = tool('submit-evidence');
 export const listUnprovenWork = tool('list-unproven-work');
 export const listEvidenceToReview = tool('list-evidence-to-review');
 export const recordVerdict = tool('record-verdict');
+export const listProofBlockers = tool('list-proof-blockers');
+export const writeRepairBrief = tool('write-repair-brief');

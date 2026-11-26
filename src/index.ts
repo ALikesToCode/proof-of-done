@@ -4,6 +4,8 @@ export {
   listEvidenceToReview,
   listUnprovenWork,
   recordVerdict,
+  listProofBlockers,
+  writeRepairBrief,
   startDoneContract,
   submitEvidence,
 } from './actions';

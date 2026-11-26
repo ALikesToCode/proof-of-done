@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MCP_TOOLS, TOOLS, VERIFIER_TOOLS } from '../src/actions/tools';
+import { MCP_TOOLS, TOOLS, VERDICT_TOOLS, VERIFIER_TOOLS } from '../src/actions/tools';
 import { VERIFIER } from '../src/frontend/text';
 import { entries, items, manifest, readSkill, resourceFile, value } from './helpers/manifest';
 
@@ -72,9 +72,16 @@ describe('the Rovo skills', () => {
   });
 
   it('puts both verdict tools in one skill', () => {
-    const judging = skills.filter((skill) => skill.tools.some((tool) => VERIFIER_TOOLS.includes(tool as (typeof TOOLS)[number])));
+    const judging = skills.filter((skill) => skill.tools.some((tool) => VERDICT_TOOLS.includes(tool as (typeof TOOLS)[number])));
     expect(judging.map((skill) => skill.key)).toEqual(['review-evidence']);
-    expect([...judging[0]!.tools].sort()).toEqual([...VERIFIER_TOOLS].sort());
+    expect([...judging[0]!.tools].sort()).toEqual([...VERDICT_TOOLS].sort());
+  });
+
+  it('keeps the repair brief apart from the verdicts', () => {
+    const explaining = skills.find((skill) => skill.key === 'explain-blockers')!;
+    expect([...explaining.tools].sort()).toEqual(['list-proof-blockers', 'write-repair-brief']);
+    expect(explaining.body).toContain('This skill records no verdict.');
+    expect([...VERIFIER_TOOLS].sort()).toEqual([...VERDICT_TOOLS, ...explaining.tools].sort());
   });
 });
 

@@ -50,6 +50,10 @@ modules:
       handler: index.listEvidenceToReview
     - key: tool-record-verdict
       handler: index.recordVerdict
+    - key: tool-proof-blockers
+      handler: index.listProofBlockers
+    - key: tool-repair-brief
+      handler: index.writeRepairBrief
     - key: on-pipeline-receipt
       handler: index.onPipelineReceipt
   # A project's pipeline posts its test runs and builds here, with the project's key. The
@@ -159,21 +163,24 @@ modules:
   rovo:agent:
     - key: proof-verifier
       name: Proof Verifier
-      description: Checks the evidence on a Jira work item against its done contract and records a verdict on each piece, with its reasoning.
+      description: Checks the evidence on a Jira work item against its done contract, records a verdict on each piece with its reasoning, and explains what blocks a work item.
       icon: resource:icons;proof-verifier.svg
       prompt: resource:rovo-prompts;proof-verifier.txt
       conversationStarters:
         - Review the evidence that waits on this work item
-        - What is still unproven on this work item?
+        - Why can this work item not close?
         - Which work in this project was closed without proof?
       actions:
         - list-evidence-to-review
         - record-verdict
         - get-done-contract
         - list-unproven-work
+        - list-proof-blockers
+        - write-repair-brief
       skills:
         - review-evidence
         - report-proof
+        - explain-blockers
   rovo:skill:
     - key: review-evidence
       source:
@@ -189,6 +196,13 @@ modules:
         tools:
           - get-done-contract
           - list-unproven-work
+    - key: explain-blockers
+      source:
+        dir: rovo/skills/explain-blockers
+      dependencies:
+        tools:
+          - list-proof-blockers
+          - write-repair-brief
   action:
     - key: get-context-pack
       name: Get context pack
@@ -353,6 +367,39 @@ modules:
           type: string
           required: true
           description: One or two sentences on why the evidence does or does not show that the criterion is met.
+    - key: list-proof-blockers
+      name: List proof blockers
+      function: tool-proof-blockers
+      actionVerb: GET
+      description: >
+        Lists the criteria of a Jira work item that are not proven, each with its evidence
+        and the contradictions the app found between records, such as an agent's claim
+        against the pipeline's result. Call it before explaining what blocks a work item.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+    - key: write-repair-brief
+      name: Write repair brief
+      function: tool-repair-brief
+      actionVerb: CREATE
+      description: >
+        Saves a repair brief on a Jira work item: what the coding agent has to fix and
+        what evidence would then prove each open criterion. The coding agent receives it
+        with the contract. It proves nothing and records no verdict.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: true
+          description: The key of the Jira work item, for example ABC-123.
+        brief:
+          title: Repair brief
+          type: string
+          required: true
+          description: The brief, addressed to the coding agent, in 40 to 2,000 characters.
   scheduledTrigger:
     - key: daily-maintenance
       function: maintenance

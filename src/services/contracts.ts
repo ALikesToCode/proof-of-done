@@ -33,6 +33,7 @@ import { IssueInfo, JiraGateway } from '../jira/gateway';
 import { ContractBundle, ContractStore, EventRow } from '../store/types';
 import { activePass } from './gate';
 import { saveProof } from './proof-sync';
+import { BRIEF_REMOVED, BRIEF_WRITTEN, cleanBrief, currentBrief } from './repair';
 import {
   ContractView,
   CriterionInput,
@@ -336,6 +337,33 @@ export class ContractService {
     return this.close(session, caller);
   }
 
+  /**
+   * Keeps what the Proof Verifier tells the coding agent to fix. Only the verifier writes
+   * one, and only while something is open. It records no verdict and proves nothing.
+   */
+  async writeBrief(issueRef: string, caller: Caller, raw: unknown): Promise<ContractView> {
+    if (caller.via !== 'verifier') throw new PodError('forbidden', 'Only the Proof Verifier writes a repair brief.');
+    const session = await this.open(issueRef);
+    const { issue, bundle, before } = session;
+    if (!bundle.contract) throw new PodError('invalid', `${issue.key} has no done contract, so there is nothing to repair.`);
+    if (before.state === 'proven') throw new PodError('invalid', `Every criterion of ${issue.key} is proven, so there is nothing to repair.`);
+    const text = cleanBrief(raw);
+    await this.record(issue, caller, BRIEF_WRITTEN, { text, commit: pipelineCommit(bundle.evidence) });
+    return this.close(session, caller);
+  }
+
+  /** Takes the repair brief away. A person does this when the brief is wrong or no longer applies. */
+  async removeBrief(issueRef: string, caller: Caller): Promise<ContractView> {
+    onlyPeople(caller);
+    const session = await this.open(issueRef);
+    const { issue } = session;
+    if (!currentBrief(await this.store.listEvents(issue.id, GATE_LOOKBACK))) {
+      throw new PodError('conflict', 'This work item has no repair brief.');
+    }
+    await this.record(issue, caller, BRIEF_REMOVED, {});
+    return this.close(session, caller);
+  }
+
   async history(issueRef: string): Promise<HistoryEntry[]> {
     const issue = await this.issue(issueRef);
     const events = await this.store.listEvents(issue.id, HISTORY_LIMIT);
@@ -523,6 +551,7 @@ export function buildView(
     unchecked: uncheckedView(gate.events, gate.now),
     canLetThrough: gate.canAdmin && settings.gateMode !== 'off',
     commit,
+    brief: exists && summary.state !== 'proven' ? briefView(gate.events, commit) : null,
     criteria,
     suggestions: suggest(issue, settings, bundle.criteria).slice(0, Math.max(0, MAX_CRITERIA - criteria.length)),
     canEdit,
@@ -530,7 +559,14 @@ export function buildView(
   };
 }
 
-/** How far back in a work item's history the panel looks for what the gate did. */
+function briefView(events: EventRow[], commit: string | null): ContractView['brief'] {
+  const brief = currentBrief(events);
+  if (!brief) return null;
+  const written = typeof brief.data['commit'] === 'string' ? brief.data['commit'] : null;
+  return { text: String(brief.data['text']), at: brief.at, askedBy: brief.actorAccountId, commit: written, outdated: commit !== null && commit !== written };
+}
+
+/** How far back in a work item's history the panel looks for what the gate did, and for a repair brief. */
 const GATE_LOOKBACK = 50;
 const HOUR = 60 * 60 * 1000;
 

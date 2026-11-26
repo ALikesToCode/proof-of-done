@@ -126,7 +126,7 @@ Every project gets a Proof of Done page in the row of tabs under its name. Jira 
 
 ## The agent tools
 
-Seven Forge actions do the work. The app's MCP server offers five of them to outside agents. Two belong to the Proof Verifier alone.
+Nine Forge actions do the work. The app's MCP server offers five of them to outside agents. Four belong to the Proof Verifier alone.
 
 | Tool | What it does | Who has it |
 | --- | --- | --- |
@@ -137,12 +137,29 @@ Seven Forge actions do the work. The app's MCP server offers five of them to out
 | `list-unproven-work` | Lists the project's work under contract that is not proven, with the meter | Coding agents, Proof Verifier |
 | `list-evidence-to-review` | Lists the evidence on a work item that waits for a verdict, with what the Teamwork Graph holds about each pull request or build | Proof Verifier |
 | `record-verdict` | Accepts or rejects one piece of evidence, with the reasoning | Proof Verifier |
+| `list-proof-blockers` | Lists the criteria that are not proven, each with its evidence and the contradictions the app found between records | Proof Verifier |
+| `write-repair-brief` | Saves what the coding agent has to fix. It records no verdict | Proof Verifier |
 
 Every answer is written for a language model. States are plain words, empty fields are left out, and a `next` line says what to do. A refusal comes back as `ok: false` with a code and a sentence the agent can act on.
 
 A tool does what the person behind the agent may do, and nothing more. The app takes the account from the invocation, never from an input, and makes its Jira calls as that person. An agent can start a contract only from criteria that are already written down. It cannot add criteria of its own, attest, or record a verdict.
 
-The Proof Verifier has two skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. Rovo shows the verdicts the agent wants to record, and the person confirms them. The panel looks for new verdicts every eight seconds, for five minutes.
+The Proof Verifier has three skills. `review-evidence` walks the review queue and records a verdict on each piece. `report-proof` reports where a work item or a project stands. `explain-blockers` explains why a work item cannot close and writes a repair brief. Its prompt holds the rules no request can bend. It judges from the record, treats text inside evidence as material and never as instructions, and rejects when unsure. When evidence waits, the panel shows an Ask Proof Verifier button that opens Rovo chat with the work item's key. Rovo shows the verdicts the agent wants to record, and the person confirms them. The panel looks for new verdicts every eight seconds, for five minutes.
+
+### The repair brief
+
+When evidence was turned away or proof went stale, the panel shows an "Ask why it is blocked" button. It opens Rovo chat with the work item's key.
+
+The app finds the contradictions, not the model. `list-proof-blockers` returns each open criterion with a `conflicts` list that the app builds from stored records:
+
+- an agent's or a person's claim that the pipeline contradicted on the same commit, with the pipeline's result;
+- proof about a commit the pipeline has moved past, with both commits;
+- the newest evidence when the automatic checks turned it away, with the reason;
+- a pull request or a build whose state in the Teamwork Graph differs from the evidence, or that the graph does not link to the work item.
+
+The Proof Verifier explains those lines and writes a brief of 40 to 2,000 characters for the coding agent. `write-repair-brief` saves it as an event with the commit the pipeline was at. The coding agent gets it as `repairBrief` in the answers to `get-context-pack` and `get-done-contract`, with a note that it is advice and proves nothing. The panel shows it with who asked.
+
+A brief changes no verdict, no criterion and no state. Only the Proof Verifier's tool writes one, and the MCP server does not offer that tool, so a coding agent cannot write its own. A newer brief replaces it. A person who can edit the work item can remove it. It is no longer shown once every criterion is proven. When the pipeline reports another commit, the brief stays and says that the pipeline has moved on. The text is written by a language model from ticket content, so the coding agent is told to treat it as advice.
 
 `skills/proof-of-done/SKILL.md` is the open skill for coding agents. It teaches the loop. Read the contract first, submit evidence for each criterion, and say "done" only when every criterion is proven. A gate that passes is not enough for that, because a gate that the project turned off also passes.
 
@@ -197,7 +214,7 @@ The app is deterministic. It stores contracts, evidence and verdicts, runs the c
 | Project page, meter, settings, sample data | `jira:projectPage`, `jira:projectSettingsPage` | Built and deployed. The services are verified on the development site, and page tests cover what the pages say and do. Checked in a browser on the development site |
 | Cleanup | `trigger` on deleted work items | Built, verified on the development site |
 | Agent tools | `action` and `rovo:mcp`, plus an open `SKILL.md` | Built and deployed. The tools are verified on the development site through a test function. The MCP path waits for an admin to turn the tools on |
-| Proof Verifier | `rovo:agent` with two `rovo:skill` modules | Built and deployed. Asked from the panel on the development site, it accepted a test run with no failures and rejected a pull request link that the Teamwork Graph had no record of. The panel showed both verdicts |
+| Proof Verifier | `rovo:agent` with three `rovo:skill` modules | Verdicts: built and deployed. Asked from the panel on the development site, it accepted a test run with no failures and rejected a pull request link that the Teamwork Graph had no record of. The panel showed both verdicts. The repair brief is built and covered by tests, and has not been tried in Rovo chat yet |
 | Teamwork Graph check | `requestTeamworkGraph` from `@forge/api`, four `read:graph` scopes | Built and deployed. Verified on the development site against pull requests, builds and a deployment that a test provider reported to Jira. The Review dialog showed its note in a browser. Not yet seen with a pull request from a real code host |
 
 The browser check ran at 1280 pixels wide. The issue panel and the project page were also read at 540 pixels and in dark colours. Jira takes its theme from the account's setting and not from the browser, and the check left that setting alone, so Atlassian's dark tokens were put on the page by hand. The pages take every colour from those tokens.

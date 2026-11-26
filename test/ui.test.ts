@@ -332,6 +332,55 @@ describe('the issue panel', () => {
     expect(world().calls).toHaveLength(calls);
   });
 
+  it('asks the Proof Verifier why a work item is blocked and shows its repair brief', async () => {
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+    onWorkItem();
+    const created = await contract();
+    await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[1]!.id, ...FAILED_RUN });
+    const page = await show(pages.panel);
+    expect(page.text()).toContain('The Proof Verifier can explain what blocks this and write a repair brief for the coding agent.');
+
+    await page.press('Ask why it is blocked');
+    expect(world().rovoOpened).toEqual([
+      { type: 'forge', agentKey: 'proof-verifier', agentName: 'Proof Verifier', prompt: 'Explain what blocks MOBL-1 and write a repair brief for the coding agent.' },
+    ]);
+    expect(page.text()).toContain('The Proof Verifier is explaining this in Rovo chat. Its repair brief shows up here.');
+
+    const brief = 'All unit tests pass: 2 tests failed in the run the agent sent.\nFix them and send the full run again.';
+    await elsewhere().writeBrief('MOBL-1', VERIFIER, brief);
+    await page.run(() => vi.advanceTimersByTime(8_000));
+    expect(page.text()).toContain('Repair brief for the coding agent');
+    expect(page.text()).toContain('All unit tests pass: 2 tests failed in the run the agent sent.');
+    expect(page.text()).toContain('Fix them and send the full run again.');
+    expect(page.text()).toContain('Written by the Proof Verifier just now, asked by');
+    expect(page.text()).toContain('It is advice and proves nothing. The verdicts stay with you.');
+    // The brief is in, so the panel stops looking.
+    const calls = world().calls.length;
+    await page.run(() => vi.advanceTimersByTime(60_000));
+    expect(world().calls).toHaveLength(calls);
+    // It decided nothing.
+    expect(page.text()).toContain('0 of 3 criteria proven');
+
+    await page.press('Remove brief');
+    expect(page.text()).not.toContain('Repair brief for the coding agent');
+    expect(page.buttons()).toContain('Ask why it is blocked');
+  });
+
+  it('offers no explanation where nothing was turned away, and shows a brief to someone who cannot edit', async () => {
+    const fresh = onWorkItem();
+    await contractWithAgentEvidence();
+    const page = await show(pages.panel);
+    expect(page.buttons()).not.toContain('Ask why it is blocked');
+    mounted.pop()!.unmount();
+
+    await elsewhere().writeBrief('MOBL-1', VERIFIER, 'Login works with email and password: the run covers it, and it waits for a review.');
+    fresh.jira.editable = false;
+    const reader = await show(pages.panel);
+    expect(reader.text()).toContain('Repair brief for the coding agent');
+    expect(reader.buttons()).not.toContain('Remove brief');
+    expect(reader.buttons()).not.toContain('Ask again');
+  });
+
   it('leaves the Proof Verifier out where Rovo is off', async () => {
     onWorkItem().rovoEnabled = false;
     await contractWithAgentEvidence();

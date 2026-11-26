@@ -72,6 +72,18 @@ export interface Suggestion {
   sourceRef: string | null;
 }
 
+/** A repair brief. It is advice for whoever does the work, and it proves nothing. */
+export interface BriefView {
+  text: string;
+  at: number;
+  /** Who asked the Proof Verifier for it. */
+  askedBy: string | null;
+  /** The commit the pipeline was at when it was written, or null when the pipeline had not reported. */
+  commit: string | null;
+  /** True when the pipeline has reported another commit since. */
+  outdated: boolean;
+}
+
 export interface ContractView {
   issue: {
     id: string;
@@ -97,6 +109,8 @@ export interface ContractView {
   canLetThrough: boolean;
   /** The commit the project's pipeline last reported on for this work item, or null when none has. */
   commit: string | null;
+  /** What the Proof Verifier told the coding agent to fix, while the contract is not proven. */
+  brief: BriefView | null;
   criteria: CriterionView[];
   suggestions: Suggestion[];
   canEdit: boolean;
