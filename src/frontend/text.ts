@@ -129,6 +129,8 @@ export function detailLines(details: EvidenceDetails, kind?: EvidenceKind): stri
   if (details.exitCode !== undefined) lines.push(`Exit code ${details.exitCode}`);
   if (details.command) lines.push(`Command: ${details.command}`);
   if (details.commit) lines.push(`Commit ${shortCommit(details.commit)}${details.branch ? ` on ${details.branch}` : ''}`);
+  const ran = [details.repository, details.workflow, details.run ? `run ${details.run}` : ''].filter(Boolean);
+  if (ran.length > 0) lines.push(`Ran in ${ran.join(', ')}`);
   return lines;
 }
 

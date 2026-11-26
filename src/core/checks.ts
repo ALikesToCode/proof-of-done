@@ -162,10 +162,13 @@ export function isHttpUrl(value: string): boolean {
 }
 
 const INT_FIELDS = ['passed', 'failed', 'skipped', 'exitCode'] as const;
-const TEXT_LIMITS: Record<'command' | 'commit' | 'branch' | 'status' | 'text', number> = {
+const TEXT_LIMITS: Record<'command' | 'commit' | 'branch' | 'repository' | 'workflow' | 'run' | 'status' | 'text', number> = {
   command: 300,
   commit: 64,
   branch: 200,
+  repository: 200,
+  workflow: 200,
+  run: 64,
   status: 32,
   text: 4000,
 };

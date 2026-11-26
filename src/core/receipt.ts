@@ -42,7 +42,8 @@ const text = (value: unknown): string => (typeof value === 'string' ? value.trim
  *
  * Fields: `issue` (a key) or `ref` (any text that names keys, such as a branch name),
  * `commit`, and either `passed` and `failed` for a test run or `status` for a build.
- * Optional: `kind`, `skipped`, `exitCode`, `command`, `branch`, `url`, `summary`.
+ * Optional: `kind`, `skipped`, `exitCode`, `command`, `branch`, `repository`, `workflow`,
+ * `run`, `url`, `summary`.
  */
 export function parseReceipt(body: string): Receipt | string {
   if (typeof body !== 'string' || body.length === 0) return 'The body is empty.';

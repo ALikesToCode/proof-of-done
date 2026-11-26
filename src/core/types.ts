@@ -77,6 +77,10 @@ export interface EvidenceDetails {
   commit?: string;
   /** The branch a pipeline ran on. */
   branch?: string;
+  /** Where a pipeline ran: the repository, the workflow or job, and the run with its attempt. */
+  repository?: string;
+  workflow?: string;
+  run?: string;
   /** Build result or pull request state, lower-cased. */
   status?: string;
   /** Short excerpt: a log tail, or the wording of an attestation. */
