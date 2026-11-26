@@ -33,6 +33,25 @@ The Proof Verifier is a Rovo agent. It reads the evidence that is waiting, decid
 - Changing a criterion retires its evidence. Proof given for one wording is never read as proof of another.
 - Evidence, verdicts and events are append-only. The history shows every one.
 
+## Results from the pipeline
+
+Everything else reaches the app as the submitter's own words. A control evaluation of the gate (`control-eval/`) measured what that costs: of the 20 attacks that got through a reviewing model, 14 were plain made-up test output. A reviewer who cannot run anything cannot tell a consistent lie about a test run from a true report.
+
+So one channel is closed to the worker. A project admin makes a key, and the project's pipeline posts its results with it to a web trigger. The rules:
+
+- A receipt names work items (a key, or any text that holds keys, such as a branch name), a commit, and either the counts of a test run or the state of a build. It may name the repository, the workflow and the run. Free text is dropped, so a pipeline cannot carry a message to a reviewer.
+- A receipt is stored as evidence with the channel `ci`, on each active criterion that asks for its kind. A criterion that takes any evidence counts when its wording asks for that kind (`src/core/kinds.ts`). The same receipt sent twice is stored once.
+- A passing receipt gets a verdict with the channel `ci`, unless the project turns `pipelineProves` off. A failing one fails its checks like any other evidence.
+- The commit a work item stands at is the commit of its newest receipt. Evidence that names another commit has the standing `stale`. A criterion whose only proof is stale is unproven, and the summary counts it in `stale`. Evidence that names no commit never goes stale.
+- A receipt that no criterion asks for is kept as evidence of no criterion. It proves nothing and it moves the commit.
+- With `pipelineOnly` on, a test run or a build from any other channel fails the check `source.pipeline`.
+
+The key reads `pod_<project id>_<48 hexadecimal characters>`. Only its SHA-256 is stored. A key speaks for one project: a receipt that names a work item of another project is ignored.
+
+The web trigger is static. It can answer only with the responses listed in the manifest, which is what keeps the app eligible for Runs on Atlassian.
+
+What this does not do: it does not fetch anything from a code host, and it does not check that the pipeline ran the tests a criterion is about. Whoever can change the pipeline or read its secrets can send a receipt.
+
 ## The done gate
 
 A work item with a contract should not pass as Done while a criterion is unproven. The app holds that line in two ways, and the project decides how strict it is.
