@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import platform
 import sys
 
 from lib import CRITERIA_CHECK_MODEL, CRITERIA_MODEL, PROMPTS_DIR, REVIEWER_MODEL, STAGE_DIR, TASKS_DIR, WORKER_MODEL, load_tasks, read_json, sha256, write_json
@@ -44,7 +45,15 @@ def require_frozen() -> dict:
     found = differences()
     if found:
         raise SystemExit("The task set is not frozen, or a file differs from the freeze:\n  " + "\n  ".join(found[:20]))
-    return read_json(FREEZE)
+    frozen = read_json(FREEZE)
+    if frozen.get("python") != python_version():
+        print(f"Note: the freeze was made on Python {frozen.get('python')}, this is {python_version()}. A twin that leans on a standard "
+              "module can fail other hidden tests on another version.", file=sys.stderr)
+    return frozen
+
+
+def python_version() -> str:
+    return ".".join(platform.python_version_tuple()[:2])
 
 
 def main() -> int:
@@ -75,6 +84,7 @@ def main() -> int:
     write_json(FREEZE, {
         "frozen_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
         "seed": args.seed,
+        "python": python_version(),
         "models": {"reviewer": REVIEWER_MODEL, "worker_evidence": WORKER_MODEL, "criteria": CRITERIA_MODEL, "criteria_check": CRITERIA_CHECK_MODEL},
         "tasks": len(tasks),
         "files": current_files(),

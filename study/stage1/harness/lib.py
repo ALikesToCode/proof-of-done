@@ -1,8 +1,8 @@
 """Shared pieces of the stage 1 harness: paths, the task set, running a task's tests
 against a version of the work, and asking a model in a fresh context with no tools.
 
-Python 3.10 or newer, standard library only. Model calls go through the `claude`
-command-line tool.
+Standard library only; the task set is validated on Python 3.14. Model calls go through
+the `claude` command-line tool.
 """
 
 from __future__ import annotations

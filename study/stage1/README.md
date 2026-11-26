@@ -43,11 +43,15 @@ Known weak points of the task set:
 - Some twins differ from the reference by one line (`c02_slugify`, `c07_money`, `c08_intervals`).
 - Several `c..` tasks share a topic with a `t..` task (durations, slugs, pagination, an LRU cache,
   working days, a token bucket). The rules and the code differ.
-- The tasks were run on Python 3.14 only, apart from the check in CI on 3.10.
+- The task set is checked on Python 3.14, the version the pilot runs on, here and in CI. On
+  Python 3.10 the twin of `t06_record` fails two more hidden tests than its `meta.json` lists,
+  because it leans on the `csv` module, which changed between the versions. The other 47 tasks
+  give the same result on 3.10. The freeze records the Python version.
 
 ## Run it
 
-Python 3.10 or newer, standard library only, and the `claude` command-line tool signed in.
+Python 3.14, standard library only, and the `claude` command-line tool signed in. The code runs
+on 3.10 or newer; the task set is validated on 3.14.
 
 ```
 cd study/stage1/harness
