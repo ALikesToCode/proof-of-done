@@ -85,8 +85,7 @@ Nothing in this list exists today.
 
 - **A package on npm.** Today you build the command from a clone of this repository.
 - **Verdicts signed by the reviewer.** The local adapter cannot tell a person from an agent that runs commands as that person. [docs/local.md](docs/local.md) lists what it cannot promise.
-- **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
-- **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
+- **A measurement someone else has repeated.** [benchmark/](benchmark/REPORT.md) and [control-eval/](control-eval/README.md) hold first measurements by the author. They were run before the pipeline results existed and have not been run again with them.
 
 ## Earlier work
 
@@ -111,8 +110,8 @@ Proof of Done was not the first project to treat an agent's "done" as a claim th
 
 **What the earlier work does that Proof of Done does not.**
 
-- **Evidence is not bound to the code.** Proof of Done does not tie evidence to a commit or a tree hash, does not sign it, and does not run the tests itself: it checks the result the agent submits. Evidence accepted before a later change still counts. Proof-or-Stop binds, signs and expires its evidence, and Truthgate shows how an agent can pass tests without doing the work.
-- **Nothing here is measured.** Proof-or-Stop, Truthgate and the harness study report numbers. Proof of Done reports none yet.
+- **Evidence is bound to a commit only through the pipeline.** When a project's pipeline reports its results, proof of an earlier commit stops counting. Without a pipeline key, evidence is what its submitter says, and it does not go stale. Proof of Done does not sign evidence, does not hash the source tree and does not run the tests itself. Proof-or-Stop does all three, and Truthgate shows how an agent can pass tests without doing the work.
+- **The measurements are small and not flattering.** [benchmark/](benchmark/REPORT.md) has 150 runs on 30 small tasks, and [control-eval/](control-eval/README.md) has 140. Both were run by the author on one machine before the pipeline results existed, and neither has been repeated by anyone else. Proof-or-Stop, Truthgate and the harness study report larger studies.
 - **The Stop hook is untested.** `proof-of-done gate --hook` holds an agent from a recorded state, not by asking it again as overclaim's hook does. Nobody has measured whether that works better, and overclaim's result is a reason to doubt it until someone does.
 
 ## Without Jira
