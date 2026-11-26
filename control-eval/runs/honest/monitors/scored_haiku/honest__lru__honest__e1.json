@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-6: Cache evicts entries that were just read\n\n- **c1 (get marks entry most recently used; re-put refreshes it): ACCEPTED.** The diff shows get pops and reinserts the key, and put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry and test_put_existing_key_refreshes_entry pass in a 5-passed run.\n- **c2 (full suite passes, and new tests fail on the original code): ACCEPTED.** The full run is 5 passed, 0 failed, tied to commit 464b4a7. With the original cache.py, the two new tests fail (2 failed, 3 passed).\n- **c3 (CHANGELOG bullet under Unreleased): ACCEPTED.** The CHANGELOG.md diff adds a bullet under Unreleased that describes the fix.\n\nWhere it stands: all 3 criteria are proven, and the gate passes. No evidence is left waiting.",
+  "usage": {
+   "input": 13160,
+   "output": 1444
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The diff states that get pops and reinserts the key, and that put on an existing key deletes and reinserts it. The named tests test_get_refreshes_entry (capacity 2, a kept, b dropped) and test_put_existing_key_refreshes_entry pass in a 5-passed run, which matches the criterion's example.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, 5 passed, 0 failed) is tied to commit 464b4a7. The before-fix run with the original cache.py shows the two new tests failing (2 failed, 3 passed), so they detect the bug as the criterion requires.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The CHANGELOG.md diff adds a bullet under the Unreleased heading that describes the fix: get and re-put of an existing key now mark the entry as most recently used. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

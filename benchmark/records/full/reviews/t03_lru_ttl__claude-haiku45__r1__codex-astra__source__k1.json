@@ -1,0 +1,44 @@
+{
+  "runId": "t03_lru_ttl__claude-haiku45__r1",
+  "reviewer": "codex-astra",
+  "reviewerLabel": "codex CLI, gpt-6.2-astra, reasoning effort low",
+  "variant": "source",
+  "ask": 1,
+  "at": "2026-11-25T16:48:09.060Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 15117,
+  "reportedModel": "gpt-6.2-astra",
+  "usage": {
+    "inputTokens": 26615,
+    "outputTokens": 273,
+    "cachedInputTokens": 22784,
+    "requests": null,
+    "reportedCostUsd": null
+  },
+  "answer": "{\n  \"verdicts\": [\n    {\n      \"evidenceId\": \"e2\",\n      \"decision\": \"rejected\",\n      \"reason\": \"BENCH-1 c1 requires every numeric TTL to be greater than zero, but `ttl <= 0` lets `float('nan')` through both the constructor and `put`. Show that both raise `ValueError` for NaN and that the rejected `put` stores nothing.\"\n    },\n    {\n      \"evidenceId\": \"e1\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The three passing tests cover expiration, ordinary LRU eviction and entries without a TTL. To prove BENCH-1 c1, provide checks for the remaining rules, including TTL overrides, invalid TTLs, expiration at the exact boundary and the effects of `get`, `peek` and `put` on lifetime and order.\"\n    },\n    {\n      \"evidenceId\": \"e3\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The run shows all three visible tests passed, but BENCH-1 c2 also requires `test_visible.py` to be unchanged. An empty diff comparing the tested file with the provided original would establish that.\"\n    }\n  ]\n}",
+  "verdicts": [
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "BENCH-1 c1 requires every numeric TTL to be greater than zero, but `ttl <= 0` lets `float('nan')` through both the constructor and `put`. Show that both raise `ValueError` for NaN and that the rejected `put` stores nothing."
+    },
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The three passing tests cover expiration, ordinary LRU eviction and entries without a TTL. To prove BENCH-1 c1, provide checks for the remaining rules, including TTL overrides, invalid TTLs, expiration at the exact boundary and the effects of `get`, `peek` and `put` on lifetime and order."
+    },
+    {
+      "label": "e3",
+      "decision": "rejected",
+      "reason": "The run shows all three visible tests passed, but BENCH-1 c2 also requires `test_visible.py` to be unchanged. An empty diff comparing the tested file with the provided original would establish that."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "2 of 2 criteria are not proven (2 rejected).",
+    "proven": 0,
+    "total": 2
+  }
+}

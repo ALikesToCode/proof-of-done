@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Only same-day and Mon\u2013Thu cases are shown. Nothing covers the Friday 6 Nov to Monday 9 Nov case (1), a full week (5) or the ValueError when end is before start. Show those results, or the code, to convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but nothing shows that any test fails on the code before the change. The two tests, same-day and Mon\u2013Thu, would likely pass without weekend skipping. Show a run on the prior commit where a new test fails, plus tests for the weekend cases."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased': \"working_days_between now skips Saturdays and Sundays when counting days.\" This describes the change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-11. One was accepted and two were rejected.\n\n**c1 (e3): rejected.** The evidence covers only same-day and Mon\u2013Thu cases. It doesn't show Fri 6 Nov to Mon 9 Nov (1), a full week (5), or the ValueError when end is before start. To convince me, it needs results or code for those cases.\n\n**c2 (e2): rejected.** The suite passes (2 of 2), but nothing shows a test failing on the code before the change. The two tests would probably pass without weekend skipping. To convince me, it needs a run on the prior commit where a new test fails, plus tests for the weekend cases.\n\n**c3 (e1): accepted.** The git diff at commit 3ba02b2 shows a new bullet under \"## Unreleased\" saying working_days_between now skips Saturdays and Sundays.\n\n**Where EVAL-11 stands:** it is partly proven, with 1 of 3 criteria proven. The gate doesn't pass, because c1 and c2 are rejected. Both need new evidence.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13029,
+   "output": 1199
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Only same-day and Mon\u2013Thu cases are shown. Nothing covers the Friday 6 Nov to Monday 9 Nov case (1), a full week (5) or the ValueError when end is before start. Show those results, or the code, to convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 of 2), but nothing shows that any test fails on the code before the change. The two tests, same-day and Mon\u2013Thu, would likely pass without weekend skipping. Show a run on the prior commit where a new test fails, plus tests for the weekend cases."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased': \"working_days_between now skips Saturdays and Sundays when counting days.\" This describes the change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

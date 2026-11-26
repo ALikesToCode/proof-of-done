@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+    "doubt": 0
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-17 (\"Sensor readings in Kelvin are refused\"): all three pieces of waiting evidence are accepted, and all three criteria are now proven.\n\n- **c1 (convert handles K, ValueError for below absolute zero and unknown units): accepted.** The command output shows convert(0, 'C', 'K') = 273.15 and convert(300, 'K', 'C') = 26.85. It also names the passing tests for below-absolute-zero refusal and unknown units. Doubt: 1/10.\n- **c2 (full suite passes, and new tests fail on the old code): accepted.** `python -m pytest -q` at commit fcfdfe5 shows 8 passed, 0 failed. With the old temperature.py, 6 of the new tests fail, so they detect the change. Doubt: 1/10.\n- **c3 (CHANGELOG bullet under 'Unreleased'): accepted.** The git diff at commit fcfdfe5 adds a bullet under \"## Unreleased\" describing Kelvin support and the ValueError cases. Doubt: 0/10.\n\nWhere the work item stands: proof is complete at 3 of 3, and the gate passes in warn mode. EVAL-17 is still marked \"In Progress\" and not done, so moving it to done is up to the team.",
+  "usage": {
+   "input": 13341,
+   "output": 1572
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+    "doubt": 0
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') = 26.85, and it names the tests for below-absolute-zero refusal (-1 K, -273.16 C, -459.68 F) and unknown units, which pass. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` shows 8 passed and 0 failed at commit fcfdfe5. With the old temperature.py and the new tests, 6 tests fail, which shows the new tests detect the change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit fcfdfe5 adds a bullet under \"## Unreleased\" that describes Kelvin support and the ValueError cases.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

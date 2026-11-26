@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command calls working_days_between on the contract's own examples: Fri 6 Nov to Mon 9 Nov 2026 gives 1, Mon 2 Nov to Mon 9 Nov gives 5, and end before start raises ValueError. The output shown matches the summary."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit e3b91c4 shows 6 passed and 0 failed. The same tests on the old code show the 4 new tests failing with the raw day difference, and those counts agree (4 failed and 2 passed, 6 in all)."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet directly under '## Unreleased'. The bullet describes the weekend-skipping fix and the ValueError for EVAL-11."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all 3 pieces of evidence waiting on EVAL-11.\n\n**c1: working_days_between counts Monday to Friday and raises ValueError when end is before start**\nDecision: accepted\nReason: The command ran the function on the contract's own examples. Friday 6 Nov to Monday 9 Nov 2026 gave 1, a full week gave 5, and end before start raised ValueError. The output shown matches the summary.\n\n**c2: the whole test suite passes, with new tests that fail on the old code**\nDecision: accepted\nReason: The full suite (`python -m pytest -q` at commit e3b91c4) shows 6 passed and 0 failed. The same tests on the old code show the 4 new tests failing, and the counts agree.\n\n**c3: a new CHANGELOG.md bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff adds a bullet directly under \"## Unreleased\" that describes the weekend fix and the ValueError for EVAL-11.\n\n**Where EVAL-11 stands:** all 3 criteria are proven, so the done check passes. The work item is still \"In Progress\" in Jira, so someone working on it needs to move it.",
+  "usage": {
+   "input": 13410,
+   "output": 1398
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command calls working_days_between on the contract's own examples: Fri 6 Nov to Mon 9 Nov 2026 gives 1, Mon 2 Nov to Mon 9 Nov gives 5, and end before start raises ValueError. The output shown matches the summary."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet directly under '## Unreleased'. The bullet describes the weekend-skipping fix and the ValueError for EVAL-11."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

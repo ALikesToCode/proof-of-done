@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+    "doubt": 0
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-1 (Parse duration strings): all three pieces of evidence reviewed and accepted.\n\n- **c1** (parse_duration returns 5400, 45, 7200 and raises ValueError for '' and '10x'): **accepted**. The command output shows the three values, and the excerpt shows the ValueError tests passing at commit 0720075. Doubt: 1/10.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The full run at 0720075 shows 7 passed and 0 failed. With durations.py reverted, the new tests error with ImportError. Doubt: 2/10.\n- **c3** (CHANGELOG.md has a new 'Unreleased' bullet for this change): **accepted**. The git diff shows the bullet, committed in 0720075. Doubt: 0/10.\n\nThe work item is done: 3 of 3 criteria are proven and the gate passes (mode: warn).",
+  "usage": {
+   "input": 13068,
+   "output": 1443
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+    "doubt": 0
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows 5400, 45 and 7200 for the three example strings, and the excerpt shows the ValueError tests for '' and '10x' passing at commit 0720075.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) at commit 0720075 shows 7 passed and 0 failed, and with durations.py reverted the new tests error with ImportError, so they fail on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md, committed in 0720075, that describes parse_duration and its behaviour.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

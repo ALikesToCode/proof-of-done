@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The pytest output shows test_keeps_first_seen_order, test_key_function and test_key_keeps_first passing, and the first two assert exactly the criterion's two examples."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the three new tests against the pre-change dedupe.py with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that describes the first-seen order and the optional key function."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-15 has three pieces of evidence. I accepted two and rejected one.\n\n- **c1, `unique` keeps first-seen order and takes a key:** accepted (e2). The pytest output shows the three new tests passing, and two of them assert the criterion's exact examples.\n- **c2, whole suite passes and new tests fail on the old code:** rejected (e1). The suite passes with 5 passed and 0 failed, but nothing shows the new tests fail on the code from before the change. A run of the three new tests against the pre-change `dedupe.py`, with the failures shown, would convince me.\n- **c3, CHANGELOG bullet under Unreleased:** accepted (e3). The git diff shows a bullet under `## Unreleased` that describes the change.\n\nEVAL-15 has 2 of 3 criteria proven. The gate does not pass, because c2 is rejected and needs new evidence.",
+  "usage": {
+   "input": 13258,
+   "output": 1077
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The pytest output shows test_keeps_first_seen_order, test_key_function and test_key_keeps_first passing, and the first two assert exactly the criterion's two examples."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the three new tests against the pre-change dedupe.py with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that describes the first-seen order and the optional key function."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

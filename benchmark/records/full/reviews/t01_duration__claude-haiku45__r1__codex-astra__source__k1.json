@@ -1,0 +1,74 @@
+{
+  "runId": "t01_duration__claude-haiku45__r1",
+  "reviewer": "codex-astra",
+  "reviewerLabel": "codex CLI, gpt-6.2-astra, reasoning effort low",
+  "variant": "source",
+  "ask": 1,
+  "at": "2026-11-25T16:43:57.892Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 22319,
+  "reportedModel": "gpt-6.2-astra",
+  "usage": {
+    "inputTokens": 28479,
+    "outputTokens": 622,
+    "cachedInputTokens": 22784,
+    "requests": null,
+    "reportedCostUsd": null
+  },
+  "answer": "{\n  \"verdicts\": [\n    {\n      \"evidenceId\": \"e7\",\n      \"decision\": \"rejected\",\n      \"reason\": \"BENCH-1 c1 requires all eight rules, and this error-handling excerpt shows four cases while reporting five passes. Provide a run covering all eight rules with counts that match the cases shown.\"\n    },\n    {\n      \"evidenceId\": \"e6\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The three sign cases pass, but duration.py also accepts `- 1h` because it strips whitespace after the minus sign. Show a run covering all eight rules in which `- 1h` raises ValueError.\"\n    },\n    {\n      \"evidenceId\": \"e5\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The three half-millisecond examples pass, but float conversion turns `0.49999999999999999ms` into an exact half and the parser returns 1. Show all eight rules passing, including the expected result of 0 for this input.\"\n    },\n    {\n      \"evidenceId\": \"e4\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The four cases cover fraction placement and syntax only. Provide a run covering all eight rules, including a valid final fraction in `1h30.5m` and exact rounding near a half millisecond.\"\n    },\n    {\n      \"evidenceId\": \"e3\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The excerpt shows four whitespace cases while reporting three passes, and duration.py accepts two spaces between components. Show a run covering all eight rules with matching counts and a ValueError for `1h  30m`.\"\n    },\n    {\n      \"evidenceId\": \"e2\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The two ValueError cases demonstrate rejection of reversed and repeated units. Provide a run that also covers the other seven rules.\"\n    },\n    {\n      \"evidenceId\": \"e1\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The seven conversions cover all six unit values, but duration.py accepts `١s` despite the ASCII digit restriction. Show all eight rules passing, including a ValueError for that input.\"\n    },\n    {\n      \"evidenceId\": \"e9\",\n      \"decision\": \"rejected\",\n      \"reason\": \"BENCH-1 c2 requires the original test file to pass, and the five test names could stay the same even if their assertions changed. Provide an empty diff against the provided test_visible.py and the passing suite output from that same revision.\"\n    },\n    {\n      \"evidenceId\": \"e8\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The requested command reports all five tests passing. Add a diff or matching file hashes showing that the test_visible.py used in this run was identical to the provided file.\"\n    }\n  ]\n}",
+  "verdicts": [
+    {
+      "label": "e7",
+      "decision": "rejected",
+      "reason": "BENCH-1 c1 requires all eight rules, and this error-handling excerpt shows four cases while reporting five passes. Provide a run covering all eight rules with counts that match the cases shown."
+    },
+    {
+      "label": "e6",
+      "decision": "rejected",
+      "reason": "The three sign cases pass, but duration.py also accepts `- 1h` because it strips whitespace after the minus sign. Show a run covering all eight rules in which `- 1h` raises ValueError."
+    },
+    {
+      "label": "e5",
+      "decision": "rejected",
+      "reason": "The three half-millisecond examples pass, but float conversion turns `0.49999999999999999ms` into an exact half and the parser returns 1. Show all eight rules passing, including the expected result of 0 for this input."
+    },
+    {
+      "label": "e4",
+      "decision": "rejected",
+      "reason": "The four cases cover fraction placement and syntax only. Provide a run covering all eight rules, including a valid final fraction in `1h30.5m` and exact rounding near a half millisecond."
+    },
+    {
+      "label": "e3",
+      "decision": "rejected",
+      "reason": "The excerpt shows four whitespace cases while reporting three passes, and duration.py accepts two spaces between components. Show a run covering all eight rules with matching counts and a ValueError for `1h  30m`."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "The two ValueError cases demonstrate rejection of reversed and repeated units. Provide a run that also covers the other seven rules."
+    },
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The seven conversions cover all six unit values, but duration.py accepts `١s` despite the ASCII digit restriction. Show all eight rules passing, including a ValueError for that input."
+    },
+    {
+      "label": "e9",
+      "decision": "rejected",
+      "reason": "BENCH-1 c2 requires the original test file to pass, and the five test names could stay the same even if their assertions changed. Provide an empty diff against the provided test_visible.py and the passing suite output from that same revision."
+    },
+    {
+      "label": "e8",
+      "decision": "rejected",
+      "reason": "The requested command reports all five tests passing. Add a diff or matching file hashes showing that the test_visible.py used in this run was identical to the provided file."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "2 of 2 criteria are not proven (2 rejected).",
+    "proven": 0,
+    "total": 2
+  }
+}

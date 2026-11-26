@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit b512003 shows convert(0,'C','K') = 273.15 and convert(300,'K','C') \u2248 26.85. The named tests for below absolute zero in K, C and F, and for an unknown unit, pass."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at b512003 gives 10 passed and 0 failed. Run against the old temperature.py, the same tests give 7 failed. The 7 named failures match that count and cover the new Kelvin behaviour."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at b512003 shows a new bullet under '## Unreleased' that describes Kelvin support and the ValueError for readings below absolute zero and for unknown units."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-17, so every criterion in its done contract is now proven.\n\n**c1: convert handles K, refuses readings below absolute zero and unknown units**\nAccepted.\nAt commit b512003, the command output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') \u2248 26.85. The tests for readings below absolute zero in K, C and F, and for an unknown unit, pass.\n\n**c2: the whole suite passes, and the new tests fail on the old code**\nAccepted.\nAt b512003, `python -m pytest -q` gives 10 passed and 0 failed. Run against the old temperature.py, the new tests give 7 failed, and the 7 tests it names match that count.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nAt b512003, the git diff shows a new bullet under '## Unreleased' that describes Kelvin support and the errors for readings below absolute zero and for unknown units.\n\nEVAL-17 is in progress, and the done gate now passes.",
+  "usage": {
+   "input": 13069,
+   "output": 1334
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at commit b512003 shows convert(0,'C','K') = 273.15 and convert(300,'K','C') \u2248 26.85. The named tests for below absolute zero in K, C and F, and for an unknown unit, pass."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at b512003 gives 10 passed and 0 failed. Run against the old temperature.py, the same tests give 7 failed. The 7 named failures match that count and cover the new Kelvin behaviour."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at b512003 shows a new bullet under '## Unreleased' that describes Kelvin support and the ValueError for readings below absolute zero and for unknown units."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

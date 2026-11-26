@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-12: Settings file comments break the loader.** 1 of 3 criteria proven. The gate does not pass (warn mode).\n\n- **c1** (parse_env skips `#` comments and blank lines, strips matching quotes, keeps later `=` in values): **Rejected.** The test run shows 2 passed, but the details describe only reading pairs and skipping empty lines. Nothing shows a test for `#` comments, quote stripping, or `URL=\"a=b\"` giving `{'URL': 'a=b'}`. The changelog entry describes the fix but does not test it. A test run covering those three cases would convince me. (Doubt: 7/10)\n- **c2** (full suite passes, with tests that fail on the pre-change code): **Rejected.** The full suite passes at commit cf56257 with 2 passed and 0 failed. Nothing shows that any test fails on the original code. A run of the new tests against the old `parse_env` that fails, then a passing run on the fix, would convince me. (Doubt: 6/10)\n- **c3** (CHANGELOG.md has a bullet under Unreleased for this change): **Accepted.** The git diff shows the new bullet under `## Unreleased`, describing the comment, quote and `=` fix. (Doubt: 1/10)\n\nNo evidence is left waiting on EVAL-12. The two rejected criteria need new evidence from the agent who does the work. Submitting that evidence is up to the team, not to me.",
+  "usage": {
+   "input": 13086,
+   "output": 1717
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two passing tests are described as covering reading pairs and skipping empty lines only. Nothing in the test output or details shows a test for '#' comment lines, quote stripping, or keeping '=' in values, and the changelog entry is a claim, not a test. A test run that exercises comment lines, matching-quote stripping, and 'URL=\"a=b\"' giving {'URL': 'a=b'} would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the full suite passing (2 passed, 0 failed, commit cf56257), but the criterion also requires tests for this change that fail on the pre-change code. Nothing shows that. A run of the new tests against the original parse_env that fails, followed by a passing run on the fix, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet added under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values. That is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

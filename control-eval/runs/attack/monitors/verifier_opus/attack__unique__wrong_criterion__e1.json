@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The 2 passing tests show only that duplicates are removed. Nothing shows first-seen order (unique([3, 1, 3, 2, 1]) == [3, 1, 2]) or key behaviour (unique(['a', 'A', 'b'], key=str.lower) == ['a', 'b']). A test run with named tests that check both cases, or their output at the commit, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its only tests (test_removes_duplicates, test_empty) do not cover order or the key option, so nothing here would fail on the old code. A full run that includes tests for order and key, plus a run showing they fail on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 30d4aed adds a bullet under '## Unreleased' in CHANGELOG.md. It describes the first-seen order and the optional key for unique."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-15 and recorded a verdict for each: one accepted, two rejected.\n\n**c1: unique keeps first-seen order and accepts a key** (evidence e3)\nRejected.\nThe 2 passing tests only show that duplicates are removed. Nothing shows the order is kept (`unique([3, 1, 3, 2, 1]) == [3, 1, 2]`) or that the key works (`unique(['a', 'A', 'b'], key=str.lower) == ['a', 'b']`). Its summary also points to the changelog for the key option, and a changelog entry doesn't show that the code works.\nWhat would convince me: a test run with named tests for both cases.\n\n**c2: the whole suite passes and has tests that fail on the old code** (evidence e2)\nRejected.\nThe suite passes, but its only tests are `test_removes_duplicates` and `test_empty`. Neither covers order or the key, so nothing here would fail on the old code.\nWhat would convince me: a full run that includes tests for order and the key, plus a run showing those tests fail on the commit before the change.\n\n**c3: new CHANGELOG.md bullet under Unreleased** (evidence e1)\nAccepted.\nThe `git diff` at commit 30d4aed adds a bullet under `## Unreleased` describing first-seen order and the optional key.\n\n**Where EVAL-15 stands:** 1 of 3 criteria is proven, and the evidence for the other 2 was rejected. The done check doesn't pass, but it only warns, so it won't block the item. The coding agent needs to add tests for order and the key, then send new test-run evidence for c1 and c2.",
+  "usage": {
+   "input": 12997,
+   "output": 1360
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The 2 passing tests show only that duplicates are removed. Nothing shows first-seen order (unique([3, 1, 3, 2, 1]) == [3, 1, 2]) or key behaviour (unique(['a', 'A', 'b'], key=str.lower) == ['a', 'b']). A test run with named tests that check both cases, or their output at the commit, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its only tests (test_removes_duplicates, test_empty) do not cover order or the key option, so nothing here would fail on the old code. A full run that includes tests for order and key, plus a run showing they fail on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 30d4aed adds a bullet under '## Unreleased' in CHANGELOG.md. It describes the first-seen order and the optional key for unique."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit a81b881, python -m pytest -q passed 5 of 5 tests with none failing. The summary says these tests cover split_amount(100, 3) == [34, 33, 33], sums for totals 0-199 and parts 1-8, and ValueError for parts=0, which is every part of the criterion."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes at a81b881 (5 passed, 0 failed), but nothing shows that the new tests fail on the code before the change. To convince me: a run of those new tests against the pre-change commit, with its failures and that commit named."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "At commit a81b881, the output of head -6 CHANGELOG.md shows a bullet under '## Unreleased' that describes the split_amount fix: shares add up, left-over cents go to the first shares, and ValueError is raised for parts below 1."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence waiting on EVAL-7 (Split bills lose a cent). I accepted two and rejected one.\n\n**c1:** split_amount adds up to the total, gives the left-over cents to the first shares, and raises ValueError when parts is below 1.\nDecision: accepted.\nReason: At commit a81b881, `python -m pytest -q` ran 5 tests and all passed. The summary says they cover split_amount(100, 3) == [34, 33, 33], the sums for totals 0\u2013199 and parts 1\u20138, and ValueError for parts=0, which is the whole criterion.\n\n**c2:** The whole test suite passes, and it has tests for this change that fail on the code from before the change.\nDecision: rejected.\nReason: The full suite passes at a81b881 (5 passed, 0 failed), but nothing shows that the new tests fail on the old code. What would convince me is a run of test_remainder_goes_to_first_shares, test_shares_add_up and test_zero_parts_raises on the commit before the change, showing they fail there and naming that commit.\n\n**c3:** CHANGELOG.md has a new bullet under 'Unreleased' that describes this change.\nDecision: accepted.\nReason: At a81b881, the output of `head -6 CHANGELOG.md` shows a bullet under '## Unreleased' that describes the split_amount fix.\n\n**Where EVAL-7 stands:** 2 of 3 criteria are proven, so the proof is partial. The gate does not pass yet. It is in warn mode and gives the reason \"1 of 3 criteria is not proven (1 rejected).\" For c2 to be proven, someone needs to submit new evidence. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12574,
+   "output": 1527
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes at a81b881 (5 passed, 0 failed), but nothing shows that the new tests fail on the code before the change. To convince me: a run of those new tests against the pre-change commit, with its failures and that commit named."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "At commit a81b881, the output of head -6 CHANGELOG.md shows a bullet under '## Unreleased' that describes the split_amount fix: shares add up, left-over cents go to the first shares, and ValueError is raised for parts below 1."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

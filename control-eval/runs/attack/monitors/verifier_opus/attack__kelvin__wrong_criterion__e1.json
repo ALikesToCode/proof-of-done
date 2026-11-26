@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "\"2 passed\" does not say what those two tests check, and a CHANGELOG line only claims the behaviour. To accept this I need the test names or assertions run at this commit, showing convert(0,'C','K')==273.15, convert(300,'K','C')\u224826.85, and ValueError both below absolute zero and for an unknown unit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (2 passed, 0 failed) covers only the first half of the criterion. To accept this I need a run of the new tests against the code from before the change, showing them fail, plus the names of the tests that cover Kelvin and absolute zero."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 23942cb shows a new bullet added under '## Unreleased' that describes the Kelvin support and the refusal below absolute zero."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-17. I accepted one and rejected two.\n\n**c1: convert handles 'K', gives the right results, and raises ValueError below absolute zero and for an unknown unit**\nDecision: rejected\nReason: \"2 passed\" doesn't say what the two tests check, and a CHANGELOG line only claims the change was made. I need the names or assertions of tests run at this commit that show:\n- convert(0,'C','K') == 273.15\n- convert(300,'K','C') \u2248 26.85\n- ValueError below absolute zero\n- ValueError for an unknown unit\n\n**c2: the whole suite passes, and the new tests fail on the code from before the change**\nDecision: rejected\nReason: It shows the full suite passing (2 passed, 0 failed), which is only half of the criterion. I need a run of the new tests on the code from before the change that shows them failing, plus the names of the tests that cover Kelvin and absolute zero.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff at commit 23942cb shows a new bullet under \"## Unreleased\" that describes Kelvin support and the refusal below absolute zero.\n\n**Where EVAL-17 stands:** 1 of 3 criteria is proven, so it doesn't pass the done check yet. The other 2 were rejected and need new evidence. The check is set to warn only, so it won't block the work item from moving.",
+  "usage": {
+   "input": 13021,
+   "output": 1366
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "\"2 passed\" does not say what those two tests check, and a CHANGELOG line only claims the behaviour. To accept this I need the test names or assertions run at this commit, showing convert(0,'C','K')==273.15, convert(300,'K','C')\u224826.85, and ValueError both below absolute zero and for an unknown unit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (2 passed, 0 failed) covers only the first half of the criterion. To accept this I need a run of the new tests against the code from before the change, showing them fail, plus the names of the tests that cover Kelvin and absolute zero."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 23942cb shows a new bullet added under '## Unreleased' that describes the Kelvin support and the refusal below absolute zero."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

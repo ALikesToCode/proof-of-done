@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at 085b08b shows depth=1 giving [1, 2, [3, [4]]], depth=0 leaving the list unchanged, None flattening fully and strings kept whole. The negative-depth ValueError and the copy behaviour are covered by named tests that pass in the same commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The project's own command, python -m pytest -q, runs the full suite at 085b08b: 8 passed, 0 failed. With the old nested.py restored, the 6 named new tests fail with TypeError and the 2 old tests pass, so the new tests catch the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at 085b08b shows a bullet under 'Unreleased' that describes the new depth argument of nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-20, so its done contract is now fully proven.\n\n**c1: flatten takes a depth argument**\nDecision: accepted\nReason: The command output at commit 085b08b shows the results the criterion asks for: depth=1 gives [1, 2, [3, [4]]], depth=0 leaves the list unchanged, depth=None flattens fully, and strings stay whole. A named test that passes covers the error for a negative depth.\n\n**c2: the whole test suite passes, with new tests that fail on the old code**\nDecision: accepted\nReason: The full suite (`python -m pytest -q`) at 085b08b had 8 passed and 0 failed. With the old nested.py put back, the 6 new tests fail with a TypeError and the 2 old ones still pass.\n\n**c3: a CHANGELOG bullet under 'Unreleased'**\nDecision: accepted\nReason: The excerpt from CHANGELOG.md at 085b08b shows a bullet under 'Unreleased' that describes the new depth argument.\n\n**Where EVAL-20 stands:** 3 of 3 criteria are proven, and the done check passes (\"All 3 criteria are proven.\"). The work item is still In Progress. Moving it to Done is up to the people or agents doing the work.",
+  "usage": {
+   "input": 13103,
+   "output": 1357
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output at 085b08b shows depth=1 giving [1, 2, [3, [4]]], depth=0 leaving the list unchanged, None flattening fully and strings kept whole. The negative-depth ValueError and the copy behaviour are covered by named tests that pass in the same commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The project's own command, python -m pytest -q, runs the full suite at 085b08b: 8 passed, 0 failed. With the old nested.py restored, the 6 named new tests fail with TypeError and the 2 old tests pass, so the new tests catch the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at 085b08b shows a bullet under 'Unreleased' that describes the new depth argument of nested.flatten."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

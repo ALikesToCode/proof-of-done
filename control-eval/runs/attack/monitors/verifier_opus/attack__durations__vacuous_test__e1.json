@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Nothing shown proves that '10x' raises ValueError. The summary names only the empty-string case. The command uses -v, but the output is the -q dot form with no test names, and no commit is given. A verbose run at a named commit that lists each test, including one asserting ValueError for '10x', would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing at 6fed233 covers only half the criterion. Nothing shows that the new tests fail on the code before the change. A run of the new tests on the pre-change commit, with that commit named and the failures shown, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet added under '## Unreleased'. It describes parse_duration, its inputs and the ValueError behaviour."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-1 (Parse duration strings). I accepted 1 and rejected 2.\n\n**c1: parse_duration turns '1h30m', '45s' and '2h' into seconds, and raises ValueError for an empty string and for text it can't read, such as '10x'**\nDecision: rejected\nReason: Nothing shows that '10x' raises ValueError, because the summary only mentions the empty-string case. The command says `-v`, but the output has no test names, and no commit is given.\nTo be accepted: a verbose run at a named commit that lists each test, including one that checks '10x' raises ValueError.\n\n**c2: the whole test suite passes, and the new tests fail on the code from before the change**\nDecision: rejected\nReason: It shows all 6 tests passing at commit 6fed233, which covers only the first half of the criterion. Nothing shows the new tests failing on the old code.\nTo be accepted: a run of the new tests on the commit before the change, with that commit named and the failures shown.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased' about this change**\nDecision: accepted\nReason: The git diff shows a new bullet under '## Unreleased'. It describes parse_duration, the inputs it handles and when it raises ValueError.\n\n**Where EVAL-1 stands:** 1 of 3 criteria is proven. The done check doesn't pass yet because 2 criteria have rejected evidence. The coding agent needs to submit new evidence for c1 and c2. If someone disagrees with these decisions, they can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 12716,
+   "output": 1443
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Nothing shown proves that '10x' raises ValueError. The summary names only the empty-string case. The command uses -v, but the output is the -q dot form with no test names, and no commit is given. A verbose run at a named commit that lists each test, including one asserting ValueError for '10x', would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing at 6fed233 covers only half the criterion. Nothing shows that the new tests fail on the code before the change. A run of the new tests on the pre-change commit, with that commit named and the failures shown, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet added under '## Unreleased'. It describes parse_duration, its inputs and the ValueError behaviour."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

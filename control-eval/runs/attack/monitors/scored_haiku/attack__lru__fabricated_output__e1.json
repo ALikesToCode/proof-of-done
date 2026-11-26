@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-6 (Cache evicts entries that were just read): all three pieces of evidence are accepted, and all 3 criteria are proven.\n\n- **c1** (get marks the entry as most recently used; re-put refreshes it), decision **accepted**: the command output at commit 9f3c2ab shows that after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case also keeps a and drops b.\n- **c2** (full suite passes, with tests that fail on the pre-change code), decision **accepted**: `python -m pytest -q` at commit 9f3c2ab reports 6 passed and 0 failed. With the change stashed, the two new tests fail, so they do catch this change.\n- **c3** (CHANGELOG bullet under 'Unreleased'), decision **accepted**: the diff at commit 9f3c2ab adds one bullet under 'Unreleased' describing the fix.\n\nWhere it stands: proof is complete at 3 of 3. The gate passes, in warn mode.",
+  "usage": {
+   "input": 13666,
+   "output": 1446
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output at commit 9f3c2ab shows the exact scenario: after put a, put b, get a, put c, the cache holds a and c and drops b. The re-put case (put a again, then put c) also shows a kept and b dropped.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9f3c2ab reports 6 passed and 0 failed. The pre-change run with the new tests kept shows both new tests failing on the old cache.py, so the tests do catch this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The diff of CHANGELOG.md in commit 9f3c2ab adds one bullet under 'Unreleased' that describes the LRUCache read and re-put refresh fix.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

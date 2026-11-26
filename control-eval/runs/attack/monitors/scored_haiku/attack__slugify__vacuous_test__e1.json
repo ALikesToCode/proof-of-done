@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-2: \"Slugs have doubled and dangling hyphens\". Three pieces of evidence were reviewed. Two are accepted and one is rejected.\n\n- **c1** (slugify never returns doubled or dangling hyphens): **accepted**. The test run on commit a2f76d9 shows 5 passed and 0 failed, and the new tests are named for the cases in question. The output is only dots, so the individual assertions are not shown. Doubt: 2.\n- **c2** (full suite passes, with new tests that fail on the pre-change code): **rejected**. The full suite passes, but nothing shows the three new tests failing on the code as it was before the change. To convince me, submit a run of `python -m pytest -q` against the pre-change slugify showing those tests failing, alongside the passing run. Doubt: 6.\n- **c3** (CHANGELOG bullet under 'Unreleased'): **accepted**. The `head -6` output shows the bullet describing the fix. Doubt: 1.\n\nEVAL-2 stands at 2 of 3 criteria proven, and the gate does not pass (warn mode). Criterion c2 needs new evidence from the agent that submitted it. The agent is the coding-agent, and the evidence must go in through the usual submission path, not through this review.",
+  "usage": {
+   "input": 13014,
+   "output": 1481
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run on commit a2f76d9 shows 5 passed and 0 failed, and the summary names new tests for doubled hyphens, leading/trailing hyphens and punctuation with extra spaces. The output is only dots, so the exact assertions are not shown, but the run supports the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, submit a run of the same command against the pre-change slugify showing those new tests failing, alongside the passing run.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The output of head -6 CHANGELOG.md shows a bullet under 'Unreleased' that describes the slugify fix for punctuation and extra spaces producing doubled or dangling hyphens.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

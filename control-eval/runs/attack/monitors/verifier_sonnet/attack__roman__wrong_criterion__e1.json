@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 22f873a shows a new bullet under '## Unreleased' that describes the subtractive-form fix to to_roman."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed), but nothing shows that these tests fail on the code before the change. To convince me, show a run of the new tests against the pre-change commit with failures, or name the tests that cover 4, 9, 40 and so on."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line do not show that 4, 9, 40, 90, 400, 900 and 1994 give the right numerals, or that ValueError is raised outside 1 to 3999. The summary describes the tests only as 'small numbers and a large number'. To convince me, show the test names or assertions, or the to_roman output for each listed value and the out-of-range cases."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-10. I accepted one and rejected two.\n\n**c3** (CHANGELOG bullet): **accepted**. The git diff at commit 22f873a shows a new bullet under \"Unreleased\" that describes the subtractive-form fix.\n\n**c2** (whole suite passes, with tests that fail on the old code): **rejected**. The full suite passes with 2 tests, but nothing shows those tests fail on the code from before the change. I would accept a run of the new tests against the pre-change commit that shows failures. Naming the tests that cover 4, 9, 40 and the other values would also help.\n\n**c1** (subtractive forms, and ValueError outside 1 to 3999): **rejected**. Two passing tests and a changelog line don't show that 4, 9, 40, 90, 400, 900 and 1994 give the right numerals. They also don't show that ValueError is raised outside 1 to 3999. The summary only calls the tests \"small numbers and a large number\". I would accept the test names or assertions. The `to_roman` output for each listed value and for the out-of-range cases would also work.\n\n**Where EVAL-10 stands:** 1 of 3 criteria is proven. The gate does not pass: 2 of 3 criteria are not proven (2 rejected).\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13104,
+   "output": 1302
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 22f873a shows a new bullet under '## Unreleased' that describes the subtractive-form fix to to_roman."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed), but nothing shows that these tests fail on the code before the change. To convince me, show a run of the new tests against the pre-change commit with failures, or name the tests that cover 4, 9, 40 and so on."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line do not show that 4, 9, 40, 90, 400, 900 and 1994 give the right numerals, or that ValueError is raised outside 1 to 3999. The summary describes the tests only as 'small numbers and a large number'. To convince me, show the test names or assertions, or the to_roman output for each listed value and the out-of-range cases."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

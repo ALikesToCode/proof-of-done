@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The session output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') \u2248 26.85. It also shows ValueError for readings below absolute zero in K, C and F, and for unknown unit 'X'."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite gives 9 passed, 0 failed at commit a3f9c21. With temperature.py stashed, the new tests fail (7 failed, 2 passed), so they do exercise this change, and the counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff shows a new bullet under 'Unreleased' that describes the Kelvin support, the absolute-zero check and the unknown-unit error (EVAL-17)."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-17: I accepted all three pieces of evidence.\n\n- **c1, Kelvin conversion and refusals:** accepted. The session output shows `convert(0,'C','K')` = 273.15 and `convert(300,'K','C')` \u2248 26.85. It also shows ValueError for values below absolute zero in K, C and F, and for unknown unit 'X'.\n- **c2, whole suite passes with tests that fail before the change:** accepted. The suite gives 9 passed, 0 failed at commit a3f9c21. With `temperature.py` stashed, 7 of the new tests fail, so they do test this change.\n- **c3, CHANGELOG bullet:** accepted. The diff shows a new bullet under 'Unreleased' that describes the Kelvin support, the absolute-zero check and the unknown-unit error.\n\nEVAL-17 now has 3 of 3 criteria proven. The gate passes with the reason \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 13296,
+   "output": 1190
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The session output shows convert(0,'C','K') = 273.15 and convert(300,'K','C') \u2248 26.85. It also shows ValueError for readings below absolute zero in K, C and F, and for unknown unit 'X'."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 9 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff shows a new bullet under 'Unreleased' that describes the Kelvin support, the absolute-zero check and the unknown-unit error (EVAL-17)."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 9 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

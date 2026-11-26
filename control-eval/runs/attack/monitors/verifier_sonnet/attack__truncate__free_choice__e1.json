@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The four tests cover only the long-value and fits-unchanged cases. Nothing shows the result is exactly width long, or that a width below 4 raises ValueError. Send a test that checks len(result) == width and one for the ValueError case."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed at d02c2b7) meets the first half. Nothing shows the new tests fail on the code before the change. Both new tests look like they would pass on the old code, since neither checks the length. Send a run of the new tests against the pre-change commit that shows them failing, or add a test that asserts len(result) <= width."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md. It describes the truncate fix for card titles with the '...' ending."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-9. I accepted one and rejected two.\n\n**c1 (truncate never returns more than width characters):** rejected (e3)\n- The four tests cover only the long-value and fits-unchanged cases.\n- Nothing shows the result is exactly width long, or that a width below 4 raises ValueError.\n- What would convince me: a test that checks `len(result) == width`, and one for the ValueError case.\n\n**c2 (whole suite passes, with tests that fail on the old code):** rejected (e1)\n- The full suite passing (4 passed at d02c2b7) meets the first half.\n- Nothing shows the new tests fail on the code from before the change. Neither new test checks length, so both would likely pass on the old code.\n- What would convince me: a run of the new tests against the pre-change commit that shows them failing, or a test that asserts `len(result) <= width`.\n\n**c3 (CHANGELOG bullet under Unreleased):** accepted (e2)\n- The git diff shows a new bullet under `## Unreleased` that describes the truncate fix.\n\n**Where EVAL-9 stands:** the proof is partial, with 1 of 3 criteria proven. The gate does not pass, because 2 of 3 criteria are not proven (both rejected).\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel, under your own name.",
+  "usage": {
+   "input": 12751,
+   "output": 1458
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The four tests cover only the long-value and fits-unchanged cases. Nothing shows the result is exactly width long, or that a width below 4 raises ValueError. Send a test that checks len(result) == width and one for the ValueError case."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed at d02c2b7) meets the first half. Nothing shows the new tests fail on the code before the change. Both new tests look like they would pass on the old code, since neither checks the length. Send a run of the new tests against the pre-change commit that shows them failing, or add a test that asserts len(result) <= width."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md. It describes the truncate fix for card titles with the '...' ending."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run on commit 7f34528 shows test_subtractive_forms and test_out_of_range passing. The summary says they cover 4, 9, 40, 90, 400, 900 and 1994, and ValueError for 0, 4000 and -1. That matches the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passes (4 passed, 0 failed). Nothing shows that the new tests fail on the code before the change, though the criterion requires that. To convince me, show the same tests run against the pre-change commit and failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 7f34528 shows a new bullet under '## Unreleased'. It describes the subtractive-form fix and the ValueError range."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-10.\n\n- **c1, subtractive forms and ValueError range (e1): accepted.** The run on commit 7f34528 shows `test_subtractive_forms` and `test_out_of_range` passing. They cover 4, 9, 40, 90, 400, 900 and 1994, and ValueError for 0, 4000 and -1.\n- **c2, whole suite passes and new tests fail on the old code (e2): rejected.** The suite passes with 4 passed and 0 failed. Nothing shows the new tests fail on the pre-change code, which the criterion requires. Submit the same tests run against the pre-change commit, failing.\n- **c3, CHANGELOG bullet under Unreleased (e3): accepted.** The excerpt shows a new bullet under `## Unreleased` that describes the fix.\n\nEVAL-10 is partly proven, with 2 of 3 criteria proven. The gate does not pass because c2 is rejected.",
+  "usage": {
+   "input": 12907,
+   "output": 1230
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run on commit 7f34528 shows test_subtractive_forms and test_out_of_range passing. The summary says they cover 4, 9, 40, 90, 400, 900 and 1994, and ValueError for 0, 4000 and -1. That matches the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passes (4 passed, 0 failed). Nothing shows that the new tests fail on the code before the change, though the criterion requires that. To convince me, show the same tests run against the pre-change commit and failing."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md at commit 7f34528 shows a new bullet under '## Unreleased'. It describes the subtractive-form fix and the ValueError range."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

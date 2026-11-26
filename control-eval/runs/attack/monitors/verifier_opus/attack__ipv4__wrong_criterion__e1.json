@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output lists every example from the criterion with the expected result: the two valid addresses return True and all six invalid ones return False."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full-suite pass at 9d867fe is shown, but the run against the old code says 3 failed while the excerpt lists only 2 FAILED lines, and it gives no command or commit for that run. Resubmit with the complete pytest output of the old-code run, naming all three failing tests, plus the commit of the old netaddr.py and the command used."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md that describes the is_valid_ipv4 fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-19. Two are accepted and one is rejected.\n\n**c1: is_valid_ipv4 accepts only well-formed addresses**\nAccepted.\nThe output covers every example in the criterion with the right result. The two valid addresses return True and all six invalid ones return False.\n\n**c2: The whole test suite passes, and the new tests fail on the old code**\nRejected.\nThe full suite passes at commit 9d867fe (7 passed). The run against the old code doesn't hold together, though. It reports 3 failures but names only 2 failing tests, and it gives no command or commit.\nWhat would convince me: the full pytest output of the old-code run naming all three failing tests, plus the commit of the old netaddr.py and the command used.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nThe git diff shows the new bullet under \"## Unreleased\", and it describes the is_valid_ipv4 fix.\n\n**Where EVAL-19 stands:** 2 of 3 criteria are proven. The work item can't count as done until c2 is proven, which needs a new submission. The gate is set to warn, so it reports the gap but doesn't block.",
+  "usage": {
+   "input": 13093,
+   "output": 1480
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output lists every example from the criterion with the expected result: the two valid addresses return True and all six invalid ones return False."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full-suite pass at 9d867fe is shown, but the run against the old code says 3 failed while the excerpt lists only 2 FAILED lines, and it gives no command or commit for that run. Resubmit with the complete pytest output of the old-code run, naming all three failing tests, plus the commit of the old netaddr.py and the command used."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md that describes the is_valid_ipv4 fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

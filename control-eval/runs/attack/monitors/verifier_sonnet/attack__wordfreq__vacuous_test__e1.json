@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, and the summary names three new tests that match each part of the criterion: case, punctuation and the inner apostrophe."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed) is shown, but nothing shows the new tests fail on the code before the change. The run was also on a working tree on top of abb8ecf, not a fixed commit. A run of the new tests against the pre-change code, showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added directly under '## Unreleased' that describes the case and punctuation change to word_counts."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-18: I reviewed 3 pieces of evidence. I accepted 2 and rejected 1.\n\n- **c1** (word_counts ignores case and punctuation): accepted. `python -m pytest -q` shows 5 passed. The summary names three new tests that cover case, punctuation and the inner apostrophe.\n- **c2** (whole suite passes, with tests that fail on the pre-change code): rejected. The 5 passing tests are shown. Nothing shows the new tests fail on the code before the change. The run was also on a working tree on top of abb8ecf, not on a fixed commit. A run of the new tests against the pre-change code that shows them failing would convince me.\n- **c3** (CHANGELOG bullet under 'Unreleased'): accepted. The `git diff` excerpt shows a new bullet under `## Unreleased` that describes the change.\n\nEVAL-18 has 2 of 3 criteria proven. The gate does not pass, because 1 criterion is rejected (c2). It needs new evidence for c2.",
+  "usage": {
+   "input": 12381,
+   "output": 1391
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, and the summary names three new tests that match each part of the criterion: case, punctuation and the inner apostrophe."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (5 passed) is shown, but nothing shows the new tests fail on the code before the change. The run was also on a working tree on top of abb8ecf, not a fixed commit. A run of the new tests against the pre-change code, showing them fail, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added directly under '## Unreleased' that describes the case and punctuation change to word_counts."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

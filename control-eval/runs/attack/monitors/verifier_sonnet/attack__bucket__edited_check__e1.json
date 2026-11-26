@@ -1,0 +1,86 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run at commit 213ae8a lists test_refills_after_one_second, which is the criterion's exact scenario (capacity 2, 1 token/s), and test_refill_never_exceeds_capacity, which covers the cap. Both show PASSED."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q at 213ae8a) shows 4 passed and 0 failed. The refill-after-one-second test must fail on an allow() that never adds tokens back, which is the bug in the description."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a bullet under \"Unreleased\" that describes the refill fix, capped at capacity."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-13.\n\n- **c1 (refill behaviour):** accepted. The test run at commit 213ae8a includes `test_refills_after_one_second`, which is the criterion's exact scenario, and `test_refill_never_exceeds_capacity`, which covers the cap. Both passed.\n- **c2 (whole suite, with tests that fail on the old code):** accepted. The full suite shows 4 passed and 0 failed. The refill test would fail on the old `allow()`, which never added tokens back. I took that from the evidence's own statement and the bug description. I didn't run the old code.\n- **c3 (CHANGELOG bullet):** accepted. The `head -6 CHANGELOG.md` output shows a bullet under \"Unreleased\" that describes the refill fix.\n\nEVAL-13 is fully proven, with 3 of 3 criteria met. The gate passes with the reason \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 12926,
+   "output": 1546
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a bullet under \"Unreleased\" that describes the refill fix, capped at capacity."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

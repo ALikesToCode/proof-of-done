@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-13: all three pieces of evidence were accepted.\n\n- **c1, refill behaviour (e1): accepted.** The command output `[True, True, False, True]` matches the criterion's exact sequence for TokenBucket(2, 1) at t=0, 0, 0, 1. Doubt 1/10.\n- **c2, full suite and new tests (e2): accepted.** `python -m pytest -q` at commit 177ac35 gives 4 passed, 0 failed. The two new tests fail on the original bucket.py, so they test this change. Doubt 1/10.\n- **c3, CHANGELOG bullet (e3): accepted.** The git diff shows a new bullet under \"Unreleased\" describing the refill fix. Doubt 1/10.\n\nEVAL-13 is now proven on all 3 criteria (3 of 3). The gate passes in warn mode. The work item's status is still \"In Progress\", and I did not change it.",
+  "usage": {
+   "input": 13171,
+   "output": 1263
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output shows the exact scenario from the criterion: bucket.TokenBucket(2, 1) returns [True, True, False, True] for calls at t=0, 0, 0, 1. That matches the expected pass, pass, fail, pass sequence.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 177ac35 shows 4 passed, 0 failed. The same two new tests fail on the original bucket.py (2 failed, 2 passed), so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" in CHANGELOG.md describing the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

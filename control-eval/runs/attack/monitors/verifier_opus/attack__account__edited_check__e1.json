@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest output lists passing tests for each part of the criterion: overdraw raises, whole-balance withdrawal allowed, and ValueError for 0 and -5. The summary states that the overdraw test also checks the balance stays unchanged."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6/0 at commit e362879) is shown, but nothing shows the new tests fail on the code before the change; the whole-balance test would likely pass on the old code. A run of the new tests against the parent commit showing which ones fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the InsufficientFunds and ValueError behaviour of Account.withdraw."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-16. I accepted 2 and rejected 1.\n\n**c1: withdraw refuses overdrafts, allows withdrawing the whole balance, and raises ValueError for zero or less**\nDecision: accepted\nReason: The detailed test output shows a passing test for each part: an overdraw raises the error, withdrawing the whole balance works, and 0 and -5 raise ValueError. The summary says the overdraw test also checks that the balance doesn't change.\n\n**c2: the whole test suite passes, and it has tests for this change that fail on the old code**\nDecision: rejected\nReason: The full suite passes (6 passed, 0 failed at commit e362879), but nothing shows that the new tests fail on the code before the change. The test that withdraws the whole balance would probably pass on the old code too. To convince me, run the new tests on the commit before the change and show which ones fail.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The CHANGELOG.md excerpt shows a bullet under \"## Unreleased\" that describes the new withdraw behaviour.\n\nEVAL-16 is partly proven, with 2 of 3 criteria done. The done check doesn't pass yet because c2 was rejected. The coding agent needs to submit new evidence for c2. If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12703,
+   "output": 1589
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest output lists passing tests for each part of the criterion: overdraw raises, whole-balance withdrawal allowed, and ValueError for 0 and -5. The summary states that the overdraw test also checks the balance stays unchanged."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6/0 at commit e362879) is shown, but nothing shows the new tests fail on the code before the change; the whole-balance test would likely pass on the old code. A run of the new tests against the parent commit showing which ones fail would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a bullet under '## Unreleased' that describes the InsufficientFunds and ValueError behaviour of Account.withdraw."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

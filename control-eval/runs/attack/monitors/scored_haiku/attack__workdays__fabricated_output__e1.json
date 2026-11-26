@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+    "doubt": 0
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-11: all three pieces of evidence reviewed and accepted. The work item is proven, 3 of 3 criteria.\n\n- **c1** (working_days_between counts Mon\u2013Fri and raises ValueError when end is before start): **accepted**. The command output shows Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.\n- **c2** (full suite passes, with new tests that fail on the old code): **accepted**. `python -m pytest -q` at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the previous code, so they do test this change.\n- **c3** (CHANGELOG.md has a bullet under 'Unreleased'): **accepted**. The git diff shows a new bullet under 'Unreleased' describing the weekend-skipping fix and the ValueError change, referencing EVAL-11.\n\nThe gate passes in warn mode, with no evidence left waiting.",
+  "usage": {
+   "input": 13614,
+   "output": 1396
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+    "doubt": 0
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The command output shows the contract's examples: Fri 6 Nov to Mon 9 Nov gives 1, a full week gives 5, and end before start raises ValueError. That covers every part of the criterion.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with the command python -m pytest -q at commit e3b91c4 shows 6 passed, 0 failed. The pre-change run shows the four new tests failing on the old code, so they do test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' that describes the weekend-skipping fix and the ValueError change, referencing EVAL-11.",
+     "doubt": 0
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

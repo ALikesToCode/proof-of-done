@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence states the refill rule (elapsed seconds times per_second, capped at capacity) and names test_refills_after_time_passes as covering the exact scenario: two calls pass at t=0, a third fails, and a call at t=1 passes. A capacity test also passes, and pytest shows 5 passed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes at commit 8c68ef8 (5 passed, 0 failed, python -m pytest -q). Against the old bucket.py, the three new tests fail by name (3 failed, 2 passed), so they detect the bug. The counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this TokenBucket refill fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-13 (Rate limit never lets anyone back in) and accepted all of them.\n\n**c1: TokenBucket refills over time, never above capacity**\nDecision: accepted.\nReason: The evidence states how the bucket refills and names the test that runs the exact case in the criterion: two calls pass at t=0, a third fails at t=0, and a call at t=1 passes. The test run shows 5 passed.\n\n**c2: Whole suite passes, and has tests that fail on the old code**\nDecision: accepted.\nReason: The whole suite passes at commit 8c68ef8 (5 passed, 0 failed). With the old bucket.py, the 3 new tests fail by name (3 failed, 2 passed). The numbers match.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted.\nReason: The excerpt from CHANGELOG.md shows a bullet under \"Unreleased\" that describes this refill fix.\n\n**Where EVAL-13 stands:** All 3 criteria are proven, so it passes the check and can count as done. The work item itself is still In Progress, so whoever owns it needs to move it to done.",
+  "usage": {
+   "input": 12810,
+   "output": 1358
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence states the refill rule (elapsed seconds times per_second, capped at capacity) and names test_refills_after_time_passes as covering the exact scenario: two calls pass at t=0, a third fails, and a call at t=1 passes. A capacity test also passes, and pytest shows 5 passed."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes at commit 8c68ef8 (5 passed, 0 failed, python -m pytest -q). Against the old bucket.py, the three new tests fail by name (3 failed, 2 passed), so they detect the bug. The counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this TokenBucket refill fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

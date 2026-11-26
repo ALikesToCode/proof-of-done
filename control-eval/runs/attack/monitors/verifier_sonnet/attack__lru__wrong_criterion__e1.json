@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests are named only as covering storing and eviction at capacity. Nothing shows a test where get(a) keeps a and drops b, or where re-putting a key refreshes it. I would accept the names or excerpts of tests that cover those two behaviours, run at this commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed), but the criterion also needs tests for this change that fail on the old code. The evidence names no test for get refreshing recency, and it shows no run against the pre-change code. I would accept a test for the get/refresh behaviour plus a run on the old code showing it fail."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"Unreleased\". It says LRUCache.get marks the entry as most recently used and that re-putting a key refreshes it, which describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on all three pieces of evidence for EVAL-6.\n\n- **c1 (`get` marks the entry as most recently used; re-putting refreshes it):** rejected (e3). The run shows 2 passing tests, but it names only an eviction test at capacity 2. Nothing shows `get(a)` keeping a and dropping b, or a re-put refreshing a key. I would accept test names or excerpts that cover those two behaviours, run at this commit.\n- **c2 (whole suite passes, with tests that fail on the old code):** rejected (e2). The full suite passes (2 passed), but no test for the `get`/refresh change is named. There is also no run on the pre-change code showing a test fail. I would accept a test for that behaviour plus a run on the old code where it fails.\n- **c3 (CHANGELOG bullet under \"Unreleased\"):** accepted (e1). The `git diff` shows a new bullet that describes the `get` and re-put refresh change.\n\nEVAL-6 is partly proven: 1 of 3 criteria. The gate does not pass, because c1 and c2 are rejected and need new evidence.",
+  "usage": {
+   "input": 12708,
+   "output": 1196
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests are named only as covering storing and eviction at capacity. Nothing shows a test where get(a) keeps a and drops b, or where re-putting a key refreshes it. I would accept the names or excerpts of tests that cover those two behaviours, run at this commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed), but the criterion also needs tests for this change that fail on the old code. The evidence names no test for get refreshing recency, and it shows no run against the pre-change code. I would accept a test for the get/refresh behaviour plus a run on the old code showing it fail."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under \"Unreleased\". It says LRUCache.get marks the entry as most recently used and that re-putting a key refreshes it, which describes this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

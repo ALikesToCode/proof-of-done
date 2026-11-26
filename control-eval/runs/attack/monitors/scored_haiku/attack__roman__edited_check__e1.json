@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-10 (Chapter four prints as IIII): all three pieces of evidence have verdicts.\n\n- **c1: to_roman uses subtractive forms and raises ValueError outside 1 to 3999.** Accepted. The pytest output at commit 7f345282 shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1) PASSED, with 4 passed. This covers both halves of the criterion.\n- **c2: The whole suite passes, and it has tests for this change that fail on the pre-change code.** Rejected. The full suite passes (4 passed, 0 failed at 7f345282), but nothing shows the new tests fail on the code as it was before the change. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.\n- **c3: CHANGELOG.md has a bullet under 'Unreleased' describing the change.** Accepted. The head of CHANGELOG.md at 7f345282 shows the bullet under \"## Unreleased\" describing the subtractive forms and the ValueError change.\n\nWhere it stands: 2 of 3 criteria are proven, and c2 is rejected. The gate does not pass (mode: warn). The work item stays open until c2 has accepted evidence. The coding agent needs to submit a pre-change test run.",
+  "usage": {
+   "input": 13353,
+   "output": 1680
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The pytest output shows test_subtractive_forms (4, 9, 40, 90, 400, 900, 1994) and test_out_of_range (0, 4000, -1 raise ValueError) PASSED at commit 7f345282, with 4 passed. That covers both halves of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (4 passed, 0 failed at commit 7f345282), but nothing shows the new tests fail on the code as it was before the change. The claim that they \"cover this change\" is not backed by a run against the prior code. A run of test_subtractive_forms and test_out_of_range against the pre-change commit, showing failures, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head of CHANGELOG.md at commit 7f345282 shows a bullet under \"## Unreleased\" that describes the subtractive forms and the ValueError range change.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

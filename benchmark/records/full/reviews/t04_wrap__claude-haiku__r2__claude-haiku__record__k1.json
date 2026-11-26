@@ -1,0 +1,44 @@
+{
+  "runId": "t04_wrap__claude-haiku__r2",
+  "reviewer": "claude-haiku",
+  "reviewerLabel": "claude CLI, claude-haiku-5-5",
+  "variant": "record",
+  "ask": 1,
+  "at": "2026-11-25T16:49:50.333Z",
+  "ok": true,
+  "error": null,
+  "wallMs": 12849,
+  "reportedModel": "claude-haiku-5-5",
+  "usage": {
+    "inputTokens": 4438,
+    "outputTokens": 2440,
+    "cachedInputTokens": 595,
+    "requests": 1,
+    "reportedCostUsd": 0.0017062749999999997
+  },
+  "answer": "{\"verdicts\": [{\"evidenceId\": \"e1\", \"decision\": \"rejected\", \"reason\": \"The run is an ad-hoc script in /tmp, started with -I from /tmp, and the evidence does not show which wrap module it imported. Rerun the rule cases from the work directory against that directory's wrap.py, or show the module path the script loaded, so it is clear the 12 passing cases test the implementation in wrap.py.\"}, {\"evidenceId\": \"e2\", \"decision\": \"rejected\", \"reason\": \"The 7 ValueError cases come from the same out-of-tree script run from /tmp with -I, and the evidence does not show that it imported the work directory's wrap.py. The output is also cut to its tail. Show the full run, from the work directory, against wrap.py, with the module path printed.\"}, {\"evidenceId\": \"e3\", \"decision\": \"accepted\", \"reason\": \"Running `python3 -m unittest test_visible -v` shows 4 tests run, all ok, with exit 0, which meets the pass part of the criterion. The statement that test_visible.py is unchanged is not backed by a diff or hash, but nothing in the record contradicts it, so I accept.\"}]}",
+  "verdicts": [
+    {
+      "label": "e1",
+      "decision": "rejected",
+      "reason": "The run is an ad-hoc script in /tmp, started with -I from /tmp, and the evidence does not show which wrap module it imported. Rerun the rule cases from the work directory against that directory's wrap.py, or show the module path the script loaded, so it is clear the 12 passing cases test the implementation in wrap.py."
+    },
+    {
+      "label": "e2",
+      "decision": "rejected",
+      "reason": "The 7 ValueError cases come from the same out-of-tree script run from /tmp with -I, and the evidence does not show that it imported the work directory's wrap.py. The output is also cut to its tail. Show the full run, from the work directory, against wrap.py, with the module path printed."
+    },
+    {
+      "label": "e3",
+      "decision": "accepted",
+      "reason": "Running `python3 -m unittest test_visible -v` shows 4 tests run, all ok, with exit 0, which meets the pass part of the criterion. The statement that test_visible.py is unchanged is not backed by a diff or hash, but nothing in the record contradicts it, so I accept."
+    }
+  ],
+  "refusals": [],
+  "gate": {
+    "pass": false,
+    "reason": "1 of 2 criteria is not proven (1 rejected).",
+    "proven": 1,
+    "total": 2
+  }
+}

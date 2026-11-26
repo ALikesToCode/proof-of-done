@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The session output shows the 2x3 table giving [[1, 4], [2, 5], [3, 6]], an empty table giving [], and ragged rows raising ValueError. That covers every part of the criterion."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (7 passed, commit 3f9c2b1) is shown. The claim that the new tests fail on the old code is only asserted. To convince me, show the new tests run against the pre-change code with their failures, or say which of the 7 tests are new."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"Unreleased\" in CHANGELOG.md that describes the transpose fix, including the empty-table and ValueError behaviour."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "Verdicts on EVAL-14:\n\n- **c1, transpose works for non-square tables:** accepted. The session output shows `[[1, 4], [2, 5], [3, 6]]` for the 2x3 table, `[]` for an empty table, and a ValueError for ragged rows.\n- **c2, whole suite passes with tests that fail on the old code:** rejected. The full suite passing is shown (7 passed, commit 3f9c2b1). The claim that the new tests fail on the old code is only stated, not shown. I would accept a run of the new tests against the pre-change code with their failures, or a statement of which of the 7 tests are new.\n- **c3, CHANGELOG bullet under Unreleased:** accepted. The git diff shows a new bullet that describes the fix.\n\nEVAL-14 is partly proven: 2 of 3 criteria. The gate does not pass because 1 of 3 criteria is not proven (c2, rejected). The team needs to submit new evidence for c2. Anyone who disagrees with a verdict can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 12653,
+   "output": 1441
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The session output shows the 2x3 table giving [[1, 4], [2, 5], [3, 6]], an empty table giving [], and ragged rows raising ValueError. That covers every part of the criterion."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing (7 passed, commit 3f9c2b1) is shown. The claim that the new tests fail on the old code is only asserted. To convince me, show the new tests run against the pre-change code with their failures, or say which of the 7 tests are new."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"Unreleased\" in CHANGELOG.md that describes the transpose fix, including the empty-table and ValueError behaviour."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

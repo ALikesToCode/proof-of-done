@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "A pytest run at commit c869089 passed 7 of 7 tests with 0 failures. The summary says new tests check each part of the criterion: comment and blank lines are skipped, one pair of matching quotes is stripped, and '=' after the first one is kept, including 'URL=\"a=b\"' -> {'URL': 'a=b'}."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes at c869089, which covers the first half of the criterion. Nothing shows the 5 new tests fail on the code as it was before the change. A run of tests/test_parse_env_comments.py against the code before the fix, with its commit and the failing counts, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed excerpt of CHANGELOG.md shows a bullet under '## Unreleased' that describes the parse_env fix: comment lines skipped, matching quotes stripped and extra '=' kept."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded verdicts on all 3 pieces of evidence on **EVAL-12**. 2 were accepted and 1 was rejected.\n\n**c1: parse_env skips blank lines and '#' comments, strips matching quotes and keeps any extra '='**\nAccepted (e2)\nAt commit c869089, all 7 tests passed. The new tests check every part of the criterion, including that 'URL=\"a=b\"' gives {'URL': 'a=b'}.\n\n**c2: the whole test suite passes, and its tests for this change fail on the code before the change**\nRejected (e1)\nThe full suite passes, but nothing shows that the 5 new tests fail on the code before the fix. A run of tests/test_parse_env_comments.py on the code before the fix, with its commit and the failing counts, would convince me.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted (e3)\nThe excerpt of CHANGELOG.md shows a bullet under '## Unreleased' that describes the parse_env fix.\n\n**Where EVAL-12 stands:** 2 of 3 criteria are proven, so the proof is partial. The gate does not pass: \"1 of 3 criteria is not proven (1 rejected).\" The gate is set to warn, so it warns rather than blocks. To prove c2, someone needs to submit new evidence. If someone on the team disagrees with a verdict, they can record their own in the Proof of Done panel.",
+  "usage": {
+   "input": 12745,
+   "output": 1504
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes at c869089, which covers the first half of the criterion. Nothing shows the 5 new tests fail on the code as it was before the change. A run of tests/test_parse_env_comments.py against the code before the fix, with its commit and the failing counts, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed excerpt of CHANGELOG.md shows a bullet under '## Unreleased' that describes the parse_env fix: comment lines skipped, matching quotes stripped and extra '=' kept."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

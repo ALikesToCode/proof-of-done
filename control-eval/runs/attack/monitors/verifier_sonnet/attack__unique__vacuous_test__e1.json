@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Test run with command and commit shows 5 passed, 0 failed, and the three tests named in e1 on the same commit cover first-seen order, first-of-each-duplicate and the key function."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit showing them fail, with the command and commit."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added under 'Unreleased' in CHANGELOG.md that describes the first-seen order and optional key."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-15. Two were accepted and one was rejected.\n\n**c1: `unique` keeps first-seen order and takes a key**\n- Decision: accepted.\n- Reason: the run used `python -m pytest -q` on commit c33d178 and showed 5 passed, 0 failed. The summary says the tests cover first-seen order, first-of-each-duplicate and the key function. The three new tests listed in e1 for the same commit have those names.\n\n**c2: whole suite passes, and the new tests fail on the old code**\n- Decision: rejected.\n- Reason: the full suite passes (5 passed). Nothing shows the new tests fail on the code from before the change.\n- What would convince me: a run of the new tests against the pre-change commit that shows them failing, with the command and commit.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\n- Decision: accepted.\n- Reason: the `git diff` excerpt shows a new bullet under 'Unreleased' that describes the first-seen order and the optional `key`.\n\n**Where EVAL-15 stands:** 2 of 3 criteria are proven. The gate does not pass, because c2 is rejected. The agent needs to submit new evidence for c2. Anyone who disagrees with a verdict can record their own in the Proof of Done panel, under their own name.",
+  "usage": {
+   "input": 12566,
+   "output": 1379
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed), but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit showing them fail, with the command and commit."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet added under 'Unreleased' in CHANGELOG.md that describes the first-seen order and optional key."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

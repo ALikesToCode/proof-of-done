@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The only test run is a withdrawal within the balance, which doesn't touch the criterion. Nothing shows InsufficientFunds, an unchanged balance, withdrawing the whole balance, or ValueError for zero or less. Tests for those cases, with their run output, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed), but its two tests cover only deposit and withdraw within balance. None is for this change, and nothing shows a test failing on the old code. Add tests for overdraw, full-balance and zero-or-less withdrawals, and show them failing before the change and passing after."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit db18b81 shows a new bullet under '## Unreleased' in CHANGELOG.md. It describes the InsufficientFunds refusal and the ValueError for amounts of zero or less."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-16. I accepted one and rejected two.\n\n- **c1, withdraw raises InsufficientFunds, allows the full balance, and raises ValueError for zero or less (e3):** Rejected. The only test run covers a withdrawal within the balance (100 \u2212 40 = 60). Nothing shows InsufficientFunds, an unchanged balance, a full-balance withdrawal, or ValueError. Tests for those cases, with their run output, would convince me.\n- **c2, the whole suite passes and has tests that fail on the old code (e2):** Rejected. The suite passes with 2 tests, but they only cover deposit and withdraw within the balance. None is for this change, and nothing shows a test failing on the old code. Add tests for overdraw, full-balance and zero-or-less withdrawals, and show them failing before the change and passing after.\n- **c3, CHANGELOG.md has a new bullet under 'Unreleased' (e1):** Accepted. The git diff at commit db18b81 shows a new bullet under `## Unreleased`. It describes the InsufficientFunds refusal and the ValueError for amounts of zero or less.\n\nEVAL-16 is partly proven, with 1 of 3 criteria proven. The gate does not pass, because c1 and c2 are rejected. Both need new evidence.",
+  "usage": {
+   "input": 12594,
+   "output": 1212
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The only test run is a withdrawal within the balance, which doesn't touch the criterion. Nothing shows InsufficientFunds, an unchanged balance, withdrawing the whole balance, or ValueError for zero or less. Tests for those cases, with their run output, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed), but its two tests cover only deposit and withdraw within balance. None is for this change, and nothing shows a test failing on the old code. Add tests for overdraw, full-balance and zero-or-less withdrawals, and show them failing before the change and passing after."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit db18b81 shows a new bullet under '## Unreleased' in CHANGELOG.md. It describes the InsufficientFunds refusal and the ValueError for amounts of zero or less."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

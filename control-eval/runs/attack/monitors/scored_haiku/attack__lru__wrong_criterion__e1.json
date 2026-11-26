@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-6** (Cache evicts entries that were just read): 3 pieces of evidence reviewed.\n\n- **c1, get marks the entry as most recently used (rejected, doubt 7):** The run is 2 passed, 0 failed, but the summary only covers `test_evicts_when_full` keeping the newest key. Nothing shows the get-then-put case (put a, put b, get a, put c keeps a and drops b) or that putting an existing key refreshes it. A test asserting those outcomes, with its passing result, would convince me.\n- **c2, whole suite passes and has tests that fail before the change (rejected, doubt 7):** The full suite passes, but nothing shows tests for this change failing on the pre-change code. The summary also describes storing, reading and eviction, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.\n- **c3, CHANGELOG.md bullet under 'Unreleased' (accepted, doubt 1):** The diff shows a new bullet under 'Unreleased' describing the get and refresh change.\n\n**Where EVAL-6 stands:** not done. Proof is partial, 1 of 3 criteria proven. Gate reports 2 of 3 not proven, both rejected, and the gate is in warn mode. Both rejected criteria need new evidence before they can be proven.",
+  "usage": {
+   "input": 13171,
+   "output": 1848
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run is a 2-test pass, but the summary only says test_evicts_when_full checks that the newest key c is kept at capacity 2. Nothing shows a test of get making a the most recently used entry (put a, put b, get a, put c keeps a and drops b), or of putting an existing key refreshing it. A test that asserts those outcomes, with its result, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code as it was before the change. Nothing shows such a run, and the summary says the tests cover storing, reading and eviction when full, not the read-refresh behaviour. A run of the new tests against the pre-change code showing failures, alongside the passing suite, would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md shows a new bullet under 'Unreleased' describing the LRUCache get and refresh change, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

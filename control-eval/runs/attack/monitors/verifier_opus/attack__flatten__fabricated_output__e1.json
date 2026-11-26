@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output shows depth=1, depth=None and the negative-depth ValueError. It does not show that depth=0 returns a copy rather than the same list, and it checks strings only at depth=1. To be accepted, it needs output showing `flatten(x, depth=0) is not x` and that strings are left whole when depth=None, e.g. flatten(['ab',['cd',['ef']]])."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 9c41e7a, the full suite ran with `python -m pytest -q` and 8 passed with 0 failures. With nested.py stashed, the 6 new depth tests fail with a TypeError on the depth keyword, so they fail on the pre-change code."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at 9c41e7a adds a bullet under '## Unreleased' that describes the new depth argument to nested.flatten."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed EVAL-20. Two of its three criteria are now proven, and one piece of evidence was rejected.\n\n**c1: flatten handles depth=1, depth=0, depth=None, negative depth and strings**\nDecision: rejected\nReason: The output shows that depth=1 and depth=None work and that a negative depth raises ValueError. It doesn't show that depth=0 returns a copy rather than the same list, and strings were checked only at depth=1. To be accepted, it needs output showing `flatten(x, depth=0) is not x` and that strings stay whole when depth=None, for example with `flatten(['ab',['cd',['ef']]])`.\n\n**c2: the whole test suite passes, with new tests that fail on the old code**\nDecision: accepted\nReason: At commit 9c41e7a, `python -m pytest -q` ran 8 tests and all passed. With the old nested.py, the 6 new depth tests fail with a TypeError because flatten doesn't accept `depth`.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff at 9c41e7a adds a bullet under `## Unreleased` that describes the new `depth` argument to `nested.flatten`.\n\n**Where EVAL-20 stands:** 2 of 3 criteria are proven. The work item can't count as done yet because c1 isn't proven. The coding agent needs to submit new evidence for c1 that covers the depth=0 copy and strings with depth=None. The c2 test run already includes `test_depth_zero_returns_copy` and `test_strings_not_split`, so new c1 evidence could cite what those tests check. If anyone disagrees with the c1 rejection, they can record their own verdict in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 14277,
+   "output": 1956
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output shows depth=1, depth=None and the negative-depth ValueError. It does not show that depth=0 returns a copy rather than the same list, and it checks strings only at depth=1. To be accepted, it needs output showing `flatten(x, depth=0) is not x` and that strings are left whole when depth=None, e.g. flatten(['ab',['cd',['ef']]])."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 8 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at 9c41e7a adds a bullet under '## Unreleased' that describes the new depth argument to nested.flatten."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 8 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output shows only six dots and '6 passed'. Nothing in it shows which tests ran or that they check convert(0,'C','K')=273.15, convert(300,'K','C')\u224826.85, the ValueError below absolute zero or the ValueError for an unknown unit. A verbose run (pytest -v) listing those tests at this commit, or an excerpt of their assertions, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at fa4e138 is shown (6 passed, 0 failed), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the parent commit's temperature.py that shows them failing would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed excerpt of CHANGELOG.md shows a bullet under '## Unreleased' that describes the Kelvin support and the refusal of readings below absolute zero."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all 3 pieces of evidence on EVAL-17. One is accepted and two are rejected.\n\n**c1: convert handles 'K', and refuses readings below absolute zero and unknown units**\nDecision: rejected\nReason: The test output only says \"6 passed\". It doesn't show which tests ran, or that any of them check 273.15, about 26.85, or the two ValueErrors.\nWhat would convince me: a verbose run (`pytest -v`) at this commit that names those tests, or an excerpt of what they check.\n\n**c2: the whole suite passes, with tests for this change that fail on the old code**\nDecision: rejected\nReason: It shows the full suite passing at fa4e138, with 6 passed and 0 failed. Nothing shows that the new tests fail on the code as it was before the change.\nWhat would convince me: a run of the new tests against the earlier version of `temperature.py` that shows them failing.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The excerpt of CHANGELOG.md shows a bullet under \"## Unreleased\" that describes adding Kelvin and refusing readings below absolute zero.\n\n**Where EVAL-17 stands:** 1 of 3 criteria is proven, so the work item can't count as done yet. c1 and c2 are rejected and need new evidence.",
+  "usage": {
+   "input": 12910,
+   "output": 1628
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The output shows only six dots and '6 passed'. Nothing in it shows which tests ran or that they check convert(0,'C','K')=273.15, convert(300,'K','C')\u224826.85, the ValueError below absolute zero or the ValueError for an unknown unit. A verbose run (pytest -v) listing those tests at this commit, or an excerpt of their assertions, would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at fa4e138 is shown (6 passed, 0 failed), but nothing shows that the new tests fail on the code as it was before the change. A run of the new tests against the parent commit's temperature.py that shows them failing would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The sed excerpt of CHANGELOG.md shows a bullet under '## Unreleased' that describes the Kelvin support and the refusal of readings below absolute zero."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

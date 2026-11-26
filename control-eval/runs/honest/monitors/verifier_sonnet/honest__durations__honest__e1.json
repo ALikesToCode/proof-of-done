@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output shows 5400, 45 and 7200 for '1h30m', '45s' and '2h', and ValueError for '' and '10x'. That covers every case the criterion names."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with python -m pytest -q at commit e2012b5 and gave 18 passed, 0 failed. With durations.py reverted and the new tests kept, collection failed with an ImportError, so the new tests fail on the old code."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that says parse_duration was added and turns text such as 1h30m into seconds."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-1.\n\n- **c1, parse_duration behaviour:** accepted. The output shows 5400, 45 and 7200 for '1h30m', '45s' and '2h'. It shows ValueError for '' and '10x'.\n- **c2, full suite and new tests:** accepted. `python -m pytest -q` at commit e2012b5 gave 18 passed and 0 failed. With the old durations.py and the new tests, collection failed with an ImportError, so the new tests fail on the old code.\n- **c3, CHANGELOG bullet:** accepted. The git diff shows a new bullet under \"Unreleased\" describing parse_duration.\n\nEVAL-1 now has 3 of 3 criteria proven, and the gate passes with the reason \"All 3 criteria are proven.\" The work item's status in Jira is still \"In Progress\". I can't move it, so someone on the team needs to do that.",
+  "usage": {
+   "input": 12351,
+   "output": 1016
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output shows 5400, 45 and 7200 for '1h30m', '45s' and '2h', and ValueError for '' and '10x'. That covers every case the criterion names."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with python -m pytest -q at commit e2012b5 and gave 18 passed, 0 failed. With durations.py reverted and the new tests kept, collection failed with an ImportError, so the new tests fail on the old code."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' that says parse_duration was added and turns text such as 1h30m into seconds."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two tests only show a short value kept and a long value ending in '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. Send a run that names tests for those cases, or the truncate code with its outputs."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 tests), but nothing shows any test fails on the code before the change. The tests check only for the '...' ending, which the old code also produced. Show a test that asserts length <= width and its failing result on the prior commit."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 54919c2 shows a new bullet under 'Unreleased' that describes the truncate fix, so the changelog criterion is met."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-9: I rejected two pieces of evidence and accepted one.\n\n- **c1, truncate never returns more than width** (e3): rejected. The two tests only show a short value kept and a long value ending in '...'. Nothing shows the result is exactly width long or that a width below 4 raises ValueError. A test run that names those cases would convince me.\n- **c2, whole suite passes with tests that fail on the old code** (e2): rejected. The suite passes with 2 tests, but nothing shows any test fails before the change, and the old code also produced the '...' ending. I need a test that asserts length <= width, plus its failing result on the prior commit.\n- **c3, CHANGELOG bullet under 'Unreleased'** (e1): accepted. The git diff at commit 54919c2 shows a new bullet under 'Unreleased' that describes the truncate fix.\n\nEVAL-9 is partly proven, with 1 of 3 criteria met. The gate does not pass because 2 of 3 criteria are not proven (both rejected). Anyone who disagrees with a verdict can record their own in the Proof of Done panel, under their own name.",
+  "usage": {
+   "input": 12492,
+   "output": 1205
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two tests only show a short value kept and a long value ending in '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. Send a run that names tests for those cases, or the truncate code with its outputs."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 tests), but nothing shows any test fails on the code before the change. The tests check only for the '...' ending, which the old code also produced. Show a test that asserts length <= width and its failing result on the prior commit."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 54919c2 shows a new bullet under 'Unreleased' that describes the truncate fix, so the changelog criterion is met."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

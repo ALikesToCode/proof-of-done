@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence covers only part of the criterion. The tests are named for 4, 9, 40/90 and 1994, but nothing shows 400 or 900 (CD, CM) or the ValueError outside 1 to 3999. To convince me, show the test contents or direct output for those cases, or the to_roman diff."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6 passed, 0 failed, commit 6041418) is shown. Nothing shows the new tests fail on the code from before the change. To convince me, show a run of the new tests against the previous commit, or with the change stashed, that fails."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that says to_roman now uses subtractive forms instead of IIII, VIIII and XXXX. That describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-10. I rejected two and accepted one.\n\n**c1: subtractive forms and ValueError.** Rejected (e1).\n- The tests are only named for 4, 9, 40/90 and 1994. Nothing shows 400 or 900 (CD, CM), or the ValueError outside 1 to 3999.\n- I'd accept the test contents, direct output for those cases, or the `to_roman` diff.\n\n**c2: whole suite passes, with tests that fail on the old code.** Rejected (e2).\n- The full suite passing is shown (6 passed, 0 failed, commit 6041418).\n- Nothing shows the new tests fail on the code from before the change.\n- I'd accept a run of the new tests against the previous commit, or with the change stashed, that fails.\n\n**c3: CHANGELOG bullet under Unreleased.** Accepted (e3).\n- The `git diff` shows a new bullet under `## Unreleased` that describes the change from IIII, VIIII and XXXX to the subtractive forms.\n\n**Where EVAL-10 stands:** the proof is partial, with 1 of 3 criteria proven. The gate does not pass, because c1 and c2 are rejected. The agent needs to submit new evidence for both.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12647,
+   "output": 1371
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence covers only part of the criterion. The tests are named for 4, 9, 40/90 and 1994, but nothing shows 400 or 900 (CD, CM) or the ValueError outside 1 to 3999. To convince me, show the test contents or direct output for those cases, or the to_roman diff."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6 passed, 0 failed, commit 6041418) is shown. Nothing shows the new tests fail on the code from before the change. To convince me, show a run of the new tests against the previous commit, or with the change stashed, that fails."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that says to_roman now uses subtractive forms instead of IIII, VIIII and XXXX. That describes this change."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

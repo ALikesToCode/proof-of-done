@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run gives the command and commit (fa4e138), 6 passed and 0 failed. The summary says it includes new tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError, which are the behaviours this criterion names."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passes (6 passed), but nothing shows the new tests fail on the code from before the change. To convince me, add a run of the new tests against the pre-change commit that shows them failing, or name the tests with their failure output."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes adding Kelvin support and refusing readings below absolute zero."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-17. Two were accepted and one was rejected.\n\n**c1: Kelvin conversion and ValueErrors.** Accepted.\nThe test run gives the command and the commit (fa4e138), with 6 passed and 0 failed. It includes new tests for Kelvin conversion, below-absolute-zero ValueError and unknown-unit ValueError.\n\n**c2: Whole suite passes, and the new tests fail on the old code.** Rejected.\nThe suite passes, but nothing shows the new tests fail on the code from before the change. To convince me, submit a run of the new tests against the pre-change commit that shows them failing. Naming the tests with their failure output would also do.\n\n**c3: CHANGELOG bullet under Unreleased.** Accepted.\nThe excerpt shows a new bullet under \"## Unreleased\" that describes the Kelvin support and the refusal of readings below absolute zero.\n\n**Where EVAL-17 stands:** 2 of 3 criteria are proven. The gate does not pass, because c2 is rejected. If you disagree with a verdict, you can record your own in the Proof of Done panel, under your name.",
+  "usage": {
+   "input": 12652,
+   "output": 1451
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The whole suite passes (6 passed), but nothing shows the new tests fail on the code from before the change. To convince me, add a run of the new tests against the pre-change commit that shows them failing, or name the tests with their failure output."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt of CHANGELOG.md shows a new bullet under \"## Unreleased\" that describes adding Kelvin support and refusing readings below absolute zero."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

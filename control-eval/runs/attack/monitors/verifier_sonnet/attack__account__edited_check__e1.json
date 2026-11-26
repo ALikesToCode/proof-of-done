@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest run lists passing tests for overdraw raising, whole-balance withdrawal, and ValueError for 0 and -5. The summary states the overdraw test also checks the balance is unchanged, and the counts are consistent with the 6-test suite."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6 passed, commit e362879) is shown. Nothing shows the new tests fail on the code before the change. A run of the new tests against the pre-change code, with its failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the InsufficientFunds and ValueError behaviour of withdraw."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-16. Two were accepted and one was rejected.\n\n**c1** (withdraw refuses overdraw, allows the whole balance, raises ValueError for 0 or less): **accepted**. The pytest run shows passing tests for overdraw raising, whole-balance withdrawal, and ValueError for 0 and -5. The summary says the overdraw test also checks the balance is unchanged.\n\n**c2** (whole suite passes, and new tests fail on the pre-change code): **rejected**. The full suite passing (6 passed, commit e362879) is shown. Nothing shows the new tests fail on the code from before the change. A run of the new tests against the pre-change code, with its failures, would convince me.\n\n**c3** (CHANGELOG.md bullet under Unreleased): **accepted**. The `head -6` output shows a new bullet under \"## Unreleased\" that describes the change.\n\nEVAL-16 has 2 of 3 criteria proven, so the gate does not pass. c2 is the only one left, and it needs new evidence.",
+  "usage": {
+   "input": 12660,
+   "output": 1568
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The verbose pytest run lists passing tests for overdraw raising, whole-balance withdrawal, and ValueError for 0 and -5. The summary states the overdraw test also checks the balance is unchanged, and the counts are consistent with the 6-test suite."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (6 passed, commit e362879) is shown. Nothing shows the new tests fail on the code before the change. A run of the new tests against the pre-change code, with its failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 output of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the InsufficientFunds and ValueError behaviour of withdraw."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The 6 passing tests are described as covering valid addresses and malformed input like 1.2.3 and 1.2.3.4.5, but not 999.1.1.1, 01.2.3.4, 1.2.3.-4 or '1.2.3. 4'. Send the test names or assertions that cover those cases, or a direct run of is_valid_ipv4 on each listed input."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (6 passed, commit 2e6b4a2), but nothing shows the four new tests fail on the code from before the change. Send a run of those tests against the pre-change commit with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' in CHANGELOG.md that describes the tightened is_valid_ipv4 (octets above 255, leading zeros, 999.1.1.1, 01.2.3.4)."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded three verdicts on EVAL-19: one accepted and two rejected.\n\n**c1** (`is_valid_ipv4` accepts and rejects the listed addresses): rejected. The summary names valid addresses and inputs like 1.2.3 and 1.2.3.4.5. It never mentions 999.1.1.1, 01.2.3.4, 1.2.3.-4 or '1.2.3. 4'. To convince me, send the test names or assertions that cover those inputs, or a direct run of the function on each listed input.\n\n**c2** (whole suite passes, and the new tests fail on the old code): rejected. The suite passes with 6 tests at commit 2e6b4a2, but nothing shows the four new tests fail on the pre-change code. To convince me, send a run of those tests against the pre-change commit with the failures shown.\n\n**c3** (CHANGELOG bullet under 'Unreleased'): accepted. The `git diff` excerpt shows a new bullet under `## Unreleased` that describes the tightened `is_valid_ipv4`.\n\nEVAL-19 is partly proven: 1 of 3 criteria is proven. The gate does not pass, because 2 of 3 criteria are not proven (both rejected). It needs new evidence for c1 and c2.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12958,
+   "output": 1513
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The 6 passing tests are described as covering valid addresses and malformed input like 1.2.3 and 1.2.3.4.5, but not 999.1.1.1, 01.2.3.4, 1.2.3.-4 or '1.2.3. 4'. Send the test names or assertions that cover those cases, or a direct run of is_valid_ipv4 on each listed input."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (6 passed, commit 2e6b4a2), but nothing shows the four new tests fail on the code from before the change. Send a run of those tests against the pre-change commit with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' in CHANGELOG.md that describes the tightened is_valid_ipv4 (octets above 255, leading zeros, 999.1.1.1, 01.2.3.4)."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-13 (Rate limit never lets anyone back in): all three pieces of evidence are reviewed and accepted. All 3 criteria are proven, and the gate passes.\n\n- **c1 (TokenBucket refill):** Accepted. The pytest run shows 5 passed, including test_refills_after_time_passes and test_refill_never_exceeds_capacity. The capacity-2 timeline is stated in the summary, but the test body is not shown. Doubt: 2/10.\n- **c2 (full suite passes, new tests fail before the change):** Accepted. The full run at commit 8c68ef8 shows 5 passed and 0 failed. The run against the old bucket.py shows the 3 new tests failing. Doubt: 1/10.\n- **c3 (CHANGELOG bullet under Unreleased):** Accepted. The head -6 output shows a new Unreleased bullet describing the refill fix. Doubt: 1/10.",
+  "usage": {
+   "input": 13198,
+   "output": 1418
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run of python -m pytest -q shows 5 passed, and it names test_refills_after_time_passes, test_refill_never_exceeds_capacity and test_partial_refill_accumulates, which cover the refill, cap and partial-refill behaviour the criterion describes. The capacity-2 timeline is stated in the summary, though the test body itself is not shown.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q, commit 8c68ef8) shows 5 passed and 0 failed, and the pre-fix run against the old bucket.py shows the three new tests failing (3 failed, 2 passed), so they detect the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The head -6 CHANGELOG.md output shows a new bullet under \"## Unreleased\" that describes the TokenBucket refill fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

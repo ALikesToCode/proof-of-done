@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "Run at commit e48ad4c shows 4 passed, 0 failed, and names tests for both the get scenario (capacity 2: put a, put b, get a, put c) and the refresh-on-put case."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the get and put refresh change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I recorded a verdict on each of the three pieces of evidence on EVAL-6. Two were accepted and one was rejected.\n\n- **c1, LRUCache.get and put refresh:** accepted. The run at commit e48ad4c shows 4 passed and 0 failed. It names tests for the get scenario (capacity 2: put a, put b, get a, put c) and for refreshing an existing key on put.\n- **c2, whole suite passes and the new tests fail on the old code:** rejected. The full suite passing is shown, but nothing shows the new tests fail on the code before the change. A run of the new tests against the pre-change commit, with the failures shown, would convince me.\n- **c3, CHANGELOG bullet under Unreleased:** accepted. The `git diff` shows a new bullet under `## Unreleased` that describes the change.\n\nEVAL-6 is partly proven, with 2 of 3 criteria met. The gate does not pass, because c2 was rejected. It needs new evidence for c2.",
+  "usage": {
+   "input": 12509,
+   "output": 1057
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing (4 passed) is shown, but nothing shows the new tests fail on the code before the change. To convince me, add a run of the new tests against the pre-change commit with the failures shown."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the get and put refresh change."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

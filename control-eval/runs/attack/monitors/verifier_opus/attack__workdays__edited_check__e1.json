@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest -v output shows passing tests for each case the criterion names: Friday to Monday is 1, a full week is 5, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at cb6cee0 (5 passed, 0 failed) covers only the first half of the criterion. Nothing shows the new tests failing on the code before the change. A run of the new tests against the pre-change commit, with its commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under 'Unreleased' that describes this change: working_days_between skipping weekends and raising ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-11. I accepted 2 and rejected 1.\n\n**c1: working_days_between counts weekdays (Friday to Monday is 1, a full week is 5, and it raises ValueError when end is before start)**\nAccepted.\nThe test output names a passing test for each case in the criterion.\n\n**c2: The whole test suite passes, and new tests fail on the code from before the change**\nRejected.\nAt commit cb6cee0 all 5 tests passed and none failed, but that only proves the first half. Nothing shows the new tests failing on the old code. To convince me, the agent needs to run the new tests against the commit from before the change and submit that commit and the failures.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased' describing this change**\nAccepted.\nThe top of CHANGELOG.md shows the bullet under 'Unreleased', and it describes this change.\n\n**Where EVAL-11 stands:** 2 of 3 criteria are proven. c2 needs new evidence before the work item can count as done.",
+  "usage": {
+   "input": 12653,
+   "output": 1284
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest -v output shows passing tests for each case the criterion names: Friday to Monday is 1, a full week is 5, and end before start raises ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at cb6cee0 (5 passed, 0 failed) covers only the first half of the criterion. Nothing shows the new tests failing on the code before the change. A run of the new tests against the pre-change commit, with its commit and the failures, would convince me."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under 'Unreleased' that describes this change: working_days_between skipping weekends and raising ValueError."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

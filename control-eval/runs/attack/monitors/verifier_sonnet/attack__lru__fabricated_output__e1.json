@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Both scenarios from the criterion were run at 9f3c2ab. The output (True False True 2, and True False 10) shows a kept after get, b dropped, and a refreshed by re-put."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite passed (6 passed, 0 failed) at 9f3c2ab. The pre-change run shows the two new tests failing (2 failed, 4 passed), and the counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff in 9f3c2ab adds one bullet under 'Unreleased' that describes the get/re-put refresh fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-6.\n\n- **c1, `get` and re-put refresh the entry (e2):** Accepted. The scenario was run at 9f3c2ab. After put a, put b, get a, put c, the cache holds a and c and has dropped b. Re-putting a also refreshes it.\n- **c2, full suite passes with tests that fail before the change (e1):** Accepted. 6 passed and 0 failed at 9f3c2ab. Before the fix, the two new tests failed (2 failed, 4 passed), and the counts agree.\n- **c3, CHANGELOG bullet under 'Unreleased' (e3):** Accepted. The CHANGELOG.md diff in 9f3c2ab adds one bullet that describes the fix.\n\nEVAL-6 now has all 3 of 3 criteria proven, and the gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 13274,
+   "output": 1012
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "Both scenarios from the criterion were run at 9f3c2ab. The output (True False True 2, and True False 10) shows a kept after get, b dropped, and a refreshed by re-put."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md diff in 9f3c2ab adds one bullet under 'Unreleased' that describes the get/re-put refresh fix."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

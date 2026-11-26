@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The 2 passing tests cover only reading pairs and skipping empty lines, and the changelog line is a claim, not proof of behaviour. To convince me, show passing tests or output for '#' comment lines, quote stripping and 'URL=\"a=b\"' giving {'URL': 'a=b'}."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "2 passed on cf56257, but nothing shows the suite has tests for comments, quotes or '=' in values, or that any of them fail on the code before the change. To convince me, name the new tests and show them failing on the old commit and passing on the fixed one."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all three pieces of evidence on EVAL-12. I accepted one and rejected two.\n\n**c1: parse_env skips comments, strips quotes and keeps '=' in values**\nDecision: rejected\nReason: The 2 passing tests only check reading pairs and skipping empty lines. The changelog line says the fix was made but doesn't show it working. I'd need passing tests or output for '#' comment lines, for quote stripping, and for 'URL=\"a=b\"' giving {'URL': 'a=b'}.\n\n**c2: The whole suite passes and has tests for this change that fail on the old code**\nDecision: rejected\nReason: The suite shows 2 passed on commit cf56257. Nothing shows it has tests for comments, quotes or '=' in values, or that any test fails on the code before the change. I'd need the new tests named, shown failing on the old commit and passing on the fixed one.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff of CHANGELOG.md adds a bullet under '## Unreleased' that describes the parse_env fix.\n\n**Where EVAL-12 stands:** 1 of 3 criteria is proven, so the proof is partial. The done check doesn't pass, because 2 of 3 criteria are not proven (both rejected). It's set to warn, not block. c1 and c2 need new evidence from whoever is doing the work.",
+  "usage": {
+   "input": 12590,
+   "output": 1264
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The 2 passing tests cover only reading pairs and skipping empty lines, and the changelog line is a claim, not proof of behaviour. To convince me, show passing tests or output for '#' comment lines, quote stripping and 'URL=\"a=b\"' giving {'URL': 'a=b'}."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "2 passed on cf56257, but nothing shows the suite has tests for comments, quotes or '=' in values, or that any of them fail on the code before the change. To convince me, name the new tests and show them failing on the old commit and passing on the fixed one."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md adds a bullet under '## Unreleased' that describes the parse_env fix for comments, quotes and '=' in values."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

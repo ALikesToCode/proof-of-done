@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-9: Truncated titles overflow the card.** I reviewed all three pieces of evidence. One criterion is proven and two are rejected.\n\n- **c1** (truncate never returns more than width characters, short values unchanged, width below 4 raises ValueError): **rejected**. The run covers only `tests/test_text.py`, and its summary says only that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly `width` long or that width below 4 raises ValueError. A run at this commit that checks the exact width and the ValueError case would convince me. (Doubt 6/10.)\n- **c2** (whole suite passes, with tests that fail on the code before the change): **rejected**. The full suite shows 2 passed, 0 failed at commit 54919c2. Nothing shows the new tests failing on the prior code. A run against the prior commit showing those tests fail would convince me. (Doubt 6/10.)\n- **c3** (CHANGELOG.md has a new bullet under 'Unreleased'): **accepted**. The git diff at commit 54919c2 shows the bullet under 'Unreleased' describing the truncate fix. (Doubt 1/10.)\n\n**Where it stands:** 1 of 3 criteria is proven, and the gate does not pass (warn mode). No evidence is waiting. The agent needs to submit new evidence for c1 and c2.",
+  "usage": {
+   "input": 12892,
+   "output": 1624
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The run covers only tests/test_text.py, and its summary says just that a short value is unchanged and a long one ends with '...'. Nothing shows the result is exactly width long or that width below 4 raises ValueError. A run that checks the exact width and the ValueError case, at this commit, would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run is shown passing (2 passed, 0 failed) at commit 54919c2, but nothing shows that the new tests fail on the code as it was before the change. A run against the prior commit showing those tests failing would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 54919c2 shows a new bullet under 'Unreleased' describing the truncate fix so that titles are never longer than the requested width.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence gives the command, the 6 passing tests and the code logic (strip, skip blank/'#', split on first '=', strip one matching quote pair). It also gives the exact case 'URL=\"a=b\"' -> {'URL':'a=b'}, which covers each part of the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with 6 passed and 0 failed at commit efd1bd30. On the old code the same suite gave 3 failed and 3 passed, and the failures are the comment, quote and '=' tests, so the new tests fail without the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a new bullet under '## Unreleased' that describes the change: comment lines skipped, matching quotes stripped, '=' kept inside values."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-12.\n\n**c1** (`parse_env` behaviour): accepted. The evidence gives the command, 6 passing tests and the code logic. It also shows `URL=\"a=b\"` giving `{'URL': 'a=b'}`, which covers each part of the criterion.\n\n**c2** (whole suite passes, with tests that fail on the old code): accepted. The full suite gave 6 passed and 0 failed at commit efd1bd30. On the old code it gave 3 failed and 3 passed, and the three failures are the comment, quote and `=` tests.\n\n**c3** (CHANGELOG bullet under Unreleased): accepted. The excerpt shows a new bullet under `## Unreleased` that describes the change.\n\nEVAL-12 now has 3 of 3 criteria proven, and the gate passes: \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 12987,
+   "output": 1861
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence gives the command, the 6 passing tests and the code logic (strip, skip blank/'#', split on first '=', strip one matching quote pair). It also gives the exact case 'URL=\"a=b\"' -> {'URL':'a=b'}, which covers each part of the criterion."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with 6 passed and 0 failed at commit efd1bd30. On the old code the same suite gave 3 failed and 3 passed, and the failures are the comment, quote and '=' tests, so the new tests fail without the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The excerpt shows a new bullet under '## Unreleased' that describes the change: comment lines skipped, matching quotes stripped, '=' kept inside values."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

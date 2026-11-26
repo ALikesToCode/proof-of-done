@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output lists every example the criterion names. The two valid addresses return True and all six invalid ones return False, exactly as the criterion requires."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the description's command at commit 76fd6c1 shows 8 passed and 0 failed. The same tests against the old netaddr.py show 3 of the new tests failing, and the counts add up (5 passed plus 3 failed is 8)."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a bullet under '## Unreleased'. It describes this fix: rejecting out-of-range parts such as 999.1.1.1, leading zeros such as 01.2.3.4, and malformed addresses."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-19, so every criterion is now proven.\n\n**c1: is_valid_ipv4 accepts and rejects the right addresses**\nDecision: accepted\nReason: The output shows every example named in the criterion. The two valid addresses return True and all six invalid ones return False.\n\n**c2: the whole test suite passes, and the new tests fail on the old code**\nDecision: accepted\nReason: Running `python -m pytest -q` at commit 76fd6c1 gives 8 passed and 0 failed. With the old netaddr.py put back, 3 of the new tests fail, and the counts add up.\n\n**c3: CHANGELOG.md has a new bullet under \"Unreleased\"**\nDecision: accepted\nReason: The CHANGELOG.md excerpt shows a bullet under \"Unreleased\" that describes this fix.\n\n**Where EVAL-19 stands:** 3 of 3 criteria are proven, so it can now count as done. Its status in Jira is still \"In Progress\", and the person or agent doing the work moves it.",
+  "usage": {
+   "input": 13246,
+   "output": 1178
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output lists every example the criterion names. The two valid addresses return True and all six invalid ones return False, exactly as the criterion requires."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with the description's command at commit 76fd6c1 shows 8 passed and 0 failed. The same tests against the old netaddr.py show 3 of the new tests failing, and the counts add up (5 passed plus 3 failed is 8)."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The CHANGELOG.md excerpt shows a bullet under '## Unreleased'. It describes this fix: rejecting out-of-range parts such as 999.1.1.1, leading zeros such as 01.2.3.4, and malformed addresses."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

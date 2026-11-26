@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-9: Truncated titles overflow the card.** All three criteria are now proven.\n\n- **c1 (truncate never returns more than width characters, fitting values unchanged, width below 4 raises ValueError): accepted.** The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.\n- **c2 (whole suite passes, with new tests that fail on the code before the change): accepted.** `python -m pytest -q` shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change. The summary names the pre-change commit as cb827b7, but the excerpt does not show that commit. The failing-test result still stands on its own.\n- **c3 (CHANGELOG.md has a new bullet under 'Unreleased'): accepted.** The git diff at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.\n\nThe work item stands at 3 of 3 criteria proven. The gate passes in warn mode. No evidence is still waiting.",
+  "usage": {
+   "input": 13307,
+   "output": 1738
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 6 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run at commit 3f9a1c7 shows a 20-character title cut to exactly 20 with the '...' ending, a 20-character value returned unchanged, and width 3 raising ValueError. Those boundary cases cover the whole criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (python -m pytest -q) shows 6 passed, 0 failed at commit 3f9a1c7. With text.py stashed, the three new tests fail, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 3f9a1c7 adds a bullet under 'Unreleased' describing the truncate fix and the ValueError for widths below 4.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output for tests/test_dedupe.py shows both contract examples asserted and passing: unique([3,1,3,2,1]) == [3,1,2] and unique(['a','A','b'], key=str.lower) == ['a','b']."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q at commit 107db0d) shows 5 passed and 0 failed. Run against the old dedupe.py, the 3 new tests fail for the expected reasons: the wrong order and a TypeError on key."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased'. It describes the first-seen order and the optional key function."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all three pieces of evidence on EVAL-15, so every criterion on the work item is now proven.\n\n**c1: `unique` keeps the first-seen order and supports `key`**\nDecision: accepted\nReason: The test output shows both examples from the contract being checked and passing: `unique([3,1,3,2,1]) == [3,1,2]` and `unique(['a','A','b'], key=str.lower) == ['a','b']`.\n\n**c2: The whole test suite passes, with new tests that fail on the old code**\nDecision: accepted\nReason: The full suite at commit 107db0d shows 5 passed and 0 failed. Against the old `dedupe.py`, the 3 new tests fail for the right reasons: the list comes back in the wrong order, and passing `key` raises a TypeError.\n\n**c3: CHANGELOG.md has a new bullet under \"Unreleased\"**\nDecision: accepted\nReason: The diff of CHANGELOG.md shows a new bullet under \"Unreleased\" that describes both the first-seen order and the optional `key` function.\n\n**Where EVAL-15 stands:** 3 of 3 criteria are proven. The gate passes: \"All 3 criteria are proven.\" The work item is still In Progress, and moving it is up to the team.",
+  "usage": {
+   "input": 12881,
+   "output": 1195
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest output for tests/test_dedupe.py shows both contract examples asserted and passing: unique([3,1,3,2,1]) == [3,1,2] and unique(['a','A','b'], key=str.lower) == ['a','b']."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite (python -m pytest -q at commit 107db0d) shows 5 passed and 0 failed. Run against the old dedupe.py, the 3 new tests fail for the expected reasons: the wrong order and a TypeError on key."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased'. It describes the first-seen order and the optional key function."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

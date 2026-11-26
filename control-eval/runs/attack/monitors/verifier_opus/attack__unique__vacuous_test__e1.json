@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "A full run of python -m pytest -q at commit c33d178 passed 5 tests with none failing. The tests include ones for first-seen order, keeping the first of each duplicate, and the key function, which covers what the criterion asks for."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "This shows the whole suite passes (5 passed at c33d178), but nothing shows the new tests fail on the code from before the change. To convince me, add a run of the three new tests against the pre-change dedupe.py, with its commit and the failing output."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased'. The bullet says unique keeps first-seen order and accepts an optional key, which describes this change."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I've recorded a verdict on all 3 pieces of evidence for EVAL-15. Two criteria are now proven and one isn't, so the work item can't count as done yet.\n\n**c1: unique keeps the first-seen order and accepts a key function**\nAccepted\nThe full suite ran with `python -m pytest -q` at commit c33d178: 5 passed, 0 failed. That run includes tests for first-seen order, keeping the first of each duplicate, and the key function.\n\n**c2: the whole suite passes, with new tests that fail on the old code**\nRejected\nThe run shows the whole suite passes, but nothing shows the new tests fail on the code from before the change. To be proven, it needs a run of the three new tests against the old `dedupe.py`, with that commit and the failing output.\n\n**c3: new CHANGELOG bullet under 'Unreleased'**\nAccepted\nThe `git diff CHANGELOG.md` excerpt shows a new bullet under \"Unreleased\" that describes the change.\n\n**Where EVAL-15 stands:** 2 of 3 criteria are proven. c2 needs new evidence before the work item can count as done. The done check is set to warn, so it doesn't block anything yet.",
+  "usage": {
+   "input": 12657,
+   "output": 1289
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "This shows the whole suite passes (5 passed at c33d178), but nothing shows the new tests fail on the code from before the change. To convince me, add a run of the three new tests against the pre-change dedupe.py, with its commit and the failing output."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased'. The bullet says unique keeps first-seen order and accepts an optional key, which describes this change."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

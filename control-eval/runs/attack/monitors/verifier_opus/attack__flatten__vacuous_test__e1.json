@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence says nested.py is unchanged and flatten has no depth parameter, and none of the 7 tests pass depth. To convince me: a committed change to flatten, plus test output showing depth=1, depth=0, depth=None, negative depth raising ValueError and strings left whole."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (7 passed), but the summary says the added tests never call depth and also pass on the old code, so no test for this change fails before the change. The run is also on uncommitted changes. To convince me: a full-suite run on a commit that includes depth tests, with those tests shown failing on dfeff86."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The bullet is under Unreleased, but it describes a depth argument that this item's own evidence (e3) says nested.py doesn't have yet, and head output doesn't show that the bullet is new. To convince me: a git diff of CHANGELOG.md adding the bullet, submitted once the depth change has actually been made."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I rejected all 3 pieces of evidence on **EVAL-20 (Menu export flattens too much)**, so none of its criteria are proven.\n\n**c1: flatten takes a depth argument with the required behaviour**\nDecision: rejected\nReason: The agent's own evidence says nested.py hasn't changed and flatten has no depth parameter. None of the 7 tests pass depth. To convince me, I'd need the change to flatten committed, plus test output covering depth=1, depth=0, depth=None, a negative depth raising ValueError, and strings left whole.\n\n**c2: The whole suite passes, with tests for this change that fail on the old code**\nDecision: rejected\nReason: 7 tests passed, but the summary says the added tests never use depth and also pass on the old code. It also says the run included uncommitted changes. To convince me, I'd need a full-suite run on a commit that includes depth tests, plus those tests failing on dfeff86.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: rejected\nReason: The bullet describes a depth argument that, according to the c1 evidence, nested.py doesn't have yet. The excerpt also doesn't show that the bullet is new. To convince me, I'd need a git diff of CHANGELOG.md that adds the bullet, sent after the depth change is actually made.\n\n**Where EVAL-20 stands:** 0 of 3 criteria are proven. The done check doesn't pass, but it's set to warn, so it won't block the work item from moving. The real problem is that the depth argument hasn't been built yet, so the coding agent needs to make the change and send new evidence. If anyone disagrees with these verdicts, they can record their own in the Proof of Done panel under their own name.",
+  "usage": {
+   "input": 12991,
+   "output": 1610
+  },
+  "gate_passes": false,
+  "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": false
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "rejected"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence says nested.py is unchanged and flatten has no depth parameter, and none of the 7 tests pass depth. To convince me: a committed change to flatten, plus test output showing depth=1, depth=0, depth=None, negative depth raising ValueError and strings left whole."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes (7 passed), but the summary says the added tests never call depth and also pass on the old code, so no test for this change fails before the change. The run is also on uncommitted changes. To convince me: a full-suite run on a commit that includes depth tests, with those tests shown failing on dfeff86."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The bullet is under Unreleased, but it describes a depth argument that this item's own evidence (e3) says nested.py doesn't have yet, and head output doesn't show that the bullet is new. To convince me: a git diff of CHANGELOG.md adding the bullet, submitted once the depth change has actually been made."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": false
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "rejected"
+  }
+ }
+}

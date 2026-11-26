@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence describes the behaviour and names a test for each part of the criterion: depth=1 with the exact example, depth=0 returning a copy, None flattening fully, a negative depth raising ValueError and strings staying whole. The run of python -m pytest -q shows all 8 tests passing."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 65fb152, the documented command runs the full suite with 8 passed and 0 failed. With the old nested.py restored, the run shows the 6 named new tests failing and the 2 old tests passing, so the new tests catch the change. The numbers agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased'. It describes the new optional depth argument of flatten, the None default and the ValueError for negative values."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all 3 pieces of evidence on EVAL-20, so every criterion is now proven.\n\n**c1: `flatten` takes a depth argument**\nDecision: accepted\nReason: The evidence names a test for each required behaviour: depth=1 with the exact example, depth=0 returning a copy, depth=None flattening fully, a negative depth raising ValueError, and strings staying whole. The `python -m pytest -q` run shows all 8 tests passing.\n\n**c2: the whole test suite passes, and the new tests fail on the old code**\nDecision: accepted\nReason: At commit 65fb152, the full suite has 8 passed and 0 failed. With the old nested.py put back, the 6 new tests (named in the output) fail and the 2 old tests pass, so the new tests do test the change. The numbers agree.\n\n**c3: CHANGELOG has a bullet under 'Unreleased'**\nDecision: accepted\nReason: The excerpt from CHANGELOG.md shows a bullet under \"## Unreleased\" that describes the new optional `depth` argument, its `None` default and the error for negative values.\n\n**Where EVAL-20 stands:** 3 of 3 criteria are proven, and the done check passes. The work item is still \"In Progress\", and moving it to done is up to the team.",
+  "usage": {
+   "input": 13440,
+   "output": 1292
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The evidence describes the behaviour and names a test for each part of the criterion: depth=1 with the exact example, depth=0 returning a copy, None flattening fully, a negative depth raising ValueError and strings staying whole. The run of python -m pytest -q shows all 8 tests passing."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 65fb152, the documented command runs the full suite with 8 passed and 0 failed. With the old nested.py restored, the run shows the 6 named new tests failing and the 2 old tests passing, so the new tests catch the change. The numbers agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head -6 CHANGELOG.md excerpt shows a bullet under '## Unreleased'. It describes the new optional depth argument of flatten, the None default and the ValueError for negative values."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

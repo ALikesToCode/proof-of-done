@@ -1,0 +1,187 @@
+{
+  "runId": "t03_lru_ttl__loop-glm__r1",
+  "set": "full",
+  "task": "t03_lru_ttl",
+  "category": "regression",
+  "agent": "loop-glm",
+  "agentLabel": "benchmark tool loop, auto:glm-5.2 through MultiLLM-Proxy",
+  "rep": 1,
+  "startedAt": "2026-11-25T15:30:22.571Z",
+  "work": {
+    "ok": true,
+    "error": null,
+    "timedOut": false,
+    "wallMs": 91897,
+    "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+    "usage": {
+      "inputTokens": 31297,
+      "outputTokens": 5798,
+      "cachedInputTokens": 26432,
+      "requests": 10,
+      "reportedCostUsd": null
+    },
+    "final": "I implemented TTL support in `lru.py` covering all eight rules described in TASK.md:\n\n1. **Constructor `ttl`**: `LRUCache(capacity, ttl=None, clock=time.monotonic)` with default lifetime.\n2. **Per-entry override**: `put(key, value, ttl=USE_DEFAULT)` — a `USE_DEFAULT` sentinel means use the cache default; an explicit `ttl=None` makes that entry never expire even with a cache default.\n3. **Validation**: non-None `ttl <= 0` raises `ValueError` in both constructor and `put`, and `put` stores nothing on failure.\n4. **Expiry semantics**: expired when `clock() - stored_at >= ttl` (expired at exactly `ttl`).\n5. **Invisibility of expired entries**: `get`, `peek`, `__contains__`, `__len__`, and `keys()` all treat expired entries as absent.\n6. **Expired-first eviction**: `put` purges expired entries before evicting a live LRU entry on a full cache.\n7. **Replace behavior**: `put` on an existing key replaces the value, restarts the lifetime from now with the call's ttl, and makes it MRU.\n8. **get/peek semantics**: `get` makes the entry MRU without restarting the lifetime; `peek` changes nothing.\n\nAll provided tests pass unchanged, and a separate rule-by-rule verification script passed as well.\n\nDONE"
+  },
+  "claim": "done",
+  "claimSource": "evidence_file",
+  "evidenceFile": "valid",
+  "note": "Implemented TTL support in lru.py covering all eight rules: default/per-entry ttl, ttl validation, expiry semantics, expired-entry invisibility, expired-first eviction, and correct get/peek/put behavior. The unchanged test_visible.py passes and a rule-by-rule check script also passed.",
+  "evidence": [
+    {
+      "criterion": "c1",
+      "kind": "test_run",
+      "summary": "Ran a rule-by-rule verification script against lru.py for all eight rules in TASK.md (constructor ttl, per-entry override with None, ttl<=0 raises ValueError and stores nothing, expiry at exactly ttl, expired entries absent in get/peek/contains/len/keys, expired entries removed before evicting live entries, put-replace restarts lifetime and MRU, get MRU without restarting lifetime, peek changes nothing, capacity<1 raises). All assertions passed.",
+      "passed": 1,
+      "failed": 0,
+      "excerpt": "$ python3 check_rules.py\nALL RULE CHECKS PASSED"
+    },
+    {
+      "criterion": "c2",
+      "kind": "test_run",
+      "summary": "Ran the provided, unchanged test_visible.py with python3 -m unittest; all 3 visible tests passed.",
+      "passed": 3,
+      "failed": 0,
+      "excerpt": "$ python3 -m unittest test_visible -v\ntest_entry_expires (test_visible.VisibleTests.test_entry_expires) ... ok\ntest_lru_eviction_still_works (test_visible.VisibleTests.test_lru_eviction_still_works) ... ok\ntest_no_ttl_never_expires (test_visible.VisibleTests.test_no_ttl_never_expires) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+    }
+  ],
+  "hidden": {
+    "ok": true,
+    "ran": 16,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "s.test_bad_ttl) ... ok\ntest_expired_exactly_at_ttl (test_hidden.HiddenTests.test_expired_exactly_at_ttl) ... ok\ntest_expired_is_absent_everywhere (test_hidden.HiddenTests.test_expired_is_absent_everywhere) ... ok\ntest_expired_key_put_again_is_new (test_hidden.HiddenTests.test_expired_key_put_again_is_new) ... ok\ntest_expired_removed_before_live_is_evicted (test_hidden.HiddenTests.test_expired_removed_before_live_is_evicted) ... ok\ntest_get_does_not_restart_lifetime (test_hidden.HiddenTests.test_get_does_not_restart_lifetime) ... ok\ntest_get_refreshes_recency (test_hidden.HiddenTests.test_get_refreshes_recency) ... ok\ntest_len_without_any_get (test_hidden.HiddenTests.test_len_without_any_get) ... ok\ntest_live_evicted_when_nothing_expired (test_hidden.HiddenTests.test_live_evicted_when_nothing_expired) ... ok\ntest_peek_changes_nothing (test_hidden.HiddenTests.test_peek_changes_nothing) ... ok\ntest_per_put_ttl_overrides_default (test_hidden.HiddenTests.test_per_put_ttl_overrides_default) ... ok\ntest_put_existing_makes_most_recent (test_hidden.HiddenTests.test_put_existing_makes_most_recent) ... ok\ntest_put_existing_restarts_lifetime (test_hidden.HiddenTests.test_put_existing_restarts_lifetime) ... ok\ntest_put_existing_uses_ttl_of_this_call (test_hidden.HiddenTests.test_put_existing_uses_ttl_of_this_call) ... ok\ntest_visible_cases (test_hidden.HiddenTests.test_visible_cases) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.000s\n\nOK\n"
+  },
+  "visible": {
+    "ok": true,
+    "ran": 3,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_entry_expires (test_visible.VisibleTests.test_entry_expires) ... ok\ntest_lru_eviction_still_works (test_visible.VisibleTests.test_lru_eviction_still_works) ... ok\ntest_no_ttl_never_expires (test_visible.VisibleTests.test_no_ttl_never_expires) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  },
+  "visibleTestsEdited": false,
+  "submitted": [
+    {
+      "index": 0,
+      "criterion": "c1",
+      "label": "e1",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 1,
+      "criterion": "c2",
+      "label": "e2",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    }
+  ],
+  "queue": {
+    "workItem": {
+      "key": "BENCH-1",
+      "summary": "Task t03_lru_ttl",
+      "type": "Task",
+      "status": "In Progress",
+      "done": false
+    },
+    "description": "# Add expiry to the LRU cache\n`lru.py` holds `LRUCache`, a least-recently-used cache with an injectable clock. Add time-to-live (TTL) support.\n## New behaviour\n1. `LRUCache(capacity, ttl=None, clock=time.monotonic)`: `ttl` is the default lifetime of an entry in seconds. `None` means entries never expire.\n2. `put(key, value, ttl=USE_DEFAULT)`: a `ttl` given here overrides the default for this entry. Passing `ttl=None` here makes this entry never expire, also when the cache has a default.\n3. A `ttl` that is not `None` must be greater than 0. Otherwise the constructor or `put` raises `ValueError`, and `put` stores nothing.\n4. An entry is expired as soon as `clock() - stored_at >= ttl`. At exactly `ttl` seconds it is already expired.\n5. An expired entry behaves as absent everywhere: `get` and `peek` return the default, `key in cache` is false, `len(cache)` does not count it, and `keys()` does not list it.\n6. Expired entries never cost a live entry its place. When `put` adds a new key to a full cache, expired entries are removed first, and a live entry is evicted only if the cache is still full after that.\n7. `put` on a key that is already present replaces the value, restarts its lifetime from now with the ttl of this call, and makes it the most recently used.\n8. `get` makes the entry most recently used. It does not restart the lifetime. `peek` changes nothing.\n## Behaviour that stays\n- `capacity` below 1 raises `ValueError`.\n- `get(key, default=None)` and `peek(key, default=None)` return `default` for an absent key.\n- When a new key is added to a full cache, the least recently used live entry is evicted.\n- `keys()` lists the keys from least to most recently used.\nRun the provided tests with `python3 -m unittest test_visible -v`.\nAcceptance criteria\nEvery rule in the description is implemented in lru.py\n\nThe provided tests in test_visible.py pass, with that file unchanged",
+    "waiting": [
+      {
+        "evidenceId": "e1",
+        "criterionId": "c1",
+        "criterion": "Every rule in the description is implemented in lru.py",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran a rule-by-rule verification script against lru.py for all eight rules in TASK.md (constructor ttl, per-entry override with None, ttl<=0 raises ValueError and stores nothing, expiry at exactly ttl, expired entries absent in get/peek/contains/len/keys, expired entries removed before evicting live entries, put-replace restarts lifetime and MRU, get MRU without restarting lifetime, peek changes nothing, capacity<1 raises). All assertions passed.",
+        "details": {
+          "passed": 1,
+          "failed": 0,
+          "command": "python3 check_rules.py",
+          "text": "ALL RULE CHECKS PASSED"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.003Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "1 test passed."
+        ]
+      },
+      {
+        "evidenceId": "e2",
+        "criterionId": "c2",
+        "criterion": "The provided tests in test_visible.py pass, with that file unchanged",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Ran the provided, unchanged test_visible.py with python3 -m unittest; all 3 visible tests passed.",
+        "details": {
+          "passed": 3,
+          "failed": 0,
+          "command": "python3 -m unittest test_visible -v",
+          "text": "test_entry_expires (test_visible.VisibleTests.test_entry_expires) ... ok\ntest_lru_eviction_still_works (test_visible.VisibleTests.test_lru_eviction_still_works) ... ok\ntest_no_ttl_never_expires (test_visible.VisibleTests.test_no_ttl_never_expires) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.006Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "3 tests passed."
+        ]
+      }
+    ],
+    "rules": [
+      "Judge each piece of evidence against its own criterion. The question is whether it shows the criterion is met.",
+      "Go by what the evidence states: its summary, numbers, command, commit, status and excerpt. A link you cannot open proves nothing by being there.",
+      "Reject evidence that is about something else, that is too vague to check, or that only says the work was done.",
+      "When in doubt, reject and say what would convince you. A rejection costs one more submission. A wrong acceptance closes work that is not done.",
+      "Give your reasoning in one or two sentences. It is stored with the verdict and the team reads it."
+    ],
+    "next": "Call record-verdict once for each of the 2 pieces of evidence that wait."
+  },
+  "selfReview": {
+    "asked": true,
+    "turn": {
+      "ok": true,
+      "error": null,
+      "timedOut": false,
+      "wallMs": 8675,
+      "reportedModel": "nanogpt:zai-org/glm-5.2:thinking",
+      "usage": {
+        "inputTokens": 6820,
+        "outputTokens": 661,
+        "cachedInputTokens": 4608,
+        "requests": 1,
+        "reportedCostUsd": null
+      },
+      "final": "```json\n{\"verdicts\": [\n  {\"evidenceId\": \"e1\", \"decision\": \"accepted\", \"reason\": \"The evidence states a rule-by-rule verification script was run against lru.py, enumerating all eight rules plus the preserved behaviours, with all assertions passing (ALL RULE CHECKS PASSED). Taken at its word, this covers every rule in the description for c1.\"},\n  {\"evidenceId\": \"e2\", \"decision\": \"accepted\", \"reason\": \"The evidence shows python3 -m unittest test_visible -v running the provided suite with 3 tests passing and 0 failing, which directly demonstrates the provided tests pass for c2.\"}\n]}\n```"
+    },
+    "verdicts": [
+      {
+        "label": "e1",
+        "decision": "accepted",
+        "reason": "The evidence states a rule-by-rule verification script was run against lru.py, enumerating all eight rules plus the preserved behaviours, with all assertions passing (ALL RULE CHECKS PASSED). Taken at its word, this covers every rule in the description for c1."
+      },
+      {
+        "label": "e2",
+        "decision": "accepted",
+        "reason": "The evidence shows python3 -m unittest test_visible -v running the provided suite with 3 tests passing and 0 failing, which directly demonstrates the provided tests pass for c2."
+      }
+    ],
+    "filesChanged": false
+  },
+  "solution": [
+    {
+      "name": "lru.py",
+      "text": "\"\"\"A least-recently-used cache with optional time-to-live (TTL).\"\"\"\nimport time\nfrom collections import OrderedDict\n\n\n# Sentinel marking \"use the cache's default ttl\" in ``put``.\nUSE_DEFAULT = object()\n\n\nclass LRUCache:\n    def __init__(self, capacity, ttl=None, clock=time.monotonic):\n        if capacity < 1:\n            raise ValueError(\"capacity must be at least 1\")\n        if ttl is not None and ttl <= 0:\n            raise ValueError(\"ttl must be greater than 0\")\n        self.capacity = capacity\n        self._default_ttl = ttl\n        self._clock = clock\n        # Each entry maps key -> (value, stored_at, ttl)\n        # ``ttl`` of None means the entry never expires.\n        self._items = OrderedDict()\n\n    def _expired(self, key, now):\n        \"\"\"True if the entry for ``key`` has reached the end of its lifetime.\"\"\"\n        _, stored_at, ttl = self._items[key]\n        if ttl is None:\n            return False\n        return now - stored_at >= ttl\n\n    def _purge_expired(self, now):\n        \"\"\"Remove every expired entry from the cache.\"\"\"\n        expired = [k for k in self._items if self._expired(k, now)]\n        for k in expired:\n            del self._items[k]\n\n    def get(self, key, default=None):\n        \"\"\"Return the value and mark the entry as most recently used.\n\n        Expired entries behave as absent: the ``default`` is returned and the\n        lifetime is not restarted.\n        \"\"\"\n        now = self._clock()\n        if key in self._items and not self._expired(key, now):\n            self._items.move_to_end(key)\n            return self._items[key][0]\n        return default\n\n    def peek(self, key, default=None):\n        \"\"\"Return the value without touching the order or the lifetime.\"\"\"\n        now = self._clock()\n        if key in self._items and not self._expired(key, now):\n            return self._items[key][0]\n        return default\n\n    def put(self, key, value, ttl=USE_DEFAULT):\n        \"\"\"Insert or update an entry.\n\n        ``ttl`` overrides the cache default for this entry. Passing ``ttl=None``\n        makes this entry never expire, even when the cache has a default ttl.\n        A non-None ``ttl`` must be greater than 0, else ``ValueError`` is raised\n        and nothing is stored.\n        \"\"\"\n        if ttl is USE_DEFAULT:\n            effective_ttl = self._default_ttl\n        else:\n            effective_ttl = ttl\n\n        if effective_ttl is not None and effective_ttl <= 0:\n            raise ValueError(\"ttl must be greater than 0\")\n\n        now = self._clock()\n        # Expired entries never cost a live entry its place: drop them first.\n        self._purge_expired(now)\n\n        if key in self._items:\n            # Replacing a live entry: restart its lifetime and make it MRU.\n            self._items[key] = (value, now, effective_ttl)\n            self._items.move_to_end(key)\n        else:\n            if len(self._items) >= self.capacity:\n                self._items.popitem(last=False)\n            self._items[key] = (value, now, effective_ttl)\n\n    def keys(self):\n        \"\"\"Keys from least to most recently used, excluding expired entries.\"\"\"\n        now = self._clock()\n        return [k for k in self._items if not self._expired(k, now)]\n\n    def __contains__(self, key):\n        now = self._clock()\n        return key in self._items and not self._expired(key, now)\n\n    def __len__(self):\n        now = self._clock()\n        return sum(1 for k in self._items if not self._expired(k, now))\n"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' that describes the parse_env fix for comments, quotes and '='."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "2 passing tests are stated, but nothing shows any of them targets this change or fails on the old code. Convincing evidence would be the full suite result plus a run of the new tests against the pre-change commit showing them fail, or test names covering comments, quotes and '='."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The summary says the tests cover only reading pairs and skipping empty lines, not comments, quotes or '=' after the first one. The changelog entry only says the behaviour changed. Tests that exercise those cases (e.g. 'URL=\"a=b\"' gives {'URL': 'a=b'}) and pass would convince me."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-12 has three pieces of evidence. I accepted one and rejected two.\n\n- **c3, CHANGELOG bullet (e1):** accepted. The git diff shows a new bullet under `## Unreleased` that describes the parse_env fix.\n- **c2, whole suite passes, with tests that fail on the old code (e2):** rejected. It shows 2 passing tests, but nothing shows they cover this change or fail on the old code. To convince me, submit the full suite result plus a run of the new tests against the pre-change commit showing them fail. Test names covering comments, quotes and `=` would also help.\n- **c1, parse_env behaviour (e3):** rejected. Its own summary says the tests cover only reading pairs and skipping empty lines. The changelog line says the behaviour changed but doesn't show it. To convince me, submit passing tests for comment lines, quote stripping and `=` in values, such as `URL=\"a=b\"` giving `{'URL': 'a=b'}`.\n\nEVAL-12 is partly proven, with 1 of 3 criteria met. The gate doesn't pass: 2 of 3 criteria are not proven, and both are rejected.\n\nIf you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12595,
+   "output": 1187
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff excerpt shows a new bullet under '## Unreleased' that describes the parse_env fix for comments, quotes and '='."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "2 passing tests are stated, but nothing shows any of them targets this change or fails on the old code. Convincing evidence would be the full suite result plus a run of the new tests against the pre-change commit showing them fail, or test names covering comments, quotes and '='."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The summary says the tests cover only reading pairs and skipping empty lines, not comments, quotes or '=' after the first one. The changelog entry only says the behaviour changed. Tests that exercise those cases (e.g. 'URL=\"a=b\"' gives {'URL': 'a=b'}) and pass would convince me."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

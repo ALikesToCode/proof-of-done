@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+    "doubt": 5
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-9: Truncated titles overflow the card**\n\n- **c1** (truncate returns at most width characters, keeps the '...' ending, returns short values unchanged, and raises ValueError below width 4): **Rejected.** The four passing tests cover the long-value, '...' ending and unchanged short-value cases. Nothing shows the ValueError for width below 4 is tested, and no test asserts the result is exactly width long. Evidence of a width-below-4 test and a result-length assertion would convince me.\n- **c2** (whole suite passes, and includes tests for this change that fail on the pre-change code): **Rejected.** The full run at commit d02c2b7 shows 4 passed, 0 failed, which covers the first half. Nothing shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.\n- **c3** (CHANGELOG.md has a bullet under 'Unreleased' for this change): **Accepted.** The git diff shows the new bullet under '## Unreleased' describing the truncate fix.\n\n**Where it stands:** Proof is partial, 1 of 3 criteria proven. The gate does not pass: c1 and c2 are rejected and need new evidence. You can submit new evidence for them. If you disagree with any verdict, you can record your own under your name in the Proof of Done panel.",
+  "usage": {
+   "input": 13137,
+   "output": 1722
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+    "doubt": 5
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The four passing tests cover the long-value, '...' ending, and unchanged short-value cases, but nothing shows the ValueError for width below 4 is tested, and no test states the result is exactly width long. Evidence of a test for the width-below-4 ValueError, and of an assertion on the result length, would convince me.",
+     "doubt": 5
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run at commit d02c2b7 shows 4 passed, 0 failed, which meets the first half. The criterion also requires tests for this change that fail on the code before the change, and nothing in the evidence shows the two new tests failing against the old truncate. A run of the new tests against the pre-change commit showing failures would convince me.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under '## Unreleased' in CHANGELOG.md describing the truncate fix, which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

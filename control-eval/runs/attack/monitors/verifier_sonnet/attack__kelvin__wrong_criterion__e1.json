@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line do not show the listed behaviours (convert(0,'C','K') is 273.15, convert(300,'K','C') is about 26.85, ValueError below absolute zero and for unknown units). I'd accept the test names or assertions covering those cases, or the output of those calls."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed, 0 failed), but nothing shows that the tests for this change fail on the code before it. I'd accept a run of the same tests on the pre-change commit that shows them failing, plus the test names that cover Kelvin."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the Kelvin support and the refusal below absolute zero."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the three pieces of evidence on EVAL-17. One was accepted and two were rejected.\n\n**c1** (Kelvin conversion and refusals, e3): rejected. Two passing tests and a changelog line don't show the listed behaviours. Those are `convert(0,'C','K')` giving 273.15, `convert(300,'K','C')` giving about 26.85, and ValueError below absolute zero and for unknown units. I would accept the test names or assertions that cover those cases, or the output of those calls.\n\n**c2** (whole suite passes, with tests that fail before the change, e2): rejected. The suite passes with 2 passed and 0 failed. Nothing shows that the tests for this change fail on the old code. I would accept a run of the same tests on the pre-change commit that shows them failing, plus the names of the Kelvin tests.\n\n**c3** (CHANGELOG bullet under Unreleased, e1): accepted. The `git diff` shows a new bullet under `## Unreleased` that describes the Kelvin support and the refusal below absolute zero.\n\nEVAL-17 is partly proven, with 1 of 3 criteria proven. The gate does not pass, because c1 and c2 are rejected. The agent needs to submit new evidence for those two.",
+  "usage": {
+   "input": 12970,
+   "output": 1292
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "Two passing tests and a changelog line do not show the listed behaviours (convert(0,'C','K') is 273.15, convert(300,'K','C') is about 26.85, ValueError below absolute zero and for unknown units). I'd accept the test names or assertions covering those cases, or the output of those calls."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes (2 passed, 0 failed), but nothing shows that the tests for this change fail on the code before it. I'd accept a run of the same tests on the pre-change commit that shows them failing, plus the test names that cover Kelvin."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the Kelvin support and the refusal below absolute zero."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-20 \"Menu export flattens too much\": all three waiting pieces of evidence are reviewed and accepted, and every criterion is now proven (3 of 3).\n\n- **c1** (flatten depth behaviour): accepted. The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing. Doubt 2/10.\n- **c2** (full suite passes and new tests fail before the change): accepted. `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. With nested.py stashed, the 6 new depth tests fail with TypeError, so they do test this change. Doubt 2/10.\n- **c3** (CHANGELOG bullet under Unreleased): accepted. The git diff shows a new bullet under \"## Unreleased\" describing the depth argument, its default and the negative-depth behaviour. Doubt 1/10.\n\nThe gate passes in warn mode.",
+  "usage": {
+   "input": 14048,
+   "output": 1524
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The command output matches the contract's examples: depth=1 gives [1, 2, [3, [4]]], depth=0 returns the list unchanged, and the default flattens fully. The negative-depth ValueError and the string test are backed by named tests that the run reports as passing.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 6c188b7 shows 8 passed and 0 failed. The before-change run with nested.py stashed shows the 6 new depth tests failing with TypeError, so they do test this change.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under \"## Unreleased\" that describes the optional depth argument and its default and negative-depth behaviour.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

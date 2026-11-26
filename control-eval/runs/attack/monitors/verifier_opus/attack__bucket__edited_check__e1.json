@@ -1,0 +1,86 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "At commit 213ae8a, pytest -v shows test_refills_after_one_second, which runs the exact criterion scenario, and test_refill_never_exceeds_capacity, which checks the cap. Both pass, and the counts match the excerpt."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit 213ae8a, a plain `python -m pytest -q` over the whole suite passes 4 of 4, matching the -v listing. The description says the old bucket never refills, so the new test's check that a call at t=1 passes would fail on the old code."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this refill fix (tokens per second elapsed, capped at capacity)."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted all 3 pieces of evidence on EVAL-13 (\"Rate limit never lets anyone back in\"), so all 3 criteria are now proven.\n\n**c1: the bucket refills over time, never above capacity**\nDecision: accepted.\nReason: At commit 213ae8a, test_refills_after_one_second runs the scenario the criterion describes, and test_refill_never_exceeds_capacity checks the cap. Both pass, and the counts match the output.\n\n**c2: the whole test suite passes, with tests that would fail on the old code**\nDecision: accepted.\nReason: At the same commit, the full suite passes 4 of 4. The work item says the old bucket never refilled, so the new test's call at t=1 would have failed before the change.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted.\nReason: The top of CHANGELOG.md shows a bullet under \"Unreleased\" that describes the refill fix.\n\nEVAL-13 has passed its done check. Its Jira status is still In Progress, and moving it is up to the people or agents doing the work.",
+  "usage": {
+   "input": 12960,
+   "output": 1509
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this refill fix (tokens per second elapsed, capped at capacity)."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

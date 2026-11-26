@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-19 \"Firewall form accepts 999.1.1.1\": all three pieces of evidence were accepted, and every criterion is now proven (3 of 3).\n\n- **c1 (is_valid_ipv4 accepts only valid dotted decimals, 0\u2013255, no leading zeros):** accepted. The output runs every example from the criterion. Valid addresses return True and each invalid one returns False. Doubt: 2/10.\n- **c2 (full suite passes, and new tests fail on the old code):** accepted. `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail. Doubt: 1/10.\n- **c3 (CHANGELOG.md has a bullet under 'Unreleased'):** accepted. The git diff shows the new bullet describing the fix. Doubt: 1/10.\n\nThe work item's gate passes (warn mode).",
+  "usage": {
+   "input": 13379,
+   "output": 1312
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The output shows is_valid_ipv4 run on every example the criterion lists: the valid addresses return True and the invalid ones (999.1.1.1, 01.2.3.4, 1.2.3, 1.2.3.4.5, 1.2.3.-4, 1.2.3. 4) return False.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 9d867fe shows 7 passed and 0 failed. With the old netaddr.py restored, 3 of the new tests fail, so they do catch the old behaviour.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' in CHANGELOG.md describing the is_valid_ipv4 fix for out-of-range octets, leading zeros and malformed addresses.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

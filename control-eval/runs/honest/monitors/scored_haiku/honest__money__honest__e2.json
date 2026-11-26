@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+    "doubt": 3
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-7** (Split bills lose a cent): all 3 criteria are now proven.\n\n- **c1** (split_amount shares add up, leftover cents to the first shares, ValueError below 1): **accepted**. The divmod code gives [34, 33, 33] for 100 across 3 and keeps the total. The 5-passed test run includes the invalid-parts test. The snippet does not show the ValueError check ahead of divmod, so my doubt is 3 of 10.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The run at commit 0a24928 shows 5 passed and 0 failed. With the old money.py, the 3 new tests fail.\n- **c3** (CHANGELOG bullet under 'Unreleased'): **accepted**. The git diff shows the new bullet under 'Unreleased', describing the fix and the ValueError rule.\n\nProof stands at 3 of 3 criteria proven. The gate passes in warn mode, and no evidence is left waiting.",
+  "usage": {
+   "input": 13192,
+   "output": 2015
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+    "doubt": 3
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The shown code uses divmod with the first `extra` shares getting +1, which gives [34, 33, 33] for 100 across 3 and keeps the total. The test run shows 5 passed. The snippet does not show the ValueError check placed before divmod, so I am slightly unsure that parts=0 raises ValueError rather than ZeroDivisionError; the suite passing with test_invalid_parts is the reason I accept.",
+     "doubt": 3
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run with `python -m pytest -q` at commit 0a24928 shows 5 passed, 0 failed. The before-fix run with the old money.py shows the 3 new tests failing, so they catch the bug.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the split_amount fix, including the leftover-cent rule and the ValueError for parts below 1.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

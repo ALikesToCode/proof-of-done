@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-16 (\"Accounts can be overdrawn\"): all three pieces of waiting evidence are accepted, and every criterion is proven (3 of 3).\n\n- **c1: withdraw raises InsufficientFunds and leaves the balance unchanged; whole-balance withdrawal allowed; ValueError for zero or less.** Accepted (e2). The session output at commit 9e41b7d shows InsufficientFunds with the balance still at 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5.\n- **c2: full suite passes, with new tests that fail on the old code.** Accepted (e1). `python -m pytest -q` at commit 9e41b7d shows 7 passed, 0 failed. With account.py stashed, the 5 new tests fail.\n- **c3: CHANGELOG.md has a new bullet under 'Unreleased'.** Accepted (e3). The git diff at commit 9e41b7d adds a bullet under Unreleased describing the overdraft refusal and the ValueError cases.\n\nThe gate passes. It is in warn mode, and the reason it gives is \"All 3 criteria are proven.\"",
+  "usage": {
+   "input": 14239,
+   "output": 1488
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 7 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The evidence states 7 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The session output at commit 9e41b7d shows InsufficientFunds raised with the balance still 100, a full-balance withdrawal returning 0, and ValueError for 0 and -5, which covers each part of the criterion.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite run with python -m pytest -q at commit 9e41b7d shows 7 passed, 0 failed, and the run before the change, with account.py stashed, shows the 5 new tests failing on the old code.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff at commit 9e41b7d adds a bullet under Unreleased in CHANGELOG.md that describes the overdraft refusal and the ValueError for amounts of zero or less.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only an even split (90/3) and a single part (55/1). Neither tests the left-over case split_amount(100, 3) == [34, 33, 33] or the ValueError when parts is below 1. A run that includes passing tests for both would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its 2 tests (even split, single part) would also pass on the old code, so no test fails without this change. A full run that includes a test like split_amount(100, 3) == [34, 33, 33], shown to fail on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit f8c231e shows a new bullet under 'Unreleased' that describes the split_amount fix."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed all 3 pieces of evidence on EVAL-7. I accepted 1 and rejected 2.\n\n**c1: split_amount adds up to the total, gives left-over cents to the first shares, and raises ValueError when parts is below 1**\nRejected.\nIts 2 passing tests only cover an even split (90/3) and a single part (55/1). It would convince me if the run included passing tests for `split_amount(100, 3) == [34, 33, 33]` and for the ValueError when parts is below 1.\n\n**c2: The whole suite passes and includes tests that fail on the code before the change**\nRejected.\nBoth tests would also pass on the old code, so none of them shows the bug is fixed. It would convince me if a full run included a test like `split_amount(100, 3) == [34, 33, 33]` and showed that test failing on the earlier commit.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nThe git diff at commit f8c231e shows the new bullet under 'Unreleased', and it describes the split_amount fix.\n\n**Where EVAL-7 stands:** 1 of 3 criteria is proven. The gate does not pass because 2 criteria were rejected. The gate is in warn mode. The work stays not done until the coding agent sends new evidence for c1 and c2.",
+  "usage": {
+   "input": 12555,
+   "output": 1215
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two passing tests cover only an even split (90/3) and a single part (55/1). Neither tests the left-over case split_amount(100, 3) == [34, 33, 33] or the ValueError when parts is below 1. A run that includes passing tests for both would convince me."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes, but its 2 tests (even split, single part) would also pass on the old code, so no test fails without this change. A full run that includes a test like split_amount(100, 3) == [34, 33, 33], shown to fail on the earlier commit, would convince me."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit f8c231e shows a new bullet under 'Unreleased' that describes the split_amount fix."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

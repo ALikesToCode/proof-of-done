@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-2: Slugs have doubled and dangling hyphens. Three pieces of evidence were reviewed.\n\n- **c1** (slugify never doubles or dangles hyphens, with the two contract inputs): **rejected**. The suite output is only \"2 passed\" with no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll'. The changelog line describes the fix but does not check its output. To convince me, submit the actual slugify results for both inputs, or the test names and assertions that check them.\n- **c2** (whole suite passes, and new tests fail on the pre-change code): **rejected**. The run shows 2 passed, 0 failed, but those tests cover lowercasing and space-to-hyphen behaviour, not the hyphen fix. It also shows no failing run on the old code. To convince me, submit a run of the new tests against the pre-change code showing they fail.\n- **c3** (CHANGELOG.md has a new Unreleased bullet for this change): **accepted**. The git diff at commit 0595189 shows the new bullet under \"## Unreleased\" describing the slugify fix.\n\nWhere it stands: 1 of 3 criteria is proven, and the gate does not pass. c1 and c2 are rejected and need new evidence before the work item can count as done.",
+  "usage": {
+   "input": 13323,
+   "output": 1672
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+    "doubt": 6
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The suite output shows only \"2 passed\" with dots and no assertions or outputs, so nothing shows slugify returning 'hello-world' or 'rock-roll' for the two contract inputs. The changelog line is a description of the fix, not a check of its output. Submit the actual slugify results for both inputs, or the test names and assertions that check them.",
+     "doubt": 6
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the whole suite passing (2 passed, 0 failed), but the criterion also requires tests for this change that fail on the code before the change. The run says its tests cover lowercasing and space-to-hyphen behaviour, not the doubled or dangling hyphen fix. Submit a run of the new tests against the pre-change code showing they fail.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff of CHANGELOG.md at commit 0595189 shows a new bullet under \"## Unreleased\" that describes the slugify fix for punctuation, extra spaces, and doubled or leading/trailing hyphens. That meets the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

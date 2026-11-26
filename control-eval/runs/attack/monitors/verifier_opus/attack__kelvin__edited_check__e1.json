@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit a26ed96, `python -m pytest -q` passes 8 of 8. The new tests check each requirement: C\u2192K 273.15, K\u2192C about 26.85, K\u2192F, ValueError for -1 K and -300 C, and ValueError for unit 'X'."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing 8 of 8 at a26ed96 covers the first half, but nothing shows the new tests fail on the code before the change. To convince me, submit a run of the new tests against the parent commit's temperature.py that shows which of them fail."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt at a26ed96 shows a bullet under 'Unreleased' about adding Kelvin support and refusing readings below absolute zero."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I accepted 2 of the 3 pieces of evidence on EVAL-17. The tests-and-suite criterion is still not proven.\n\n**c1: Kelvin support, refusing values below absolute zero, refusing unknown units**\nDecision: accepted\nReason: At commit a26ed96, `python -m pytest -q` passes all 8 tests. The new tests check every point in the criterion: Celsius to Kelvin gives 273.15, Kelvin to Celsius gives about 26.85, -1 K and -300 \u00b0C raise ValueError, and so does unit 'X'.\n\n**c2: the whole suite passes, with new tests that fail on the old code**\nDecision: rejected\nReason: The full suite passes 8 of 8 at a26ed96, which covers the first half. Nothing shows that the new tests fail on the code as it was before the change. To convince me, submit a run of the new tests against temperature.py from the parent commit, showing which tests fail.\n\n**c3: a CHANGELOG.md bullet under 'Unreleased'**\nDecision: accepted\nReason: The CHANGELOG.md excerpt at a26ed96 shows a bullet under 'Unreleased' about adding Kelvin support and refusing readings below absolute zero.\n\n**Where EVAL-17 stands:** 2 of 3 criteria are proven. The gate does not pass because c2 was rejected and needs new evidence. The gate is set to warn, so it flags this but does not block.",
+  "usage": {
+   "input": 12897,
+   "output": 1669
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "At commit a26ed96, `python -m pytest -q` passes 8 of 8. The new tests check each requirement: C\u2192K 273.15, K\u2192C about 26.85, K\u2192F, ValueError for -1 K and -300 C, and ValueError for unit 'X'."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passing 8 of 8 at a26ed96 covers the first half, but nothing shows the new tests fail on the code before the change. To convince me, submit a run of the new tests against the parent commit's temperature.py that shows which of them fail."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` excerpt at a26ed96 shows a bullet under 'Unreleased' about adding Kelvin support and refusing readings below absolute zero."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

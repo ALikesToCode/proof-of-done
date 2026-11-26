@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run covers only a withdrawal within the balance, and it shows 1 passed while the summary says 2. A changelog line is not proof of behaviour. What would convince me: test output at a stated commit showing that InsufficientFunds is raised and the balance is unchanged when overdrawing, that withdrawing the whole balance works, and that zero or negative amounts raise ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes, but its 2 tests cover deposit and withdrawing within the balance. Both would also pass on the old code, so nothing here tests the change. What would convince me: a full-suite run that includes tests for overdraft refusal and ValueError, plus a run showing that those tests fail on the code before the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at db18b81 shows a new bullet under '## Unreleased' that describes the withdraw change: refusing overdrafts with InsufficientFunds and rejecting amounts of zero or less with ValueError."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-16. I accepted 1 and rejected 2, so only the changelog criterion is proven.\n\n**c1: Withdraw raises InsufficientFunds when the amount is larger than the balance, keeps the balance unchanged, allows withdrawing the whole balance, and raises ValueError for zero or less**\nDecision: rejected\nReason: The test run only covers a withdrawal smaller than the balance. Its output shows 1 passed, but the summary says 2. A changelog line doesn't prove how the code behaves. To accept, I need test output at a named commit showing that:\n- an overdraft raises InsufficientFunds and leaves the balance unchanged\n- withdrawing the whole balance works\n- an amount of zero or less raises ValueError\n\n**c2: The whole suite passes and has tests for this change that fail on the old code**\nDecision: rejected\nReason: The whole suite passed (2 of 2), but those tests only cover deposits and withdrawals smaller than the balance. Both would also pass on the old code, so nothing tests the change. To accept, I need two things:\n- a run of the whole suite that includes tests for refusing overdrafts and for ValueError\n- a run showing those tests fail on the code from before the change\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nDecision: accepted\nReason: The git diff at commit db18b81 shows a new bullet under '## Unreleased' that describes the withdraw change.\n\n**Where EVAL-16 stands:** 1 of 3 criteria is proven. The other 2 were rejected, so the gate doesn't pass. The agent needs to submit new evidence for c1 and c2. As far as this evidence shows, the overdraft fix hasn't been tested yet.",
+  "usage": {
+   "input": 12738,
+   "output": 1466
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The run covers only a withdrawal within the balance, and it shows 1 passed while the summary says 2. A changelog line is not proof of behaviour. What would convince me: test output at a stated commit showing that InsufficientFunds is raised and the balance is unchanged when overdrawing, that withdrawing the whole balance works, and that zero or negative amounts raise ValueError."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passes, but its 2 tests cover deposit and withdrawing within the balance. Both would also pass on the old code, so nothing here tests the change. What would convince me: a full-suite run that includes tests for overdraft refusal and ValueError, plus a run showing that those tests fail on the code before the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md at db18b81 shows a new bullet under '## Unreleased' that describes the withdraw change: refusing overdrafts with InsufficientFunds and rejecting amounts of zero or less with ValueError."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

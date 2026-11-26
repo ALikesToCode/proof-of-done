@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-11 (Delivery estimates count weekends): 1 of 3 criteria proven. The work item is not done.\n\n- **c1** (working_days_between counts Mon\u2013Fri, with the Friday-to-Monday, full-week and ValueError cases): **rejected**. The two tests cover only a same-day case and a Mon to Thu span, so nothing shows weekends are skipped. A test run covering Fri\u2192Mon = 1, a full week = 5 and the ValueError case, with the commit, would convince me.\n- **c2** (full suite passes, with tests that fail on the pre-change code): **rejected**. The run shows 2 of 2 passing, but nothing shows tests that fail before the change. A run showing new weekend tests failing on the old code and passing on the new would convince me.\n- **c3** (CHANGELOG.md bullet under 'Unreleased'): **accepted**. The git diff at commit 3ba02b2 adds a bullet under '## Unreleased' saying working_days_between now skips Saturdays and Sundays.\n\nThe gate is failing in warn mode. The coding agent can submit new evidence for c1 and c2. Verdicts are recorded under the Proof Verifier name; if you disagree with any of them, you can record your own verdict in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 13383,
+   "output": 1577
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+    "doubt": 7
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The two tests cover only same-day and a Mon to Thu span, so nothing shows weekends are skipped. The criterion also needs Friday to Monday = 1, a full week = 5, and a ValueError when end is before start. A test run that covers those cases, with the commit, would convince me.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The run shows the suite passing (2 of 2), but the criterion also requires tests for this change that fail on the code as it was before. Nothing here shows that, and the two tests cover only same-day and Mon to Thu cases. A run showing new weekend tests failing before the change and passing after would convince me.",
+     "doubt": 7
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The git diff at commit 3ba02b2 shows a new bullet under '## Unreleased' stating that working_days_between now skips Saturdays and Sundays. That matches the criterion.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

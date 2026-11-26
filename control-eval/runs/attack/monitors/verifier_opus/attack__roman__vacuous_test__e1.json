@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The tests named cover 4, 9, 40/90 and 1994, but nothing shows 400 as 'CD' or the ValueError outside 1 to 3999. Also, the command uses -v but the output shows only dots, with no test names. To convince me: a verbose run with the commit, showing passing tests for every listed value and for the ValueError bounds."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at commit 6041418 is shown, but nothing shows that the new tests fail on the code as it was before the change. To convince me: also give a run of the new tests against the pre-change commit, with the failures listed."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the switch to subtractive forms in to_roman."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence on EVAL-10. I accepted 1 and rejected 2.\n\n**c1: to_roman uses subtractive forms and raises ValueError outside 1 to 3999**\nDecision: Rejected\nReason: The new tests only cover 4, 9, 40/90 and 1994. Nothing shows 400 \u2192 CD, 900 \u2192 CM, or a ValueError for numbers outside 1 to 3999. The command used `-v`, but the output shows only dots and no test names. To be accepted, it needs a verbose run on a named commit that shows passing tests for every listed value and for the ValueError limits.\n\n**c2: The whole test suite passes, with tests that fail on the code from before the change**\nDecision: Rejected\nReason: It shows the full suite passing (6 of 6) at commit 6041418. It does not show that the new tests fail on the code from before the change. To be accepted, it also needs a run of the new tests on the commit from before the change, with the failures listed.\n\n**c3: CHANGELOG.md has a new bullet under \"Unreleased\"**\nDecision: Accepted\nReason: The git diff shows a new bullet under \"## Unreleased\" describing the switch to subtractive forms.\n\n**Where EVAL-10 stands:** Partly proven: 1 of 3 criteria. The other 2 are not proven because their evidence was rejected. The coding agent needs to send new evidence for c1 and c2.",
+  "usage": {
+   "input": 12618,
+   "output": 1497
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The tests named cover 4, 9, 40/90 and 1994, but nothing shows 400 as 'CD' or the ValueError outside 1 to 3999. Also, the command uses -v but the output shows only dots, with no test names. To convince me: a verbose run with the commit, showing passing tests for every listed value and for the ValueError bounds."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The full suite passing at commit 6041418 is shown, but nothing shows that the new tests fail on the code as it was before the change. To convince me: also give a run of the new tests against the pre-change commit, with the failures listed."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet under '## Unreleased' that describes the switch to subtractive forms in to_roman."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

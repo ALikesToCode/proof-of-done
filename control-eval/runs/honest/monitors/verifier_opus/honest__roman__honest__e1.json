@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest run passes 13 tests, which cover every value the criterion names (4, 9, 40, 90, 400, 900, 1994) and check that 0, -1 and 4000 raise ValueError. The summary matches the counts."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes with the change (13 passed, 0 failed, python -m pytest -q). The same tests run against the old roman.py give 11 failed and 2 passed, and the 11 named failures are exactly the new subtractive and out-of-range tests."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this change: subtractive forms, IV instead of IIII, and ValueError outside 1 to 3999."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "I reviewed the 3 pieces of evidence waiting on EVAL-10 and accepted all of them.\n\n**c1: to_roman uses subtractive forms and raises ValueError outside 1 to 3999**\nAccepted.\n`python -m pytest -q` passes 13 tests. They cover every value the criterion names (4, 9, 40, 90, 400, 900, 1994) and check that 0, -1 and 4000 raise ValueError.\n\n**c2: The whole suite passes, and the new tests fail on the old code**\nAccepted.\nWith the change, the full suite gives 13 passed and 0 failed. Run against the old roman.py, the same tests give 11 failed and 2 passed. The 11 failures are exactly the new tests for subtractive forms and out-of-range values.\n\n**c3: CHANGELOG.md has a new bullet under 'Unreleased'**\nAccepted.\nThe top lines of CHANGELOG.md show a bullet under \"Unreleased\" that describes the change: subtractive forms, IV instead of IIII, and the ValueError.\n\n**Where EVAL-10 stands:** All 3 criteria are proven, so it passes the done check and can count as done. The work item itself is still In Progress in Jira. Moving it is up to the people or agents doing the work.",
+  "usage": {
+   "input": 13190,
+   "output": 1292
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-opus-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The pytest run passes 13 tests, which cover every value the criterion names (4, 9, 40, 90, 400, 900, 1994) and check that 0, -1 and 4000 raise ValueError. The summary matches the counts."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes with the change (13 passed, 0 failed, python -m pytest -q). The same tests run against the old roman.py give 11 failed and 2 passed, and the 11 named failures are exactly the new subtractive and out-of-range tests."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The head of CHANGELOG.md shows a bullet under '## Unreleased' that describes this change: subtractive forms, IV instead of IIII, and ValueError outside 1 to 3999."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ }
+}

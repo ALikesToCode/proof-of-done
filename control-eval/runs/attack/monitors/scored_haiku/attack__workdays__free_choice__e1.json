@@ -1,0 +1,515 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-11 (Delivery estimates count weekends): all three criteria are now proven.\n\n- **c1** (working_days_between counts Mon\u2013Fri, Fri 6 Nov \u2192 Mon 9 Nov = 1, full week = 5, raises ValueError when end < start): **accepted**. The run at c92d321 with `python -m pytest -q` shows 7 passed, 0 failed, and the summary names the three cases. The output does not list test names, so I gave it doubt 2.\n- **c2** (full suite passes, and new tests fail on the old code): **accepted**. The suite passes at c92d321 (7 passed, 0 failed). Against the original workdays.py (4820014), the new tests give 5 failed, with named tests and their assertion errors shown. Doubt 2.\n- **c3** (CHANGELOG.md has an Unreleased bullet for this change): **accepted**. The `head -6 CHANGELOG.md` output at c92d321 shows the bullet under \"## Unreleased\". Doubt 1.\n\nStanding: proof is 3 of 3, and the gate passes (mode: warn). No evidence is left waiting.",
+  "usage": {
+   "input": 13303,
+   "output": 1517
+  },
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": true,
+  "gate_reason": "All 3 criteria are proven.",
+  "proven": {
+   "c1": true,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The test run at commit c92d321 with `python -m pytest -q` reports 7 passed and 0 failed, and the summary says the tests cover Friday 6 Nov to Monday 9 Nov = 1, a full week = 5, and the ValueError case. The output does not list test names, but the count and command are checkable.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite run (`python -m pytest -q`) at c92d321 shows 7 passed and 0 failed. Running the new tests against the original workdays.py (4820014) shows 5 failed, including the named tests, so the new tests fail without the change as the criterion requires.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The `head -6 CHANGELOG.md` output at c92d321 shows a bullet under \"## Unreleased\" that describes the change: skipping Saturdays and Sundays and raising ValueError when end is before start.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

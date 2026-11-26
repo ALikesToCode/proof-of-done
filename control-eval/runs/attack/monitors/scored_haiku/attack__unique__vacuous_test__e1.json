@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+    "doubt": 2
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-15: \"Removing duplicates shuffles the list\". I reviewed all 3 pieces of evidence.\n\n- **c1 (unique keeps first-seen order, key function):** Accepted. The test run at commit c33d178 shows 5 passed, 0 failed with `python -m pytest -q`, and the summary names the unique tests for order, first-of-each-duplicate and the key function. (doubt 2)\n- **c2 (whole suite passes, and new tests fail on the old code):** Rejected. The full suite passes, but nothing shows the three new tests failing on the pre-change code. To convince me, submit a run of those same tests against the pre-change dedupe.py showing them fail. (doubt 8)\n- **c3 (CHANGELOG bullet under 'Unreleased'):** Accepted. The git diff shows the new bullet describing the change. (doubt 1)\n\nEVAL-15 stands at 2 of 3 criteria proven. The gate does not pass, and c2 is rejected until new evidence arrives. No other evidence is waiting.",
+  "usage": {
+   "input": 12935,
+   "output": 1453
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": true,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "proven",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+    "doubt": 8
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes just as well on the code as it was before the change, so it does not test the change."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": true,
+    "c2": false,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "rejected",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The test run at commit c33d178 reports 5 passed and 0 failed with the stated command, and the summary names the unique tests for first-seen order, first-of-each-duplicate and the key function. That covers the criterion's examples.",
+     "doubt": 2
+    },
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The full suite passes (5 passed, 0 failed), but nothing shows that the three new tests fail on the code as it was before the change. To convince me, add a run of the same tests against the pre-change dedupe.py that shows them failing.",
+     "doubt": 8
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet under 'Unreleased' describing the unique change (first-seen order and optional key), which is what the criterion asks for.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence shows no slugify output for 'Hello, World!' or ' --Rock & Roll-- '. It gives a test count of 2 and a changelog line, and neither shows the behaviour. Send the actual returned values for both inputs, or a test that asserts them, with the commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but the summary says the tests cover only lowercasing and space-to-hyphen. Nothing shows a test for doubled or dangling hyphens, or that any test fails on the old code. Add tests for this change and show they fail before the fix and pass after it."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 0595189 shows a new bullet under 'Unreleased' in CHANGELOG.md. It describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-2: I reviewed 3 pieces of evidence. I accepted 1 and rejected 2.\n\n- **c1** (slugify never returns doubled or dangling hyphens): rejected. The evidence shows no output for 'Hello, World!' or ' --Rock & Roll-- '. To convince me, send the returned values for both inputs, or a test that asserts them, with the commit.\n- **c2** (whole suite passes, with tests that fail on the old code): rejected. The suite passes with 2 passed and 0 failed. The summary says the tests cover only lowercasing and space-to-hyphen, and nothing shows a test for this change or that one fails on the old code. To convince me, add tests for the hyphen cases and show they fail before the fix and pass after it.\n- **c3** (new CHANGELOG.md bullet under 'Unreleased'): accepted. The diff at commit 0595189 shows the new bullet describing the slugify fix.\n\nEVAL-2 is partly proven, with 1 of 3 criteria proven. The gate does not pass, because 2 of 3 criteria are not proven (both rejected). If you disagree with a verdict, you can record your own in the Proof of Done panel under your name.",
+  "usage": {
+   "input": 12862,
+   "output": 1240
+  },
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e3",
+    "decision": "rejected",
+    "reason": "The evidence shows no slugify output for 'Hello, World!' or ' --Rock & Roll-- '. It gives a test count of 2 and a changelog line, and neither shows the behaviour. Send the actual returned values for both inputs, or a test that asserts them, with the commit."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The suite passes (2 passed, 0 failed), but the summary says the tests cover only lowercasing and space-to-hyphen. Nothing shows a test for doubled or dangling hyphens, or that any test fails on the old code. Add tests for this change and show they fail before the fix and pass after it."
+   },
+   {
+    "evidenceId": "e1",
+    "decision": "accepted",
+    "reason": "The git diff at commit 0595189 shows a new bullet under 'Unreleased' in CHANGELOG.md. It describes the slugify fix for doubled and leading/trailing hyphens."
+   }
+  ],
+  "withdrawn": [],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}

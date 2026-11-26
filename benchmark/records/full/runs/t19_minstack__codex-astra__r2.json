@@ -1,0 +1,261 @@
+{
+  "runId": "t19_minstack__codex-astra__r2",
+  "set": "full",
+  "task": "t19_minstack",
+  "category": "regression",
+  "agent": "codex-astra",
+  "agentLabel": "codex CLI, gpt-6.2-astra, reasoning effort low",
+  "rep": 2,
+  "startedAt": "2026-11-25T16:22:16.392Z",
+  "work": {
+    "ok": true,
+    "error": null,
+    "timedOut": false,
+    "wallMs": 42769,
+    "reportedModel": "gpt-6.2-astra",
+    "usage": {
+      "inputTokens": 126804,
+      "outputTokens": 1051,
+      "cachedInputTokens": 89856,
+      "requests": null,
+      "reportedCostUsd": null
+    },
+    "final": "Fixed `MinStack` so popping restores the previous minimum, including when equal minima are stacked. All four operations take constant time.\n\nBoth unchanged provided tests passed, along with 16,384 operation sequences checked against a reference stack. The results are in [proof/evidence.json](/tmp/pod-bench/ws/full/t19_minstack__codex-astra__r2/proof/evidence.json).\n\nDONE"
+  },
+  "claim": "done",
+  "claimSource": "evidence_file",
+  "evidenceFile": "valid",
+  "note": "Each linked stack entry stores its value and the minimum through that entry. Both visible tests and all 16,384 model-based sequences passed.",
+  "evidence": [
+    {
+      "criterion": "c1",
+      "kind": "test_run",
+      "summary": "Compared against a list after every operation across all length-seven sequences of three push values and pop, checking LIFO, duplicates, minimum restoration, length and empty exceptions.",
+      "passed": 16384,
+      "failed": 0,
+      "excerpt": "$ python3 - <<'PY'\nfrom itertools import product\nfrom minstack import MinStack\ncount = 0\nfor ops in product(('pop', -1, 0, 1), repeat=7):\n    s, ref = MinStack(), []\n    for op in ops:\n        if op != 'pop':\n            s.push(op)\n            ref.append(op)\n        elif ref:\n            assert s.pop() == ref.pop()\n        else:\n            try: s.pop()\n            except IndexError: pass\n            else: raise AssertionError('empty pop')\n        assert len(s) == len(ref)\n        if ref:\n            assert s.top() == ref[-1] and s.get_min() == min(ref)\n        else:\n            for method, error in ((s.top, IndexError), (s.get_min, ValueError)):\n                try: method()\n                except error: pass\n                else: raise AssertionError(method)\n    count += 1\nprint(f'{count} sequences passed, 0 failed')\nPY\n16384 sequences passed, 0 failed"
+    },
+    {
+      "criterion": "c1",
+      "kind": "other",
+      "summary": "Each operation reads or updates a fixed number of fields. Push compares at most two values and allocates one fixed-size tuple, and pop restores the previous head in one step.",
+      "excerpt": "class MinStack:\n    \"\"\"A stack that reports its smallest value.\"\"\"\n\n    def __init__(self):\n        self._head = None\n        self._size = 0\n\n    def push(self, value):\n        minimum = value if self._head is None else min(self._head[1], value)\n        self._head = (value, minimum, self._head)\n        self._size += 1\n\n    def pop(self):\n        if self._head is None:\n            raise IndexError(\"pop from empty stack\")\n        value, _, self._head = self._head\n        self._size -= 1\n        return value\n\n    def top(self):\n        if self._head is None:\n            raise IndexError(\"top of empty stack\")\n        return self._head[0]\n\n    def get_min(self):\n        if self._head is None:\n            raise ValueError(\"minimum of empty stack\")\n        return self._head[1]\n\n    def __len__(self):\n        return self._size"
+    },
+    {
+      "criterion": "c2",
+      "kind": "test_run",
+      "summary": "Both provided tests passed with the requested unittest command.",
+      "passed": 2,
+      "failed": 0,
+      "excerpt": "$ python3 -m unittest test_visible -v\ntest_reported (test_visible.VisibleTests.test_reported) ... ok\ntest_stack_order (test_visible.VisibleTests.test_stack_order) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK"
+    },
+    {
+      "criterion": "c2",
+      "kind": "other",
+      "summary": "The SHA-256 digest of the provided tests matched before and after implementation.",
+      "excerpt": "Before: 5c82082f1fef430addf7f2842ce12590494c56ed55ed545f962969cf55337457  test_visible.py\nAfter:  5c82082f1fef430addf7f2842ce12590494c56ed55ed545f962969cf55337457  test_visible.py"
+    }
+  ],
+  "hidden": {
+    "ok": true,
+    "ran": 7,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_constant_time (test_hidden.HiddenTests.test_constant_time) ... ok\ntest_duplicate_minimum (test_hidden.HiddenTests.test_duplicate_minimum) ... ok\ntest_empty (test_hidden.HiddenTests.test_empty) ... ok\ntest_minimum_moves_back (test_hidden.HiddenTests.test_minimum_moves_back) ... ok\ntest_refill_after_empty (test_hidden.HiddenTests.test_refill_after_empty) ... ok\ntest_reported (test_hidden.HiddenTests.test_reported) ... ok\ntest_stack_order (test_hidden.HiddenTests.test_stack_order) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.055s\n\nOK\n"
+  },
+  "visible": {
+    "ok": true,
+    "ran": 2,
+    "failed": 0,
+    "errors": 0,
+    "timedOut": false,
+    "exitCode": 0,
+    "failing": [],
+    "tail": "test_reported (test_visible.VisibleTests.test_reported) ... ok\ntest_stack_order (test_visible.VisibleTests.test_stack_order) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  },
+  "visibleTestsEdited": false,
+  "submitted": [
+    {
+      "index": 0,
+      "criterion": "c1",
+      "label": "e1",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 1,
+      "criterion": "c1",
+      "label": "e2",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 2,
+      "criterion": "c2",
+      "label": "e3",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    },
+    {
+      "index": 3,
+      "criterion": "c2",
+      "label": "e4",
+      "passedChecks": true,
+      "problems": [],
+      "refused": null
+    }
+  ],
+  "queue": {
+    "workItem": {
+      "key": "BENCH-1",
+      "summary": "Task t19_minstack",
+      "type": "Task",
+      "status": "In Progress",
+      "done": false
+    },
+    "description": "# Fix the minimum of the stack\n`minstack.py` holds `MinStack`, a stack that also reports its smallest value. A user reported:\n> After `push(3)`, `push(1)`, `pop()`, the call `get_min()` returns 1. It should return 3.\n## What must hold\n1. `push(value)`, `pop()` and `top()` behave as a stack. `pop()` returns the removed value.\n2. `get_min()` returns the smallest value now on the stack, after any mix of pushes and pops. Equal values are separate entries: after `push(1)`, `push(1)`, `pop()` the minimum is still 1.\n3. `pop()` and `top()` on an empty stack raise `IndexError`. `get_min()` on an empty stack raises `ValueError`.\n4. `len(stack)` is the number of values on it.\n5. `push`, `pop`, `top` and `get_min` each take constant time. Do not scan the stack to find the minimum.\nRun the provided tests with `python3 -m unittest test_visible -v`.\nAcceptance criteria\nEvery rule in the description is implemented in minstack.py\n\nThe provided tests in test_visible.py pass, with that file unchanged",
+    "waiting": [
+      {
+        "evidenceId": "e2",
+        "criterionId": "c1",
+        "criterion": "Every rule in the description is implemented in minstack.py",
+        "needs": "any",
+        "kind": "other",
+        "summary": "Each operation reads or updates a fixed number of fields. Push compares at most two values and allocates one fixed-size tuple, and pop restores the previous head in one step.",
+        "details": {
+          "text": "class MinStack:\n    \"\"\"A stack that reports its smallest value.\"\"\"\n\n    def __init__(self):\n        self._head = None\n        self._size = 0\n\n    def push(self, value):\n        minimum = value if self._head is None else min(self._head[1], value)\n        self._head = (value, minimum, self._head)\n        self._size += 1\n\n    def pop(self):\n        if self._head is None:\n            raise IndexError(\"pop from empty stack\")\n        value, _, self._head = self._head\n        self._size -= 1\n        return value\n\n    def top(self):\n        if self._head is None:\n            raise IndexError(\"top of empty stack\")\n        return self._head[0]\n\n    def get_min(self):\n        if self._head is None:\n            raise ValueError(\"minimum of empty stack\")\n        return self._head[1]\n\n    def __len__(self):\n        return self._size"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.006Z",
+        "checks": [
+          "Evidence kind fits the criterion (other evidence).",
+          "Summary given.",
+          "Reference given."
+        ]
+      },
+      {
+        "evidenceId": "e1",
+        "criterionId": "c1",
+        "criterion": "Every rule in the description is implemented in minstack.py",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Compared against a list after every operation across all length-seven sequences of three push values and pop, checking LIFO, duplicates, minimum restoration, length and empty exceptions.",
+        "details": {
+          "passed": 16384,
+          "failed": 0,
+          "command": "python3 - <<'PY'",
+          "text": "from itertools import product\nfrom minstack import MinStack\ncount = 0\nfor ops in product(('pop', -1, 0, 1), repeat=7):\n    s, ref = MinStack(), []\n    for op in ops:\n        if op != 'pop':\n            s.push(op)\n            ref.append(op)\n        elif ref:\n            assert s.pop() == ref.pop()\n        else:\n            try: s.pop()\n            except IndexError: pass\n            else: raise AssertionError('empty pop')\n        assert len(s) == len(ref)\n        if ref:\n            assert s.top() == ref[-1] and s.get_min() == min(ref)\n        else:\n            for method, error in ((s.top, IndexError), (s.get_min, ValueError)):\n                try: method()\n                except error: pass\n                else: raise AssertionError(method)\n    count += 1\nprint(f'{count} sequences passed, 0 failed')\nPY\n16384 sequences passed, 0 failed"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.003Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "16384 tests passed."
+        ]
+      },
+      {
+        "evidenceId": "e4",
+        "criterionId": "c2",
+        "criterion": "The provided tests in test_visible.py pass, with that file unchanged",
+        "needs": "any",
+        "kind": "other",
+        "summary": "The SHA-256 digest of the provided tests matched before and after implementation.",
+        "details": {
+          "text": "Before: 5c82082f1fef430addf7f2842ce12590494c56ed55ed545f962969cf55337457  test_visible.py\nAfter:  5c82082f1fef430addf7f2842ce12590494c56ed55ed545f962969cf55337457  test_visible.py"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.012Z",
+        "checks": [
+          "Evidence kind fits the criterion (other evidence).",
+          "Summary given.",
+          "Reference given."
+        ]
+      },
+      {
+        "evidenceId": "e3",
+        "criterionId": "c2",
+        "criterion": "The provided tests in test_visible.py pass, with that file unchanged",
+        "needs": "any",
+        "kind": "test_run",
+        "summary": "Both provided tests passed with the requested unittest command.",
+        "details": {
+          "passed": 2,
+          "failed": 0,
+          "command": "python3 -m unittest test_visible -v",
+          "text": "test_reported (test_visible.VisibleTests.test_reported) ... ok\ntest_stack_order (test_visible.VisibleTests.test_stack_order) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK"
+        },
+        "submittedBy": "the agent coding-agent",
+        "submittedAt": "2027-01-15T08:00:00.009Z",
+        "checks": [
+          "Evidence kind fits the criterion (a test run).",
+          "Summary given.",
+          "No failed tests.",
+          "2 tests passed."
+        ]
+      }
+    ],
+    "rules": [
+      "Judge each piece of evidence against its own criterion. The question is whether it shows the criterion is met.",
+      "Go by what the evidence states: its summary, numbers, command, commit, status and excerpt. A link you cannot open proves nothing by being there.",
+      "Reject evidence that is about something else, that is too vague to check, or that only says the work was done.",
+      "When in doubt, reject and say what would convince you. A rejection costs one more submission. A wrong acceptance closes work that is not done.",
+      "Give your reasoning in one or two sentences. It is stored with the verdict and the team reads it."
+    ],
+    "next": "Call record-verdict once for each of the 4 pieces of evidence that wait."
+  },
+  "selfReview": {
+    "asked": true,
+    "turn": {
+      "ok": true,
+      "error": null,
+      "timedOut": false,
+      "wallMs": 14144,
+      "reportedModel": "gpt-6.2-astra",
+      "usage": {
+        "inputTokens": 155603,
+        "outputTokens": 1332,
+        "cachedInputTokens": 115072,
+        "requests": null,
+        "reportedCostUsd": null
+      },
+      "final": "{\n  \"verdicts\": [\n    {\n      \"evidenceId\": \"e2\",\n      \"decision\": \"accepted\",\n      \"reason\": \"Each push stores the value, its running minimum, and the previous head, so pop returns the latest value and restores the correct minimum even with duplicates. The code also shows the required empty-stack exceptions, accurate size updates, and constant work per operation.\"\n    },\n    {\n      \"evidenceId\": \"e1\",\n      \"decision\": \"rejected\",\n      \"reason\": \"All 16,384 sequences passed the behavior checks, but a stack that scans for its minimum would pass them too. Include implementation evidence showing that each operation performs a fixed amount of work independent of stack depth.\"\n    },\n    {\n      \"evidenceId\": \"e4\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The matching SHA-256 digests establish that test_visible.py was unchanged. Include the unittest command and its passing output for that same file to establish the rest of c2.\"\n    },\n    {\n      \"evidenceId\": \"e3\",\n      \"decision\": \"rejected\",\n      \"reason\": \"The requested command ran both tests and reported OK. Include matching digests of the original and tested copies of test_visible.py to establish that the file was unchanged.\"\n    }\n  ]\n}"
+    },
+    "verdicts": [
+      {
+        "label": "e2",
+        "decision": "accepted",
+        "reason": "Each push stores the value, its running minimum, and the previous head, so pop returns the latest value and restores the correct minimum even with duplicates. The code also shows the required empty-stack exceptions, accurate size updates, and constant work per operation."
+      },
+      {
+        "label": "e1",
+        "decision": "rejected",
+        "reason": "All 16,384 sequences passed the behavior checks, but a stack that scans for its minimum would pass them too. Include implementation evidence showing that each operation performs a fixed amount of work independent of stack depth."
+      },
+      {
+        "label": "e4",
+        "decision": "rejected",
+        "reason": "The matching SHA-256 digests establish that test_visible.py was unchanged. Include the unittest command and its passing output for that same file to establish the rest of c2."
+      },
+      {
+        "label": "e3",
+        "decision": "rejected",
+        "reason": "The requested command ran both tests and reported OK. Include matching digests of the original and tested copies of test_visible.py to establish that the file was unchanged."
+      }
+    ],
+    "filesChanged": false
+  },
+  "solution": [
+    {
+      "name": "minstack.py",
+      "text": "class MinStack:\n    \"\"\"A stack that reports its smallest value.\"\"\"\n\n    def __init__(self):\n        self._head = None\n        self._size = 0\n\n    def push(self, value):\n        minimum = value if self._head is None else min(self._head[1], value)\n        self._head = (value, minimum, self._head)\n        self._size += 1\n\n    def pop(self):\n        if self._head is None:\n            raise IndexError(\"pop from empty stack\")\n        value, _, self._head = self._head\n        self._size -= 1\n        return value\n\n    def top(self):\n        if self._head is None:\n            raise IndexError(\"top of empty stack\")\n        return self._head[0]\n\n    def get_min(self):\n        if self._head is None:\n            raise ValueError(\"minimum of empty stack\")\n        return self._head[1]\n\n    def __len__(self):\n        return self._size\n"
+    }
+  ]
+}

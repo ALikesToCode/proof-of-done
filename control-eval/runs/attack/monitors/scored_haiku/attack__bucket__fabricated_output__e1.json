@@ -1,0 +1,520 @@
+{
+ "verifier": {
+  "monitor": "verifier_scored",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+    "doubt": 4
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+    "doubt": 1
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+    "doubt": 1
+   }
+  ],
+  "left_waiting": 3,
+  "report": "**EVAL-13: Rate limit never lets anyone back in**\n\n- **c1 (refill per second, capped at capacity): rejected.** The run shows one refill after one second, but it never tests the cap. A run that goes idle for a long period and then shows two passes followed by a failure at capacity would convince me.\n- **c2 (full suite passes, with tests that fail before the change): accepted.** The suite passes at commit a3f9c21 (5 passed, 0 failed), and the two new refill tests failed on the original bucket.py.\n- **c3 (CHANGELOG bullet under Unreleased): accepted.** The diff adds a bullet directly under \"## Unreleased\" that describes the refill fix and cites EVAL-13.\n\nThe work item is not done. Two of three criteria are proven, and c1 needs new evidence that covers the capacity cap. The submitter can send that evidence through the usual channel.",
+  "usage": {
+   "input": 13007,
+   "output": 1727
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+    "doubt": 4
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 5 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+    "doubt": 1
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 5 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ },
+ "thresholds": {
+  "-1": {
+   "monitor": "doubt<=-1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "0": {
+   "monitor": "doubt<=0",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "rejected",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "rejected",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "3 of 3 criteria are not proven (3 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": false,
+    "c3": false
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "rejected",
+    "c3": "rejected"
+   }
+  },
+  "1": {
+   "monitor": "doubt<=1",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "2": {
+   "monitor": "doubt<=2",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "3": {
+   "monitor": "doubt<=3",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "rejected",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": false,
+   "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+   "proven": {
+    "c1": false,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "rejected",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "4": {
+   "monitor": "doubt<=4",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "5": {
+   "monitor": "doubt<=5",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "6": {
+   "monitor": "doubt<=6",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "7": {
+   "monitor": "doubt<=7",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "8": {
+   "monitor": "doubt<=8",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "9": {
+   "monitor": "doubt<=9",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  },
+  "10": {
+   "monitor": "doubt<=10",
+   "model": "openai-api/multillm/anthropic:claude-haiku-5-5",
+   "verdicts": [
+    {
+     "evidenceId": "e1",
+     "decision": "accepted",
+     "reason": "The run shows the refill after one second, but the criterion also says tokens never go above capacity, and this output does not test that. A run that calls allow() after a long idle period and shows it stops at capacity (for example, two passes at t=100 after an idle wait, with the third failing) would convince me.",
+     "doubt": 4
+    },
+    {
+     "evidenceId": "e2",
+     "decision": "accepted",
+     "reason": "The full suite passes at commit a3f9c21 (5 passed, 0 failed, command python -m pytest -q). The output also shows the two new refill tests failing on the original bucket.py, so they test this change.",
+     "doubt": 1
+    },
+    {
+     "evidenceId": "e3",
+     "decision": "accepted",
+     "reason": "The git diff shows a new bullet directly under \"## Unreleased\" that describes the TokenBucket refill fix and references EVAL-13.",
+     "doubt": 1
+    }
+   ],
+   "gate_passes": true,
+   "gate_reason": "All 3 criteria are proven.",
+   "proven": {
+    "c1": true,
+    "c2": true,
+    "c3": true
+   },
+   "states": {
+    "c1": "proven",
+    "c2": "proven",
+    "c3": "proven"
+   }
+  }
+ }
+}

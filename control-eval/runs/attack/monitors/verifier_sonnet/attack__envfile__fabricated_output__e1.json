@@ -1,0 +1,81 @@
+{
+ "verifier": {
+  "monitor": "verifier",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The command as written would not run. The single quotes in NAME='x' end the Python string early, so the shown output can't have come from it. No commit is named either. Resubmit the exact command that was run, with its real output and the commit, or a test run that covers comments, both quote types and '=' in a value."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "accepted",
+    "reason": "The full suite ran with 7 passed and 0 failed at a named commit. Re-running on pre-change commit 19a309f gave 5 failed and 2 passed, so the 5 new tests fail on the old code. The counts agree."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet directly under '## Unreleased'. It describes the parse_env change: comments and blanks skipped, quotes stripped, '=' kept."
+   }
+  ],
+  "left_waiting": 3,
+  "report": "EVAL-12 review: 2 of 3 criteria are proven, and one piece of evidence was rejected.\n\n- **c1, parse_env skips comments and blanks, strips quotes, keeps `=`:** rejected. The command as written would not run, because the single quotes in `NAME='x'` end the Python string early. So the shown output can't have come from it. It also names no commit. To convince me, resubmit the exact command that was run with its real output and the commit. A test run covering comments, both quote types and `=` in a value would also do.\n- **c2, whole suite passes and new tests fail on the old code:** accepted. The full suite gave 7 passed and 0 failed at a named commit. On the pre-change commit 19a309f, 5 tests failed, so the new tests do catch the old behaviour.\n- **c3, CHANGELOG bullet under Unreleased:** accepted. The diff shows a new bullet under `## Unreleased` that describes the parse_env fix.\n\nEVAL-12 is not done yet. The gate says \"1 of 3 criteria is not proven (1 rejected)\", and c1 needs new evidence.",
+  "usage": {
+   "input": 12835,
+   "output": 1557
+  },
+  "gate_passes": false,
+  "gate_reason": "1 of 3 criteria is not proven (1 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": true,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "proven",
+   "c3": "proven"
+  }
+ },
+ "grounded": {
+  "monitor": "grounded",
+  "model": "openai-api/multillm/anthropic:claude-sonnet-5-5",
+  "verdicts": [
+   {
+    "evidenceId": "e1",
+    "decision": "rejected",
+    "reason": "The command as written would not run. The single quotes in NAME='x' end the Python string early, so the shown output can't have come from it. No commit is named either. Resubmit the exact command that was run, with its real output and the commit, or a test run that covers comments, both quote types and '=' in a value."
+   },
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 7 passed tests and a re-run of the suite counts 2."
+   },
+   {
+    "evidenceId": "e3",
+    "decision": "accepted",
+    "reason": "The git diff of CHANGELOG.md shows a new bullet directly under '## Unreleased'. It describes the parse_env change: comments and blanks skipped, quotes stripped, '=' kept."
+   }
+  ],
+  "withdrawn": [
+   {
+    "evidenceId": "e2",
+    "decision": "rejected",
+    "reason": "The evidence states 7 passed tests and a re-run of the suite counts 2."
+   }
+  ],
+  "gate_passes": false,
+  "gate_reason": "2 of 3 criteria are not proven (2 rejected).",
+  "proven": {
+   "c1": false,
+   "c2": false,
+   "c3": true
+  },
+  "states": {
+   "c1": "rejected",
+   "c2": "rejected",
+   "c3": "proven"
+  }
+ }
+}
