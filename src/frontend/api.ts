@@ -1,7 +1,7 @@
 import { invoke } from '@forge/bridge';
 import type { ProjectSettings } from '../core/types';
 import type { GraphNoteView } from '../services/graph';
-import type { ProjectView, SampleRemoval, SampleStep } from '../services/project-view';
+import type { GuideView, ProjectView, SampleRemoval, SampleStep } from '../services/project-view';
 import type { ContractView, EvidenceInput, HistoryEntry, VerdictInput } from '../services/view';
 
 type ApiResult<T> = { ok: true; data: T } | { ok: false; error: { code: string; message: string } };
@@ -60,6 +60,8 @@ export const projectApi = {
   saveSettings: (settings: ProjectSettings) => call<ProjectSettings>('saveSettings', { settings }),
   loadSample: (index: number) => call<SampleStep>('loadSample', { index }),
   removeSample: () => call<SampleRemoval>('removeSample'),
+  getGuide: () => call<GuideView>('getGuide'),
+  advanceGuide: (step: string) => call<GuideView>('advanceGuide', { step }),
   getPipeline: () => call<PipelineView>('getPipeline'),
   createPipelineKey: () => call<PipelineView & { key: string }>('createPipelineKey'),
   removePipelineKey: () => call<PipelineView>('removePipelineKey'),

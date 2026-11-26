@@ -6,11 +6,13 @@ import {
   attestationIndependent,
   criterionProof,
   evidenceStanding,
+  failedNote,
   gateDecision,
   isIndependent,
   isStale,
   latestVerdict,
   pipelineCommit,
+  pipelineResultFor,
   summarize,
 } from '../core/proof';
 import { rulesFor } from '../core/settings';
@@ -238,6 +240,8 @@ export class ContractService {
 
     const channel = caller.via;
     const otherUrls = bundle.evidence.flatMap((e) => (e.criterionId !== criterion.id && e.url ? [e.url] : []));
+    // The pipeline's word on a commit stands against anyone else's word on the same commit.
+    const reported = kind === 'test_run' || kind === 'build' ? pipelineResultFor(bundle.evidence, criterion.id, kind, details.commit) : null;
     const checks = runChecks({
       requiredKind: criterion.requiredKind,
       kind,
@@ -247,6 +251,7 @@ export class ContractService {
       channel,
       otherUrls,
       pipelineOnly: session.settings.pipelineOnly,
+      pipelineSays: reported && !reported.checksPassed ? failedNote(reported) : null,
     });
     const now = this.now();
     const evidence: Evidence = {

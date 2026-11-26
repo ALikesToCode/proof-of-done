@@ -53,7 +53,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
             {check.note}
           </Line>
         ))}
-        {verdict && verdict.channel !== 'attestation' && verdict.channel !== 'ci' && (
+        {verdict && verdict.channel !== 'attestation' && verdict.channel !== 'ci' && verdict.channel !== 'check' && (
           <Inline space="space.050" alignBlock="center" shouldWrap>
             <Line size="small" color="color.text.subtle">
               {verdict.decision === 'accepted' ? 'Accepted' : 'Rejected'}
@@ -66,9 +66,9 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
             </Line>
           </Inline>
         )}
-        {verdict && (verdict.channel === 'attestation' || verdict.channel === 'ci') && (
-          <Line size="small" color="color.text.subtle">
-            {verdict.reason}
+        {verdict && (verdict.channel === 'attestation' || verdict.channel === 'ci' || verdict.channel === 'check') && (
+          <Line size="small" color={verdict.channel === 'check' ? 'color.text.danger' : 'color.text.subtle'}>
+            {verdict.channel === 'check' ? `Turned away by the app. ${verdict.reason}` : verdict.reason}
           </Line>
         )}
         {evidence.acceptBlocked && (

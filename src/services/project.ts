@@ -2,7 +2,7 @@ import { PodError } from '../core/errors';
 import { newId } from '../core/ids';
 import { Meter, readMeter, toWindowDays } from '../core/meter';
 import { summarize } from '../core/proof';
-import { SAMPLE_ITEMS } from '../core/sample';
+import { GUIDE_SLUG, SAMPLE_ITEMS } from '../core/sample';
 import { normalizeSettings } from '../core/settings';
 import { ProjectSettings } from '../core/types';
 import { IssueRow, JiraGateway, ProjectInfo } from '../jira/gateway';
@@ -90,7 +90,8 @@ export class ProjectService {
         waiting: rows.filter((r) => r.waiting > 0).length,
       },
       rows: rows.map(({ closedAt: _closedAt, ...row }) => row),
-      sample: { loaded: samples.length, size: SAMPLE_ITEMS.length },
+      // The guided run has a card of its own.
+      sample: { loaded: samples.filter((s) => s.slug !== GUIDE_SLUG).length, size: SAMPLE_ITEMS.length },
     };
   }
 

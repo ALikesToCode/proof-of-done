@@ -9,6 +9,7 @@ import type {
 import type { GraphFinding } from '../core/graph';
 import { PASS_MINUTES, awaitsReview } from '../core/proof';
 import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
+import { GUIDE_STEPS, GUIDE_WORKFLOW } from '../core/sample';
 
 /** Wording and small formatters for the panel. No Forge imports, so it can be unit-tested. */
 
@@ -94,12 +95,15 @@ export function sourceLine(source: CriterionSource, sourceRef: string | null): s
   }
 }
 
-export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'>): string {
+export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'> & { details?: { workflow?: string } }): string {
   switch (evidence.channel) {
     case 'agent':
       return evidence.agentName ? `Submitted by the agent ${evidence.agentName}` : 'Submitted by an agent';
     case 'ci':
-      return "Reported by the project's pipeline";
+      // The guided run stores its results the way a pipeline's are stored, and marks them with its workflow name.
+      return evidence.details?.workflow === GUIDE_WORKFLOW
+        ? "Sample data, as if reported by the project's pipeline"
+        : "Reported by the project's pipeline";
     case 'graph':
       return 'Found through Teamwork Graph';
     case 'sample':
@@ -192,6 +196,7 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
     case 'verdict.recorded': {
       if (data['by'] === 'attestation') return `attested ${quote(data['text'])}`;
       const verb = data['decision'] === 'accepted' ? 'accepted' : 'rejected';
+      if (data['by'] === 'check') return `reported a result that contradicts evidence for ${quote(data['text'])}, so the app turned that evidence away.${sentence(data['reason'])}`;
       const who = data['by'] === 'verifier' ? 'asked the Proof Verifier, which ' : '';
       const self = data['decision'] === 'accepted' && data['independent'] === false ? ' as a self-review' : '';
       const reason = typeof data['reason'] === 'string' && data['reason'] && data['reason'] !== 'Accepted.' ? ` Reason: ${data['reason']}` : '';
@@ -222,6 +227,11 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
     }
     case 'issue.reopened':
       return `moved the work item from ${statusName(data['fromStatus'], 'a done status')} back to ${statusName(data['status'], 'an open status')}`;
+    case 'sample.step': {
+      const step = GUIDE_STEPS.find((candidate) => candidate.id === data['step']);
+      const answer = data['pass'] === true ? 'could close' : 'could not close';
+      return `ran a step of the guided sample${step ? `: ${step.label.charAt(0).toLowerCase()}${step.label.slice(1)}` : ''}. After it the work item ${answer}.${sentence(data['reason'])}`;
+    }
     case 'gate.warned':
       return `got a warning from the done gate.${sentence(data['reason'])}`;
     case 'gate.bounced':

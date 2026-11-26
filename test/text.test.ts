@@ -214,6 +214,16 @@ describe('gate events and sample entries', () => {
     expect(actorLabel({ channel: 'jira' })).toBe('The app');
     expect(channelLine({ channel: 'sample', agentName: 'claude-code' })).toBe('Sample data, as if submitted by the agent claude-code');
     expect(channelLine({ channel: 'sample', agentName: null })).toBe('Sample data, as if added by a person');
+    expect(channelLine({ channel: 'ci', agentName: null, details: { workflow: 'proof-of-done-guided-run' } })).toBe(
+      "Sample data, as if reported by the project's pipeline",
+    );
+    expect(channelLine({ channel: 'ci', agentName: null, details: { workflow: 'ci.yml' } })).toBe("Reported by the project's pipeline");
+    expect(describeEvent({ type: 'sample.step', data: { step: 'pipeline_fails', pass: false, reason: 'The evidence for the one criterion was turned away.' } })).toBe(
+      'ran a step of the guided sample: the pipeline reports the same commit. After it the work item could not close. The evidence for the one criterion was turned away.',
+    );
+    expect(describeEvent({ type: 'verdict.recorded', data: { by: 'check', decision: 'rejected', text: 'Tests pass', reason: 'The pipeline says no.' } })).toBe(
+      'reported a result that contradicts evidence for "Tests pass", so the app turned that evidence away. The pipeline says no.',
+    );
   });
 });
 

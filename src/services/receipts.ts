@@ -3,9 +3,9 @@ import { checksPassed, runChecks } from '../core/checks';
 import { PodError } from '../core/errors';
 import { newId } from '../core/ids';
 import { kindFor } from '../core/kinds';
-import { summarize } from '../core/proof';
+import { failedNote, latestVerdict, sameCommit, summarize } from '../core/proof';
 import { Receipt, formatPipelineKey, parseReceipt, projectOfKey } from '../core/receipt';
-import { Evidence, ProjectSettings, Verdict } from '../core/types';
+import { Criterion, Evidence, ProjectSettings, Verdict } from '../core/types';
 import { IssueInfo, JiraGateway } from '../jira/gateway';
 import { ContractBundle, ContractStore } from '../store/types';
 import { requireAdmin } from './project';
@@ -134,6 +134,21 @@ export class ReceiptService {
     return pick('no_work_item', 'None of the named work items is in this project with a done contract.');
   }
 
+  /**
+   * Stores a simulated result on a work item the app made as sample data, the way a
+   * receipt from a pipeline is stored. No key is asked for, and that is why this takes
+   * sample work items only: on any other work item the key is the whole point.
+   */
+  async acceptSample(issue: IssueInfo, body: string): Promise<ReceiptOutcome> {
+    const samples = await this.store.listSampleIssues(issue.projectId);
+    if (!samples.some((sample) => sample.issueId === issue.id)) {
+      throw new PodError('forbidden', 'Only a sample work item takes a simulated pipeline result.');
+    }
+    const receipt = parseReceipt(body);
+    if (typeof receipt === 'string') throw new PodError('invalid', receipt);
+    return this.storeOn(issue, receipt, await this.store.getSettings(issue.projectId));
+  }
+
   private async storeOn(issue: IssueInfo, receipt: Receipt, settings: ProjectSettings): Promise<ReceiptOutcome> {
     const before = await this.store.getBundle(issue.id);
     if (!before.contract) return 'no_work_item';
@@ -190,6 +205,7 @@ export class ReceiptService {
       stored = true;
       if (!evidence.checksPassed) {
         passing = false;
+        await this.turnAwayClaims(issue, criterion, evidence, before);
         continue;
       }
       if (!settings.pipelineProves) continue;
@@ -220,6 +236,46 @@ export class ReceiptService {
 
     await this.settle(issue, before, receipt.details.commit, settings);
     return passing ? 'recorded' : 'recorded_failing';
+  }
+
+  /**
+   * The pipeline ran a commit and it does not pass. Whatever an agent or a person said
+   * about the same commit for the same criterion is turned away, with the pipeline's
+   * result as the reason. Nobody has to notice the contradiction first.
+   */
+  private async turnAwayClaims(issue: IssueInfo, criterion: Criterion, failing: Evidence, before: ContractBundle): Promise<void> {
+    const commit = failing.details.commit ?? '';
+    for (const claim of before.evidence) {
+      if (claim.criterionId !== criterion.id || claim.channel === 'ci' || claim.kind !== failing.kind || !claim.checksPassed) continue;
+      if (!claim.details.commit || !sameCommit(claim.details.commit, commit)) continue;
+      if (latestVerdict(claim.id, before.verdicts)?.decision === 'rejected') continue;
+      const now = this.now();
+      const reason = `The project's pipeline reported on the same commit (${commit.slice(0, 7)}), and its result does not pass: ${failedNote(failing)}`;
+      await this.store.insertVerdict(
+        {
+          id: newId(now),
+          evidenceId: claim.id,
+          criterionId: criterion.id,
+          issueId: issue.id,
+          decision: 'rejected',
+          reason,
+          channel: 'check',
+          actorAccountId: null,
+          independent: true,
+          createdAt: now,
+        },
+        issue.projectId,
+      );
+      await this.event(issue.projectId, issue.id, 'verdict.recorded', null, 'ci', {
+        evidenceId: claim.id,
+        criterionId: criterion.id,
+        text: criterion.text,
+        decision: 'rejected',
+        by: 'check',
+        independent: true,
+        reason,
+      });
+    }
   }
 
   /**

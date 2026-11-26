@@ -740,7 +740,64 @@ describe('the project page', () => {
     expect(page.text()).toContain('No work item in this project has a done contract yet.');
     expect(page.labels('Tab')).toEqual(['Work under contract', 'Settings']);
     expect(page.all('DynamicTable')).toHaveLength(0);
-    expect(world().calls).toEqual(['getProject']);
+    expect(world().calls).toEqual(['getProject', 'getGuide']);
+  });
+
+  it('offers the guided run to someone who administers the project, and to nobody else', async () => {
+    const fresh = onProject();
+    const page = await show(pages.project);
+    expect(page.text()).toContain('See a false "done" caught, in one minute');
+    expect(page.text()).toContain('every record it adds is labelled as sample data');
+    expect(page.buttons()).toContain('Start the one-minute run');
+
+    fresh.jira.admin = false;
+    const other = await show(pages.project);
+    expect(other.text()).not.toContain('See a false "done" caught');
+    expect(other.buttons()).not.toContain('Start the one-minute run');
+  });
+
+  it('walks through the guided run, with the done gate\'s answer after every step', async () => {
+    const fresh = onProject();
+    const page = await show(pages.project);
+    await page.press('Start the one-minute run');
+    expect(page.text()).toContain('1. The app made MOBL-100 with a done contract of one criterion: "All checkout tests pass".');
+    expect(page.text()).toContain('The done gate says: The one criterion has no evidence.');
+    expect(page.text()).toContain('Step 1 of 6');
+    expect(page.all('Link').map((link) => link.props['href'])).toContain('https://example.atlassian.net/browse/MOBL-100');
+
+    await page.press('Next: The agent says it is done');
+    expect(page.text()).toContain('The done gate says: The evidence for the one criterion waits for a check.');
+    await page.press('Next: The pipeline reports the same commit');
+    expect(page.text()).toContain("3. The pipeline ran commit a1f3c9e itself: 10 passed, 2 failed. The app turned the agent's claim away.");
+    expect(page.text()).toContain('The done gate says: The evidence for the one criterion was turned away.');
+    await page.press('Next: The agent pushes a fix');
+    await page.press('Next: The agent pushes one more commit');
+    expect(page.text()).toContain('The done gate says: The proof of the one criterion is about an earlier commit.');
+    await page.press('Next: The pipeline tests the new commit');
+
+    const answers = page.labels('Lozenge').filter((label) => label === 'Can close' || label === 'Cannot close');
+    expect(answers).toEqual(['Cannot close', 'Cannot close', 'Cannot close', 'Can close', 'Cannot close', 'Can close']);
+    expect(page.text()).toContain('That is the whole loop');
+    expect(page.text()).toContain('Done');
+    expect(page.buttons().filter((label) => label.startsWith('Next:'))).toEqual([]);
+    // The page read the project again after each step, so the work item is in the table, marked as a sample.
+    expect(page.text()).toContain('Sample: Apply a discount code at checkout');
+    // It is not one of the five samples.
+    expect(page.buttons()).toContain('Load sample data');
+
+    await page.press('Remove the sample');
+    expect(fresh.jira.issues.size).toBe(0);
+    expect(page.buttons()).toContain('Start the one-minute run');
+  });
+
+  it('shows where the guided run stands to someone who comes back to the page', async () => {
+    onProject();
+    const first = await show(pages.project);
+    await first.press('Start the one-minute run');
+    await first.press('Next: The agent says it is done');
+    const again = await show(pages.project);
+    expect(again.text()).toContain('Step 2 of 6');
+    expect(again.buttons()).toContain('Next: The pipeline reports the same commit');
   });
 
   it('loads the sample data in one click and removes it again', async () => {
@@ -813,7 +870,7 @@ describe('the project page', () => {
     await page.pick('meter-window', '30');
     expect(page.text()).toContain('Nothing was opened, closed or proven in the last 30 days.');
     expect(page.field('meter-window').props['value']).toMatchObject({ value: '30' });
-    expect(fresh.calls).toEqual(['getProject', 'getProject']);
+    expect(fresh.calls).toEqual(['getProject', 'getGuide', 'getProject']);
   });
 
   it('saves the settings an admin changes', async () => {

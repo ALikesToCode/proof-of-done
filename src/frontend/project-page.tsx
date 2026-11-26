@@ -14,6 +14,7 @@ import ForgeReconciler, {
 import { DEFAULT_WINDOW } from '../core/meter';
 import type { ProjectView } from '../services/project-view';
 import { messageOf, projectApi } from './api';
+import { GuideCard } from './components/project/GuideCard';
 import { MeterCard } from './components/project/MeterCard';
 import { SampleCard } from './components/project/SampleCard';
 import { SettingsForm } from './components/project/SettingsForm';
@@ -69,6 +70,7 @@ const App = () => {
             <Text>{problem}</Text>
           </SectionMessage>
         )}
+        {view.canAdmin && <GuideCard siteUrl={siteUrl} onChanged={() => load(days)} />}
         <MeterCard meter={view.meter} busy={busy} onWindow={setDays} />
         <SampleCard view={view} onChanged={() => load(days)} />
         <Tabs id="proof-of-done-project">

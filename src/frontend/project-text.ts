@@ -79,6 +79,16 @@ export function contractsLine(contracts: { total: number; listed: number }): str
   return `${contracts.total} ${noun} a done contract.${tail}`;
 }
 
+/** How far the guided run is. */
+export function guideProgress(guide: { lines: unknown[]; total: number }): string {
+  return guide.lines.length >= guide.total ? 'Done' : `Step ${guide.lines.length} of ${guide.total}`;
+}
+
+/** The done gate's answer after a step of the guided run. */
+export function guideAnswer(line: { pass: boolean; reason: string }): string {
+  return `The done gate says: ${line.reason}`;
+}
+
 /** One line on whether the project's pipeline has a key and whether it has used it. */
 export function pipelineStatusLine(
   key: { exists: boolean; createdAt: number | null; lastUsedAt: number | null },

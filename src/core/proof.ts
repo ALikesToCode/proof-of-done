@@ -81,6 +81,27 @@ export function pipelineCommit(evidence: Evidence[]): string | null {
   return newest?.details.commit ?? null;
 }
 
+/**
+ * The newest result the project's pipeline reported for one criterion, one kind of evidence
+ * and one commit, or null when it has reported none. A rerun on the same commit replaces
+ * the run before it.
+ */
+export function pipelineResultFor(evidence: Evidence[], criterionId: string, kind: Evidence['kind'], commit: string | undefined): Evidence | null {
+  if (!commit) return null;
+  let newest: Evidence | null = null;
+  for (const item of evidence) {
+    if (item.channel !== 'ci' || item.criterionId !== criterionId || item.kind !== kind) continue;
+    if (!item.details.commit || !sameCommit(item.details.commit, commit)) continue;
+    if (!newest || item.createdAt > newest.createdAt || (item.createdAt === newest.createdAt && item.id > newest.id)) newest = item;
+  }
+  return newest;
+}
+
+/** Why a piece of evidence failed its checks, in the words of the first check that failed. */
+export function failedNote(evidence: Pick<Evidence, 'checks' | 'summary'>): string {
+  return evidence.checks.find((check) => !check.ok)?.note ?? evidence.summary;
+}
+
 /** Evidence about a commit the pipeline has since moved past. Evidence that names no commit never goes stale. */
 export function isStale(evidence: Pick<Evidence, 'details'>, current: string | null): boolean {
   const commit = evidence.details.commit;
@@ -123,7 +144,8 @@ export function criterionProof(
   requireIndependent: boolean,
 ): CriterionProof {
   const current = pipelineCommit(evidence);
-  const standings = evidence.filter((e) => e.criterionId === criterionId).map((e) => evidenceStanding(e, verdicts, current));
+  const own = evidence.filter((e) => e.criterionId === criterionId);
+  const standings = own.map((e) => evidenceStanding(e, verdicts, current));
   const base = { selfReviewed: false, needsIndependent: false, stale: false };
   if (standings.includes('accepted')) return { ...base, state: 'proven' };
   if (standings.includes('self_accepted')) {
@@ -132,6 +154,17 @@ export function criterionProof(
       : { ...base, state: 'proven', selfReviewed: true };
   }
   if (standings.includes('pending')) return { ...base, state: 'submitted' };
+  // Proof that held until the pipeline moved on, with nothing turned away for the commit it is at now.
+  // An older run that failed does not hide that: what the criterion lacks is proof of the new commit.
+  const heldBefore = own.some((e, index) => {
+    if (standings[index] !== 'stale') return false;
+    const before = evidenceStanding(e, verdicts, null);
+    return before === 'accepted' || (before === 'self_accepted' && !requireIndependent);
+  });
+  const turnedAwayNow = own.some(
+    (e, index) => (standings[index] === 'rejected' || standings[index] === 'failed_checks') && !isStale(e, current),
+  );
+  if (heldBefore && !turnedAwayNow) return { ...base, state: 'unproven', stale: true };
   // A new commit turns earlier proof away without anyone having rejected it. The criterion is open again.
   if (standings.includes('stale') && !standings.includes('rejected') && !standings.includes('failed_checks')) {
     return { ...base, state: 'unproven', stale: true };
