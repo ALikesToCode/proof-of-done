@@ -139,6 +139,16 @@ export class SampleService {
       await this.store.purgeIssue(existing.issueId);
     }
 
+    const { created, status } = await this.create(project, item);
+    if (item.withContract) await this.seed(item, { ...created, projectId: project.id }, status);
+    return { ...step, key: created.key, existed: false };
+  }
+
+  /**
+   * Makes the Jira work item of a sample, remembers it as one, and moves it to its status.
+   * Also used by the guided run, which then builds the contract through the real services.
+   */
+  async create(project: ProjectInfo, item: SampleItem): Promise<{ created: { id: string; key: string }; status: { name: string; category: string } | null }> {
     const type = pickIssueType(project);
     if (!type) throw new PodError('invalid', `${project.name} has no work item type the sample can use.`);
     let created: { id: string; key: string };
@@ -159,9 +169,7 @@ export class SampleService {
 
     // Moved before the contract exists. A workflow that carries this app's validator
     // would otherwise refuse to close the sample that is there to show an unproven close.
-    const status = await this.move(created.id, item.status);
-    if (item.withContract) await this.seed(item, { ...created, projectId: project.id }, status);
-    return { ...step, key: created.key, existed: false };
+    return { created, status: await this.move(created.id, item.status) };
   }
 
   /** Deletes the sample work items the app made in this project, with everything stored about them. */

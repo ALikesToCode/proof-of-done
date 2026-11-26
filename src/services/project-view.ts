@@ -64,3 +64,21 @@ export interface SampleRemoval {
   /** Keys or ids of sample work items Jira would not delete. */
   kept: string[];
 }
+
+/** One step of the guided run that has been taken, with the done gate's answer right after it. */
+export interface GuideLine {
+  id: string;
+  text: string;
+  /** Whether the work item could close after this step, and the gate's reason. */
+  pass: boolean;
+  reason: string;
+}
+
+export interface GuideView {
+  /** The sample work item of the run, or null before it starts. */
+  key: string | null;
+  lines: GuideLine[];
+  /** The step the next press runs, or null when the run is over. */
+  next: { id: string; label: string } | null;
+  total: number;
+}

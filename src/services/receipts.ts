@@ -134,6 +134,21 @@ export class ReceiptService {
     return pick('no_work_item', 'None of the named work items is in this project with a done contract.');
   }
 
+  /**
+   * Stores a simulated result on a work item the app made as sample data, the way a
+   * receipt from a pipeline is stored. No key is asked for, and that is why this takes
+   * sample work items only: on any other work item the key is the whole point.
+   */
+  async acceptSample(issue: IssueInfo, body: string): Promise<ReceiptOutcome> {
+    const samples = await this.store.listSampleIssues(issue.projectId);
+    if (!samples.some((sample) => sample.issueId === issue.id)) {
+      throw new PodError('forbidden', 'Only a sample work item takes a simulated pipeline result.');
+    }
+    const receipt = parseReceipt(body);
+    if (typeof receipt === 'string') throw new PodError('invalid', receipt);
+    return this.storeOn(issue, receipt, await this.store.getSettings(issue.projectId));
+  }
+
   private async storeOn(issue: IssueInfo, receipt: Receipt, settings: ProjectSettings): Promise<ReceiptOutcome> {
     const before = await this.store.getBundle(issue.id);
     if (!before.contract) return 'no_work_item';

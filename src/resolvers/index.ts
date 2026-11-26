@@ -5,6 +5,7 @@ import { ForgeGraphGateway } from '../graph/forge-graph';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { Caller, ContractService } from '../services/contracts';
 import { GraphService } from '../services/graph';
+import { GuideService } from '../services/guide';
 import { ProjectService } from '../services/project';
 import { ReceiptService } from '../services/receipts';
 import { SampleService } from '../services/sample';
@@ -23,6 +24,7 @@ const service = new ContractService(store, jira);
 const graphs = new GraphService(service, new ForgeGraphGateway());
 const projects = new ProjectService(store, jira);
 const samples = new SampleService(store, jira);
+const guide = new GuideService(store, jira);
 const receipts = new ReceiptService(store, jira);
 
 /** Where the project's pipeline posts its results. The same address for every project of the site. */
@@ -124,6 +126,10 @@ defineProject('saveSettings', (projectId, accountId, payload) => projects.saveSe
 defineProject('loadSample', (projectId, _accountId, payload) => samples.loadOne(projectId, payload['index']));
 
 defineProject('removeSample', (projectId) => samples.remove(projectId));
+
+defineProject('getGuide', (projectId) => guide.state(projectId));
+
+defineProject('advanceGuide', (projectId, accountId, payload) => guide.advance(projectId, accountId, payload['step']));
 
 defineProject('getPipeline', async (projectId) => {
   await projects.requireAdmin(projectId, "see the pipeline's key");

@@ -177,3 +177,75 @@ export const SAMPLE_ITEMS: readonly SampleItem[] = [
     ],
   },
 ];
+
+/**
+ * The guided run: one sample work item that a project admin walks through in a minute,
+ * to see a false "done" caught. Every step runs the same services a real agent and a
+ * real pipeline reach. Nothing here needs a repository, a pipeline or a coding agent.
+ */
+
+export const GUIDE_SLUG = 'guided-run';
+/** The name the simulated agent gives for itself, so its evidence reads as sample data wherever it shows. */
+export const GUIDE_AGENT = `${SAMPLE_AGENT} (sample)`;
+/** The workflow name on every simulated pipeline result. The pages read it to label the result as sample data. */
+export const GUIDE_WORKFLOW = 'proof-of-done-guided-run';
+
+export const GUIDE_ITEM: SampleItem = {
+  slug: GUIDE_SLUG,
+  summary: 'Sample: Apply a discount code at checkout',
+  intro: 'Customers with a discount code have nowhere to enter it. Add the field to the checkout and apply the discount to the total.',
+  status: 'in_progress',
+  withContract: false,
+  criteria: [{ text: 'All checkout tests pass', requiredKind: 'test_run', evidence: [] }],
+};
+
+export const GUIDE_COMMITS = {
+  first: 'a1f3c9e07b2d4c58916e0fa3d7b84c21e5f6a903',
+  fix: 'b72d04a9c1e358f60a47d92b3ce81f05d6a7b4e2',
+  next: 'c9e51b3f8a06d72e4b1c95a0e3d67f28b4c0a1d5',
+} as const;
+
+export type GuideStepId = 'start' | 'claim' | 'pipeline_fails' | 'fix_passes' | 'new_commit' | 'passes_again';
+
+export interface GuideStep {
+  id: GuideStepId;
+  /** What the button says that runs this step. */
+  label: string;
+  /** What happened, once it ran. `{key}` is the work item. */
+  done: string;
+}
+
+const short = (commit: string): string => commit.slice(0, 7);
+
+export const GUIDE_STEPS: readonly GuideStep[] = [
+  {
+    id: 'start',
+    label: 'Start the one-minute run',
+    done: `The app made {key} with a done contract of one criterion: "${GUIDE_ITEM.criteria[0]!.text}".`,
+  },
+  {
+    id: 'claim',
+    label: 'The agent says it is done',
+    done: `The coding agent reported 12 passed and 0 failed on commit ${short(GUIDE_COMMITS.first)}. That is the agent's own word.`,
+  },
+  {
+    id: 'pipeline_fails',
+    label: 'The pipeline reports the same commit',
+    done: `The pipeline ran commit ${short(GUIDE_COMMITS.first)} itself: 10 passed, 2 failed. The app turned the agent's claim away.`,
+  },
+  {
+    id: 'fix_passes',
+    label: 'The agent pushes a fix',
+    done: `The pipeline ran the fix, commit ${short(GUIDE_COMMITS.fix)}: 12 passed, 0 failed.`,
+  },
+  {
+    id: 'new_commit',
+    label: 'The agent pushes one more commit',
+    done: `The pipeline built commit ${short(GUIDE_COMMITS.next)}. Its tests have not reported yet, so the proof is about the commit before.`,
+  },
+  {
+    id: 'passes_again',
+    label: 'The pipeline tests the new commit',
+    done: `The pipeline ran commit ${short(GUIDE_COMMITS.next)}: 13 passed, 0 failed.`,
+  },
+];

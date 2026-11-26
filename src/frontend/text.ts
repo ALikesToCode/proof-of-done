@@ -8,6 +8,7 @@ import type {
 } from '../core/types';
 import type { GraphFinding } from '../core/graph';
 import { awaitsReview } from '../core/proof';
+import { GUIDE_STEPS, GUIDE_WORKFLOW } from '../core/sample';
 import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
 
 /** Wording and small formatters for the panel. No Forge imports, so it can be unit-tested. */
@@ -94,12 +95,15 @@ export function sourceLine(source: CriterionSource, sourceRef: string | null): s
   }
 }
 
-export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'>): string {
+export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'> & { details?: { workflow?: string } }): string {
   switch (evidence.channel) {
     case 'agent':
       return evidence.agentName ? `Submitted by the agent ${evidence.agentName}` : 'Submitted by an agent';
     case 'ci':
-      return "Reported by the project's pipeline";
+      // The guided run stores its results the way a pipeline's are stored, and marks them with its workflow name.
+      return evidence.details?.workflow === GUIDE_WORKFLOW
+        ? "Sample data, as if reported by the project's pipeline"
+        : "Reported by the project's pipeline";
     case 'graph':
       return 'Found through Teamwork Graph';
     case 'sample':
@@ -222,6 +226,11 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
     }
     case 'issue.reopened':
       return `moved the work item from ${statusName(data['fromStatus'], 'a done status')} back to ${statusName(data['status'], 'an open status')}`;
+    case 'sample.step': {
+      const step = GUIDE_STEPS.find((candidate) => candidate.id === data['step']);
+      const answer = data['pass'] === true ? 'could close' : 'could not close';
+      return `ran a step of the guided sample${step ? `: ${step.label.charAt(0).toLowerCase()}${step.label.slice(1)}` : ''}. After it the work item ${answer}.${sentence(data['reason'])}`;
+    }
     case 'gate.warned':
       return `got a warning from the done gate.${sentence(data['reason'])}`;
     case 'gate.bounced':
