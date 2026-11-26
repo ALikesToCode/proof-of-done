@@ -19,6 +19,9 @@ import {
   verifierPrompt,
   waitingForReview,
   waitingLine,
+  blockedPrompt,
+  briefNote,
+  hasTrouble,
 } from '../src/frontend/text';
 import type { CriterionView, EvidenceView } from '../src/services/view';
 
@@ -356,5 +359,36 @@ describe('excerptHead', () => {
 
   it('reads Windows line ends as line breaks', () => {
     expect(excerptHead('one\r\ntwo\r\n')).toEqual({ head: 'one\ntwo', cut: false });
+  });
+});
+
+describe('the repair brief in the panel', () => {
+  it('asks the Proof Verifier by the work item key', () => {
+    expect(blockedPrompt('MOBL-7')).toBe('Explain what blocks MOBL-7 and write a repair brief for the coding agent.');
+  });
+
+  it('offers an explanation only where evidence was turned away or proof went stale', () => {
+    const criterion = (state: string, stale = false) => ({ state, stale }) as never;
+    expect(hasTrouble({ criteria: [criterion('unproven'), criterion('submitted'), criterion('proven')] })).toBe(false);
+    expect(hasTrouble({ criteria: [criterion('unproven'), criterion('rejected')] })).toBe(true);
+    expect(hasTrouble({ criteria: [criterion('unproven', true)] })).toBe(true);
+  });
+
+  it('says what a brief is, and when the pipeline has moved on since', () => {
+    const base = 'The coding agent gets this brief with the contract. It is advice and proves nothing. The verdicts stay with you.';
+    expect(briefNote({ commit: null, outdated: false }, null)).toBe(base);
+    expect(briefNote({ commit: 'a1f3c9e07b2d4c58916e0fa3d7b84c21e5f6a903', outdated: true }, 'b72d04a9c1e358f60a47d92b3ce81f05d6a7b4e2')).toBe(
+      `${base} It was written at commit a1f3c9e, and the pipeline has since reported b72d04a, so it may no longer apply.`,
+    );
+    expect(briefNote({ commit: null, outdated: true }, 'b72d04a9c1e358f60a47d92b3ce81f05d6a7b4e2')).toBe(
+      `${base} It was written before the pipeline reported, and the pipeline has since reported b72d04a, so it may no longer apply.`,
+    );
+  });
+
+  it('keeps a brief and its removal in the history', () => {
+    expect(describeEvent({ type: 'brief.written', data: { text: 'Fix the two failing tests.' } })).toBe(
+      'asked the Proof Verifier, which wrote a repair brief for the coding agent: "Fix the two failing tests."',
+    );
+    expect(describeEvent({ type: 'brief.removed', data: {} })).toBe('removed the repair brief');
   });
 });

@@ -20,6 +20,8 @@ A Jira work item under Proof of Done has a done contract, which is a list of cri
 6. **Check the contract.** Call `get-done-contract`. The loop is complete when every criterion is `proven` or `waiting_for_review`, or you have told the person which ones you cannot prove and why.
 7. **Report the state the contract shows.** Give the count of proven criteria, the ones that wait for a review, and the ones still open. Say "done" only when `proof.state` is `proven`, which means every criterion is proven. `gate.passes` answers a different question, whether the work item may be closed. It is also true when the project turned its gate off, or when the work item has no contract.
 
+When the contract has a `repairBrief`, read it before you change anything. The Proof Verifier wrote it from the records, to say what to fix. It is advice. A criterion is still proven only by evidence that passes the checks and a review, so fix the work and submit new evidence, or wait for the pipeline.
+
 Asked what is left in a whole project, call `list-unproven-work` with the project key. It lists the work items that are not proven, most urgent first, and says whether the project is climbing, busy or stalled.
 
 ## Evidence

@@ -123,6 +123,8 @@ define('letThrough', async (issueId, caller, payload) => {
   return service.view(issueId, caller);
 });
 
+define('removeBrief', (issueId, caller) => service.removeBrief(issueId, caller));
+
 define('getHistory', (issueId) => service.history(issueId));
 
 define('getGraphNote', (issueId, caller, payload) => graphs.noteFor(issueId, caller, text(payload['evidenceId'])));

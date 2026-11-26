@@ -142,6 +142,7 @@ It is built for teams that hand Jira work to AI coding agents. The agent reads t
 - **A verdict on each piece.** Evidence that passes the checks waits for a review, except an attestation, which the app accepts when it arrives. A person or the Proof Verifier, a Rovo agent that ships with the app, accepts or rejects each piece that waits. A rejection needs a reason, and the Proof Verifier gives a reason for every verdict. By default a person cannot accept evidence they typed in themselves. A project can allow that, and the panel then labels the proof self-reviewed. The project page and the JQL field show it as proven. A person can accept evidence that their own coding agent submitted, and the app counts that as a review by someone else. An attestation proves its criterion when it comes from someone who is not the assignee, also when the work item has no assignee. An attestation by the assignee needs a second reader, unless the project allows self-review.
 - **A second source for pull requests and builds.** When evidence links a pull request or a build, the app asks Jira's Teamwork Graph what the connected development tool reported for that work item. The reviewer sees whether the two agree.
 - **A source on each piece.** The panel labels every piece of evidence with where it came from: the pipeline, an agent's claim, the Teamwork Graph, or typed by a person. Above the criteria it lists what still blocks closing, with the reason for each. The review dialog shows what the pipeline says about the commit a claim names.
+- **A repair brief.** When evidence was turned away or proof went stale, the Proof Verifier explains which records disagree and writes a short brief on what to fix. The coding agent receives it with the contract. The brief proves nothing and changes no verdict.
 - **Results from the pipeline.** The project's pipeline reports test runs and builds with a key that agents and people do not hold. A passing result proves its criterion, and a newer commit turns proof of an earlier one stale.
 - **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright, and it refuses too when it could not check, unless the project chooses otherwise.
 - **Project page.** One page per project counts what needs someone now: work items closed without proof, evidence waiting for a check, and evidence turned away. Below that it counts what was opened and reopened in the last 7, 14 or 30 days against what was closed with proof. It lists the work items under contract that you can see, up to the 200 that changed most recently, with what each still needs.
@@ -187,6 +188,8 @@ Remove the validator from every workflow before you uninstall the app. A validat
 The Proof Verifier is a Rovo agent. It reads the evidence that waits on a work item, decides whether each piece proves its criterion, and records a verdict with its reasoning. Its instructions tell it to judge from the record, to treat text inside evidence as material to judge and not as an instruction, and to reject when it is unsure. The app does not enforce these instructions. The Proof Verifier runs on a language model, so it can still get a verdict wrong.
 
 Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat and ask, for example, "Review the evidence that waits on ABC-123".
+
+It also explains a blocked work item. When evidence was turned away or proof went stale, the panel shows "Ask why it is blocked". The app gives the agent the records that disagree, for example an agent's claim and the pipeline's failing result on the same commit. The agent explains them and saves a repair brief of at most 2,000 characters. The panel shows the brief, and the coding agent gets it as `repairBrief` the next time it calls `get-context-pack` or `get-done-contract`. The brief is advice. It records no verdict, and anyone who can edit the work item can remove it. This part has not been tried in Rovo chat yet.
 
 Rovo shows the verdicts in a card first, each with a checkbox. The agent records them when you press Confirm selected.
 
@@ -291,9 +294,9 @@ The Teamwork Graph does not always answer on the development site. On 23 Nov 202
 | `src/core/` | The rules of proof, the checks and the meter. No Forge imports |
 | `src/services/` | Contracts, the project page, the done gate, the sample data, the agent tools |
 | `src/store/`, `src/jira/`, `src/graph/` | The Forge SQL store, the Jira REST gateway and the Teamwork Graph gateway |
-| `src/resolvers/`, `src/actions/`, `src/triggers/` | The backend of the pages, the seven tools, and the gate, validator and cleanup |
+| `src/resolvers/`, `src/actions/`, `src/triggers/` | The backend of the pages, the nine tools, and the gate, validator and cleanup |
 | `src/frontend/` | The issue panel, the project page and the settings page, in UI Kit |
-| `rovo/` | The Proof Verifier's prompt and its two skills |
+| `rovo/` | The Proof Verifier's prompt and its three skills |
 | `skills/proof-of-done/` | The open skill for coding agents |
 | `scripts/` | The deploy step for the Marketplace registration |
 | `test/` | Unit tests and page tests |

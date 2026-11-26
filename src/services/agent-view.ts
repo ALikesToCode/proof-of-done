@@ -62,6 +62,18 @@ export interface AgentGate {
   reason: string;
 }
 
+/** What the Proof Verifier told the coding agent to fix. Advice: it proves nothing. */
+export interface AgentBrief {
+  text: string;
+  writtenBy: string;
+  /** ISO 8601. */
+  writtenAt: string;
+  /** The commit the pipeline was at when the brief was written. */
+  commit?: string;
+  /** How to read the brief, and whether the pipeline has moved on since. */
+  note: string;
+}
+
 export interface AgentContract {
   workItem: AgentWorkItem;
   hasContract: boolean;
@@ -69,6 +81,7 @@ export interface AgentContract {
   gate: AgentGate;
   /** The commit the project's pipeline last reported on for this work item. Evidence about an earlier commit does not count. */
   commit?: string;
+  repairBrief?: AgentBrief;
   criteria: AgentCriterion[];
   /** Criteria found in the description or the project rules that are not in the contract. */
   suggested?: Array<{ text: string; needs: RequiredKind; from: string }>;
@@ -174,6 +187,36 @@ export interface VerdictResult {
   evidenceId: string;
   decision: Decision;
   criterion: AgentCriterion;
+  proof: AgentProof;
+  gate: AgentGate;
+  next: string;
+}
+
+/** A criterion that is not proven, with the records that disagree about it. */
+export interface BlockedCriterion extends AgentCriterion {
+  /** Each line is one contradiction the app found between two records, with the source of each. */
+  conflicts?: string[];
+}
+
+export interface ProofBlockers {
+  workItem: AgentWorkItem;
+  proof: AgentProof;
+  gate: AgentGate;
+  /** The commit the project's pipeline last reported on for this work item. */
+  commit?: string;
+  /** Present when the work item is in a done status and its contract is not proven. */
+  closedWithoutProof?: true;
+  /** The criteria that are not proven, in the order of the contract. */
+  blocking: BlockedCriterion[];
+  /** The brief that stands now. Writing a new one replaces it. */
+  repairBrief?: AgentBrief;
+  /** How to explain, and what a repair brief may say. */
+  rules: string[];
+  next: string;
+}
+
+export interface BriefResult {
+  repairBrief: AgentBrief;
   proof: AgentProof;
   gate: AgentGate;
   next: string;

@@ -18,14 +18,19 @@ export const TOOLS = [
   'list-unproven-work',
   'list-evidence-to-review',
   'record-verdict',
+  'list-proof-blockers',
+  'write-repair-brief',
 ] as const;
 export type ToolName = (typeof TOOLS)[number];
 
 /** The tools an outside agent reaches through MCP. Judging evidence is not among them, on purpose. */
 export const MCP_TOOLS: readonly ToolName[] = ['get-context-pack', 'get-done-contract', 'start-done-contract', 'submit-evidence', 'list-unproven-work'];
 
+/** The two tools that judge evidence. */
+export const VERDICT_TOOLS: readonly ToolName[] = ['list-evidence-to-review', 'record-verdict'];
+
 /** The tools only the Proof Verifier has. A call to one of them is a review, never a submission. */
-export const VERIFIER_TOOLS: readonly ToolName[] = ['list-evidence-to-review', 'record-verdict'];
+export const VERIFIER_TOOLS: readonly ToolName[] = [...VERDICT_TOOLS, 'list-proof-blockers', 'write-repair-brief'];
 
 export type ToolResult = ({ ok: true } & Record<string, unknown>) | { ok: false; code: string; error: string };
 
@@ -89,6 +94,10 @@ function dispatch(agent: AgentService, name: ToolName, input: Json, caller: Call
       return agent.reviewQueue(issueOf(input), caller);
     case 'record-verdict':
       return agent.verdict({ ...input, issueKey: issueOf(input) }, caller);
+    case 'list-proof-blockers':
+      return agent.blockers(issueOf(input), caller);
+    case 'write-repair-brief':
+      return agent.writeBrief({ ...input, issueKey: issueOf(input) }, caller);
   }
 }
 

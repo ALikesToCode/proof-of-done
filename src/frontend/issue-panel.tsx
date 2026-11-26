@@ -11,9 +11,10 @@ import { GateNotice } from './components/GateNotice';
 import { EvidenceModal } from './components/EvidenceModal';
 import { HistoryModal } from './components/HistoryModal';
 import { NoContract } from './components/NoContract';
+import { RepairBrief } from './components/RepairBrief';
 import { ReviewModal } from './components/ReviewModal';
 import { Summary } from './components/Summary';
-import { VERIFIER, verifierPrompt, waitingForReview } from './text';
+import { VERIFIER, blockedPrompt, hasTrouble, verifierPrompt, waitingForReview } from './text';
 import { forgetWatch, recallWatch, rememberWatch } from './watch';
 
 type Dialog =
@@ -27,6 +28,9 @@ type Dialog =
 const WATCH_EVERY_MS = 8_000;
 const WATCH_FOR_MS = 5 * 60_000;
 
+/** The name under which the panel remembers that it looks for a repair brief. */
+const briefWatch = (issueKey: string): string => `${issueKey}.brief`;
+
 const App = () => {
   const [view, setView] = useState<ContractView | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
@@ -34,6 +38,7 @@ const App = () => {
   const [addingSuggested, setAddingSuggested] = useState(false);
   const [rovoOn, setRovoOn] = useState(false);
   const [watchUntil, setWatchUntil] = useState(0);
+  const [briefUntil, setBriefUntil] = useState(0);
 
   const load = useCallback(async () => {
     try {
@@ -65,7 +70,9 @@ const App = () => {
   // goes on looking where the one before it stopped.
   const issueKey = view?.issue.key ?? null;
   useEffect(() => {
-    if (issueKey) setWatchUntil((current) => current || recallWatch(issueKey, Date.now()));
+    if (!issueKey) return;
+    setWatchUntil((current) => current || recallWatch(issueKey, Date.now()));
+    setBriefUntil((current) => current || recallWatch(briefWatch(issueKey), Date.now()));
   }, [issueKey]);
 
   // The Proof Verifier records its verdicts from Rovo chat, and Jira does not tell the
@@ -87,6 +94,38 @@ const App = () => {
     }, WATCH_EVERY_MS);
     return () => clearInterval(timer);
   }, [watchUntil, waiting, issueKey, load]);
+
+  // The same for a repair brief: look until one shows up that was written after the question.
+  const briefAt = view?.brief?.at ?? 0;
+  useEffect(() => {
+    if (!briefUntil || !issueKey) return undefined;
+    const stop = () => {
+      forgetWatch(briefWatch(issueKey));
+      setBriefUntil(0);
+    };
+    if (briefAt >= briefUntil - WATCH_FOR_MS) {
+      stop();
+      return undefined;
+    }
+    const timer = setInterval(() => {
+      if (Date.now() > briefUntil) stop();
+      else void load();
+    }, WATCH_EVERY_MS);
+    return () => clearInterval(timer);
+  }, [briefUntil, briefAt, issueKey, load]);
+
+  const askWhy = async () => {
+    if (!view) return;
+    const until = Date.now() + WATCH_FOR_MS;
+    rememberWatch(briefWatch(view.issue.key), until);
+    try {
+      await rovo.open({ type: 'forge', ...VERIFIER, prompt: blockedPrompt(view.issue.key) });
+      setBriefUntil(until);
+    } catch {
+      forgetWatch(briefWatch(view.issue.key));
+      setProblem('Rovo chat did not open from here. Open Rovo chat yourself and choose the Proof Verifier agent.');
+    }
+  };
 
   const askVerifier = async () => {
     if (!view) return;
@@ -143,6 +182,15 @@ const App = () => {
         </SectionMessage>
       )}
       {rovoOn && view.canEdit && waiting > 0 && <AskVerifier waiting={waiting} asked={watchUntil > 0} onAsk={() => void askVerifier()} />}
+      <RepairBrief
+        view={view}
+        now={now}
+        canAsk={rovoOn && view.canEdit && view.summary.state !== 'proven' && hasTrouble(view)}
+        asked={briefUntil > 0}
+        onAsk={() => void askWhy()}
+        onChanged={saved}
+        onProblem={setProblem}
+      />
       {view.criteria.length === 0 && (
         <Text color="color.text.subtle">This contract has no criteria yet. Add the first one below.</Text>
       )}
