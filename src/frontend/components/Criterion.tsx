@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Inline, Link, Lozenge, Stack, Text, User } from '@forge/react';
 import type { CriterionView, EvidenceView } from '../../services/view';
-import { KIND, REQUIRED, STANDING, channelLine, criterionBadge, detailLines, sourceLine, timeAgo } from '../text';
+import { KIND, REQUIRED, STANDING, channelLine, criterionBadge, detailLines, sourceBadge, sourceLine, timeAgo } from '../text';
 import { Excerpt } from './Excerpt';
 import { Line } from './Line';
 import { card, evidenceBox } from './styles';
@@ -16,6 +16,7 @@ interface EvidenceProps {
 
 const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
   const standing = STANDING[evidence.standing];
+  const source = sourceBadge(evidence);
   const failed = evidence.checks.filter((check) => !check.ok);
   const verdict = evidence.verdict;
   return (
@@ -24,6 +25,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
         <Inline space="space.100" alignBlock="center" shouldWrap>
           <Lozenge appearance={standing.tone}>{standing.label}</Lozenge>
           <Line weight="medium">{KIND[evidence.kind]}</Line>
+          <Lozenge appearance={source.tone}>{source.label}</Lozenge>
           <Line size="small" color="color.text.subtlest">
             {channelLine(evidence)}, {timeAgo(evidence.createdAt, now)}
           </Line>

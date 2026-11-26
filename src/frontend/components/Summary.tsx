@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, Inline, Lozenge, ProgressBar, SectionMessage, Stack, Text } from '@forge/react';
 import type { ContractView } from '../../services/view';
-import { PROOF_STATE, proofLine, shortCommit } from '../text';
+import { PROOF_STATE, blockers, proofLine, shortCommit } from '../text';
+
+/** How many blocking criteria the summary lists before it counts the rest. */
+const BLOCKERS_SHOWN = 5;
 
 interface Props {
   view: ContractView;
@@ -15,6 +18,7 @@ export const Summary = ({ view, onHistory, onRefresh }: Props) => {
   const badge = PROOF_STATE[summary.state];
   const proven = summary.state === 'proven';
   const closedWithoutProof = !gate.pass && issue.statusCategory === 'done';
+  const blocking = proven || policy.gateMode === 'off' ? [] : blockers(view);
   return (
     <Stack space="space.100">
       <Inline spread="space-between" alignBlock="center">
@@ -56,6 +60,23 @@ export const Summary = ({ view, onHistory, onRefresh }: Props) => {
             ? `${gate.reason}${summary.selfReviewed ? ` ${summary.selfReviewed} self-reviewed.` : ''} This work item can close.`
             : `Not ready to close. ${gate.reason}`}
         </Text>
+      )}
+      {blocking.length > 0 && (
+        <Stack space="space.050">
+          <Text size="small" weight="medium">
+            What still blocks it
+          </Text>
+          {blocking.slice(0, BLOCKERS_SHOWN).map((blocker) => (
+            <Text key={blocker.id} size="small">
+              {blocker.text}: {blocker.why}
+            </Text>
+          ))}
+          {blocking.length > BLOCKERS_SHOWN && (
+            <Text size="small" color="color.text.subtle">
+              And {blocking.length - BLOCKERS_SHOWN} more below.
+            </Text>
+          )}
+        </Stack>
       )}
     </Stack>
   );

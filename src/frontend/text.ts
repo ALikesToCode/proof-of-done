@@ -113,6 +113,92 @@ export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'
   }
 }
 
+/**
+ * Where a piece of evidence comes from, as one word a reviewer can weigh at a glance.
+ * The pipeline holds a key nobody else has. Everything else is somebody's word.
+ */
+export function sourceBadge(evidence: Pick<EvidenceView, 'channel'> & { details?: { workflow?: string } }): Badge {
+  switch (evidence.channel) {
+    case 'ci':
+      return evidence.details?.workflow === GUIDE_WORKFLOW ? { label: 'Sample pipeline', tone: 'default' } : { label: 'Pipeline', tone: 'success' };
+    case 'agent':
+      return { label: "Agent's claim", tone: 'moved' };
+    case 'graph':
+      return { label: 'Teamwork Graph', tone: 'new' };
+    case 'sample':
+      return { label: 'Sample data', tone: 'default' };
+    default:
+      return { label: 'Typed by a person', tone: 'default' };
+  }
+}
+
+const sameCommitId = (a: string, b: string): boolean => {
+  const left = a.trim().toLowerCase();
+  const right = b.trim().toLowerCase();
+  return left.length >= 7 && right.length >= 7 ? left.startsWith(right) || right.startsWith(left) : left === right;
+};
+
+/**
+ * What the project's pipeline says about the commit a piece of evidence names. This is
+ * the first thing a reviewer needs for a test run or a build that someone else reported.
+ * Null when there is nothing to say: the evidence is the pipeline's own, or it is of a
+ * kind a pipeline does not report.
+ */
+export function pipelineNote(criterion: Pick<CriterionView, 'evidence'>, evidence: Pick<EvidenceView, 'id' | 'kind' | 'channel' | 'details'>): string | null {
+  if (evidence.channel === 'ci' || (evidence.kind !== 'test_run' && evidence.kind !== 'build')) return null;
+  const commit = evidence.details.commit;
+  if (!commit) return 'This names no commit, so no pipeline result can be set against it. It is the word of whoever sent it.';
+  const reported = criterion.evidence
+    .filter((other) => other.channel === 'ci' && other.kind === evidence.kind && other.details.commit && sameCommitId(other.details.commit, commit))
+    .sort((a, b) => b.createdAt - a.createdAt)[0];
+  if (!reported) return `The project's pipeline has not reported on commit ${shortCommit(commit)}. This is the word of whoever sent it.`;
+  return reported.standing === 'failed_checks'
+    ? `The project's pipeline reported on commit ${shortCommit(commit)} too, and its result does not pass.`
+    : `The project's pipeline reported on commit ${shortCommit(commit)} too, and its result passes.`;
+}
+
+export interface Blocker {
+  /** The criterion's id. */
+  id: string;
+  text: string;
+  /** What keeps it from counting as proven, and what would change that. */
+  why: string;
+}
+
+/** The criteria that keep a work item from closing, each with the reason in plain words. */
+export function blockers(view: Pick<ContractView, 'criteria' | 'policy' | 'commit'>): Blocker[] {
+  const found: Blocker[] = [];
+  for (const criterion of view.criteria) {
+    if (criterion.state === 'proven') continue;
+    const fromPipeline = criterion.requiredKind === 'test_run' || criterion.requiredKind === 'build';
+    const needs = criterion.requiredKind === 'any' ? '' : ` It needs ${REQUIRED[criterion.requiredKind].toLowerCase()}.`;
+    let why: string;
+    if (criterion.stale) {
+      why = view.commit
+        ? `Proven for an earlier commit. It needs proof of commit ${shortCommit(view.commit)}.`
+        : 'Proven for an earlier commit. It needs proof of the newest one.';
+    } else if (criterion.state === 'submitted') {
+      const waiting = criterion.evidence.filter((e) => awaitsReview(e.standing, view.policy.requireIndependent)).length;
+      why = criterion.needsIndependent
+        ? 'Accepted by the person who entered it. It needs a second person.'
+        : `${waiting === 1 ? 'One piece of evidence waits' : `${waiting} pieces of evidence wait`} for a check.`;
+    } else if (criterion.state === 'rejected') {
+      const newest = criterion.evidence[0];
+      const reason =
+        newest?.standing === 'failed_checks'
+          ? newest.checks.find((check) => !check.ok)?.note
+          : newest?.standing === 'rejected'
+            ? newest.verdict?.reason
+            : undefined;
+      why = `The evidence was turned away.${reason ? ` ${reason}` : ''}`;
+    } else {
+      why = `No evidence yet.${needs}${view.policy.pipelineOnly && fromPipeline ? ' Only the pipeline can report it.' : ''}`;
+    }
+    found.push({ id: criterion.id, text: criterion.text, why });
+  }
+  return found;
+}
+
 /** A commit id as people quote it. */
 export const shortCommit = (commit: string): string => (/^[0-9a-f]{12,}$/i.test(commit) ? commit.slice(0, 7) : commit);
 

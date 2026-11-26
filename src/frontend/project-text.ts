@@ -1,15 +1,8 @@
-import type { Meter, MeterVerdict } from '../core/meter';
+import type { Meter } from '../core/meter';
 import type { GateMode } from '../core/types';
 import type { WorkItemRow } from '../services/project-view';
-import type { Badge } from './text';
 
 /** Wording for the project page. No Forge imports, so it can be unit-tested. */
-
-export const METER: Record<MeterVerdict, Badge> = {
-  climbing: { label: 'Climbing', tone: 'success' },
-  busy: { label: 'Busy, not climbing', tone: 'moved' },
-  stalled: { label: 'Stalled', tone: 'default' },
-};
 
 export const WINDOW_OPTIONS = [
   { label: 'Last 7 days', value: '7' },
@@ -24,7 +17,20 @@ export interface Figure {
   note?: string;
 }
 
-/** The numbers behind the meter, in the order the verdict reads them. */
+/**
+ * What needs someone today, whatever the window: work items closed without proof,
+ * evidence nobody has checked, and evidence that was turned away.
+ */
+export function nowFigures(view: { contracts: { closedUnproven: number; waiting: number }; rows: Array<Pick<WorkItemRow, 'attention'>> }): Figure[] {
+  const turnedAway = view.rows.filter((row) => row.attention === 'rejected').length;
+  return [
+    { label: 'Closed without proof', value: view.contracts.closedUnproven, note: 'prove them or reopen them' },
+    { label: 'Waiting for a check', value: view.contracts.waiting, note: 'someone has to review' },
+    { label: 'Evidence turned away', value: turnedAway, note: 'the work is not done' },
+  ];
+}
+
+/** What came in and what went out in the window. */
 export function meterFigures(meter: Meter): Figure[] {
   const figures: Figure[] = [
     { label: 'Opened', value: meter.opened },

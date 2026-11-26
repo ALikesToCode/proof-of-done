@@ -63,7 +63,7 @@ const App = () => {
     <Box xcss={page}>
       <Stack space="space.300">
         <Text>
-          Done means proven. This page shows whether {view.project.name} is converging, and which work items still lack proof.
+          Done means proven. This page shows what in {view.project.name} needs someone now, and which work items still lack proof.
         </Text>
         {problem && (
           <SectionMessage appearance="error">
@@ -71,7 +71,7 @@ const App = () => {
           </SectionMessage>
         )}
         {view.canAdmin && <GuideCard siteUrl={siteUrl} onChanged={() => load(days)} />}
-        <MeterCard meter={view.meter} busy={busy} onWindow={setDays} />
+        <MeterCard meter={view.meter} view={view} busy={busy} onWindow={setDays} />
         <SampleCard view={view} onChanged={() => load(days)} />
         <Tabs id="proof-of-done-project">
           <TabList>

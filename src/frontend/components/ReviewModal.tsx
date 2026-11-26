@@ -23,7 +23,7 @@ import { graphCovers } from '../../core/graph';
 import type { GraphNote } from '../../core/graph';
 import type { ContractView, CriterionView, EvidenceView } from '../../services/view';
 import { api, messageOf } from '../api';
-import { GRAPH_FINDING, KIND, STANDING, channelLine, detailLines } from '../text';
+import { GRAPH_FINDING, KIND, STANDING, channelLine, detailLines, pipelineNote, sourceBadge } from '../text';
 import { Excerpt } from './Excerpt';
 import { Line } from './Line';
 
@@ -44,6 +44,8 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
   const [asking, setAsking] = useState(covered);
   const [asks, setAsks] = useState(0);
   const standing = STANDING[evidence.standing];
+  const source = sourceBadge(evidence);
+  const fromPipeline = pipelineNote(criterion, evidence);
 
   // For a pull request or a build, ask what Jira itself links to the work item.
   // The answer is an extra: when the graph is silent the dialog says so and goes on without it.
@@ -100,6 +102,7 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
                   Evidence
                 </Line>
                 <Lozenge appearance={standing.tone}>{standing.label}</Lozenge>
+                <Lozenge appearance={source.tone}>{source.label}</Lozenge>
                 <Line size="small" color="color.text.subtle">
                   {KIND[evidence.kind]}. {channelLine(evidence)}
                 </Line>
@@ -120,6 +123,14 @@ export const ReviewModal = ({ criterion, evidence, onClose, onSaved }: Props) =>
               ))}
               {evidence.details.text && <Excerpt text={evidence.details.text} whole />}
             </Stack>
+            {fromPipeline && (
+              <Stack space="space.050">
+                <Line size="small" color="color.text.subtle">
+                  What the pipeline says
+                </Line>
+                <Line size="small">{fromPipeline}</Line>
+              </Stack>
+            )}
             <Stack space="space.050">
               <Line size="small" color="color.text.subtle">
                 Checks the app ran
