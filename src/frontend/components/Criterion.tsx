@@ -43,12 +43,17 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
           </Line>
         ))}
         {evidence.details.text && <Excerpt text={evidence.details.text} />}
+        {evidence.standing === 'stale' && (
+          <Line size="small" color="color.text.subtle">
+            The pipeline has reported a newer commit since. This no longer proves the criterion.
+          </Line>
+        )}
         {failed.map((check) => (
           <Line key={check.id} size="small" color="color.text.danger">
             {check.note}
           </Line>
         ))}
-        {verdict && verdict.channel !== 'attestation' && (
+        {verdict && verdict.channel !== 'attestation' && verdict.channel !== 'ci' && (
           <Inline space="space.050" alignBlock="center" shouldWrap>
             <Line size="small" color="color.text.subtle">
               {verdict.decision === 'accepted' ? 'Accepted' : 'Rejected'}
@@ -61,7 +66,7 @@ const EvidenceItem = ({ evidence, now, onReview }: EvidenceProps) => {
             </Line>
           </Inline>
         )}
-        {verdict && verdict.channel === 'attestation' && (
+        {verdict && (verdict.channel === 'attestation' || verdict.channel === 'ci') && (
           <Line size="small" color="color.text.subtle">
             {verdict.reason}
           </Line>

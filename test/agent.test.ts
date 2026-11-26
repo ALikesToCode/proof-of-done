@@ -245,11 +245,11 @@ describe('the context pack', () => {
     expect(pack.comments).toEqual([{ author: 'Bob Example', at: '2026-11-20T10:00:00.000+0000', text: 'Use the existing lockout table.' }]);
     expect(pack.commentTotal).toBe(7);
     expect(pack.contract.hasContract).toBe(false);
-    expect(pack.rules).toHaveLength(7);
+    expect(pack.rules).toHaveLength(8);
     expect(pack.rules[5]).toBe(
       "When you submit a pull request or a build, the reviewer sees whether Jira's Teamwork Graph links it to the work item. Jira links a pull request or a build to a work item when the work item key is in the branch name, the pull request title or a commit message.",
     );
-    expect(pack.rules[6]).toBe(
+    expect(pack.rules[7]).toBe(
       'Do not move the work item to a done status before every criterion is proven. The done gate comments on work that is closed without proof.',
     );
   });
@@ -262,7 +262,7 @@ describe('the context pack', () => {
     expect(Object.keys(pack)).toEqual(['workItem', 'description', 'descriptionCut', 'contract', 'rules']);
     expect(pack.description.length).toBeLessThan(12_010);
     expect(pack.descriptionCut).toBe(true);
-    expect(pack.rules).toHaveLength(6);
+    expect(pack.rules).toHaveLength(7);
   });
 });
 

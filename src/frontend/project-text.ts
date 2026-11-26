@@ -72,3 +72,41 @@ export function contractsLine(contracts: { total: number; listed: number }): str
   const tail = hidden > 0 ? ` ${hidden} ${hidden === 1 ? 'is' : 'are'} not listed, because you cannot see ${hidden === 1 ? 'it' : 'them'} or ${hidden === 1 ? 'it was' : 'they were'} deleted.` : '';
   return `${contracts.total} ${noun} a done contract.${tail}`;
 }
+
+/** One line on whether the project's pipeline has a key and whether it has used it. */
+export function pipelineStatusLine(
+  key: { exists: boolean; createdAt: number | null; lastUsedAt: number | null },
+  now: number,
+): string {
+  if (!key.exists) return 'This project has no pipeline key, so no pipeline can report results to it.';
+  const days = (at: number): string => {
+    const n = Math.floor((now - at) / (24 * 60 * 60 * 1000));
+    return n <= 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`;
+  };
+  const made = key.createdAt ? `The key was made ${days(key.createdAt)}.` : 'The project has a key.';
+  return key.lastUsedAt ? `${made} A pipeline last reported with it ${days(key.lastUsedAt)}.` : `${made} No pipeline has reported with it yet.`;
+}
+
+/**
+ * A GitHub Actions step that reports the job's result. It builds the JSON with jq from
+ * environment variables, so a branch name cannot break out of the request.
+ */
+export function pipelineSnippet(url: string): string {
+  return [
+    '- name: Report to Proof of Done',
+    '  if: always()',
+    '  env:',
+    '    POD_KEY: ${{ secrets.PROOF_OF_DONE_KEY }}',
+    '    REF: ${{ github.head_ref || github.ref_name }}',
+    '    SHA: ${{ github.event.pull_request.head.sha || github.sha }}',
+    '    STATUS: ${{ job.status }}',
+    '  run: |',
+    '    jq -n --arg ref "$REF" --arg commit "$SHA" --arg status "$STATUS" \\',
+    '      --arg repository "$GITHUB_REPOSITORY" --arg workflow "$GITHUB_WORKFLOW" --arg run "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT" \\',
+    '      --arg url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \\',
+    "      '{ref: $ref, commit: $commit, status: $status, repository: $repository, workflow: $workflow, run: $run, url: $url}' |",
+    `    curl -sS -X POST "${url}" \\`,
+    '      -H "Authorization: Bearer $POD_KEY" -H "Content-Type: application/json" -d @-',
+    '# For a test run, send "passed" and "failed" (two numbers) in place of "status".',
+  ].join('\n');
+}

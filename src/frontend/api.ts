@@ -31,6 +31,15 @@ export function messageOf(error: unknown): string {
   return 'Something went wrong. Try again in a moment.';
 }
 
+/** The state of the project's pipeline key, and the address a pipeline posts to. */
+export interface PipelineView {
+  exists: boolean;
+  createdAt: number | null;
+  createdBy: string | null;
+  lastUsedAt: number | null;
+  url: string;
+}
+
 export const api = {
   getContract: () => call<ContractView>('getContract'),
   createContract: (withSuggestions: boolean) => call<ContractView>('createContract', { withSuggestions }),
@@ -50,4 +59,7 @@ export const projectApi = {
   saveSettings: (settings: ProjectSettings) => call<ProjectSettings>('saveSettings', { settings }),
   loadSample: (index: number) => call<SampleStep>('loadSample', { index }),
   removeSample: () => call<SampleRemoval>('removeSample'),
+  getPipeline: () => call<PipelineView>('getPipeline'),
+  createPipelineKey: () => call<PipelineView & { key: string }>('createPipelineKey'),
+  removePipelineKey: () => call<PipelineView>('removePipelineKey'),
 };

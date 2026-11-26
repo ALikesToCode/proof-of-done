@@ -17,7 +17,7 @@ import {
   VerdictChannel,
 } from '../core/types';
 import { withSchema } from './schema';
-import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from './types';
+import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, PipelineKey, SampleMarker } from './types';
 
 type Row = Record<string, unknown>;
 
@@ -279,6 +279,37 @@ export class SqlContractStore implements ContractStore {
       actorAccountId,
       now,
     );
+  }
+
+  async getPipelineKey(projectId: string): Promise<PipelineKey | null> {
+    const rows = await select('SELECT key_hash, created_by, created_at, last_used_at FROM pod_pipeline_keys WHERE project_id = ?', projectId);
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      projectId,
+      hash: str(row['key_hash']),
+      createdBy: row['created_by'] === null || row['created_by'] === undefined ? null : str(row['created_by']),
+      createdAt: num(row['created_at']),
+      lastUsedAt: row['last_used_at'] === null || row['last_used_at'] === undefined ? null : num(row['last_used_at']),
+    };
+  }
+
+  async savePipelineKey(key: PipelineKey): Promise<void> {
+    await write(
+      'INSERT INTO pod_pipeline_keys (project_id, key_hash, created_by, created_at, last_used_at) VALUES (?, ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE key_hash = VALUES(key_hash), created_by = VALUES(created_by), created_at = VALUES(created_at), last_used_at = NULL',
+      key.projectId,
+      key.hash,
+      key.createdBy,
+      key.createdAt,
+    );
+  }
+
+  async deletePipelineKey(projectId: string): Promise<void> {
+    await write('DELETE FROM pod_pipeline_keys WHERE project_id = ?', projectId);
+  }
+
+  async markPipelineKeyUsed(projectId: string, now: number): Promise<void> {
+    await write('UPDATE pod_pipeline_keys SET last_used_at = ? WHERE project_id = ?', now, projectId);
   }
 
   async listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]> {

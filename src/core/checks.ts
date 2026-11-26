@@ -16,6 +16,8 @@ export interface CheckInput {
   channel: EvidenceChannel;
   /** URLs already submitted against other criteria of the same work item. */
   otherUrls?: string[];
+  /** The project counts a test run or a build only when its pipeline reports it. */
+  pipelineOnly?: boolean;
 }
 
 export const KIND_LABEL: Record<RequiredKind, string> = {
@@ -41,6 +43,13 @@ export function runChecks(input: CheckInput): CheckResult[] {
     fail('kind.match', `This criterion needs ${KIND_LABEL[input.requiredKind]}, but this is ${KIND_LABEL[kind]}.`);
   } else {
     pass('kind.match', `Evidence kind fits the criterion (${KIND_LABEL[kind]}).`);
+  }
+
+  if (input.pipelineOnly && (kind === 'test_run' || kind === 'build') && input.channel !== 'ci' && input.channel !== 'sample') {
+    fail(
+      'source.pipeline',
+      `This project counts ${KIND_LABEL[kind]} only when its pipeline reports it. The pipeline reports with the project's key, and a person or an agent cannot.`,
+    );
   }
 
   if (input.summary.trim().length < 10) {
@@ -153,9 +162,13 @@ export function isHttpUrl(value: string): boolean {
 }
 
 const INT_FIELDS = ['passed', 'failed', 'skipped', 'exitCode'] as const;
-const TEXT_LIMITS: Record<'command' | 'commit' | 'status' | 'text', number> = {
+const TEXT_LIMITS: Record<'command' | 'commit' | 'branch' | 'repository' | 'workflow' | 'run' | 'status' | 'text', number> = {
   command: 300,
   commit: 64,
+  branch: 200,
+  repository: 200,
+  workflow: 200,
+  run: 64,
   status: 32,
   text: 4000,
 };

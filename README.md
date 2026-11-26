@@ -142,6 +142,7 @@ It is built for teams that hand Jira work to AI coding agents. The agent reads t
 - **Evidence with checks.** Evidence is a test run, a build, a pull request, a document, a person's attestation, or something else with a link or an excerpt. The app checks each piece the moment it arrives. A test run with failures, a link that is not a pull request, or a build with no result is turned away with the reason.
 - **A verdict on each piece.** Evidence that passes the checks waits for a review, except an attestation, which the app accepts when it arrives. A person or the Proof Verifier, a Rovo agent that ships with the app, accepts or rejects each piece that waits. A rejection needs a reason, and the Proof Verifier gives a reason for every verdict. By default a person cannot accept evidence they typed in themselves. A project can allow that, and the panel then labels the proof self-reviewed. The project page and the JQL field show it as proven. A person can accept evidence that their own coding agent submitted, and the app counts that as a review by someone else. An attestation proves its criterion when it comes from someone who is not the assignee, also when the work item has no assignee. An attestation by the assignee needs a second reader, unless the project allows self-review.
 - **A second source for pull requests and builds.** When evidence links a pull request or a build, the app asks Jira's Teamwork Graph what the connected development tool reported for that work item. The reviewer sees whether the two agree.
+- **Results from the pipeline.** The project's pipeline reports test runs and builds with a key that agents and people do not hold. A passing result proves its criterion, and a newer commit turns proof of an earlier one stale.
 - **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright.
 - **Project meter.** One page per project says whether the work is climbing, busy but not climbing, or stalled. It lists the work items under contract that you can see, up to the 200 that changed most recently, with what each still needs.
 - **Tools for coding agents.** An MCP server lets an outside agent fetch the contract and a context pack and submit evidence. It has no tool that records a verdict.
@@ -184,6 +185,24 @@ Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat 
 
 Rovo shows the verdicts in a card first, each with a checkbox. The agent records them when you press Confirm selected.
 
+### Results from the pipeline
+
+Evidence that an agent or a person submits is their own word. A test run they report says what they say it says. The one source they cannot write is the project's pipeline, so the app lets the pipeline report for itself.
+
+1. A project admin opens the Settings tab of the project's Proof of Done page, presses Set up the pipeline, then Create a key. The key is shown once. Store it as a secret in the pipeline.
+2. Add the step the page shows to the pipeline. It posts the result of the job, the commit, the repository, the workflow and the run to the address on the page. The work item key comes from the branch name, so name the branch after the work item, for example `ABC-12-export`.
+3. The app stores the result as evidence from the pipeline, on the criterion that asks for a test run or a build. A criterion that takes any evidence counts too when its wording asks for one, such as "All unit tests pass".
+
+What follows from it:
+
+- **A passing result proves its criterion without a person.** A failing one is stored and proves nothing. A project can ask for a person's review all the same.
+- **Proof is bound to a commit.** When the pipeline reports a newer commit, evidence about an earlier commit shows as "Earlier commit" and stops counting. Its criterion is open again, and the done gate says so. This also covers what an agent submitted with a commit.
+- **A project can take test runs and builds only from the pipeline.** With that rule on, the app turns away a test run that an agent or a person reports, and says why.
+
+The key is for one project. Whoever holds it can report results for that project, so keep it where the pipeline's other secrets are. The app stores only its hash. Replace it on the same page, and the key before stops working.
+
+A pipeline's result shows that the checks the pipeline ran passed on that commit. It does not show that those checks cover the criterion. That is still for a person to judge.
+
 ### The Teamwork Graph check
 
 Evidence for a pull request or a build says what its author says. When a code host or a CI tool is connected to Jira, the Teamwork Graph holds what that tool reported for the work item. The app compares the two and puts a note in the Review dialog.
@@ -217,7 +236,7 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
 ### What it stores and what it may do
 
 - Its scopes are `read:jira-work` and `write:jira-work`, and four Teamwork Graph scopes that only read: `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`.
-- Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app makes no outbound network calls, and the Forge CLI reports it as eligible for Runs on Atlassian. It gives contract and work item data to Jira, to Rovo when someone asks the Proof Verifier, and to a coding agent that a person connects.
+- Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app makes no outbound network calls, and the Forge CLI reports it as eligible for Runs on Atlassian. The address a pipeline posts to answers only with fixed responses. It gives contract and work item data to Jira, to Rovo when someone asks the Proof Verifier, and to a coding agent that a person connects.
 - The app makes no LLM calls. The reasoning happens in Rovo and in the coding agent.
 - It reads work items and the Teamwork Graph as the person who is using it, and asks Jira whether that person may edit them. As itself it comments on or moves a work item that was closed with an unproven contract, writes the work item property `proof-of-done` that JQL searches, and creates and deletes the sample work items.
 - When a work item is deleted, the app deletes everything it stored for it.

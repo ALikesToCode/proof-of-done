@@ -94,6 +94,11 @@ export class ProjectService {
     };
   }
 
+  /** Throws unless the caller administers the project. */
+  async requireAdmin(projectId: string, what: string): Promise<void> {
+    await requireAdmin(this.jira, await this.project(projectId), what);
+  }
+
   /** Saves the project's settings. Only someone who administers the project may. */
   async saveSettings(projectId: string, actorAccountId: string | null, raw: unknown): Promise<ProjectSettings> {
     const project = await this.project(projectId);
@@ -114,6 +119,8 @@ export class ProjectService {
         gateMode: settings.gateMode,
         requireIndependent: settings.requireIndependent,
         enforceWithoutContract: settings.enforceWithoutContract,
+        pipelineProves: settings.pipelineProves,
+        pipelineOnly: settings.pipelineOnly,
         rules: settings.rules.length,
       },
     });

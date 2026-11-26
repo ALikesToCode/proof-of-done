@@ -27,6 +27,7 @@ export const PROOF_STATE: Record<ProofState, Badge> = {
 
 export const STANDING: Record<EvidenceStanding, Badge> = {
   failed_checks: { label: 'Failed checks', tone: 'removed' },
+  stale: { label: 'Earlier commit', tone: 'moved' },
   pending: { label: 'Waiting for a check', tone: 'inprogress' },
   accepted: { label: 'Accepted', tone: 'success' },
   self_accepted: { label: 'Self-reviewed', tone: 'moved' },
@@ -60,7 +61,8 @@ export const REQUIRED: Record<RequiredKind, string> = {
   other: 'Other evidence',
 };
 
-export function criterionBadge(criterion: Pick<CriterionView, 'state' | 'selfReviewed' | 'needsIndependent'>): Badge {
+export function criterionBadge(criterion: Pick<CriterionView, 'state' | 'selfReviewed' | 'needsIndependent'> & { stale?: boolean }): Badge {
+  if (criterion.stale) return { label: 'Proven for an earlier commit', tone: 'moved' };
   switch (criterion.state) {
     case 'proven':
       return criterion.selfReviewed ? { label: 'Proven, self-reviewed', tone: 'moved' } : { label: 'Proven', tone: 'success' };
@@ -97,7 +99,7 @@ export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'
     case 'agent':
       return evidence.agentName ? `Submitted by the agent ${evidence.agentName}` : 'Submitted by an agent';
     case 'ci':
-      return 'Sent by CI';
+      return "Reported by the project's pipeline";
     case 'graph':
       return 'Found through Teamwork Graph';
     case 'sample':
@@ -106,6 +108,9 @@ export function channelLine(evidence: Pick<EvidenceView, 'channel' | 'agentName'
       return 'Added by hand';
   }
 }
+
+/** A commit id as people quote it. */
+export const shortCommit = (commit: string): string => (/^[0-9a-f]{12,}$/i.test(commit) ? commit.slice(0, 7) : commit);
 
 /** How the panel words the state a pull request was entered with. Anything else is shown as it came. */
 const PULL_REQUEST_STATE: Record<string, string> = { closed: 'closed without merging' };
@@ -123,7 +128,9 @@ export function detailLines(details: EvidenceDetails, kind?: EvidenceKind): stri
   }
   if (details.exitCode !== undefined) lines.push(`Exit code ${details.exitCode}`);
   if (details.command) lines.push(`Command: ${details.command}`);
-  if (details.commit) lines.push(`Commit ${details.commit}`);
+  if (details.commit) lines.push(`Commit ${shortCommit(details.commit)}${details.branch ? ` on ${details.branch}` : ''}`);
+  const ran = [details.repository, details.workflow, details.run ? `run ${details.run}` : ''].filter(Boolean);
+  if (ran.length > 0) lines.push(`Ran in ${ran.join(', ')}`);
   return lines;
 }
 
@@ -190,6 +197,17 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
       const reason = typeof data['reason'] === 'string' && data['reason'] && data['reason'] !== 'Accepted.' ? ` Reason: ${data['reason']}` : '';
       return `${who}${verb} evidence for ${quote(data['text'])}${self}.${reason}`;
     }
+    case 'proof.stale': {
+      const count = Number(data['criteria'] ?? 0);
+      const commit = typeof data['commit'] === 'string' ? shortCommit(data['commit']) : 'a new commit';
+      return `reported commit ${commit}, so ${count === 1 ? 'one criterion is' : `${count} criteria are`} open again: the proof was about an earlier commit`;
+    }
+    case 'pipeline.key_created':
+      return "made the key the project's pipeline reports with";
+    case 'pipeline.key_replaced':
+      return "replaced the pipeline's key, so the one before stopped working";
+    case 'pipeline.key_removed':
+      return "removed the pipeline's key";
     case 'proof.completed':
       return 'made the last change that proved every criterion';
     case 'proof.reopened':
@@ -219,6 +237,7 @@ const sentence = (value: unknown): string => (typeof value === 'string' && value
 
 /** Who an entry in the history is attributed to when no person did it. */
 export function actorLabel(entry: Pick<HistoryEntry, 'channel'>): string {
+  if (entry.channel === 'ci') return "The project's pipeline";
   return entry.channel === 'sample' ? 'Sample data' : 'The app';
 }
 

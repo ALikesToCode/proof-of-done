@@ -26,17 +26,21 @@ export type EvidenceChannel = 'ui' | 'agent' | 'ci' | 'graph' | 'sample';
 
 /**
  * Who decided. `check` is the app's own mechanical checks (they can only reject),
- * `verifier` is the Proof Verifier agent, `ui` is a person, and `attestation` is the
- * decision implied by a person's signed statement.
+ * `verifier` is the Proof Verifier agent, `ui` is a person, `attestation` is the
+ * decision implied by a person's signed statement, and `ci` is the project's pipeline
+ * reporting its own result with the project's key.
  */
-export type VerdictChannel = 'check' | 'verifier' | 'ui' | 'attestation' | 'sample';
+export type VerdictChannel = 'check' | 'verifier' | 'ui' | 'attestation' | 'ci' | 'sample';
 
 export type Decision = 'accepted' | 'rejected';
 
 export type CriterionState = 'unproven' | 'submitted' | 'proven' | 'rejected';
 
-/** Where one piece of evidence stands after checks and verdicts. */
-export type EvidenceStanding = 'failed_checks' | 'pending' | 'accepted' | 'self_accepted' | 'rejected';
+/**
+ * Where one piece of evidence stands after checks and verdicts. `stale` is evidence about
+ * a commit the project's pipeline has since moved past. It proves nothing any more.
+ */
+export type EvidenceStanding = 'failed_checks' | 'stale' | 'pending' | 'accepted' | 'self_accepted' | 'rejected';
 
 /** Proof state of a whole work item. Also written to the issue property that JQL reads. */
 export type ProofState = 'none' | 'unproven' | 'partial' | 'proven';
@@ -71,6 +75,12 @@ export interface EvidenceDetails {
   exitCode?: number;
   command?: string;
   commit?: string;
+  /** The branch a pipeline ran on. */
+  branch?: string;
+  /** Where a pipeline ran: the repository, the workflow or job, and the run with its attempt. */
+  repository?: string;
+  workflow?: string;
+  run?: string;
   /** Build result or pull request state, lower-cased. */
   status?: string;
   /** Short excerpt: a log tail, or the wording of an attestation. */
@@ -117,6 +127,8 @@ export interface ProofSummary {
   unproven: number;
   /** Criteria that count as proven only because the project allows self-review. */
   selfReviewed: number;
+  /** Criteria whose only proof is about a commit the pipeline has moved past. Counted in `unproven`. */
+  stale: number;
   state: ProofState;
 }
 
@@ -137,5 +149,9 @@ export interface ProjectSettings {
   gateMode: GateMode;
   /** When true, a work item with no contract also fails the gate. */
   enforceWithoutContract: boolean;
+  /** When true, a passing result that the project's pipeline reports proves its criterion without a person. */
+  pipelineProves: boolean;
+  /** When true, a test run or a build counts only when the project's pipeline reports it. */
+  pipelineOnly: boolean;
   rules: ProjectRule[];
 }

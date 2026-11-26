@@ -8,7 +8,7 @@ import { Decision, EvidenceDetails, EvidenceKind, GateMode, ProofState, Required
  * Types only.
  */
 
-export type AgentStanding = 'failed_checks' | 'waiting_for_review' | 'accepted' | 'accepted_by_submitter' | 'rejected';
+export type AgentStanding = 'failed_checks' | 'stale_commit' | 'waiting_for_review' | 'accepted' | 'accepted_by_submitter' | 'rejected';
 export type AgentCriterionState = 'no_evidence' | 'waiting_for_review' | 'proven' | 'rejected';
 
 export interface AgentEvidence {
@@ -67,6 +67,8 @@ export interface AgentContract {
   hasContract: boolean;
   proof: AgentProof;
   gate: AgentGate;
+  /** The commit the project's pipeline last reported on for this work item. Evidence about an earlier commit does not count. */
+  commit?: string;
   criteria: AgentCriterion[];
   /** Criteria found in the description or the project rules that are not in the contract. */
   suggested?: Array<{ text: string; needs: RequiredKind; from: string }>;

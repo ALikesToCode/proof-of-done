@@ -105,13 +105,13 @@ describe('criterionProof', () => {
     const bad = evidence('e1', 'c1');
     const good = evidence('e2', 'c1');
     const verdicts = [verdict('v1', bad, 'rejected'), verdict('v2', good, 'accepted')];
-    expect(criterionProof('c1', [bad, good], verdicts, true)).toEqual({ state: 'proven', selfReviewed: false, needsIndependent: false });
+    expect(criterionProof('c1', [bad, good], verdicts, true)).toEqual({ state: 'proven', selfReviewed: false, needsIndependent: false, stale: false });
   });
   it('keeps a self-accepted criterion open when the project requires an independent check', () => {
     const e = evidence('e1', 'c1', { channel: 'ui' });
     const self = verdict('v1', e, 'accepted', { independent: false, actorAccountId: 'ann' });
-    expect(criterionProof('c1', [e], [self], true)).toEqual({ state: 'submitted', selfReviewed: false, needsIndependent: true });
-    expect(criterionProof('c1', [e], [self], false)).toEqual({ state: 'proven', selfReviewed: true, needsIndependent: false });
+    expect(criterionProof('c1', [e], [self], true)).toEqual({ state: 'submitted', selfReviewed: false, needsIndependent: true, stale: false });
+    expect(criterionProof('c1', [e], [self], false)).toEqual({ state: 'proven', selfReviewed: true, needsIndependent: false, stale: false });
   });
   it('ignores evidence that belongs to other criteria', () => {
     const other = evidence('e1', 'c2');
@@ -128,7 +128,7 @@ describe('summarize', () => {
     const e1 = evidence('e1', 'c1');
     const e2 = evidence('e2', 'c2');
     const summary = summarize([c1, c2, c3, removed], [e1, e2], [verdict('v1', e1, 'accepted')], true);
-    expect(summary).toEqual({ total: 3, proven: 1, submitted: 1, rejected: 0, unproven: 1, selfReviewed: 0, state: 'partial' });
+    expect(summary).toEqual({ total: 3, proven: 1, submitted: 1, rejected: 0, unproven: 1, selfReviewed: 0, stale: 0, state: 'partial' });
   });
   it('is "none" without criteria, "unproven" without evidence and "proven" when everything is accepted', () => {
     expect(summarize([], [], [], true).state).toBe('none');

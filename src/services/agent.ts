@@ -88,11 +88,13 @@ const DECIDER: Record<VerdictChannel, string> = {
   verifier: 'the Proof Verifier',
   attestation: 'the attestation itself',
   check: 'the automatic checks',
+  ci: "the project's pipeline",
   sample: 'the sample data',
 };
 
 const STANDING: Record<EvidenceStanding, AgentStanding> = {
   failed_checks: 'failed_checks',
+  stale: 'stale_commit',
   pending: 'waiting_for_review',
   accepted: 'accepted',
   self_accepted: 'accepted_by_submitter',
@@ -162,7 +164,21 @@ function whyTurnedAway(evidence: EvidenceView | undefined): string {
   return '';
 }
 
-function nextStep(criterion: CriterionView): string {
+const PIPELINE_KINDS: readonly RequiredKind[] = ['test_run', 'build'];
+const FROM_PIPELINE =
+  "Only the project's pipeline can prove this one. Push your commit on a branch that has the work item key in its name and wait for the pipeline to report. Do not submit it yourself: the app turns it away.";
+
+function nextStep(criterion: CriterionView, view: Pick<ContractView, 'commit' | 'policy'>): string {
+  const pipelineOnly = view.policy.pipelineOnly && PIPELINE_KINDS.includes(criterion.requiredKind);
+  if (criterion.stale) {
+    const at = view.commit ? `The pipeline is at commit ${view.commit.slice(0, 12)} now. ` : '';
+    return `Open again. ${at}The proof on record is about an earlier commit and no longer counts. ${
+      pipelineOnly ? 'Wait for the pipeline to report on the new commit.' : 'Submit evidence about the new commit, or wait for the pipeline to report on it.'
+    }`;
+  }
+  if (pipelineOnly && (criterion.state === 'unproven' || criterion.state === 'rejected')) {
+    return `${FROM_PIPELINE} ${criterion.state === 'rejected' ? whyTurnedAway(criterion.evidence[0]) : ''}`.trim();
+  }
   switch (criterion.state) {
     case 'proven':
       return 'Nothing. This criterion is proven.';
@@ -177,13 +193,13 @@ function nextStep(criterion: CriterionView): string {
   }
 }
 
-export function toAgentCriterion(criterion: CriterionView): AgentCriterion {
+export function toAgentCriterion(criterion: CriterionView, view: Pick<ContractView, 'commit' | 'policy'>): AgentCriterion {
   return {
     id: criterion.id,
     text: criterion.text,
     needs: criterion.requiredKind,
     state: CRITERION_STATE[criterion.state],
-    next: nextStep(criterion),
+    next: nextStep(criterion, view),
     evidence: criterion.evidence.slice(0, EVIDENCE_SHOWN).map(toAgentEvidence),
     ...(criterion.evidence.length > EVIDENCE_SHOWN ? { evidenceTotal: criterion.evidence.length } : {}),
   };
@@ -230,7 +246,8 @@ export function toAgentContract(view: ContractView): AgentContract {
     hasContract: view.exists,
     proof: toProof(view),
     gate: toGate(view),
-    criteria: view.criteria.map(toAgentCriterion),
+    ...(view.commit ? { commit: view.commit } : {}),
+    criteria: view.criteria.map((criterion) => toAgentCriterion(criterion, view)),
     ...(suggested.length > 0 ? { suggested } : {}),
     next: overallNext(view),
   };
@@ -245,6 +262,10 @@ function proofRules(policy: ContractView['policy']): string[] {
     'You cannot add, change or remove criteria. If a criterion is wrong or cannot be met, tell the person who gave you the work.',
     `When you submit a pull request or a build, the reviewer sees whether Jira's Teamwork Graph links it to the work item. ${HOW_JIRA_LINKS}`,
   ];
+  rules.push(
+    "The project's pipeline can report a test run or a build itself, bound to a commit. When it reports a newer commit, evidence about an earlier commit stops counting, yours included. Name the commit in `details.commit` when your evidence is about one.",
+  );
+  if (policy.pipelineOnly) rules.push(FROM_PIPELINE.replace('this one', 'a criterion that needs a test run or a build'));
   if (policy.gateMode === 'warn') {
     rules.push('Do not move the work item to a done status before every criterion is proven. The done gate comments on work that is closed without proof.');
   }
@@ -370,7 +391,7 @@ export class AgentService {
       passedChecks,
       problems: failedChecks(evidence),
       ...(note ? { graph: note.text } : {}),
-      criterion: toAgentCriterion(criterion),
+      criterion: toAgentCriterion(criterion, view),
       proof: toProof(view),
       gate: toGate(view),
       next,
@@ -523,7 +544,7 @@ export class AgentService {
     return {
       evidenceId,
       decision,
-      criterion: toAgentCriterion(criterion),
+      criterion: toAgentCriterion(criterion, view),
       proof: toProof(view),
       gate: toGate(view),
       next: parts.join(' '),
