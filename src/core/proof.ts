@@ -202,6 +202,9 @@ export function summarize(
   return summary;
 }
 
+/** How long a work item that someone let through the done gate stays let through. */
+export const PASS_MINUTES = 30;
+
 export interface GateDecision {
   pass: boolean;
   reason: string;

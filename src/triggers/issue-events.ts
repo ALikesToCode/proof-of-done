@@ -1,6 +1,6 @@
 import { errorLine } from '../core/errors';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
-import { GateService, StatusChange, ValidatorResult } from '../services/gate';
+import { GateService, REFUSES_BROKEN, StatusChange, ValidatorResult } from '../services/gate';
 import { SqlContractStore } from '../store/sql-store';
 
 const store = new SqlContractStore();
@@ -64,17 +64,23 @@ export async function onIssueDeleted(event: unknown): Promise<void> {
   console.log(`Proof of Done: work item ${issueId} was deleted, so its contract is gone too.`);
 }
 
-/** The workflow validator: Jira asks whether a transition may go ahead. */
+/**
+ * The workflow validator: Jira asks whether a transition may go ahead. The answer for a
+ * check that could not be made is the project's choice, and the gate applies it. What is
+ * left for here is a fault nobody planned for, and that refuses too: a validator that
+ * says yes when it did not look is worth nothing.
+ */
 export async function validateDone(request: unknown): Promise<ValidatorResult> {
   const payload = object(request);
   const issue = object(payload['issue']);
-  const ref = text(issue['key']) || text(issue['id']);
+  const id = text(issue['id']) || null;
+  const ref = text(issue['key']) || id;
+  // A work item that is being created has no key yet, and no contract either.
   if (!ref) return { result: true };
   try {
-    return await gate.validate(ref, text(object(payload['user'])['accountId']) || null);
+    return await gate.validate(ref, text(object(payload['user'])['accountId']) || null, id);
   } catch (error) {
-    // A fault in this app must not lock a team out of its own workflow.
-    console.error(`Proof of Done: the validator failed for ${ref} and let the transition through. ${errorLine(error)}`);
-    return { result: true };
+    console.error(`Proof of Done: the validator failed for ${ref} and refused the transition. ${errorLine(error)}`);
+    return { result: false, errorMessage: REFUSES_BROKEN };
   }
 }

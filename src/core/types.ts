@@ -149,6 +149,12 @@ export interface ProjectSettings {
   gateMode: GateMode;
   /** When true, a work item with no contract also fails the gate. */
   enforceWithoutContract: boolean;
+  /**
+   * What the workflow validator answers when it could not check a work item, because Jira
+   * or the app's storage did not answer or the app may not read the work item. True
+   * refuses the transition. False lets it through and says so in the work item's history.
+   */
+  strictGate: boolean;
   /** When true, a passing result that the project's pipeline reports proves its criterion without a person. */
   pipelineProves: boolean;
   /** When true, a test run or a build counts only when the project's pipeline reports it. */

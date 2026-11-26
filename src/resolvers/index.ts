@@ -4,6 +4,7 @@ import { PodError, errorLine } from '../core/errors';
 import { ForgeGraphGateway } from '../graph/forge-graph';
 import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { Caller, ContractService } from '../services/contracts';
+import { GateService } from '../services/gate';
 import { GraphService } from '../services/graph';
 import { GuideService } from '../services/guide';
 import { ProjectService } from '../services/project';
@@ -26,6 +27,7 @@ const projects = new ProjectService(store, jira);
 const samples = new SampleService(store, jira);
 const guide = new GuideService(store, jira);
 const receipts = new ReceiptService(store, jira);
+const gate = new GateService(store, jira);
 
 /** Where the project's pipeline posts its results. The same address for every project of the site. */
 const pipelineUrl = (): Promise<string> => webTrigger.getUrl('pipeline-receipt');
@@ -114,6 +116,12 @@ define('recordVerdict', (issueId, caller, payload) =>
     reason: text(payload['reason']) || null,
   }),
 );
+
+// The gate checks that the caller administers the project. The panel then shows the pass.
+define('letThrough', async (issueId, caller, payload) => {
+  await gate.letThrough(issueId, caller.accountId, payload['reason']);
+  return service.view(issueId, caller);
+});
 
 define('getHistory', (issueId) => service.history(issueId));
 

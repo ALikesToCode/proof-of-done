@@ -7,6 +7,7 @@ import { AddCriterion } from './components/AddCriterion';
 import { AskVerifier } from './components/AskVerifier';
 import { Criterion } from './components/Criterion';
 import { CriterionModal } from './components/CriterionModal';
+import { GateNotice } from './components/GateNotice';
 import { EvidenceModal } from './components/EvidenceModal';
 import { HistoryModal } from './components/HistoryModal';
 import { NoContract } from './components/NoContract';
@@ -135,6 +136,7 @@ const App = () => {
   return (
     <Stack space="space.150">
       <Summary view={view} onHistory={() => setDialog({ type: 'history' })} onRefresh={() => void load()} />
+      <GateNotice view={view} onChanged={saved} />
       {problem && (
         <SectionMessage appearance="error">
           <Text>{problem}</Text>

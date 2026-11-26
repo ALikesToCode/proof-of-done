@@ -142,7 +142,7 @@ It is built for teams that hand Jira work to AI coding agents. The agent reads t
 - **A verdict on each piece.** Evidence that passes the checks waits for a review, except an attestation, which the app accepts when it arrives. A person or the Proof Verifier, a Rovo agent that ships with the app, accepts or rejects each piece that waits. A rejection needs a reason, and the Proof Verifier gives a reason for every verdict. By default a person cannot accept evidence they typed in themselves. A project can allow that, and the panel then labels the proof self-reviewed. The project page and the JQL field show it as proven. A person can accept evidence that their own coding agent submitted, and the app counts that as a review by someone else. An attestation proves its criterion when it comes from someone who is not the assignee, also when the work item has no assignee. An attestation by the assignee needs a second reader, unless the project allows self-review.
 - **A second source for pull requests and builds.** When evidence links a pull request or a build, the app asks Jira's Teamwork Graph what the connected development tool reported for that work item. The reviewer sees whether the two agree.
 - **Results from the pipeline.** The project's pipeline reports test runs and builds with a key that agents and people do not hold. A passing result proves its criterion, and a newer commit turns proof of an earlier one stale.
-- **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright.
+- **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright, and it refuses too when it could not check, unless the project chooses otherwise.
 - **Project meter.** One page per project says whether the work is climbing, busy but not climbing, or stalled. It lists the work items under contract that you can see, up to the 200 that changed most recently, with what each still needs.
 - **Tools for coding agents.** An MCP server lets an outside agent fetch the contract and a context pack and submit evidence. It has no tool that records a verdict.
 - **JQL.** `statusCategory = Done AND proofState != proven` finds closed work whose contract is not fully proven.
@@ -174,6 +174,10 @@ The comment and the move back happen after the work item was closed. To stop the
 3. Choose "Proof of Done is complete" and publish the workflow.
 
 Jira then refuses the transition and shows what is missing, for example "Proof of Done: 5 of 5 criteria are not proven (5 with no evidence). Add or review evidence in the Proof of Done panel."
+
+The validator also refuses when it could not check: Jira or the app's storage did not answer, or the app may not read the work item. The message says which. A project can choose to let such a transition through instead, under "When the validator cannot check a work item" in the settings. If the app cannot read that setting either, it refuses.
+
+Someone who administers the project can let one work item through from its Proof of Done panel, with a reason. That holds for 30 minutes, the reason is kept in the history and in a comment, and the work item still counts as not proven. If the panel does not load either, a Jira admin can take the validator off the transition.
 
 Remove the validator from every workflow before you uninstall the app. A validator that is left behind blocks its transition.
 

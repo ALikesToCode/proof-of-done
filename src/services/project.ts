@@ -120,6 +120,7 @@ export class ProjectService {
         gateMode: settings.gateMode,
         requireIndependent: settings.requireIndependent,
         enforceWithoutContract: settings.enforceWithoutContract,
+        strictGate: settings.strictGate,
         pipelineProves: settings.pipelineProves,
         pipelineOnly: settings.pipelineOnly,
         rules: settings.rules.length,

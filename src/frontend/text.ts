@@ -7,7 +7,7 @@ import type {
   RequiredKind,
 } from '../core/types';
 import type { GraphFinding } from '../core/graph';
-import { awaitsReview } from '../core/proof';
+import { PASS_MINUTES, awaitsReview } from '../core/proof';
 import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
 import { GUIDE_STEPS, GUIDE_WORKFLOW } from '../core/sample';
 
@@ -219,6 +219,7 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
       return 'made a change that left the work item no longer fully proven';
     case 'issue.done': {
       const status = statusName(data['status'], 'a done status');
+      if (data['letThrough'] === true) return `moved the work item to ${status} without proof, let through by someone who administers the project`;
       if (data['contract'] === false) return `moved the work item to ${status} before it had a contract`;
       return data['proven'] === true
         ? `moved the work item to ${status} with every criterion proven`
@@ -236,14 +237,41 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
     case 'gate.bounced':
       return `closed the work item without proof, and the done gate moved it back to ${statusName(data['backTo'], 'where it was')}.${sentence(data['reason'])}`;
     case 'gate.blocked':
-      return `tried to move the work item on, and the workflow validator refused.${sentence(data['reason'])}`;
+      return data['unchecked'] === true
+        ? `tried to move the work item on, and the workflow validator refused because it could not check.${sentence(data['reason'])}`
+        : `tried to move the work item on, and the workflow validator refused.${sentence(data['reason'])}`;
+    case 'gate.unchecked':
+      return `moved the work item on while the workflow validator could not check it. The project lets that through.${sentence(data['reason'])}`;
+    case 'gate.pass_granted':
+      return `let the work item through the done gate for ${PASS_MINUTES} minutes, without proof.${sentence(reasonOf(data['reason']))}`;
+    case 'gate.let_through':
+      return `moved the work item on with that pass. Without it the validator would have refused.${sentence(data['instead'])}`;
     default:
       return entry.type;
   }
 }
 
 const statusName = (value: unknown, fallback: string): string => (typeof value === 'string' && value ? value : fallback);
+const reasonOf = (value: unknown): string => (typeof value === 'string' && value ? `Reason: ${value}` : '');
 const sentence = (value: unknown): string => (typeof value === 'string' && value ? ` ${value}` : '');
+
+/** What the panel says while a pass holds. */
+export function passLine(pass: { until: number; reason: string }, now: number): string {
+  const minutes = Math.max(1, Math.ceil((pass.until - now) / 60_000));
+  const left = minutes === 1 ? 'one more minute' : `${minutes} more minutes`;
+  return `Someone who administers the project let this work item through for ${left}. Reason: ${pass.reason} It is still not proven.`;
+}
+
+/** What the panel says after the validator could not check this work item. */
+export function uncheckedLine(unchecked: { at: number; reason: string; refused: boolean }, now: number, canLetThrough: boolean): string {
+  const when = timeAgo(unchecked.at, now);
+  const start = `${when.charAt(0).toUpperCase()}${when.slice(1)}:`;
+  if (!unchecked.refused) return `${start} ${unchecked.reason} This project lets such a transition through, so check the proof below.`;
+  const way = canLetThrough
+    ? 'If it lasts, you can let this work item through below.'
+    : 'If it lasts, someone who administers the project can let this work item through here.';
+  return `${start} ${unchecked.reason} This project refuses a transition the app cannot check. Try the transition again. ${way}`;
+}
 
 /** Who an entry in the history is attributed to when no person did it. */
 export function actorLabel(entry: Pick<HistoryEntry, 'channel'>): string {

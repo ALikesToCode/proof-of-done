@@ -6,6 +6,8 @@ import {
   channelLine,
   criterionBadge,
   describeEvent,
+  passLine,
+  uncheckedLine,
   detailLines,
   excerptHead,
   proofLine,
@@ -83,7 +85,7 @@ describe('badges and lines', () => {
 describe('asking the Proof Verifier', () => {
   const evidence = (standing: EvidenceView['standing']) => ({ standing }) as EvidenceView;
   const view = (requireIndependent: boolean) => ({
-    policy: { requireIndependent, gateMode: 'warn' as const, pipelineOnly: false },
+    policy: { requireIndependent, gateMode: 'warn' as const, pipelineOnly: false, strictGate: true },
     criteria: [
       { evidence: [evidence('pending'), evidence('rejected')] },
       { evidence: [evidence('self_accepted'), evidence('accepted'), evidence('failed_checks')] },
@@ -134,6 +136,48 @@ describe('describeEvent', () => {
     const long = 'x'.repeat(200);
     expect(describeEvent({ type: 'criterion.removed', data: { text: long } }).length).toBeLessThan(130);
     expect(describeEvent({ type: 'something.new', data: {} })).toBe('something.new');
+  });
+});
+
+describe('a check that could not be made, and a pass', () => {
+  const REASON = "The app's storage did not answer, so it could not check MOBL-1.";
+
+  it('says in the history what the validator did', () => {
+    expect(describeEvent({ type: 'gate.blocked', data: { reason: REASON, unchecked: true } })).toBe(
+      `tried to move the work item on, and the workflow validator refused because it could not check. ${REASON}`,
+    );
+    expect(describeEvent({ type: 'gate.unchecked', data: { reason: REASON } })).toBe(
+      `moved the work item on while the workflow validator could not check it. The project lets that through. ${REASON}`,
+    );
+    expect(describeEvent({ type: 'gate.pass_granted', data: { reason: 'Hotfix for the outage.' } })).toBe(
+      'let the work item through the done gate for 30 minutes, without proof. Reason: Hotfix for the outage.',
+    );
+    expect(describeEvent({ type: 'gate.let_through', data: { instead: 'The one criterion has no evidence.' } })).toBe(
+      'moved the work item on with that pass. Without it the validator would have refused. The one criterion has no evidence.',
+    );
+    expect(describeEvent({ type: 'issue.done', data: { status: 'Done', proven: false, contract: true, letThrough: true } })).toBe(
+      'moved the work item to Done without proof, let through by someone who administers the project',
+    );
+  });
+
+  it('says in the panel how long a pass still holds', () => {
+    const pass = { until: 30 * 60_000, reason: 'Hotfix for the outage.' };
+    expect(passLine(pass, 0)).toBe(
+      'Someone who administers the project let this work item through for 30 more minutes. Reason: Hotfix for the outage. It is still not proven.',
+    );
+    expect(passLine(pass, 29 * 60_000 + 20_000)).toContain('for one more minute.');
+  });
+
+  it('says in the panel what happened and what to do', () => {
+    const at = 1_700_000_000_000;
+    expect(uncheckedLine({ at, reason: REASON, refused: true }, at + 5 * 60_000, false)).toBe(
+      `5 minutes ago: ${REASON} This project refuses a transition the app cannot check. Try the transition again. If it lasts, someone who administers the project can let this work item through here.`,
+    );
+    expect(uncheckedLine({ at, reason: REASON, refused: true }, at, true)).toContain('Just now:');
+    expect(uncheckedLine({ at, reason: REASON, refused: true }, at, true)).toContain('you can let this work item through below.');
+    expect(uncheckedLine({ at, reason: REASON, refused: false }, at, true)).toBe(
+      `Just now: ${REASON} This project lets such a transition through, so check the proof below.`,
+    );
   });
 });
 
