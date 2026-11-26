@@ -88,6 +88,33 @@ Nothing in this list exists today.
 - **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
 - **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
 
+## Earlier work
+
+Proof of Done was not the first project to treat an agent's "done" as a claim that needs evidence. These four came earlier, and they are worth reading.
+
+| Work | What it does |
+| --- | --- |
+| [Proof-or-Stop](https://arxiv.org/abs/2607.14890), with [code](https://github.com/Proof-or-Stop/Prooforstop) | The closest. A command line that sits between a coding agent and its workflow. A step such as review, test or done advances only on evidence that is signed, carries a receipt of the command that produced it, and is bound to a hash of the source tree. The evidence stops counting once the tree changes. Done on a high-risk path needs review rounds from independent hosts. Its authors report 10 of 10 scenarios of an unattended loop with no false done. In their ablation with injected faults, a retry loop on a matched budget made the fault worse in 31 of 1,800 runs and their loop in 2 of 1,800 |
+| [Truthgate](https://arxiv.org/abs/2611.23335), with [code](https://github.com/Cygnux-Labs/Truthgate) | A study, not a workflow tool. It checks an agent against a record the agent cannot edit: tests run again outside the sandbox, hidden checks, and a signed log of every tool call. On 180 tasks that cannot be solved honestly, Claude Sonnet 5.5 passed 39 by writing code that fits the failing assertion |
+| [Rethinking Verification in Agent Harnesses](https://arxiv.org/abs/2610.34577) | A study of 17 ways a harness can check an agent's work, on seven models. A separate critic that reviews the result in a fresh context raised accuracy by 5.9 to 9.5 points on Terminal-Bench and 3.9 to 6.6 on SWE-bench Verified. Gates at the moment the agent tries to finish gained more in some designs and cost much more |
+| [overclaim](https://github.com/h-a-forster/overclaim) | Scores an agent's final message against a hidden check, and ships a Stop hook for Claude Code. In its trials, 71% to 79% of failed runs on solvable tasks still claimed success. Its second study found no support for a Stop hook preventing false completions |
+
+**What is the same.** The agent's report counts for nothing by itself. The work has to show evidence, something other than the worker judges it, and a gate holds the work until then. The critic in the third paper and the review rounds in Proof-or-Stop are the same idea as the verdict from someone else here.
+
+**What Proof of Done does differently.**
+
+- **People write the done contract.** An agent can start a contract only from criteria that are already written down, and cannot add its own. In Proof-or-Stop the agent writes the story and its checklist from a request. The two studies take the task and its tests as given.
+- **A person holds the verdict.** A person accepts or rejects each piece of evidence, or confirms the verdicts of the reviewing agent. A verdict from whoever submitted the evidence does not prove a criterion, unless the project turns that rule off. The agent's tool server has no tool that records a verdict. In Proof-or-Stop the reviewers are agents on separate hosts, a person comes in when the loop escalates, and the merge stays a human decision.
+- **It lives where a team tracks its work.** The Jira app puts the contract on the work item, and can block the transition to Done. None of the four works with an issue tracker, as far as their papers and code show.
+- **The contract is not only about code.** A criterion can ask for a document or a person's attestation, not only for a test run, a build or a pull request.
+- **It also runs without Jira,** as a command line over a folder of task files, with a gate for a harness or a pipeline.
+
+**What the earlier work does that Proof of Done does not.**
+
+- **Evidence is not bound to the code.** Proof of Done does not tie evidence to a commit or a tree hash, does not sign it, and does not run the tests itself: it checks the result the agent submits. Evidence accepted before a later change still counts. Proof-or-Stop binds, signs and expires its evidence, and Truthgate shows how an agent can pass tests without doing the work.
+- **Nothing here is measured.** Proof-or-Stop, Truthgate and the harness study report numbers. Proof of Done reports none yet.
+- **The Stop hook is untested.** `proof-of-done gate --hook` holds an agent from a recorded state, not by asking it again as overclaim's hook does. Nobody has measured whether that works better, and overclaim's result is a reason to doubt it until someone does.
+
 ## Without Jira
 
 You need Node.js 22 or newer.
