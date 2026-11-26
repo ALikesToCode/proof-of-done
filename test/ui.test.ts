@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SAMPLE_ITEMS } from '../src/core/sample';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import type { IssueInfo } from '../src/jira/gateway';
@@ -81,12 +81,31 @@ beforeAll(async () => {
   };
 });
 
+/** A tab's session storage. A browser has one, and Node has one only from version 25 on. */
+function tabStorage(): Storage {
+  const held = new Map<string, string>();
+  return {
+    getItem: (name: string) => held.get(name) ?? null,
+    setItem: (name: string, value: string) => void held.set(name, value),
+    removeItem: (name: string) => void held.delete(name),
+    clear: () => held.clear(),
+    key: () => null,
+    get length() {
+      return held.size;
+    },
+  };
+}
+
+// The panel notes in the tab's storage that it looks for verdicts. A new test is a new tab.
+beforeEach(() => {
+  vi.stubGlobal('sessionStorage', tabStorage());
+});
+
 afterEach(() => {
   for (const page of mounted.splice(0)) page.unmount();
   vi.useRealTimers();
   vi.restoreAllMocks();
-  // The panel notes in the tab's storage that it looks for verdicts. A new test is a new tab.
-  globalThis.sessionStorage?.clear();
+  vi.unstubAllGlobals();
 });
 
 async function show(page: ReactElement): Promise<Page> {
