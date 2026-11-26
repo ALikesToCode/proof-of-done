@@ -1,4 +1,4 @@
-import { isForgePlatformError } from '@forge/api';
+import { isForgePlatformError, webTrigger } from '@forge/api';
 import Resolver, { Request } from '@forge/resolver';
 import { PodError, errorLine } from '../core/errors';
 import { ForgeGraphGateway } from '../graph/forge-graph';
@@ -6,6 +6,7 @@ import { ForgeJiraGateway } from '../jira/forge-gateway';
 import { Caller, ContractService } from '../services/contracts';
 import { GraphService } from '../services/graph';
 import { ProjectService } from '../services/project';
+import { ReceiptService } from '../services/receipts';
 import { SampleService } from '../services/sample';
 import { SqlContractStore } from '../store/sql-store';
 
@@ -22,6 +23,10 @@ const service = new ContractService(store, jira);
 const graphs = new GraphService(service, new ForgeGraphGateway());
 const projects = new ProjectService(store, jira);
 const samples = new SampleService(store, jira);
+const receipts = new ReceiptService(store, jira);
+
+/** Where the project's pipeline posts its results. The same address for every project of the site. */
+const pipelineUrl = (): Promise<string> => webTrigger.getUrl('pipeline-receipt');
 const resolver = new Resolver();
 
 type Payload = Record<string, unknown>;
@@ -119,5 +124,22 @@ defineProject('saveSettings', (projectId, accountId, payload) => projects.saveSe
 defineProject('loadSample', (projectId, _accountId, payload) => samples.loadOne(projectId, payload['index']));
 
 defineProject('removeSample', (projectId) => samples.remove(projectId));
+
+defineProject('getPipeline', async (projectId) => {
+  await projects.requireAdmin(projectId, "see the pipeline's key");
+  const [status, url] = await Promise.all([receipts.keyStatus(projectId), pipelineUrl()]);
+  return { ...status, url };
+});
+
+// The key is in this one answer and nowhere after it: only its hash is stored.
+defineProject('createPipelineKey', async (projectId, accountId) => {
+  const key = await receipts.createKey(projectId, accountId);
+  return { key, url: await pipelineUrl(), ...(await receipts.keyStatus(projectId)) };
+});
+
+defineProject('removePipelineKey', async (projectId, accountId) => {
+  await receipts.revokeKey(projectId, accountId);
+  return { ...(await receipts.keyStatus(projectId)), url: await pipelineUrl() };
+});
 
 export const handler = resolver.getDefinitions();

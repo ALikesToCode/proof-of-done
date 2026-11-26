@@ -85,8 +85,34 @@ Nothing in this list exists today.
 
 - **A package on npm.** Today you build the command from a clone of this repository.
 - **Verdicts signed by the reviewer.** The local adapter cannot tell a person from an agent that runs commands as that person. [docs/local.md](docs/local.md) lists what it cannot promise.
-- **A report on how often the problem happens.** Measured cases where an agent reported done and the work was not done.
-- **A public benchmark.** "The agent said done" against "it was done", from real agent runs. [benchmark/](benchmark/README.md) is the place for it and holds no data.
+- **A measurement someone else has repeated.** [benchmark/](benchmark/REPORT.md) and [control-eval/](control-eval/README.md) hold first measurements by the author. They were run before the pipeline results existed and have not been run again with them.
+
+## Earlier work
+
+Proof of Done was not the first project to treat an agent's "done" as a claim that needs evidence. These four came earlier, and they are worth reading.
+
+| Work | What it does |
+| --- | --- |
+| [Proof-or-Stop](https://arxiv.org/abs/2607.14890), with [code](https://github.com/Proof-or-Stop/Prooforstop) | The closest. A command line that sits between a coding agent and its workflow. A step such as review, test or done advances only on evidence that is signed, carries a receipt of the command that produced it, and is bound to a hash of the source tree. The evidence stops counting once the tree changes. Done on a high-risk path needs review rounds from independent hosts. Its authors report 10 of 10 scenarios of an unattended loop with no false done. In their ablation with injected faults, a retry loop on a matched budget made the fault worse in 31 of 1,800 runs and their loop in 2 of 1,800 |
+| [Truthgate](https://arxiv.org/abs/2611.23335), with [code](https://github.com/Cygnux-Labs/Truthgate) | A study, not a workflow tool. It checks an agent against a record the agent cannot edit: tests run again outside the sandbox, hidden checks, and a signed log of every tool call. On 180 tasks that cannot be solved honestly, Claude Sonnet 5.5 passed 39 by writing code that fits the failing assertion |
+| [Rethinking Verification in Agent Harnesses](https://arxiv.org/abs/2610.34577) | A study of 17 ways a harness can check an agent's work, on seven models. A separate critic that reviews the result in a fresh context raised accuracy by 5.9 to 9.5 points on Terminal-Bench and 3.9 to 6.6 on SWE-bench Verified. Gates at the moment the agent tries to finish gained more in some designs and cost much more |
+| [overclaim](https://github.com/h-a-forster/overclaim) | Scores an agent's final message against a hidden check, and ships a Stop hook for Claude Code. In its trials, 71% to 79% of failed runs on solvable tasks still claimed success. Its second study found no support for a Stop hook preventing false completions |
+
+**What is the same.** The agent's report counts for nothing by itself. The work has to show evidence, something other than the worker judges it, and a gate holds the work until then. The critic in the third paper and the review rounds in Proof-or-Stop are the same idea as the verdict from someone else here.
+
+**What Proof of Done does differently.**
+
+- **People write the done contract.** An agent can start a contract only from criteria that are already written down, and cannot add its own. In Proof-or-Stop the agent writes the story and its checklist from a request. The two studies take the task and its tests as given.
+- **A person holds the verdict.** A person accepts or rejects each piece of evidence, or confirms the verdicts of the reviewing agent. A verdict from whoever submitted the evidence does not prove a criterion, unless the project turns that rule off. The agent's tool server has no tool that records a verdict. In Proof-or-Stop the reviewers are agents on separate hosts, a person comes in when the loop escalates, and the merge stays a human decision.
+- **It lives where a team tracks its work.** The Jira app puts the contract on the work item, and can block the transition to Done. None of the four works with an issue tracker, as far as their papers and code show.
+- **The contract is not only about code.** A criterion can ask for a document or a person's attestation, not only for a test run, a build or a pull request.
+- **It also runs without Jira,** as a command line over a folder of task files, with a gate for a harness or a pipeline.
+
+**What the earlier work does that Proof of Done does not.**
+
+- **Evidence is bound to a commit only through the pipeline.** When a project's pipeline reports its results, proof of an earlier commit stops counting. Without a pipeline key, evidence is what its submitter says, and it does not go stale. Proof of Done does not sign evidence, does not hash the source tree and does not run the tests itself. Proof-or-Stop does all three, and Truthgate shows how an agent can pass tests without doing the work.
+- **The measurements are small and not flattering.** [benchmark/](benchmark/REPORT.md) has 150 runs on 30 small tasks, and [control-eval/](control-eval/README.md) has 140. Both were run by the author on one machine before the pipeline results existed, and neither has been repeated by anyone else. Proof-or-Stop, Truthgate and the harness study report larger studies.
+- **The Stop hook is untested.** `proof-of-done gate --hook` holds an agent from a recorded state, not by asking it again as overclaim's hook does. Nobody has measured whether that works better, and overclaim's result is a reason to doubt it until someone does.
 
 ## Without Jira
 
@@ -115,6 +141,7 @@ It is built for teams that hand Jira work to AI coding agents. The agent reads t
 - **Evidence with checks.** Evidence is a test run, a build, a pull request, a document, a person's attestation, or something else with a link or an excerpt. The app checks each piece the moment it arrives. A test run with failures, a link that is not a pull request, or a build with no result is turned away with the reason.
 - **A verdict on each piece.** Evidence that passes the checks waits for a review, except an attestation, which the app accepts when it arrives. A person or the Proof Verifier, a Rovo agent that ships with the app, accepts or rejects each piece that waits. A rejection needs a reason, and the Proof Verifier gives a reason for every verdict. By default a person cannot accept evidence they typed in themselves. A project can allow that, and the panel then labels the proof self-reviewed. The project page and the JQL field show it as proven. A person can accept evidence that their own coding agent submitted, and the app counts that as a review by someone else. An attestation proves its criterion when it comes from someone who is not the assignee, also when the work item has no assignee. An attestation by the assignee needs a second reader, unless the project allows self-review.
 - **A second source for pull requests and builds.** When evidence links a pull request or a build, the app asks Jira's Teamwork Graph what the connected development tool reported for that work item. The reviewer sees whether the two agree.
+- **Results from the pipeline.** The project's pipeline reports test runs and builds with a key that agents and people do not hold. A passing result proves its criterion, and a newer commit turns proof of an earlier one stale.
 - **Done gate.** When a work item is closed with an unproven contract, the app comments on it or moves it back. A workflow validator can refuse the transition outright.
 - **Project meter.** One page per project says whether the work is climbing, busy but not climbing, or stalled. It lists the work items under contract that you can see, up to the 200 that changed most recently, with what each still needs.
 - **Tools for coding agents.** An MCP server lets an outside agent fetch the contract and a context pack and submit evidence. It has no tool that records a verdict.
@@ -157,6 +184,24 @@ Open it with Ask Proof Verifier in the panel. You can also pick it in Rovo chat 
 
 Rovo shows the verdicts in a card first, each with a checkbox. The agent records them when you press Confirm selected.
 
+### Results from the pipeline
+
+Evidence that an agent or a person submits is their own word. A test run they report says what they say it says. The one source they cannot write is the project's pipeline, so the app lets the pipeline report for itself.
+
+1. A project admin opens the Settings tab of the project's Proof of Done page, presses Set up the pipeline, then Create a key. The key is shown once. Store it as a secret in the pipeline.
+2. Add the step the page shows to the pipeline. It posts the result of the job, the commit, the repository, the workflow and the run to the address on the page. The work item key comes from the branch name, so name the branch after the work item, for example `ABC-12-export`.
+3. The app stores the result as evidence from the pipeline, on the criterion that asks for a test run or a build. A criterion that takes any evidence counts too when its wording asks for one, such as "All unit tests pass".
+
+What follows from it:
+
+- **A passing result proves its criterion without a person.** A failing one is stored and proves nothing. A project can ask for a person's review all the same.
+- **Proof is bound to a commit.** When the pipeline reports a newer commit, evidence about an earlier commit shows as "Earlier commit" and stops counting. Its criterion is open again, and the done gate says so. This also covers what an agent submitted with a commit.
+- **A project can take test runs and builds only from the pipeline.** With that rule on, the app turns away a test run that an agent or a person reports, and says why.
+
+The key is for one project. Whoever holds it can report results for that project, so keep it where the pipeline's other secrets are. The app stores only its hash. Replace it on the same page, and the key before stops working.
+
+A pipeline's result shows that the checks the pipeline ran passed on that commit. It does not show that those checks cover the criterion. That is still for a person to judge.
+
 ### The Teamwork Graph check
 
 Evidence for a pull request or a build says what its author says. When a code host or a CI tool is connected to Jira, the Teamwork Graph holds what that tool reported for the work item. The app compares the two and puts a note in the Review dialog.
@@ -190,7 +235,7 @@ The app's MCP server has five tools: `get-context-pack`, `get-done-contract`, `s
 ### What it stores and what it may do
 
 - Its scopes are `read:jira-work` and `write:jira-work`, and four Teamwork Graph scopes that only read: `read:graph:issue:jira`, `read:graph:pull-request:external`, `read:graph:build:external` and `read:graph:deployment:external`.
-- Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app makes no outbound network calls, and the Forge CLI reports it as eligible for Runs on Atlassian. It gives contract and work item data to Jira, to Rovo when someone asks the Proof Verifier, and to a coding agent that a person connects.
+- Contracts, evidence, verdicts and the event history live in Forge SQL, inside Atlassian's cloud. The app makes no outbound network calls, and the Forge CLI reports it as eligible for Runs on Atlassian. The address a pipeline posts to answers only with fixed responses. It gives contract and work item data to Jira, to Rovo when someone asks the Proof Verifier, and to a coding agent that a person connects.
 - The app makes no LLM calls. The reasoning happens in Rovo and in the coding agent.
 - It reads work items and the Teamwork Graph as the person who is using it, and asks Jira whether that person may edit them. As itself it comments on or moves a work item that was closed with an unproven contract, writes the work item property `proof-of-done` that JQL searches, and creates and deletes the sample work items.
 - When a work item is deleted, the app deletes everything it stored for it.

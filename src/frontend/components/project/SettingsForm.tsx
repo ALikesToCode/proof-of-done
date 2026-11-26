@@ -22,6 +22,7 @@ import { GATE_MODES } from '../../project-text';
 import { REQUIRED } from '../../text';
 import { KIND_OPTIONS } from '../AddCriterion';
 import { Line } from '../Line';
+import { PipelineCard } from './PipelineCard';
 import { card, kindSelect, typeSelect } from '../styles';
 
 interface Props {
@@ -134,6 +135,29 @@ export const SettingsForm = ({ view, onSaved }: Props) => {
           A person reviewing what their own coding agent submitted counts as someone else. Turn this off for a team of one. Proof that
           was self-reviewed stays labelled as such.
         </HelperMessage>
+      </Stack>
+
+      <Stack space="space.100">
+        <Heading size="xsmall" as="h3">
+          Results from the pipeline
+        </Heading>
+        <Checkbox
+          isDisabled={locked}
+          isChecked={draft.pipelineProves}
+          onChange={(event) => change({ pipelineProves: Boolean(event.target.checked) })}
+          label="A passing result that the pipeline reports proves its criterion without a person"
+        />
+        <Checkbox
+          isDisabled={locked}
+          isChecked={draft.pipelineOnly}
+          onChange={(event) => change({ pipelineOnly: Boolean(event.target.checked) })}
+          label="A test run or a build counts only when the pipeline reports it"
+        />
+        <HelperMessage>
+          The pipeline reports with the project's key, below. An agent and a person do not hold it, so they cannot write its results.
+          When the pipeline reports a newer commit, proof of an earlier commit stops counting.
+        </HelperMessage>
+        {!locked && <PipelineCard />}
       </Stack>
 
       <Stack space="space.100">

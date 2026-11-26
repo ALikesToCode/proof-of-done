@@ -2,7 +2,7 @@ import { closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, re
 import { dirname, join } from 'node:path';
 import { DEFAULT_SETTINGS, normalizeSettings } from '../core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../core/types';
-import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../store/types';
+import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, PipelineKey, SampleMarker } from '../store/types';
 
 /**
  * The store of the local adapter: one JSON file.
@@ -33,6 +33,8 @@ export interface State {
   settings: Record<string, ProjectSettings>;
   samples: Array<SampleMarker & { projectId: string }>;
   comments: LocalComment[];
+  /** Absent in a file written before pipeline keys existed. */
+  pipelineKeys?: Record<string, PipelineKey>;
 }
 
 const empty = (): State => ({
@@ -216,6 +218,25 @@ export class FileStore implements ContractStore {
 
   async saveSettings(projectId: string, settings: ProjectSettings): Promise<void> {
     this.change((state) => void (state.settings[projectId] = settings));
+  }
+
+  async getPipelineKey(projectId: string): Promise<PipelineKey | null> {
+    return this.read().pipelineKeys?.[projectId] ?? null;
+  }
+
+  async savePipelineKey(key: PipelineKey): Promise<void> {
+    this.change((state) => void ((state.pipelineKeys ??= {})[key.projectId] = key));
+  }
+
+  async deletePipelineKey(projectId: string): Promise<void> {
+    this.change((state) => void delete state.pipelineKeys?.[projectId]);
+  }
+
+  async markPipelineKeyUsed(projectId: string, now: number): Promise<void> {
+    this.change((state) => {
+      const key = state.pipelineKeys?.[projectId];
+      if (key) key.lastUsedAt = now;
+    });
   }
 
   async listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]> {

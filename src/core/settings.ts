@@ -5,6 +5,8 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   requireIndependent: true,
   gateMode: 'warn',
   enforceWithoutContract: false,
+  pipelineProves: true,
+  pipelineOnly: false,
   rules: [],
 };
 
@@ -28,6 +30,8 @@ export function normalizeSettings(raw: unknown): ProjectSettings {
     gateMode,
     enforceWithoutContract:
       typeof source['enforceWithoutContract'] === 'boolean' ? source['enforceWithoutContract'] : DEFAULT_SETTINGS.enforceWithoutContract,
+    pipelineProves: typeof source['pipelineProves'] === 'boolean' ? source['pipelineProves'] : DEFAULT_SETTINGS.pipelineProves,
+    pipelineOnly: typeof source['pipelineOnly'] === 'boolean' ? source['pipelineOnly'] : DEFAULT_SETTINGS.pipelineOnly,
     rules,
   };
 }
