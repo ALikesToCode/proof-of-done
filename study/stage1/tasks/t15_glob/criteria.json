@@ -1,0 +1,51 @@
+{
+  "task": "t15_glob",
+  "criteria": [
+    "`matches(pattern, path)` is implemented in `glob_match.py` and returns `True` when the whole `path` matches the whole `pattern`, and `False` otherwise.",
+    "The implementation of `matches` does not use `fnmatch`, `glob` or `pathlib` matching.",
+    "In `matches`, a path is segments separated by `/`, and matching is case-sensitive.",
+    "In `matches`, `?` matches exactly one character that is not `/`.",
+    "In `matches`, `*` matches zero or more characters that are not `/` and never crosses a slash: `*.py` does not match `src/a.py`.",
+    "In `matches`, `**` is special only when it is a whole segment (`**/x`, `a/**/b`, `a/**`), and it then matches zero or more whole segments: `a/**/b` matches `a/b`, `a/x/b` and `a/x/y/b`; `**` alone matches every path, the empty path included.",
+    "In `matches`, inside a segment with other characters, `**` is two `*` in a row and acts like one `*`: `a**b` matches `axxb` and does not match `a/b`.",
+    "In `matches`, `[abc]` matches one character from the set, `[a-c]` matches one character from the range, and `[!abc]` matches one character that is not in the set; a class never matches `/`; `]` directly after `[` or `[!` is a literal member of the set, so `[]x]` matches `]` or `x`.",
+    "In `matches`, `\\` makes the next character literal: `\\*` matches a star and `\\\\` matches a backslash; inside a class, characters are literal except for the class rules (sets, ranges, `!` negation, leading `]`), and a backslash inside a class stands for itself.",
+    "`matches` raises `ValueError` for a pattern with an unclosed `[`, a pattern with a `\\` at its very end, or a pattern containing a range whose end is before its start, such as `[c-a]`.",
+    "In `matches`, every other character matches itself, and the empty pattern matches only the empty path.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`matches(pattern, path)` is implemented in `glob_match.py` and returns `True` when the whole `path` matches the whole `pattern`, and `False` otherwise.",
+        "The implementation of `matches` does not use `fnmatch`, `glob` or `pathlib` matching.",
+        "In `matches`, a path is segments separated by `/`, and matching is case-sensitive.",
+        "In `matches`, `?` matches exactly one character that is not `/`.",
+        "In `matches`, `*` matches zero or more characters that are not `/` and never crosses a slash: `*.py` does not match `src/a.py`.",
+        "In `matches`, `**` is special only when it is a whole segment (`**/x`, `a/**/b`, `a/**`), and it then matches zero or more whole segments: `a/**/b` matches `a/b`, `a/x/b` and `a/x/y/b`; `**` alone matches every path, the empty path included.",
+        "In `matches`, inside a segment with other characters, `**` is two `*` in a row and acts like one `*`: `a**b` matches `axxb` and does not match `a/b`.",
+        "In `matches`, `[abc]` matches one character from the set, `[a-c]` matches one character from the range, and `[!abc]` matches one character that is not in the set; a class never matches `/`; `]` directly after `[` or `[!` is a literal member of the set, so `[]x]` matches `]` or `x`.",
+        "In `matches`, `\\` makes the next character literal: `\\*` matches a star and `\\\\` matches a backslash; inside a class, characters are literal except for the class rules (sets, ranges, `!` negation, leading `]`), and a backslash inside a class stands for itself.",
+        "`matches` raises `ValueError` for a pattern with an unclosed `[`, a pattern with a `\\` at its very end, or a pattern containing a range whose end is before its start, such as `[c-a]`.",
+        "In `matches`, every other character matches itself, and the empty pattern matches only the empty path.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

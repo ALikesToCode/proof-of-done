@@ -1,0 +1,59 @@
+{
+  "task": "t07_slug",
+  "criteria": [
+    "`slugify(title)` keeps its existing behaviour: the title is lower-cased, accented letters lose their accents (`é` becomes `e`), every run of characters other than `a`-`z` and `0`-`9` becomes one hyphen, and hyphens at the start and the end are removed.",
+    "`slugify(title)` returns `\"untitled\"` for a title that leaves nothing.",
+    "`slugify` accepts a `max_length` parameter with default `None`, as `slugify(title, max_length=None)`.",
+    "Rule 1: `slugify` with `max_length=None` gives the same result as today.",
+    "Rule 2: a slug is a list of words joined by hyphens; when the slug is longer than `max_length`, `slugify` shortens it to the longest run of whole leading words that fits in `max_length` characters. `slugify(\"the quick brown fox\", 12)` is `\"the-quick\"`, because `\"the-quick-br\"` would cut a word.",
+    "Rule 3: when the first word alone is longer than `max_length`, `slugify` cuts that word to exactly `max_length` characters: `slugify(\"extraordinary\", 5)` is `\"extra\"`.",
+    "Rule 4: the result of `slugify` never starts or ends with a hyphen and is never longer than `max_length`.",
+    "Rule 5: `slugify` shortens `\"untitled\"` by the same rule: `slugify(\"!!!\", 3)` is `\"unt\"`.",
+    "Rule 6: `slugify` with `max_length` below 1 raises `ValueError`.",
+    "A new function `unique_slug(title, taken, max_length=None)` exists in `slug.py`.",
+    "Rule 7: `unique_slug` accepts as `taken` any collection of slugs that are in use (a list, a set or a tuple), and does not change `taken`.",
+    "Rule 8: when `slugify(title, max_length)` is not in `taken`, `unique_slug` returns that slug.",
+    "Rule 9: otherwise `unique_slug` returns the base slug with a suffix, trying `-2`, then `-3`, and so on, and the first one that is not in `taken` wins. `unique_slug(\"Hello\", [\"hello\", \"hello-2\"])` is `\"hello-3\"`.",
+    "Rule 10: with `max_length`, the whole result of `unique_slug`, suffix included, is at most `max_length` characters; the base is shortened by rules 2 to 4 to `max_length` minus the length of the suffix, and this is done again for each suffix tried (because `-10` is longer than `-9`). `unique_slug(\"the quick brown\", {\"the-quick\"}, 12)` is `\"the-quick-2\"`, and with `max_length=10` it is `\"the-2\"`.",
+    "Rule 11: `unique_slug` raises `ValueError` when a suffix leaves less than one character for the base.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`slugify(title)` keeps its existing behaviour: the title is lower-cased, accented letters lose their accents (`é` becomes `e`), every run of characters other than `a`-`z` and `0`-`9` becomes one hyphen, and hyphens at the start and the end are removed.",
+        "`slugify(title)` returns `\"untitled\"` for a title that leaves nothing.",
+        "`slugify` accepts a `max_length` parameter with default `None`, as `slugify(title, max_length=None)`.",
+        "Rule 1: `slugify` with `max_length=None` gives the same result as today.",
+        "Rule 2: a slug is a list of words joined by hyphens; when the slug is longer than `max_length`, `slugify` shortens it to the longest run of whole leading words that fits in `max_length` characters. `slugify(\"the quick brown fox\", 12)` is `\"the-quick\"`, because `\"the-quick-br\"` would cut a word.",
+        "Rule 3: when the first word alone is longer than `max_length`, `slugify` cuts that word to exactly `max_length` characters: `slugify(\"extraordinary\", 5)` is `\"extra\"`.",
+        "Rule 4: the result of `slugify` never starts or ends with a hyphen and is never longer than `max_length`.",
+        "Rule 5: `slugify` shortens `\"untitled\"` by the same rule: `slugify(\"!!!\", 3)` is `\"unt\"`.",
+        "Rule 6: `slugify` with `max_length` below 1 raises `ValueError`.",
+        "A new function `unique_slug(title, taken, max_length=None)` exists in `slug.py`.",
+        "Rule 7: `unique_slug` accepts as `taken` any collection of slugs that are in use (a list, a set or a tuple), and does not change `taken`.",
+        "Rule 8: when `slugify(title, max_length)` is not in `taken`, `unique_slug` returns that slug.",
+        "Rule 9: otherwise `unique_slug` returns the base slug with a suffix, trying `-2`, then `-3`, and so on, and the first one that is not in `taken` wins. `unique_slug(\"Hello\", [\"hello\", \"hello-2\"])` is `\"hello-3\"`.",
+        "Rule 10: with `max_length`, the whole result of `unique_slug`, suffix included, is at most `max_length` characters; the base is shortened by rules 2 to 4 to `max_length` minus the length of the suffix, and this is done again for each suffix tried (because `-10` is longer than `-9`). `unique_slug(\"the quick brown\", {\"the-quick\"}, 12)` is `\"the-quick-2\"`, and with `max_length=10` it is `\"the-2\"`.",
+        "Rule 11: `unique_slug` raises `ValueError` when a suffix leaves less than one character for the base.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

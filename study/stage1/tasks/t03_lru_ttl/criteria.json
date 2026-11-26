@@ -1,0 +1,53 @@
+{
+  "task": "t03_lru_ttl",
+  "criteria": [
+    "In lru.py, the `LRUCache` constructor has the signature `LRUCache(capacity, ttl=None, clock=time.monotonic)`, where `ttl` is the default lifetime of an entry in seconds and `ttl=None` means entries never expire.",
+    "`LRUCache.put(key, value, ttl=USE_DEFAULT)` accepts a `ttl` that overrides the cache's default lifetime for that entry; passing `ttl=None` to `put` makes that entry never expire, also when the cache has a default ttl.",
+    "A `ttl` that is not `None` must be greater than 0; otherwise the `LRUCache` constructor or `put` raises `ValueError`, and a `put` that raises stores nothing.",
+    "An entry is expired as soon as `clock() - stored_at >= ttl`; at exactly `ttl` seconds after being stored it is already expired.",
+    "An expired entry behaves as absent everywhere: `get` and `peek` return the default, `key in cache` is false, `len(cache)` does not count it, and `keys()` does not list it.",
+    "Expired entries never cost a live entry its place: when `put` adds a new key to a full cache, expired entries are removed first, and a live entry is evicted only if the cache is still full after that.",
+    "`put` on a key that is already present replaces the value, restarts its lifetime from now with the ttl of this call, and makes it the most recently used.",
+    "`get` makes the entry most recently used but does not restart its lifetime; `peek` changes nothing.",
+    "The `LRUCache` constructor raises `ValueError` when `capacity` is below 1.",
+    "`get(key, default=None)` and `peek(key, default=None)` return `default` for an absent key.",
+    "When a new key is added to a full `LRUCache`, the least recently used live entry is evicted.",
+    "`keys()` lists the keys from least to most recently used.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "In lru.py, the `LRUCache` constructor has the signature `LRUCache(capacity, ttl=None, clock=time.monotonic)`, where `ttl` is the default lifetime of an entry in seconds and `ttl=None` means entries never expire.",
+        "`LRUCache.put(key, value, ttl=USE_DEFAULT)` accepts a `ttl` that overrides the cache's default lifetime for that entry; passing `ttl=None` to `put` makes that entry never expire, also when the cache has a default ttl.",
+        "A `ttl` that is not `None` must be greater than 0; otherwise the `LRUCache` constructor or `put` raises `ValueError`, and a `put` that raises stores nothing.",
+        "An entry is expired as soon as `clock() - stored_at >= ttl`; at exactly `ttl` seconds after being stored it is already expired.",
+        "An expired entry behaves as absent everywhere: `get` and `peek` return the default, `key in cache` is false, `len(cache)` does not count it, and `keys()` does not list it.",
+        "Expired entries never cost a live entry its place: when `put` adds a new key to a full cache, expired entries are removed first, and a live entry is evicted only if the cache is still full after that.",
+        "`put` on a key that is already present replaces the value, restarts its lifetime from now with the ttl of this call, and makes it the most recently used.",
+        "`get` makes the entry most recently used but does not restart its lifetime; `peek` changes nothing.",
+        "The `LRUCache` constructor raises `ValueError` when `capacity` is below 1.",
+        "`get(key, default=None)` and `peek(key, default=None)` return `default` for an absent key.",
+        "When a new key is added to a full `LRUCache`, the least recently used live entry is evicted.",
+        "`keys()` lists the keys from least to most recently used.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "task": "t16_ini",
+  "criteria": [
+    "`parse_ini(text)` is implemented in `ini.py` and returns a `dict` that maps each section name to a `dict` of its keys and values, where all names and values are `str`.",
+    "`ini.py` does not use `configparser`.",
+    "In `parse_ini`, lines end at `\"\\n\"`, and a `\"\\r\"` before the `\"\\n\"` is dropped.",
+    "In `parse_ini`, a line that is empty or only whitespace is skipped, and a line whose first non-whitespace character is `;` or `#` is a comment and is skipped.",
+    "In `parse_ini`, `[name]` on a line of its own starts a section; whitespace around the brackets and inside them is trimmed (`[ db ]` is the section `db`); section names are case-sensitive; and an empty name (`[]`) is an error.",
+    "In `parse_ini`, `key = value` sets a key in the current section: the line is split at the first `=`, key and value are trimmed, keys are lower-cased while values are kept as written, an empty value is allowed (`key =`), and an empty key is an error.",
+    "In `parse_ini`, `;` and `#` start a comment only at the start of a line: in `url = http://x/#top ; note` the value is `http://x/#top ; note`.",
+    "In `parse_ini`, keys that come before any section header go into the section named `\"\"`, and that section is in the result only when it has at least one key.",
+    "In `parse_ini`, a line that starts with a space or a tab, and is not blank or a comment, continues the value of the key before it by appending its trimmed text after one `\"\\n\"`; a continuation with no key before it in the same section is an error; and a section header ends the reach of a continuation.",
+    "In `parse_ini`, when the same key appears twice in a section the last value wins, and when the same section appears twice its keys are merged into one dict with later keys winning.",
+    "In `parse_ini`, a section with no keys is in the result with an empty dict.",
+    "In `parse_ini`, any other line is an error, and errors raise `ValueError` whose message contains `line N`, where `N` is the 1-based number of the bad line.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`parse_ini(text)` is implemented in `ini.py` and returns a `dict` that maps each section name to a `dict` of its keys and values, where all names and values are `str`.",
+        "`ini.py` does not use `configparser`.",
+        "In `parse_ini`, lines end at `\"\\n\"`, and a `\"\\r\"` before the `\"\\n\"` is dropped.",
+        "In `parse_ini`, a line that is empty or only whitespace is skipped, and a line whose first non-whitespace character is `;` or `#` is a comment and is skipped.",
+        "In `parse_ini`, `[name]` on a line of its own starts a section; whitespace around the brackets and inside them is trimmed (`[ db ]` is the section `db`); section names are case-sensitive; and an empty name (`[]`) is an error.",
+        "In `parse_ini`, `key = value` sets a key in the current section: the line is split at the first `=`, key and value are trimmed, keys are lower-cased while values are kept as written, an empty value is allowed (`key =`), and an empty key is an error.",
+        "In `parse_ini`, `;` and `#` start a comment only at the start of a line: in `url = http://x/#top ; note` the value is `http://x/#top ; note`.",
+        "In `parse_ini`, keys that come before any section header go into the section named `\"\"`, and that section is in the result only when it has at least one key.",
+        "In `parse_ini`, a line that starts with a space or a tab, and is not blank or a comment, continues the value of the key before it by appending its trimmed text after one `\"\\n\"`; a continuation with no key before it in the same section is an error; and a section header ends the reach of a continuation.",
+        "In `parse_ini`, when the same key appears twice in a section the last value wins, and when the same section appears twice its keys are merged into one dict with later keys winning.",
+        "In `parse_ini`, a section with no keys is in the result with an empty dict.",
+        "In `parse_ini`, any other line is an error, and errors raise `ValueError` whose message contains `line N`, where `N` is the 1-based number of the bad line.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

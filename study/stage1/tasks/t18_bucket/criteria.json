@@ -1,0 +1,49 @@
+{
+  "task": "t18_bucket",
+  "criteria": [
+    "The class `TokenBucket` is implemented in `bucket.py` with the constructor `TokenBucket(rate, capacity, clock=time.monotonic)`, where time comes from the `clock` function, which returns seconds.",
+    "`TokenBucket`: `rate` is the number of tokens added per second and `capacity` is the most the bucket can hold. Both must be greater than 0, otherwise the constructor raises `ValueError`. Both may be `int`, `float` or `fractions.Fraction`.",
+    "A new `TokenBucket` is full (it holds `capacity` tokens).",
+    "`TokenBucket` adds tokens continuously: after `t` seconds the bucket has gained `rate * t` tokens, never going above `capacity`. Time spent full is not saved up.",
+    "`TokenBucket.take(cost=1)` returns `True` and removes `cost` tokens when the bucket holds at least `cost` tokens. Holding exactly `cost` is enough. Otherwise it returns `False` and removes nothing.",
+    "`TokenBucket.available()` returns the number of tokens in the bucket now.",
+    "`TokenBucket.wait_time(cost=1)` returns the seconds until `take(cost)` would succeed, and returns `0` when it would succeed now. It changes nothing.",
+    "`cost` must be greater than 0 and at most `capacity`. Otherwise `TokenBucket.take` and `TokenBucket.wait_time` raise `ValueError`.",
+    "When the `clock` reports an earlier time than at the last call, `TokenBucket` adds no tokens and removes none for that step.",
+    "`TokenBucket` arithmetic is exact for exact inputs: with `int` or `Fraction` rate, capacity, cost and clock values, the results of `available` and `wait_time` are exact, with no floating-point error. For example, a bucket with `rate=Fraction(1, 3)` gains exactly one token in 3 seconds.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "The class `TokenBucket` is implemented in `bucket.py` with the constructor `TokenBucket(rate, capacity, clock=time.monotonic)`, where time comes from the `clock` function, which returns seconds.",
+        "`TokenBucket`: `rate` is the number of tokens added per second and `capacity` is the most the bucket can hold. Both must be greater than 0, otherwise the constructor raises `ValueError`. Both may be `int`, `float` or `fractions.Fraction`.",
+        "A new `TokenBucket` is full (it holds `capacity` tokens).",
+        "`TokenBucket` adds tokens continuously: after `t` seconds the bucket has gained `rate * t` tokens, never going above `capacity`. Time spent full is not saved up.",
+        "`TokenBucket.take(cost=1)` returns `True` and removes `cost` tokens when the bucket holds at least `cost` tokens. Holding exactly `cost` is enough. Otherwise it returns `False` and removes nothing.",
+        "`TokenBucket.available()` returns the number of tokens in the bucket now.",
+        "`TokenBucket.wait_time(cost=1)` returns the seconds until `take(cost)` would succeed, and returns `0` when it would succeed now. It changes nothing.",
+        "`cost` must be greater than 0 and at most `capacity`. Otherwise `TokenBucket.take` and `TokenBucket.wait_time` raise `ValueError`.",
+        "When the `clock` reports an earlier time than at the last call, `TokenBucket` adds no tokens and removes none for that step.",
+        "`TokenBucket` arithmetic is exact for exact inputs: with `int` or `Fraction` rate, capacity, cost and clock values, the results of `available` and `wait_time` are exact, with no floating-point error. For example, a bucket with `rate=Fraction(1, 3)` gains exactly one token in 3 seconds.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}
