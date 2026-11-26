@@ -1,0 +1,20 @@
+{
+  "id": "t09_rle",
+  "module": "rle",
+  "source": "benchmark-dev",
+  "note": "Visible tests cover plain encoding and decoding, a count with no character after it and the round trip; only the hidden tests cover digits given to `encode` and counts of 0 or 1 or with a leading zero given to `decode`.",
+  "twin_breaks": [
+    {
+      "rule": "The text given to `encode` must not contain the digits `0` to `9`. If it does, `ValueError`.",
+      "tests": [
+        "test_encode_rejects_digits"
+      ]
+    },
+    {
+      "rule": "a count of 0 or 1 (`\"1a\"`, `\"0a\"`), a count with a leading zero (`\"02a\"`)",
+      "tests": [
+        "test_decode_rejects_bad_counts"
+      ]
+    }
+  ]
+}

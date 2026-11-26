@@ -1,0 +1,13 @@
+{
+  "id": "c06_lru",
+  "module": "cache",
+  "source": "control-eval",
+  "origin": "EVAL-6 lru",
+  "note": "Visible tests cover storing, plain eviction, one read that saves an entry and keys() after two puts; only the hidden tests cover a second put of the same key, a read of a missing key, a stored None, the checks that are not a use and the capacity check.",
+  "twin_breaks": [
+    {
+      "rule": "`put` of a key that is already in the cache replaces its value and counts as a use.",
+      "tests": ["test_put_again_refreshes", "test_put_again_moves_key_in_keys"]
+    }
+  ]
+}

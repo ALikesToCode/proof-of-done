@@ -1,0 +1,42 @@
+{
+  "id": "t10_paginate",
+  "module": "paginate",
+  "source": "benchmark",
+  "note": "The reported off-by-one is in one function; the page-window function shares the fault at the last page, and TASK.md states the window rules that the visible tests do not reach.",
+  "twin_breaks": [
+    {
+      "rule": "The last page may be short",
+      "tests": [
+        "test_slice_last_page_is_short",
+        "test_slice_of_nothing",
+        "test_slices_cover_everything_once"
+      ]
+    },
+    {
+      "rule": "With an even `size` the extra page goes after the current one",
+      "tests": [
+        "test_window_even_size"
+      ]
+    },
+    {
+      "rule": "Near the first or the last page the window is shifted to stay inside 1 to `page_count`, and it keeps its full length",
+      "tests": [
+        "test_window_at_the_end_keeps_its_length",
+        "test_window_with_few_pages",
+        "test_window_uses_fixed_page_count"
+      ]
+    },
+    {
+      "rule": "A page below 1 or above `page_count`, and a `size` below 1, raise `ValueError`",
+      "tests": [
+        "test_window_bad_arguments"
+      ]
+    },
+    {
+      "rule": "In all three functions `per_page` below 1 and `total_items` below 0 raise `ValueError`",
+      "tests": [
+        "test_bad_totals_and_per_page"
+      ]
+    }
+  ]
+}
