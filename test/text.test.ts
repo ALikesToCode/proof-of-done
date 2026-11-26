@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readMeter } from '../src/core/meter';
-import { activityLine, attentionNote, contractsLine, meterFigures } from '../src/frontend/project-text';
+import { activityLine, attentionNote, contractsLine, meterFigures, nowFigures } from '../src/frontend/project-text';
 import {
   actorLabel,
   channelLine,
@@ -301,6 +301,16 @@ describe('project page wording', () => {
       ['Closed, no contract', 2],
     ]);
     expect(meterFigures(readMeter({ ...meter, closed: 2 }))).toHaveLength(4);
+    expect(
+      nowFigures({
+        contracts: { closedUnproven: 2, waiting: 3 },
+        rows: [{ attention: 'rejected' }, { attention: 'waiting' }, { attention: 'rejected' }, { attention: 'none' }],
+      }).map((f) => [f.label, f.value]),
+    ).toEqual([
+      ['Closed without proof', 2],
+      ['Waiting for a check', 3],
+      ['Evidence turned away', 2],
+    ]);
     expect(activityLine(meter)).toBe('1 piece of evidence and 3 verdicts in the last 7 days.');
   });
 

@@ -12,9 +12,9 @@ Teams assign Jira work to AI agents, and the agents mark it done without proof. 
 2. The panel reads the acceptance criteria out of the description and offers them as a done contract. One click creates it. Criteria can be added, edited or removed by hand.
 3. Someone adds evidence against a criterion: a test run, a build, a pull request, a document, a person's attestation, or something else with a link or excerpt.
 4. The app runs mechanical checks on the evidence the moment it arrives. A test run with failures, a pull request link that is not a pull request, or a build with no result is turned away with the reason.
-5. Evidence that passes the checks waits for a review. A person or the Proof Verifier agent accepts or rejects it, with a reason. For a pull request or a build, the Review dialog says whether Jira's Teamwork Graph links it to the work item, and in what state.
+5. Evidence that passes the checks waits for a review. A person or the Proof Verifier agent accepts or rejects it, with a reason. For a pull request or a build, the Review dialog says whether Jira's Teamwork Graph links it to the work item, and in what state. Every piece carries its source: the pipeline, an agent's claim, the Teamwork Graph, or typed by a person. For a claim that names a commit, the dialog also says what the pipeline reported about that commit. Above the criteria the panel lists what still blocks closing, with the reason for each.
 6. When the work item moves to a done status without proof, the done gate reacts. Depending on the project setting it comments, moves the work item back, or does nothing. An admin can also add the app's validator to a workflow transition, and then Jira refuses the transition outright.
-7. The project page shows the meter and every work item under contract, with the ones closed without proof at the top.
+7. The project page counts what needs someone now and lists every work item under contract, with the ones closed without proof at the top.
 
 ## What an agent does with it
 
@@ -106,7 +106,12 @@ The meter answers one question per project: is the work converging, or is the te
 - Busy, not climbing: there was activity, but proven closures did not outrun new and reopened work. A ticket closed without proof does not move the meter.
 - Stalled: nothing happened.
 
-The window is the last 7, 14 or 30 days. The page shows the numbers behind the verdict: opened, reopened, closed with proof, closed without proof, and closed with no contract at all. The last two are marked "does not count". Evidence and verdicts from the window are listed as activity.
+The agent tool and the local command line return that word. The project page does not show it. A team lead cannot act on "busy", so the page shows numbers in two groups.
+
+- Needs someone now, whatever the window: work items closed without proof, work items with evidence waiting for a check, and work items with evidence turned away. These count the listed work items, so they match the table below them.
+- In and out, for the window: opened, reopened, closed with proof, closed without proof, and closed with no contract at all. The last two are marked "does not count". One sentence says how the two sides compare. Evidence and verdicts from the window are listed as activity.
+
+The window is the last 7, 14 or 30 days.
 
 Opened and closed counts come from JQL, so they work for the time before the app was installed. Reopens and proof come from the app's own store. The meter covers the whole project. A project with only some of its work under contract reads as busy until proven closures outrun everything that arrives.
 

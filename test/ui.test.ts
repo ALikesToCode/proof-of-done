@@ -745,8 +745,10 @@ describe('the project page', () => {
   it('explains itself on a project with no contracts', async () => {
     onProject();
     const page = await show(pages.project);
-    expect(page.text()).toContain('Done means proven. This page shows whether Mobile Dev is converging, and which work items still lack proof.');
-    expect(page.labels('Lozenge')).toEqual(['Stalled']);
+    expect(page.text()).toContain('Done means proven. This page shows what in Mobile Dev needs someone now, and which work items still lack proof.');
+    expect(page.labels('Lozenge')).toEqual([]);
+    expect(page.text()).toContain('Needs someone now');
+    expect(page.text()).toContain('Closed without proof');
     expect(page.text()).toContain('Nothing was opened, closed or proven in the last 7 days.');
     expect(page.text()).toContain('No done contracts in this project yet');
     expect(page.text()).toContain('No work item in this project has a done contract yet.');
@@ -821,7 +823,10 @@ describe('the project page', () => {
     expect(page.text()).toContain('4 work items have a done contract.');
     expect(page.text()).toContain('Sample: Lock an account after five failed logins');
     expect(page.all('DynamicTable')[0]!.props['rows']).toHaveLength(4);
-    expect(page.labels('Lozenge')).toEqual(expect.arrayContaining(['Busy, not climbing', 'Proven', 'Partly proven', 'Not proven', 'Done', 'In Progress']));
+    expect(page.labels('Lozenge')).toEqual(expect.arrayContaining(['Proven', 'Partly proven', 'Not proven', 'Done', 'In Progress']));
+
+    expect(page.labels('Lozenge')).not.toContain('Busy, not climbing');
+    expect(page.text()).toContain('prove them or reopen them');
 
     await page.press('Remove sample data');
     expect(page.text()).toContain('This deletes the 5 sample work items, their proof and any subtasks that someone added under them.');
