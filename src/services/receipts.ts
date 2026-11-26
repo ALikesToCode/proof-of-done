@@ -2,6 +2,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { checksPassed, runChecks } from '../core/checks';
 import { PodError } from '../core/errors';
 import { newId } from '../core/ids';
+import { kindFor } from '../core/kinds';
 import { sameCommit, summarize } from '../core/proof';
 import { Receipt, formatPipelineKey, parseReceipt, projectOfKey } from '../core/receipt';
 import { Evidence, ProjectSettings, Verdict } from '../core/types';
@@ -133,7 +134,11 @@ export class ReceiptService {
   private async storeOn(issue: IssueInfo, receipt: Receipt, settings: ProjectSettings): Promise<ReceiptOutcome> {
     const before = await this.store.getBundle(issue.id);
     if (!before.contract) return 'no_work_item';
-    const criteria = before.criteria.filter((c) => c.active && c.requiredKind === receipt.kind);
+    // A criterion that takes any evidence is the pipeline's too when its wording asks for
+    // this kind: "All unit tests pass" is about a test run whether or not someone set the field.
+    const criteria = before.criteria.filter(
+      (c) => c.active && (c.requiredKind === receipt.kind || (c.requiredKind === 'any' && kindFor(c.text) === receipt.kind)),
+    );
     if (criteria.length === 0) return 'no_criterion';
 
     const detailsKey = JSON.stringify(receipt.details);

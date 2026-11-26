@@ -160,6 +160,31 @@ describe('a receipt from the pipeline', () => {
   });
 });
 
+describe('which criterion a receipt is for', () => {
+  it('reads the kind from the wording', async () => {
+    const { kindFor } = await import('../src/core/kinds');
+    expect(kindFor('All unit tests pass')).toBe('test_run');
+    expect(kindFor('The test suite is green on main')).toBe('test_run');
+    expect(kindFor('Passing integration tests')).toBe('test_run');
+    expect(kindFor('The build passes')).toBe('build');
+    expect(kindFor('CI is green and lint is clean')).toBe('build');
+    expect(kindFor('The pull request is merged')).toBe('pull_request');
+    expect(kindFor('Add tests for the export')).toBe('any');
+    expect(kindFor('Tests are written for the parser and pass review')).toBe('any');
+    expect(kindFor('Release notes are updated')).toBe('any');
+    expect(kindFor('Users can pass a filter to the export')).toBe('any');
+  });
+
+  it('also proves a criterion that takes any evidence when its wording asks for a test run', async () => {
+    jira.add(issueInfo({ id: '10002', key: 'MOBL-2' }));
+    await contracts.createContract('MOBL-2', ALICE, { withSuggestions: false });
+    await contracts.addCriteria('MOBL-2', ALICE, [{ text: 'All unit tests pass' }, { text: 'Release notes are updated' }]);
+    expect((await receipts.accept(key, body({ issue: 'MOBL-2' }))).outcome).toBe('recorded');
+    const after = await contracts.view('MOBL-2', ALICE);
+    expect(after.criteria.map((c) => c.state)).toEqual(['proven', 'unproven']);
+  });
+});
+
 describe('a new commit', () => {
   it('turns the proof of the commit before stale and opens the criterion again', async () => {
     await receipts.accept(key, body({}));
