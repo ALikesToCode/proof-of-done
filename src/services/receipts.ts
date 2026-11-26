@@ -3,11 +3,11 @@ import { checksPassed, runChecks } from '../core/checks';
 import { PodError } from '../core/errors';
 import { newId } from '../core/ids';
 import { kindFor } from '../core/kinds';
-import { sameCommit, summarize } from '../core/proof';
+import { summarize } from '../core/proof';
 import { Receipt, formatPipelineKey, parseReceipt, projectOfKey } from '../core/receipt';
 import { Evidence, ProjectSettings, Verdict } from '../core/types';
 import { IssueInfo, JiraGateway } from '../jira/gateway';
-import { ContractStore } from '../store/types';
+import { ContractBundle, ContractStore } from '../store/types';
 import { requireAdmin } from './project';
 import { saveProof } from './proof-sync';
 
@@ -45,6 +45,9 @@ export interface PipelineKeyStatus {
   createdBy: string | null;
   lastUsedAt: number | null;
 }
+
+/** The criterion id of a receipt kept only for its commit. No criterion has it. */
+export const NO_CRITERION = '-';
 
 const hashOf = (key: string): string => createHash('sha256').update(key, 'utf8').digest('hex');
 
@@ -139,7 +142,10 @@ export class ReceiptService {
     const criteria = before.criteria.filter(
       (c) => c.active && (c.requiredKind === receipt.kind || (c.requiredKind === 'any' && kindFor(c.text) === receipt.kind)),
     );
-    if (criteria.length === 0) return 'no_criterion';
+    if (criteria.length === 0) {
+      await this.noteCommit(issue, receipt, before, settings);
+      return 'no_criterion';
+    }
 
     const detailsKey = JSON.stringify(receipt.details);
     let stored = false;
@@ -212,12 +218,47 @@ export class ReceiptService {
     }
     if (!stored) return 'duplicate';
 
+    await this.settle(issue, before, receipt.details.commit, settings);
+    return passing ? 'recorded' : 'recorded_failing';
+  }
+
+  /**
+   * A receipt that no criterion asks for still says which commit the work is at. It is
+   * kept as evidence that belongs to no criterion: it can prove nothing, and it moves the
+   * commit, so proof of an earlier commit goes stale.
+   */
+  private async noteCommit(issue: IssueInfo, receipt: Receipt, before: ContractBundle, settings: ProjectSettings): Promise<void> {
+    const detailsKey = JSON.stringify(receipt.details);
+    if (before.evidence.some((e) => e.criterionId === NO_CRITERION && e.kind === receipt.kind && JSON.stringify(e.details) === detailsKey)) return;
+    const now = this.now();
+    await this.store.insertEvidence(
+      {
+        id: newId(now),
+        criterionId: NO_CRITERION,
+        issueId: issue.id,
+        kind: receipt.kind,
+        summary: receipt.summary,
+        url: receipt.url,
+        details: receipt.details,
+        channel: 'ci',
+        actorAccountId: null,
+        agentName: null,
+        checks: [],
+        checksPassed: false,
+        createdAt: now,
+      },
+      issue.projectId,
+    );
+    await this.settle(issue, before, receipt.details.commit, settings);
+  }
+
+  /** Stores the summary after a receipt, with the events for proof that went stale, was completed or was reopened. */
+  private async settle(issue: IssueInfo, before: ContractBundle, commit: string, settings: ProjectSettings): Promise<void> {
     const after = await this.store.getBundle(issue.id);
     const was = summarize(before.criteria, before.evidence, before.verdicts, settings.requireIndependent);
     const summary = summarize(after.criteria, after.evidence, after.verdicts, settings.requireIndependent);
-    const moved = before.evidence.some((e) => e.details.commit && !sameCommit(e.details.commit, receipt.details.commit));
-    if (moved && summary.stale > 0) {
-      await this.event(issue.projectId, issue.id, 'proof.stale', null, 'ci', { commit: receipt.details.commit, criteria: summary.stale });
+    if (summary.stale > was.stale) {
+      await this.event(issue.projectId, issue.id, 'proof.stale', null, 'ci', { commit, criteria: summary.stale });
     }
     if (was.state !== 'proven' && summary.state === 'proven') {
       await this.event(issue.projectId, issue.id, 'proof.completed', null, 'ci', { total: summary.total });
@@ -225,7 +266,6 @@ export class ReceiptService {
       await this.event(issue.projectId, issue.id, 'proof.reopened', null, 'ci', { proven: summary.proven, total: summary.total });
     }
     await saveProof(this.store, this.jira, issue, summary, this.now());
-    return passing ? 'recorded' : 'recorded_failing';
   }
 
   private async adminProject(projectId: string, what: string) {

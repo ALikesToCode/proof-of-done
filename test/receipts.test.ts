@@ -208,6 +208,24 @@ describe('a new commit', () => {
     expect((await view()).summary).toMatchObject({ proven: 2, stale: 0 });
   });
 
+  it('counts even when no criterion asks for what the pipeline reported', async () => {
+    const start = await view();
+    await contracts.removeCriterion('MOBL-1', ALICE, start.criteria[1]!.id);
+    await receipts.accept(key, body({}));
+    expect((await view()).criteria[0]!.state).toBe('proven');
+
+    const build = JSON.stringify({ issue: 'MOBL-1', commit: B, status: 'success' });
+    expect((await receipts.accept(key, build)).outcome).toBe('no_criterion');
+    expect((await receipts.accept(key, build)).outcome).toBe('no_criterion');
+    const after = await view();
+    expect(after.commit).toBe(B);
+    expect(after.criteria[0]).toMatchObject({ state: 'unproven', stale: true });
+    expect(after.criteria.flatMap((c) => c.evidence)).toHaveLength(1);
+    expect(store.evidence).toHaveLength(2);
+    expect(store.eventTypes('10001').filter((type) => type === 'proof.stale')).toHaveLength(1);
+    expect(jira.properties.get('10001')).toMatchObject({ state: 'unproven' });
+  });
+
   it('also turns stale what an agent claimed about the earlier commit', async () => {
     const start = await view();
     await contracts.submitEvidence('MOBL-1', AGENT, {
