@@ -1,0 +1,53 @@
+{
+  "task": "t12_bytesize",
+  "criteria": [
+    "`bytesize.py` implements two functions: `format_size(count)`, which returns a `str`, and `parse_size(text)`, which returns an `int`.",
+    "`format_size(count)` takes `count` as an `int` number of bytes and uses the units `B`, `KiB`, `MiB`, `GiB` and `TiB`, each 1024 times the one before.",
+    "`format_size` returns the count and `B` with no decimal for counts below 1024 bytes, for example `\"0 B\"` and `\"1023 B\"`.",
+    "`format_size` returns, from 1024 bytes on, a value with exactly one decimal and the largest unit in which the value is at least 1, for example `\"1.0 KiB\"` and `\"1.5 KiB\"`.",
+    "`format_size` rounds the value to one decimal, and an exact half rounds away from zero: 1280 bytes (exactly 1.25 KiB) gives `\"1.3 KiB\"`, and 2304 bytes (2.25 KiB) gives `\"2.3 KiB\"`.",
+    "`format_size` uses the next unit when rounding gives `1024.0`: 1048575 bytes gives `\"1.0 MiB\"`, not `\"1024.0 KiB\"`. `TiB` is the last unit, so values of 1024 TiB and more stay in `TiB`, for example `\"2048.0 TiB\"`.",
+    "`format_size` formats a negative count as its absolute value with a leading `-`, for example `\"-1.5 KiB\"`.",
+    "`format_size` raises `TypeError` when given a `bool` or a value that is not an `int`.",
+    "`parse_size(text)` accepts a number, optional spaces, and a unit, for example `\"1.5 KiB\"`, `\"1.5KiB\"` and `\"10 B\"`. Spaces around the whole text are ignored. Units are matched exactly as written (`B`, `KiB`, `MiB`, `GiB`, `TiB`), and `kib` and `KB` are invalid.",
+    "`parse_size` accepts a number made of digits with an optional fraction of one or more digits and an optional leading `-`. A fraction is not allowed with the unit `B`.",
+    "`parse_size` returns the exact number of bytes when that is a whole number and raises `ValueError` when it is not: `\"0.5 KiB\"` gives 512, and `\"0.1 KiB\"` raises `ValueError`.",
+    "`parse_size` raises `ValueError` for any other text.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`bytesize.py` implements two functions: `format_size(count)`, which returns a `str`, and `parse_size(text)`, which returns an `int`.",
+        "`format_size(count)` takes `count` as an `int` number of bytes and uses the units `B`, `KiB`, `MiB`, `GiB` and `TiB`, each 1024 times the one before.",
+        "`format_size` returns the count and `B` with no decimal for counts below 1024 bytes, for example `\"0 B\"` and `\"1023 B\"`.",
+        "`format_size` returns, from 1024 bytes on, a value with exactly one decimal and the largest unit in which the value is at least 1, for example `\"1.0 KiB\"` and `\"1.5 KiB\"`.",
+        "`format_size` rounds the value to one decimal, and an exact half rounds away from zero: 1280 bytes (exactly 1.25 KiB) gives `\"1.3 KiB\"`, and 2304 bytes (2.25 KiB) gives `\"2.3 KiB\"`.",
+        "`format_size` uses the next unit when rounding gives `1024.0`: 1048575 bytes gives `\"1.0 MiB\"`, not `\"1024.0 KiB\"`. `TiB` is the last unit, so values of 1024 TiB and more stay in `TiB`, for example `\"2048.0 TiB\"`.",
+        "`format_size` formats a negative count as its absolute value with a leading `-`, for example `\"-1.5 KiB\"`.",
+        "`format_size` raises `TypeError` when given a `bool` or a value that is not an `int`.",
+        "`parse_size(text)` accepts a number, optional spaces, and a unit, for example `\"1.5 KiB\"`, `\"1.5KiB\"` and `\"10 B\"`. Spaces around the whole text are ignored. Units are matched exactly as written (`B`, `KiB`, `MiB`, `GiB`, `TiB`), and `kib` and `KB` are invalid.",
+        "`parse_size` accepts a number made of digits with an optional fraction of one or more digits and an optional leading `-`. A fraction is not allowed with the unit `B`.",
+        "`parse_size` returns the exact number of bytes when that is a whole number and raises `ValueError` when it is not: `\"0.5 KiB\"` gives 512, and `\"0.1 KiB\"` raises `ValueError`.",
+        "`parse_size` raises `ValueError` for any other text.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

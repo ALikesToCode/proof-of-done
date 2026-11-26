@@ -1,0 +1,48 @@
+{
+  "task": "t08_roman",
+  "source": "benchmark-dev",
+  "version": "twin",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:10+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The harness ran `python3 -m unittest test_visible -v` on the final files: 4 passed, 0 failed, exit 0. The final roman.py defines both `to_roman(number)` and `from_roman(text)`."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The code checks that the input is an int in 1 to 3999 and raises ValueError otherwise. The greedy `_PAIRS` table includes the subtractive pairs (4, 9, 40, 90, 400, 900). The passing known-value test covers those forms, and the round-trip test covers every value from 1 to 3999 through `from_roman`."
+    },
+    {
+      "criterion": "c3",
+      "decision": "not_proven",
+      "reason": "The code does not reject all non-standard forms. `from_roman('IIII')` computes 4 and returns it, `from_roman('VX')` computes 5 and returns it, and `from_roman('IC')` computes 99 and returns it, so none of these raises ValueError as the criterion requires. Only the out-of-range case `MMMM` is rejected. The visible tests do not check these forms. To convince me, the function would need to reject any text that is not the exact output of `to_roman` for some number, for example by comparing `to_roman(from_roman(text)) == text`, together with tests for IIII, VX, IC, iv and the empty string."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "The harness ran the provided tests on the final files and all 4 passed. The harness file_hash record shows test_visible.py has the same SHA-256 before and after the work, so the file is unchanged."
+    }
+  ],
+  "criteria": 4,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4284,
+      "output_tokens": 1070,
+      "seconds": 6.367,
+      "cost_usd": 0.0010704500000000001
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The harness ran `python3 -m unittest test_visible -v` on the final files: 4 passed, 0 failed, exit 0. The final roman.py defines both `to_roman(number)` and `from_roman(text)`.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The code checks that the input is an int in 1 to 3999 and raises ValueError otherwise. The greedy `_PAIRS` table includes the subtractive pairs (4, 9, 40, 90, 400, 900). The passing known-value test covers those forms, and the round-trip test covers every value from 1 to 3999 through `from_roman`.\"}, {\"criterion\": \"c3\", \"decision\": \"not_proven\", \"reason\": \"The code does not reject all non-standard forms. `from_roman('IIII')` computes 4 and returns it, `from_roman('VX')` computes 5 and returns it, and `from_roman('IC')` computes 99 and returns it, so none of these raises ValueError as the criterion requires. Only the out-of-range case `MMMM` is rejected. The visible tests do not check these forms. To convince me, the function would need to reject any text that is not the exact output of `to_roman` for some number, for example by comparing `to_roman(from_roman(text)) == text`, together with tests for IIII, VX, IC, iv and the empty string.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"The harness ran the provided tests on the final files and all 4 passed. The harness file_hash record shows test_visible.py has the same SHA-256 before and after the work, so the file is unchanged.\"}]}"
+}

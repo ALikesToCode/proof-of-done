@@ -1,0 +1,49 @@
+{
+  "task": "t06_record",
+  "criteria": [
+    "`record.py` implements two functions: `parse_record(text, delimiter=\",\")`, which returns a `list[str]`, and `format_record(fields, delimiter=\",\")`, which returns a `str`.",
+    "`parse_record` splits fields on the delimiter. The empty string is one empty field, `[\"\"]`. `\"a,,b\"` gives `[\"a\", \"\", \"b\"]` and `\"a,\"` gives `[\"a\", \"\"]`.",
+    "In `parse_record`, a field whose first character is `\"` is a quoted field and runs to the closing quote. Inside it, two quotes `\"\"` stand for one quote character, and the delimiter, `\"\\n\"` and `\"\\r\"` are ordinary characters.",
+    "In `parse_record`, the character right after a quoted field's closing quote must be the delimiter or the end of the text. Anything else raises `ValueError`, so `\"a\"b` (with the quotes) is invalid. A quoted field that never closes raises `ValueError`.",
+    "In `parse_record`, a field that does not start with `\"` is an unquoted field. It is taken as it is with spaces kept, so `\" a , b \"` gives `[\" a \", \" b \"]`. A `\"` anywhere inside an unquoted field raises `ValueError`, so `ab\"c` is invalid.",
+    "`parse_record` parses one record: `\"\\n\"` or `\"\\r\"` outside a quoted field raises `ValueError`.",
+    "`format_record` joins the fields with the delimiter. A field is written in quotes when it contains the delimiter, a `\"`, `\"\\n\"` or `\"\\r\"`, or when it starts or ends with a space. Every other field, the empty string included, is written without quotes. Inside quotes, each `\"` is doubled.",
+    "`format_record` raises `ValueError` unless `fields` holds at least one field and every field is a `str`.",
+    "For every valid `fields` and delimiter `d`, `parse_record(format_record(fields, d), d) == list(fields)`.",
+    "Both `parse_record` and `format_record` raise `ValueError` unless `delimiter` is exactly one character and is not `\"`, `\"\\n\"` or `\"\\r\"`.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`record.py` implements two functions: `parse_record(text, delimiter=\",\")`, which returns a `list[str]`, and `format_record(fields, delimiter=\",\")`, which returns a `str`.",
+        "`parse_record` splits fields on the delimiter. The empty string is one empty field, `[\"\"]`. `\"a,,b\"` gives `[\"a\", \"\", \"b\"]` and `\"a,\"` gives `[\"a\", \"\"]`.",
+        "In `parse_record`, a field whose first character is `\"` is a quoted field and runs to the closing quote. Inside it, two quotes `\"\"` stand for one quote character, and the delimiter, `\"\\n\"` and `\"\\r\"` are ordinary characters.",
+        "In `parse_record`, the character right after a quoted field's closing quote must be the delimiter or the end of the text. Anything else raises `ValueError`, so `\"a\"b` (with the quotes) is invalid. A quoted field that never closes raises `ValueError`.",
+        "In `parse_record`, a field that does not start with `\"` is an unquoted field. It is taken as it is with spaces kept, so `\" a , b \"` gives `[\" a \", \" b \"]`. A `\"` anywhere inside an unquoted field raises `ValueError`, so `ab\"c` is invalid.",
+        "`parse_record` parses one record: `\"\\n\"` or `\"\\r\"` outside a quoted field raises `ValueError`.",
+        "`format_record` joins the fields with the delimiter. A field is written in quotes when it contains the delimiter, a `\"`, `\"\\n\"` or `\"\\r\"`, or when it starts or ends with a space. Every other field, the empty string included, is written without quotes. Inside quotes, each `\"` is doubled.",
+        "`format_record` raises `ValueError` unless `fields` holds at least one field and every field is a `str`.",
+        "For every valid `fields` and delimiter `d`, `parse_record(format_record(fields, d), d) == list(fields)`.",
+        "Both `parse_record` and `format_record` raise `ValueError` unless `delimiter` is exactly one character and is not `\"`, `\"\\n\"` or `\"\\r\"`.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

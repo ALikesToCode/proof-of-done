@@ -1,0 +1,53 @@
+{
+  "task": "t24_column",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:21+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": true,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "column.py defines column_name(index) and column_index(name), as the code shows. The harness ran the provided tests after the work and they exited 0 with 3 passed, 0 failed."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The code computes the name by base-26 division, and I traced 1, 26, 27, 52, 53, 702 and 703 to A, Z, AA, AZ, BA, ZZ and AAA. The harness-run test_names checks all of these values and passed."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "column_index accumulates the base-26 value after calling name.upper(), so it reverses column_name and accepts lower case. The harness-run test_names and test_lower_case cover this and passed."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "column_name raises ValueError when index is below 1, and column_index rejects the empty string and any character outside A-Z and a-z, which the code checks. The harness-run test_bad covers 0, -1, '', 'A1', 'A A', 'É', '1' and '-' and passed."
+    },
+    {
+      "criterion": "c5",
+      "decision": "proven",
+      "reason": "The harness ran the provided tests after the work with exit 0 and 3 passed. The harness file_hash record shows test_visible.py has the same SHA-256 before and after the work, so it is unchanged."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4040,
+      "output_tokens": 948,
+      "seconds": 5.533,
+      "cost_usd": 0.00097895
+    }
+  ],
+  "answer": "```json\n{\"criteria\": [\n  {\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"column.py defines column_name(index) and column_index(name), as the code shows. The harness ran the provided tests after the work and they exited 0 with 3 passed, 0 failed.\"},\n  {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The code computes the name by base-26 division, and I traced 1, 26, 27, 52, 53, 702 and 703 to A, Z, AA, AZ, BA, ZZ and AAA. The harness-run test_names checks all of these values and passed.\"},\n  {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"column_index accumulates the base-26 value after calling name.upper(), so it reverses column_name and accepts lower case. The harness-run test_names and test_lower_case cover this and passed.\"},\n  {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"column_name raises ValueError when index is below 1, and column_index rejects the empty string and any character outside A-Z and a-z, which the code checks. The harness-run test_bad covers 0, -1, '', 'A1', 'A A', 'É', '1' and '-' and passed.\"},\n  {\"criterion\": \"c5\", \"decision\": \"proven\", \"reason\": \"The harness ran the provided tests after the work with exit 0 and 3 passed. The harness file_hash record shows test_visible.py has the same SHA-256 before and after the work, so it is unchanged.\"}\n]}\n```"
+}

@@ -1,0 +1,48 @@
+{
+  "task": "t08_roman",
+  "source": "benchmark-dev",
+  "version": "twin",
+  "cell": 3,
+  "form": "specific",
+  "kind": "worker",
+  "at": "2026-11-26T21:30:29+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The files after the work define both `to_roman` and `from_roman` in `roman.py`, and the passing run imports both from that module, so the functions exist as required."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The `_PAIRS` table includes all six subtractive pairs, and `to_roman` raises `ValueError` outside 1 to 3999. `test_known_values` checks IV, IX, XL, XC, CD and CM, and `test_out_of_range` checks 0 and 4000, so the readable code and test file together cover the criterion."
+    },
+    {
+      "criterion": "c3",
+      "decision": "not_proven",
+      "reason": "The code does not reject non-standard forms. `from_roman('IIII')` returns 4, `from_roman('VX')` returns 5 and `from_roman('IC')` returns 99, where the criterion requires `ValueError`. The suite does not test these inputs, so the criterion is not met. A fix would need a round-trip check such as `to_roman(result) == text`, plus a passing test for these cases."
+    },
+    {
+      "criterion": "c4",
+      "decision": "not_proven",
+      "reason": "The four provided tests pass, but nothing in the record shows that `test_visible.py` is unchanged from its original. The worker says so itself. A harness-recorded diff or hash against the original file would be needed."
+    }
+  ],
+  "criteria": 4,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4215,
+      "output_tokens": 1442,
+      "seconds": 8.315,
+      "cost_usd": 0.001247825
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The files after the work define both `to_roman` and `from_roman` in `roman.py`, and the passing run imports both from that module, so the functions exist as required.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The `_PAIRS` table includes all six subtractive pairs, and `to_roman` raises `ValueError` outside 1 to 3999. `test_known_values` checks IV, IX, XL, XC, CD and CM, and `test_out_of_range` checks 0 and 4000, so the readable code and test file together cover the criterion.\"}, {\"criterion\": \"c3\", \"decision\": \"not_proven\", \"reason\": \"The code does not reject non-standard forms. `from_roman('IIII')` returns 4, `from_roman('VX')` returns 5 and `from_roman('IC')` returns 99, where the criterion requires `ValueError`. The suite does not test these inputs, so the criterion is not met. A fix would need a round-trip check such as `to_roman(result) == text`, plus a passing test for these cases.\"}, {\"criterion\": \"c4\", \"decision\": \"not_proven\", \"reason\": \"The four provided tests pass, but nothing in the record shows that `test_visible.py` is unchanged from its original. The worker says so itself. A harness-recorded diff or hash against the original file would be needed.\"}]}"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "t29_daterange",
+  "module": "daterange",
+  "source": "benchmark",
+  "note": "The report is about the missing last day; the counting function shares the bound, and the hidden tests reach descending ranges and steps that do not land on the end.",
+  "twin_breaks": [
+    {
+      "rule": "When `start` is after `end`, the list runs backward by the same rule",
+      "tests": [
+        "test_backward",
+        "test_count_is_fast"
+      ]
+    },
+    {
+      "rule": "`step` must be an `int` of at least 1, otherwise `ValueError`",
+      "tests": [
+        "test_bad_step"
+      ]
+    },
+    {
+      "rule": "`count_dates(start, end, step=1)` is `len(dates_between(start, end, step))`",
+      "tests": [
+        "test_count_matches_the_list"
+      ]
+    }
+  ]
+}

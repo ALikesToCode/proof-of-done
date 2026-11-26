@@ -1,0 +1,50 @@
+{
+  "id": "t28_bump",
+  "module": "bump",
+  "source": "benchmark",
+  "note": "Visible tests bump a 1.x version with one commit; hidden tests cover the precedence between commit kinds, the rules below 1.0.0, breaking-change footers and commits that do not count.",
+  "twin_breaks": [
+    {
+      "rule": "The first line of a message is its header",
+      "tests": [
+        "test_body_does_not_add_types"
+      ]
+    },
+    {
+      "rule": "`scope` is anything but parentheses and is not empty",
+      "tests": [
+        "test_scopes"
+      ]
+    },
+    {
+      "rule": "A header in another form does not count at all",
+      "tests": [
+        "test_headers_that_do_not_count"
+      ]
+    },
+    {
+      "rule": "A line after the header that starts with `BREAKING CHANGE: ` or `BREAKING-CHANGE: `",
+      "tests": [
+        "test_footers"
+      ]
+    },
+    {
+      "rule": "Type `feat` is a feature and type `fix` is a fix",
+      "tests": [
+        "test_other_types"
+      ]
+    },
+    {
+      "rule": "Below 1.0.0 (MAJOR is 0): breaking gives `0.MINOR+1.0`, and a feature or a fix gives `0.MINOR.PATCH+1`",
+      "tests": [
+        "test_below_one"
+      ]
+    },
+    {
+      "rule": "A `current` that is not a valid version raises `ValueError`",
+      "tests": [
+        "test_bad_current"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "task": "t25_chunks",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:42+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": true,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "chunks.py defines both functions; each returns a new list of new lists built from slices, so the argument is not changed. The harness run passed 4/4, including test_argument_not_changed, and the code matches the criterion."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "chunk uses range(0, len, size) with slices, which gives consecutive pieces with a shorter last piece and returns [] for an empty list. test_chunk covers these cases and the harness run passed."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "sliding iterates range(0, len-size+1, step), which yields windows starting at 0, step, 2*step, and so on, drops windows that run past the end, and returns [] when the list is shorter than size. test_sliding covers these cases and the harness run passed."
+    },
+    {
+      "criterion": "c4",
+      "decision": "proven",
+      "reason": "_check raises ValueError unless size (and step, in sliding) is an int of at least 1, rejecting bools too. chunk validates size and sliding validates size and step; test_bad covers sizes 0, -1, 1.5 and step 0, and the harness run passed."
+    },
+    {
+      "criterion": "c5",
+      "decision": "proven",
+      "reason": "The harness ran python3 -m unittest test_visible and got 4 passed, 0 failed, exit 0. The harness file hash for test_visible.py is identical before and after the work, so the file is unchanged."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4483,
+      "output_tokens": 909,
+      "seconds": 5.18,
+      "cost_usd": 0.001014825
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"chunks.py defines both functions; each returns a new list of new lists built from slices, so the argument is not changed. The harness run passed 4/4, including test_argument_not_changed, and the code matches the criterion.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"chunk uses range(0, len, size) with slices, which gives consecutive pieces with a shorter last piece and returns [] for an empty list. test_chunk covers these cases and the harness run passed.\"}, {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"sliding iterates range(0, len-size+1, step), which yields windows starting at 0, step, 2*step, and so on, drops windows that run past the end, and returns [] when the list is shorter than size. test_sliding covers these cases and the harness run passed.\"}, {\"criterion\": \"c4\", \"decision\": \"proven\", \"reason\": \"_check raises ValueError unless size (and step, in sliding) is an int of at least 1, rejecting bools too. chunk validates size and sliding validates size and step; test_bad covers sizes 0, -1, 1.5 and step 0, and the harness run passed.\"}, {\"criterion\": \"c5\", \"decision\": \"proven\", \"reason\": \"The harness ran python3 -m unittest test_visible and got 4 passed, 0 failed, exit 0. The harness file hash for test_visible.py is identical before and after the work, so the file is unchanged.\"}]}"
+}

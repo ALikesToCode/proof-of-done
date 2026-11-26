@@ -1,0 +1,23 @@
+{
+  "id": "t02_ledger",
+  "module": "ledger",
+  "source": "benchmark",
+  "note": "The bug report names one function; the same rounding fault sits in a second function, and float arithmetic hides a half-cent case that TASK.md spells out.",
+  "twin_breaks": [
+    {
+      "rule": "Wherever the module rounds an amount to whole cents, an exact half rounds up",
+      "tests": [
+        "test_tax_half_up",
+        "test_tax_exact_decimal",
+        "test_order_total_uses_fixed_rounding",
+        "test_decimal_percentages"
+      ]
+    },
+    {
+      "rule": "`parts` below 1 raises `ValueError`",
+      "tests": [
+        "test_split_bad_parts"
+      ]
+    }
+  ]
+}

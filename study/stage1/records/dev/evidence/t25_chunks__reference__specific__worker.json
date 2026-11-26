@@ -1,0 +1,101 @@
+{
+  "task": "t25_chunks",
+  "version": "reference",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`chunks.py` implements two functions, `chunk(items, size)` and `sliding(items, size, step=1)`; both take a `list` and return a `list` of `list`s, and neither changes its argument.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests ran against chunks.py and all 4 passed. This includes test_argument_not_changed, which by its name checks that the argument list is not modified. The output does not show the test bodies, so the return type (list of lists) is not shown directly.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`chunk(items, size)` cuts the list into consecutive pieces of `size` items; the last piece may be shorter; an empty list gives `[]`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_chunk passed. By its name it exercises chunk(). The output does not show which cases it covers (short last piece, empty list), so this is partial evidence for c2.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\nRan 4 tests in 0.001s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "`sliding(items, size, step=1)` returns every window of exactly `size` consecutive items, starting at positions 0, `step`, `2 * step`, and so on; a window that would run past the end is left out; a list shorter than `size` gives `[]`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_sliding passed. By its name it exercises sliding(). The output does not show which cases it covers (step values, dropped partial windows, list shorter than size), so this is partial evidence for c3.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\nRan 4 tests in 0.001s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "In `chunk` and `sliding`, `size` and `step` must be `int`s of at least 1, otherwise `ValueError` is raised.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "test_bad passed. By its name it checks invalid input handling. The output does not show which inputs it tries (non-int, below 1, for size and step, in both functions), so this is partial evidence for c4.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\nRan 4 tests in 0.001s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "All 4 provided tests in test_visible.py passed, with 0 failures. The output does not show whether test_visible.py was left unchanged; that is not demonstrated by this record.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_argument_not_changed (test_visible.VisibleTests.test_argument_not_changed) ... ok\ntest_bad (test_visible.VisibleTests.test_bad) ... ok\ntest_chunk (test_visible.VisibleTests.test_chunk) ... ok\ntest_sliding (test_visible.VisibleTests.test_sliding) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1592,
+        "output_tokens": 1517,
+        "seconds": 10.402,
+        "note": "The only evidence is one run of the provided visible tests: 4 tests ran and all passed. The output shows test names and results only, not the test bodies or the source of chunks.py, so each criterion is supported only as far as those tests cover it."
+      }
+    ]
+  }
+}

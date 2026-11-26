@@ -1,0 +1,48 @@
+{
+  "id": "t15_glob",
+  "module": "glob_match",
+  "source": "benchmark",
+  "note": "Visible tests use * and ? inside one path segment; hidden tests cover ** across segments, the rule that * stops at a slash, classes, escapes and malformed patterns.",
+  "twin_breaks": [
+    {
+      "rule": "`?` matches exactly one character that is not `/`",
+      "tests": [
+        "test_star_stops_at_slash"
+      ]
+    },
+    {
+      "rule": "It then matches zero or more whole segments",
+      "tests": [
+        "test_double_star_segments"
+      ]
+    },
+    {
+      "rule": "Inside a segment with other characters, `**` is two `*` in a row and acts like one `*`",
+      "tests": [
+        "test_double_star_inside_a_segment"
+      ]
+    },
+    {
+      "rule": "A class never matches `/`",
+      "tests": [
+        "test_classes"
+      ]
+    },
+    {
+      "rule": "`\\` makes the next character literal",
+      "tests": [
+        "test_escapes"
+      ]
+    },
+    {
+      "rule": "A pattern with an unclosed `[` or a `\\` at its very end raises `ValueError`",
+      "tests": [
+        "test_malformed"
+      ]
+    }
+  ],
+  "disputed_assertions_removed": 1,
+  "changes_from_benchmark": [
+    "The assertion listed in the benchmark's hidden/disputed.json is removed."
+  ]
+}

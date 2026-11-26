@@ -1,0 +1,45 @@
+{
+  "task": "c05_semver",
+  "criteria": [
+    "`compare(a, b)` in `versions.py` returns -1, 0 or 1 as version `a` is older than, equal to or newer than version `b`.",
+    "In `compare`, a version is `MAJOR.MINOR.PATCH`: three numbers joined by dots, each written with one or more of the digits `0`-`9`; the numbers are compared as numbers, left to right: `compare(\"1.10.0\", \"1.9.0\")` is 1 and `compare(\"2.0.0\", \"10.0.0\")` is -1.",
+    "In `compare`, leading zeros change nothing: `compare(\"1.02.0\", \"1.2.0\")` is 0.",
+    "In `compare`, a version may end with a pre-release tag: a hyphen followed by one or more ASCII letters and digits, as in `1.2.0-rc1`; a version with a tag is older than the same three numbers without a tag: `compare(\"1.2.0-rc1\", \"1.2.0\")` is -1.",
+    "In `compare`, the numbers decide first; tags are looked at only when all three numbers are equal: `compare(\"1.3.0-rc1\", \"1.2.9\")` is 1.",
+    "In `compare`, two tags on equal numbers are compared as Python compares two `str` values: `compare(\"1.2.0-alpha\", \"1.2.0-beta\")` is -1, `compare(\"1.2.0-rc2\", \"1.2.0-rc1\")` is 1 and `compare(\"1.2.0-rc10\", \"1.2.0-rc9\")` is -1; equal tags give 0.",
+    "`compare` raises `ValueError` for any other text that is not a version, whichever argument it is; that covers fewer or more than three numbers (`1.2`, `1.2.3.4`), an empty part (`1..3`), a part with a sign, a space or a letter (`+1.2.3`, `1. 2.3`, `1.x.0`), an empty tag (`1.2.0-`), a tag with any other character (`1.2.0-rc.1`), and the empty string.",
+    "`compare` raises `TypeError` for an argument that is not a `str`.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`compare(a, b)` in `versions.py` returns -1, 0 or 1 as version `a` is older than, equal to or newer than version `b`.",
+        "In `compare`, a version is `MAJOR.MINOR.PATCH`: three numbers joined by dots, each written with one or more of the digits `0`-`9`; the numbers are compared as numbers, left to right: `compare(\"1.10.0\", \"1.9.0\")` is 1 and `compare(\"2.0.0\", \"10.0.0\")` is -1.",
+        "In `compare`, leading zeros change nothing: `compare(\"1.02.0\", \"1.2.0\")` is 0.",
+        "In `compare`, a version may end with a pre-release tag: a hyphen followed by one or more ASCII letters and digits, as in `1.2.0-rc1`; a version with a tag is older than the same three numbers without a tag: `compare(\"1.2.0-rc1\", \"1.2.0\")` is -1.",
+        "In `compare`, the numbers decide first; tags are looked at only when all three numbers are equal: `compare(\"1.3.0-rc1\", \"1.2.9\")` is 1.",
+        "In `compare`, two tags on equal numbers are compared as Python compares two `str` values: `compare(\"1.2.0-alpha\", \"1.2.0-beta\")` is -1, `compare(\"1.2.0-rc2\", \"1.2.0-rc1\")` is 1 and `compare(\"1.2.0-rc10\", \"1.2.0-rc9\")` is -1; equal tags give 0.",
+        "`compare` raises `ValueError` for any other text that is not a version, whichever argument it is; that covers fewer or more than three numbers (`1.2`, `1.2.3.4`), an empty part (`1..3`), a part with a sign, a space or a letter (`+1.2.3`, `1. 2.3`, `1.x.0`), an empty tag (`1.2.0-`), a tag with any other character (`1.2.0-rc.1`), and the empty string.",
+        "`compare` raises `TypeError` for an argument that is not a `str`.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

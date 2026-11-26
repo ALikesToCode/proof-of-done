@@ -1,0 +1,35 @@
+{
+  "id": "t07_slug",
+  "module": "slug",
+  "source": "benchmark",
+  "note": "A plain cut at max_length passes the visible tests; hidden tests cover the word-boundary rule at its edges, the suffix that has to fit inside max_length, and the unchanged slug rules.",
+  "twin_breaks": [
+    {
+      "rule": "it is shortened to the longest run of whole leading words that fits in `max_length` characters",
+      "tests": [
+        "test_exact_fit"
+      ]
+    },
+    {
+      "rule": "`max_length` below 1 raises `ValueError`",
+      "tests": [
+        "test_bad_max_length"
+      ]
+    },
+    {
+      "rule": "With `max_length`, the whole result, suffix included, is at most `max_length` characters. The base is shortened by rules 2 to 4 to `max_length` minus the length of the suffix",
+      "tests": [
+        "test_unique_suffix_fits_in_max_length",
+        "test_unique_suffix_grows",
+        "test_unique_skips_taken_shortened_forms",
+        "test_unique_one_character_base"
+      ]
+    },
+    {
+      "rule": "When a suffix leaves less than one character for the base, `ValueError` is raised",
+      "tests": [
+        "test_unique_no_room_for_base"
+      ]
+    }
+  ]
+}

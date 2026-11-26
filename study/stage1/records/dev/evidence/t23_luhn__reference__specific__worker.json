@@ -1,0 +1,101 @@
+{
+  "task": "t23_luhn",
+  "version": "reference",
+  "form": "specific",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "`is_valid(number)` takes a `str`. Spaces and hyphens are removed first. What is left must be 2 or more characters, all digits `0`-`9`; otherwise `is_valid` returns `False`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests test_valid and test_invalid passed. They are the only check of is_valid's input handling (separator stripping, rejecting too-short or non-digit input). I did not see the test bodies in this session, so how much of c1 they cover is not shown by the output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_check_digit (test_visible.VisibleTests.test_check_digit) ... ok\ntest_check_digit_bad (test_visible.VisibleTests.test_check_digit_bad) ... ok\ntest_invalid (test_visible.VisibleTests.test_invalid) ... ok\ntest_valid (test_visible.VisibleTests.test_valid) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "`is_valid` applies the Luhn rule: starting from the rightmost digit and moving left, every second digit is doubled (the second from the right, the fourth, and so on); when doubling gives more than 9, 9 is subtracted. The number is valid when the sum of all digits is divisible by 10. `is_valid` returns `True` or `False` and never raises for a `str`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests test_valid and test_invalid passed, so is_valid returned the expected True/False for the cases they contain, and none raised. The output does not show which inputs were used, so it does not show that every part of the Luhn rule was exercised.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_invalid (test_visible.VisibleTests.test_invalid) ... ok\ntest_valid (test_visible.VisibleTests.test_valid) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "`check_digit(partial)` takes a `str` of one or more digits, with optional spaces and hyphens, and returns the one digit, as a `str`, that makes `partial + digit` valid. Anything that is not such a string makes `check_digit` raise `ValueError`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The visible tests test_check_digit (returned digit) and test_check_digit_bad (invalid input) passed. This is the only check of check_digit. The test inputs are not shown in the output.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_check_digit (test_visible.VisibleTests.test_check_digit) ... ok\ntest_check_digit_bad (test_visible.VisibleTests.test_check_digit_bad) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "The two functions `is_valid` and `check_digit` are implemented in `luhn.py`.",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The tests ran and passed against is_valid and check_digit, so both functions exist and are importable. The output does not name the module, so the claim that they are in luhn.py is an inference from the task setup, not something the output shows.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_check_digit (test_visible.VisibleTests.test_check_digit) ... ok\ntest_check_digit_bad (test_visible.VisibleTests.test_check_digit_bad) ... ok\ntest_invalid (test_visible.VisibleTests.test_invalid) ... ok\ntest_valid (test_visible.VisibleTests.test_valid) ... ok\n\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "Running the provided test module test_visible gave 4 tests, all ok, 0 failures, final result OK. The output does not show that test_visible.py is unchanged. I have no record of a diff or checksum, so that part of c5 is not shown.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_check_digit (test_visible.VisibleTests.test_check_digit) ... ok\ntest_check_digit_bad (test_visible.VisibleTests.test_check_digit_bad) ... ok\ntest_invalid (test_visible.VisibleTests.test_invalid) ... ok\ntest_valid (test_visible.VisibleTests.test_valid) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_check_digit (test_visible.VisibleTests.test_check_digit) ... ok\ntest_check_digit_bad (test_visible.VisibleTests.test_check_digit_bad) ... ok\ntest_invalid (test_visible.VisibleTests.test_invalid) ... ok\ntest_valid (test_visible.VisibleTests.test_valid) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1714,
+        "output_tokens": 1561,
+        "seconds": 10.689,
+        "note": "The only evidence is one run of the provided visible tests (python3 -m unittest test_visible -v), which passed 4 of 4. No other command was run, so criteria are supported only to the extent those tests cover them."
+      }
+    ]
+  }
+}

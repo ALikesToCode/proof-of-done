@@ -1,0 +1,47 @@
+{
+  "task": "n02_cronfield",
+  "criteria": [
+    "`expand_field(field, low, high)` is implemented in `cronfield.py`, where `field` is one field of a cron line and `low` and `high` are the smallest and largest value the field can hold, and it returns the values the field matches as a sorted `list` of `int` with no duplicates.",
+    "Rule 1: In `expand_field`, a field is one or more parts separated by `,`, and the result holds every value matched by at least one part: `expand_field(\"5,1,5\", 0, 59)` is `[1, 5]`.",
+    "Rule 2: In `expand_field`, the part `*` matches every value from `low` to `high`, and a part that is a single number matches that number.",
+    "Rule 3: In `expand_field`, the part `a-b` is a range and matches every value from `a` to `b`, both included; `a` must not be greater than `b`: `5-3` is invalid, and `4-4` matches 4.",
+    "Rule 4: In `expand_field`, `*` or a range may be followed by `/n`, a step, and the part then matches the first value that the `*` or the range matches and every `n`-th value after it: with 0 and 59, `*/15` is `[0, 15, 30, 45]` and `10-20/4` is `[10, 14, 18]`; the step must be at least 1, and it may be larger than `high`.",
+    "Rule 5: In `expand_field`, a single number followed by a step, `a/n`, means `a-high/n`: with 0 and 59, `50/4` is `[50, 54, 58]`.",
+    "Rule 6: In `expand_field`, every number other than a step must lie from `low` to `high`: with 1 and 12, `0`, `13/2` and `10-13` are invalid.",
+    "Rule 7: In `expand_field`, a number is written with the digits `0`-`9` only and leading zeros are allowed (`05` is 5); a sign, a space or an underscore anywhere in the field makes it invalid: `+5`, `1, 2` and `1_0` are invalid.",
+    "Rule 8: `expand_field` raises `ValueError` for an invalid field, including the empty string, an empty part (`1,,2` or `1,`), a part with a missing number (`-5`, `3-`, `*/`, `/5`), names such as `MON`, and any other part that is not one of the forms above (`1-2-3`, `*-5`).",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`expand_field(field, low, high)` is implemented in `cronfield.py`, where `field` is one field of a cron line and `low` and `high` are the smallest and largest value the field can hold, and it returns the values the field matches as a sorted `list` of `int` with no duplicates.",
+        "Rule 1: In `expand_field`, a field is one or more parts separated by `,`, and the result holds every value matched by at least one part: `expand_field(\"5,1,5\", 0, 59)` is `[1, 5]`.",
+        "Rule 2: In `expand_field`, the part `*` matches every value from `low` to `high`, and a part that is a single number matches that number.",
+        "Rule 3: In `expand_field`, the part `a-b` is a range and matches every value from `a` to `b`, both included; `a` must not be greater than `b`: `5-3` is invalid, and `4-4` matches 4.",
+        "Rule 4: In `expand_field`, `*` or a range may be followed by `/n`, a step, and the part then matches the first value that the `*` or the range matches and every `n`-th value after it: with 0 and 59, `*/15` is `[0, 15, 30, 45]` and `10-20/4` is `[10, 14, 18]`; the step must be at least 1, and it may be larger than `high`.",
+        "Rule 5: In `expand_field`, a single number followed by a step, `a/n`, means `a-high/n`: with 0 and 59, `50/4` is `[50, 54, 58]`.",
+        "Rule 6: In `expand_field`, every number other than a step must lie from `low` to `high`: with 1 and 12, `0`, `13/2` and `10-13` are invalid.",
+        "Rule 7: In `expand_field`, a number is written with the digits `0`-`9` only and leading zeros are allowed (`05` is 5); a sign, a space or an underscore anywhere in the field makes it invalid: `+5`, `1, 2` and `1_0` are invalid.",
+        "Rule 8: `expand_field` raises `ValueError` for an invalid field, including the empty string, an empty part (`1,,2` or `1,`), a part with a missing number (`-5`, `3-`, `*/`, `/5`), names such as `MON`, and any other part that is not one of the forms above (`1-2-3`, `*-5`).",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

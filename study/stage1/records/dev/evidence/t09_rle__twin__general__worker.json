@@ -1,0 +1,59 @@
+{
+  "task": "t09_rle",
+  "version": "twin",
+  "form": "general",
+  "kind": "worker",
+  "usable": true,
+  "criteria": [
+    {
+      "id": "c1",
+      "text": "Every rule in the description is implemented in rle.py",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "The 4 provided tests pass. By name they cover encode, decode, the round trip, and decode rejecting a count with no character. This supports only those rules (1, 3 and part of 4). The output does not show the other rules: ValueError for digits in encode input, rejecting counts 0 or 1 and leading-zero counts in decode, and multi-digit counts such as decode('12x'). It does not show the empty-string case either. The test names suggest these are not covered, so c1 is only partly evidenced.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\ntest_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "The provided tests in test_visible.py pass, with that file unchanged",
+      "evidence": [
+        {
+          "recordedBy": "worker",
+          "kind": "test_run",
+          "summary": "All 4 tests in test_visible.py pass, with 0 failures and 0 errors. The output does not show that test_visible.py is unchanged. I have no diff or checksum, so that part of c2 is not demonstrated by this evidence.",
+          "passed": 4,
+          "failed": 0,
+          "excerpt": "$ python3 -m unittest test_visible -v\nRan 4 tests in 0.000s\n\nOK"
+        }
+      ]
+    }
+  ],
+  "visible": {
+    "ok": true,
+    "ran": 4,
+    "failed": 0,
+    "errors": 0,
+    "exit": 0,
+    "output": "test_decode (test_visible.VisibleTests.test_decode) ... ok\ntest_decode_rejects_count_without_character (test_visible.VisibleTests.test_decode_rejects_count_without_character) ... ok\ntest_encode (test_visible.VisibleTests.test_encode) ... ok\ntest_round_trip (test_visible.VisibleTests.test_round_trip) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  },
+  "worker": {
+    "model": "claude-sonnet-5-5",
+    "calls": [
+      {
+        "ok": true,
+        "problem": null,
+        "reported_model": "claude-sonnet-5-5",
+        "input_tokens": 1434,
+        "output_tokens": 868,
+        "seconds": 7.465,
+        "note": "The only evidence is one run of the provided test suite, `python3 -m unittest test_visible -v`: 4 tests, all passing. I did not inspect rle.py or run any other check in this session."
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "task": "t22_base",
+  "source": "benchmark-dev",
+  "version": "reference",
+  "cell": 4,
+  "form": "specific",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:13+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "proven",
+      "reason": "The harness run of test_visible passes 4/4, including test_to_base, which checks 255 in base 16 as \"ff\", 0 as \"0\", -10 in base 2 as \"-1010\", and the digit boundaries 35 and 36. The code in base.py uses the lower-case digit string and adds a leading \"-\" for negatives."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "test_from_base passes and covers \"ff\" and \"FF\" in base 16, \"-1010\" in base 2, and \"0\". The code lowercases the input, strips one optional leading \"-\", and accumulates digits by the inverse of to_base's method."
+    },
+    {
+      "criterion": "c3",
+      "decision": "proven",
+      "reason": "test_bad_base passes and checks bases 1, 0, 37 and -2 for both to_base and from_base with assertRaises(ValueError). The shared _check function raises for any base outside 2 to 36."
+    },
+    {
+      "criterion": "c4",
+      "decision": "not_proven",
+      "reason": "test_bad_text covers the empty string, a lone \"-\", an invalid digit, a space, \"+1\", \"1.5\" and \"--1\", and the code handles those. But from_base applies body.lower() before the lookup, so the Kelvin sign U+212A lowercases to ASCII 'k' and is accepted as the digit 20. For example, from_base(\"\\u212a\", 21) returns 20 where the spec says any other character must raise ValueError. The record would be convincing with the code fixed to validate characters before lowercasing (or to accept only ASCII A-Z) and a test covering a non-ASCII character that lowercases to a digit."
+    },
+    {
+      "criterion": "c5",
+      "decision": "proven",
+      "reason": "The harness ran python3 -m unittest test_visible -v with exit status 0 and 4 passed, 0 failed. The harness file_hash shows test_visible.py has the same SHA-256 before and after the work, so it is unchanged."
+    }
+  ],
+  "criteria": 5,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 4487,
+      "output_tokens": 1881,
+      "seconds": 10.25,
+      "cost_usd": 0.001501325
+    }
+  ],
+  "answer": "```json\n{\"criteria\": [\n  {\"criterion\": \"c1\", \"decision\": \"proven\", \"reason\": \"The harness run of test_visible passes 4/4, including test_to_base, which checks 255 in base 16 as \\\"ff\\\", 0 as \\\"0\\\", -10 in base 2 as \\\"-1010\\\", and the digit boundaries 35 and 36. The code in base.py uses the lower-case digit string and adds a leading \\\"-\\\" for negatives.\"},\n  {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"test_from_base passes and covers \\\"ff\\\" and \\\"FF\\\" in base 16, \\\"-1010\\\" in base 2, and \\\"0\\\". The code lowercases the input, strips one optional leading \\\"-\\\", and accumulates digits by the inverse of to_base's method.\"},\n  {\"criterion\": \"c3\", \"decision\": \"proven\", \"reason\": \"test_bad_base passes and checks bases 1, 0, 37 and -2 for both to_base and from_base with assertRaises(ValueError). The shared _check function raises for any base outside 2 to 36.\"},\n  {\"criterion\": \"c4\", \"decision\": \"not_proven\", \"reason\": \"test_bad_text covers the empty string, a lone \\\"-\\\", an invalid digit, a space, \\\"+1\\\", \\\"1.5\\\" and \\\"--1\\\", and the code handles those. But from_base applies body.lower() before the lookup, so the Kelvin sign U+212A lowercases to ASCII 'k' and is accepted as the digit 20. For example, from_base(\\\"\\\\u212a\\\", 21) returns 20 where the spec says any other character must raise ValueError. The record would be convincing with the code fixed to validate characters before lowercasing (or to accept only ASCII A-Z) and a test covering a non-ASCII character that lowercases to a digit.\"},\n  {\"criterion\": \"c5\", \"decision\": \"proven\", \"reason\": \"The harness ran python3 -m unittest test_visible -v with exit status 0 and 4 passed, 0 failed. The harness file_hash shows test_visible.py has the same SHA-256 before and after the work, so it is unchanged.\"}\n]}\n```"
+}

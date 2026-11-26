@@ -1,0 +1,47 @@
+{
+  "task": "n04_backoff",
+  "criteria": [
+    "backoff.py defines a function `schedule(attempts, base, factor=2, cap=None, budget=None)` that plans the waits between the tries of an operation retried with exponential backoff and returns them as a `list` in the order they are used, where `base`, `cap` and `budget` are whole numbers of milliseconds.",
+    "In `schedule`, `attempts` is the total number of tries and a delay stands between two tries, so the returned list has `attempts - 1` delays unless a later rule ends it sooner: `schedule(4, 100)` returns `[100, 200, 400]` and `schedule(1, 100)` returns `[]`.",
+    "In `schedule`, delay number `i`, counting from 0, is `base * factor ** i`, where `factor` is an `int` or a `fractions.Fraction`: `schedule(4, 100, factor=3)` returns `[100, 300, 900]`.",
+    "Every delay in the list returned by `schedule` is an `int`. A value that is not whole is rounded down, and the rounding is never carried into later delays: with `base=100` and `factor=Fraction(3, 2)` the delays are 100, 150, 225, 337, 506, where the fifth is 506.25 rounded down and not 337 times 1.5.",
+    "In `schedule` with `cap`, a delay that would be larger than `cap` is `cap` instead: `schedule(5, 100, cap=350)` returns `[100, 200, 350, 350]`.",
+    "In `schedule` with `budget`, the delays in the list never add up to more than `budget`: the list ends before the first delay that would take the sum above it, and a sum equal to `budget` is allowed. `schedule(10, 100, budget=700)` returns `[100, 200, 400]`, and `schedule(10, 100, budget=699)` returns `[100, 200]`.",
+    "In `schedule`, the cap is applied before the budget is checked: `schedule(10, 100, cap=150, budget=400)` returns `[100, 150, 150]`.",
+    "In `schedule`, `attempts=None` means there is no limit on the number of tries. Then `budget` is required, otherwise `ValueError` is raised, and the list runs until the budget ends it: `schedule(None, 100, budget=700)` returns `[100, 200, 400]`.",
+    "`schedule` raises `ValueError` unless `attempts`, `base`, `factor` and `cap` are each at least 1 and `budget` is at least 0.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "backoff.py defines a function `schedule(attempts, base, factor=2, cap=None, budget=None)` that plans the waits between the tries of an operation retried with exponential backoff and returns them as a `list` in the order they are used, where `base`, `cap` and `budget` are whole numbers of milliseconds.",
+        "In `schedule`, `attempts` is the total number of tries and a delay stands between two tries, so the returned list has `attempts - 1` delays unless a later rule ends it sooner: `schedule(4, 100)` returns `[100, 200, 400]` and `schedule(1, 100)` returns `[]`.",
+        "In `schedule`, delay number `i`, counting from 0, is `base * factor ** i`, where `factor` is an `int` or a `fractions.Fraction`: `schedule(4, 100, factor=3)` returns `[100, 300, 900]`.",
+        "Every delay in the list returned by `schedule` is an `int`. A value that is not whole is rounded down, and the rounding is never carried into later delays: with `base=100` and `factor=Fraction(3, 2)` the delays are 100, 150, 225, 337, 506, where the fifth is 506.25 rounded down and not 337 times 1.5.",
+        "In `schedule` with `cap`, a delay that would be larger than `cap` is `cap` instead: `schedule(5, 100, cap=350)` returns `[100, 200, 350, 350]`.",
+        "In `schedule` with `budget`, the delays in the list never add up to more than `budget`: the list ends before the first delay that would take the sum above it, and a sum equal to `budget` is allowed. `schedule(10, 100, budget=700)` returns `[100, 200, 400]`, and `schedule(10, 100, budget=699)` returns `[100, 200]`.",
+        "In `schedule`, the cap is applied before the budget is checked: `schedule(10, 100, cap=150, budget=400)` returns `[100, 150, 150]`.",
+        "In `schedule`, `attempts=None` means there is no limit on the number of tries. Then `budget` is required, otherwise `ValueError` is raised, and the list runs until the budget ends it: `schedule(None, 100, budget=700)` returns `[100, 200, 400]`.",
+        "`schedule` raises `ValueError` unless `attempts`, `base`, `factor` and `cap` are each at least 1 and `budget` is at least 0.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "n04_backoff",
+  "module": "backoff",
+  "source": "new",
+  "note": "Visible tests cover plain doubling, one attempt, a whole factor, a cap, a budget that the delays reach exactly and an attempts value of 0; only the hidden tests cover a fraction factor and its rounding, a budget that falls between two sums or below the first delay, the cap together with the budget, unlimited attempts and the other invalid arguments.",
+  "twin_breaks": [
+    {
+      "rule": "A value that is not whole is rounded down, and the rounding is never carried into later delays",
+      "tests": ["test_rounding_is_not_carried"]
+    },
+    {
+      "rule": "With `budget`, the delays in the list never add up to more than `budget`: the list ends before the first delay that would take the sum above it.",
+      "tests": [
+        "test_budget_is_never_exceeded",
+        "test_budget_below_the_first_delay",
+        "test_cap_with_a_budget_between_sums",
+        "test_no_limit_on_attempts_stays_within_budget"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "t18_bucket",
+  "module": "bucket",
+  "source": "benchmark",
+  "note": "Visible tests take single tokens from a full bucket; hidden tests cover refill between calls, the cap, exact-boundary amounts, the wait time and refusal without side effects.",
+  "twin_breaks": [
+    {
+      "rule": "`cost` must be greater than 0 and at most `capacity`",
+      "tests": [
+        "test_bad_cost"
+      ]
+    },
+    {
+      "rule": "When the clock reports an earlier time than at the last call, no tokens are added and none are removed for that step",
+      "tests": [
+        "test_clock_going_back"
+      ]
+    },
+    {
+      "rule": "Arithmetic is exact for exact inputs",
+      "tests": [
+        "test_exact_tenths"
+      ]
+    }
+  ]
+}

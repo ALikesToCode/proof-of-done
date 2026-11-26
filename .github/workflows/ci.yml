@@ -41,3 +41,18 @@ jobs:
           POD_ALLOW_NONINTERACTIVE=1 pod start POD-1
           if pod gate POD-1; then echo "The gate passed unproven work." >&2; exit 1; fi
           printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | pod mcp | grep -q '"submit-evidence"'
+
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Check the study's tasks and harness
+        working-directory: study/stage1/harness
+        run: |
+          python3 -m unittest discover -s . -p 'test_*.py'
+          python3 validate.py
+          python3 validate.py --set dev

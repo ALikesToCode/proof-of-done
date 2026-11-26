@@ -1,0 +1,47 @@
+{
+  "task": "t17_template",
+  "criteria": [
+    "`render(template, values)` is implemented in `template.py`, takes a `dict` as `values`, and returns the template with each field replaced.",
+    "Rule 1: In `render`, a field is `{path}`, where a path is one or more names joined by dots (such as `user.name`) and a name is letters, digits and underscores; whitespace inside the braces around the path is ignored, so `{ user.name }` is the same field as `{user.name}`.",
+    "Rule 2: In `render`, the first name of a path is looked up in `values`, and each later name is looked up in the value found so far: as a key when that value is a `dict`, and as an index when it is a `list` or a `tuple` and the name is all digits (`items.0`); attribute lookup is never used.",
+    "Rule 3: In `render`, a found value is inserted as `str(value)`, except that `None` is inserted as the empty string, and `True` and `False` are inserted as `true` and `false`.",
+    "Rule 4: In `render`, `{path|text}` gives a default: when the lookup fails at any step, `text` is inserted exactly as written, spaces included, up to the closing brace; the default may be empty (`{name|}`); a value that is found and is `None` is not a failed lookup.",
+    "Rule 5: In `render`, a failed lookup with no default raises `KeyError` whose first argument is the full path as written in the field, trimmed, such as `\"user.name\"`.",
+    "Rule 6: In `render`, `{{` is a literal `{` and `}}` is a literal `}`; they are not fields.",
+    "Rule 7: `render` raises `ValueError` for: a `{` with no closing `}`, a `}` with no opening `{`, an empty field `{}`, a path that is not valid by rule 1 (such as `{a..b}` or `{a-b}`), and a `{` inside a field.",
+    "Rule 8: In `render`, text outside fields is copied unchanged, and inserted values are not scanned again for fields.",
+    "The provided tests in test_visible.py pass, with that file unchanged"
+  ],
+  "clean": true,
+  "written_by": "claude-opus-5-5",
+  "checked_by": "claude-sonnet-5-5",
+  "edited_by_hand": false,
+  "attempts": 1,
+  "history": [
+    {
+      "criteria": [
+        "`render(template, values)` is implemented in `template.py`, takes a `dict` as `values`, and returns the template with each field replaced.",
+        "Rule 1: In `render`, a field is `{path}`, where a path is one or more names joined by dots (such as `user.name`) and a name is letters, digits and underscores; whitespace inside the braces around the path is ignored, so `{ user.name }` is the same field as `{user.name}`.",
+        "Rule 2: In `render`, the first name of a path is looked up in `values`, and each later name is looked up in the value found so far: as a key when that value is a `dict`, and as an index when it is a `list` or a `tuple` and the name is all digits (`items.0`); attribute lookup is never used.",
+        "Rule 3: In `render`, a found value is inserted as `str(value)`, except that `None` is inserted as the empty string, and `True` and `False` are inserted as `true` and `false`.",
+        "Rule 4: In `render`, `{path|text}` gives a default: when the lookup fails at any step, `text` is inserted exactly as written, spaces included, up to the closing brace; the default may be empty (`{name|}`); a value that is found and is `None` is not a failed lookup.",
+        "Rule 5: In `render`, a failed lookup with no default raises `KeyError` whose first argument is the full path as written in the field, trimmed, such as `\"user.name\"`.",
+        "Rule 6: In `render`, `{{` is a literal `{` and `}}` is a literal `}`; they are not fields.",
+        "Rule 7: `render` raises `ValueError` for: a `{` with no closing `}`, a `}` with no opening `{`, an empty field `{}`, a path that is not valid by rule 1 (such as `{a..b}` or `{a-b}`), and a `{` inside a field.",
+        "Rule 8: In `render`, text outside fields is copied unchanged, and inserted values are not scanned again for fields.",
+        "The provided tests in test_visible.py pass, with that file unchanged"
+      ],
+      "reported_model": "claude-opus-5-5",
+      "check": {
+        "ok": true,
+        "findings": {
+          "missing": [],
+          "added": [],
+          "changed": []
+        },
+        "error": null,
+        "reported_model": "claude-sonnet-5-5"
+      }
+    }
+  ]
+}

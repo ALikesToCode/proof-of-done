@@ -1,0 +1,50 @@
+{
+  "id": "t06_record",
+  "module": "record",
+  "source": "benchmark",
+  "note": "A lenient parser (for example the csv module) passes the visible tests; hidden tests cover the strict error rules, untrimmed fields and the quoting rules of the formatter.",
+  "twin_breaks": [
+    {
+      "rule": "Right after the closing quote comes the delimiter or the end of the text. Anything else raises `ValueError`",
+      "tests": [
+        "test_text_after_closing_quote"
+      ]
+    },
+    {
+      "rule": "A quoted field that never closes raises `ValueError`",
+      "tests": [
+        "test_unterminated_quote"
+      ]
+    },
+    {
+      "rule": "A `\"` anywhere inside an unquoted field raises `ValueError`",
+      "tests": [
+        "test_quote_inside_unquoted_field"
+      ]
+    },
+    {
+      "rule": "`\"\\n\"` or `\"\\r\"` outside a quoted field raises `ValueError`",
+      "tests": [
+        "test_bare_newline"
+      ]
+    },
+    {
+      "rule": "or when it starts or ends with a space",
+      "tests": [
+        "test_format_quoting"
+      ]
+    },
+    {
+      "rule": "Every other field, the empty string included, is written without quotes",
+      "tests": [
+        "test_format_empty_and_plain"
+      ]
+    },
+    {
+      "rule": "`fields` must hold at least one field, and every field must be a `str`. Otherwise `ValueError`",
+      "tests": [
+        "test_format_bad_fields"
+      ]
+    }
+  ]
+}

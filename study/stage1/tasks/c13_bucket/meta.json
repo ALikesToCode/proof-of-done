@@ -1,0 +1,10 @@
+{
+  "id": "c13_bucket",
+  "module": "bucket",
+  "source": "control-eval",
+  "origin": "EVAL-13 bucket",
+  "note": "Visible tests cover the full bucket, the empty bucket and a refill after whole seconds at two rates; only the hidden tests cover parts of a second, the cap, a time earlier than the latest one seen and the constructor's checks.",
+  "twin_breaks": [
+    {"rule": "When `now` is earlier than the latest time the bucket has seen, no tokens are added and the bucket keeps that latest time, so the same seconds are never paid for twice.", "tests": ["test_earlier_time_adds_nothing", "test_seconds_are_not_paid_twice", "test_latest_time_is_kept", "test_earlier_time_then_part_of_a_second"]}
+  ]
+}

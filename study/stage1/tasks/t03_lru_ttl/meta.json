@@ -1,0 +1,40 @@
+{
+  "id": "t03_lru_ttl",
+  "module": "lru",
+  "source": "benchmark",
+  "note": "Visible tests cover expiry through get(); hidden tests cover the exact boundary, len/in/keys, eviction that prefers expired entries, and the unchanged LRU behaviour.",
+  "twin_breaks": [
+    {
+      "rule": "A `ttl` that is not `None` must be greater than 0",
+      "tests": [
+        "test_bad_ttl"
+      ]
+    },
+    {
+      "rule": "At exactly `ttl` seconds it is already expired",
+      "tests": [
+        "test_expired_exactly_at_ttl",
+        "test_get_does_not_restart_lifetime",
+        "test_put_existing_restarts_lifetime"
+      ]
+    },
+    {
+      "rule": "An expired entry behaves as absent everywhere",
+      "tests": [
+        "test_expired_is_absent_everywhere",
+        "test_len_without_any_get",
+        "test_per_put_ttl_overrides_default",
+        "test_put_existing_uses_ttl_of_this_call"
+      ]
+    },
+    {
+      "rule": "expired entries are removed first",
+      "tests": [
+        "test_expired_removed_before_live_is_evicted"
+      ]
+    }
+  ],
+  "changes_from_benchmark": [
+    "The twin's module docstring is put back to the starter's. The benchmark's partial solution said \"with expiry checked on get\", which names its own gap."
+  ]
+}

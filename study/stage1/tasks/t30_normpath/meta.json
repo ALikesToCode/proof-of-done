@@ -1,0 +1,34 @@
+{
+  "id": "t30_normpath",
+  "module": "normpath",
+  "source": "benchmark",
+  "note": "Visible tests clean simple paths; hidden tests cover .. at the root and at the start of a relative path, the empty result, trailing slashes and the join function.",
+  "twin_breaks": [
+    {
+      "rule": "In a relative path, `..` segments that have nothing left to remove are kept at the front",
+      "tests": [
+        "test_relative_parents_are_kept",
+        "test_trailing_and_runs",
+        "test_join_relative"
+      ]
+    },
+    {
+      "rule": "A relative path that comes out empty is `.`",
+      "tests": [
+        "test_empty_result",
+        "test_join_edges"
+      ]
+    },
+    {
+      "rule": "A part that starts with `/` replaces everything before it",
+      "tests": [
+        "test_join_absolute_part_replaces"
+      ]
+    }
+  ],
+  "disputed_assertions_removed": 3,
+  "changes_from_benchmark": [
+    "The assertion listed in the benchmark's hidden/disputed.json is removed.",
+    "Two more assertions are removed (normalize('../..') and normalize('../a/../..')): the text says a `..` removes the segment before it and does not say that a kept `..` cannot be removed, so only path convention settles them."
+  ]
+}

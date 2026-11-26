@@ -1,0 +1,16 @@
+{
+  "id": "n03_pointer",
+  "module": "pointer",
+  "source": "new",
+  "note": "Visible tests cover the empty pointer, keys, a nested key, a list index, one `~1` and one `~0` escape, a missing key and a pointer with no leading slash; only the hidden tests cover empty tokens, `~01` and one-pass decoding, bad escapes, bad and out-of-range list indexes, tokens left on a string or another scalar, and a pointer that is not a string.",
+  "twin_breaks": [
+    {
+      "rule": "Decoding makes one pass from left to right, so `~01` is the two characters `~1`, not `/`.",
+      "tests": ["test_tilde_zero_one", "test_decoding_is_one_pass"]
+    },
+    {
+      "rule": "When the current value is anything else (a string, a number, a boolean or `None`) and a token is left, `TypeError` is raised. A string is never indexed: `resolve({\"a\": \"xyz\"}, \"/a/0\")` raises `TypeError`.",
+      "tests": ["test_string_is_never_indexed", "test_token_left_on_a_scalar"]
+    }
+  ]
+}

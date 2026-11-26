@@ -1,0 +1,38 @@
+{
+  "task": "t09_rle",
+  "source": "benchmark-dev",
+  "version": "twin",
+  "cell": 2,
+  "form": "general",
+  "kind": "harness",
+  "at": "2026-11-26T21:30:38+00:00",
+  "reviewer": "claude-haiku-5-5",
+  "reported_model": "claude-haiku-5-5",
+  "answered": true,
+  "usable": true,
+  "accepted": false,
+  "verdicts": [
+    {
+      "criterion": "c1",
+      "decision": "not_proven",
+      "reason": "rle.py leaves several described rules unimplemented: encode does not raise ValueError on digits in its input (rule 2), and decode accepts counts of 0 or 1 such as \"1a\" and \"0a\" and counts with a leading zero such as \"02a\" instead of raising ValueError (rule 4). The harness run only covers the provided tests, which do not exercise these cases. Proof would need the code to implement these checks, plus tests or a run that show they raise ValueError."
+    },
+    {
+      "criterion": "c2",
+      "decision": "proven",
+      "reason": "The harness ran `python3 -m unittest test_visible -v` on the final files, and all 4 tests passed with exit status 0. The harness hash record shows test_visible.py has the same SHA-256 before and after the work, so the file is unchanged."
+    }
+  ],
+  "criteria": 2,
+  "calls": [
+    {
+      "ok": true,
+      "error": null,
+      "input_tokens": 3274,
+      "output_tokens": 656,
+      "seconds": 4.623,
+      "cost_usd": 0.0007372
+    }
+  ],
+  "answer": "{\"criteria\": [{\"criterion\": \"c1\", \"decision\": \"not_proven\", \"reason\": \"rle.py leaves several described rules unimplemented: encode does not raise ValueError on digits in its input (rule 2), and decode accepts counts of 0 or 1 such as \\\"1a\\\" and \\\"0a\\\" and counts with a leading zero such as \\\"02a\\\" instead of raising ValueError (rule 4). The harness run only covers the provided tests, which do not exercise these cases. Proof would need the code to implement these checks, plus tests or a run that show they raise ValueError.\"}, {\"criterion\": \"c2\", \"decision\": \"proven\", \"reason\": \"The harness ran `python3 -m unittest test_visible -v` on the final files, and all 4 tests passed with exit status 0. The harness hash record shows test_visible.py has the same SHA-256 before and after the work, so the file is unchanged.\"}]}"
+}
