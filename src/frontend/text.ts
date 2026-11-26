@@ -27,6 +27,7 @@ export const PROOF_STATE: Record<ProofState, Badge> = {
 
 export const STANDING: Record<EvidenceStanding, Badge> = {
   failed_checks: { label: 'Failed checks', tone: 'removed' },
+  stale: { label: 'Earlier commit', tone: 'moved' },
   pending: { label: 'Waiting for a check', tone: 'inprogress' },
   accepted: { label: 'Accepted', tone: 'success' },
   self_accepted: { label: 'Self-reviewed', tone: 'moved' },

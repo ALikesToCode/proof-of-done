@@ -8,7 +8,9 @@ import {
   evidenceStanding,
   gateDecision,
   isIndependent,
+  isStale,
   latestVerdict,
+  pipelineCommit,
   summarize,
 } from '../core/proof';
 import { rulesFor } from '../core/settings';
@@ -232,7 +234,16 @@ export class ContractService {
 
     const channel = caller.via;
     const otherUrls = bundle.evidence.flatMap((e) => (e.criterionId !== criterion.id && e.url ? [e.url] : []));
-    const checks = runChecks({ requiredKind: criterion.requiredKind, kind, summary, url, details, channel, otherUrls });
+    const checks = runChecks({
+      requiredKind: criterion.requiredKind,
+      kind,
+      summary,
+      url,
+      details,
+      channel,
+      otherUrls,
+      pipelineOnly: session.settings.pipelineOnly,
+    });
     const now = this.now();
     const evidence: Evidence = {
       id: newId(now),
@@ -285,6 +296,9 @@ export class ContractService {
     const criterion = activeCriterion(bundle, evidence.criterionId);
     if (!evidence.checksPassed) {
       throw new PodError('invalid', 'This evidence failed its checks, so there is nothing to review. Submit corrected evidence instead.');
+    }
+    if (isStale(evidence, pipelineCommit(bundle.evidence))) {
+      throw new PodError('invalid', 'This evidence is about an earlier commit, so there is nothing to review. The work needs evidence for the commit it is at now.');
     }
     const decision = toDecision(input?.decision);
     const reason = squash(input?.reason);
@@ -447,6 +461,7 @@ export function buildView(
   const exists = bundle.contract !== null;
   const summary = summarize(bundle.criteria, bundle.evidence, bundle.verdicts, settings.requireIndependent);
   const mayReview = canEdit && caller.via !== 'agent';
+  const commit = pipelineCommit(bundle.evidence);
   const criteria: CriterionView[] = bundle.criteria
     .filter((c) => c.active)
     .map((criterion) => {
@@ -454,7 +469,7 @@ export function buildView(
       const evidence = bundle.evidence
         .filter((e) => e.criterionId === criterion.id)
         .sort((a, b) => b.createdAt - a.createdAt || (a.id < b.id ? 1 : -1))
-        .map((e) => toEvidenceView(e, bundle.verdicts, settings, caller, mayReview));
+        .map((e) => toEvidenceView(e, bundle.verdicts, settings, caller, mayReview, commit));
       return {
         id: criterion.id,
         text: criterion.text,
@@ -464,6 +479,7 @@ export function buildView(
         state: proof.state,
         selfReviewed: proof.selfReviewed,
         needsIndependent: proof.needsIndependent,
+        stale: proof.stale,
         evidence,
       };
     });
@@ -483,7 +499,8 @@ export function buildView(
     createdBy: bundle.contract?.createdBy ?? null,
     summary,
     gate: gateDecision(exists ? summary : null, settings),
-    policy: { requireIndependent: settings.requireIndependent, gateMode: settings.gateMode },
+    policy: { requireIndependent: settings.requireIndependent, gateMode: settings.gateMode, pipelineOnly: settings.pipelineOnly },
+    commit,
     criteria,
     suggestions: suggest(issue, settings, bundle.criteria).slice(0, Math.max(0, MAX_CRITERIA - criteria.length)),
     canEdit,
@@ -497,8 +514,9 @@ function toEvidenceView(
   settings: ProjectSettings,
   caller: Caller,
   mayReview: boolean,
+  commit: string | null,
 ): EvidenceView {
-  const standing = evidenceStanding(evidence, verdicts);
+  const standing = evidenceStanding(evidence, verdicts, commit);
   const verdict = latestVerdict(evidence.id, verdicts);
   const channel: VerdictChannel = caller.via === 'verifier' ? 'verifier' : 'ui';
   const independent = isIndependent(evidence, { channel, actorAccountId: caller.accountId });

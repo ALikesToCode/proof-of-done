@@ -83,7 +83,7 @@ describe('badges and lines', () => {
 describe('asking the Proof Verifier', () => {
   const evidence = (standing: EvidenceView['standing']) => ({ standing }) as EvidenceView;
   const view = (requireIndependent: boolean) => ({
-    policy: { requireIndependent, gateMode: 'warn' as const },
+    policy: { requireIndependent, gateMode: 'warn' as const, pipelineOnly: false },
     criteria: [
       { evidence: [evidence('pending'), evidence('rejected')] },
       { evidence: [evidence('self_accepted'), evidence('accepted'), evidence('failed_checks')] },

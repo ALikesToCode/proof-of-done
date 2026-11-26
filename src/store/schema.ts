@@ -118,6 +118,16 @@ const MIGRATIONS: Array<[name: string, ddl: string]> = [
       INDEX idx_pod_samples_project (project_id)
     )`,
   ],
+  [
+    'v008_pipeline_keys',
+    `CREATE TABLE IF NOT EXISTS pod_pipeline_keys (
+      project_id VARCHAR(32) NOT NULL PRIMARY KEY,
+      key_hash CHAR(64) NOT NULL,
+      created_by VARCHAR(128) NULL,
+      created_at BIGINT NOT NULL,
+      last_used_at BIGINT NULL
+    )`,
+  ],
 ];
 
 for (const [name, ddl] of MIGRATIONS) migrationRunner.enqueue(name, ddl);

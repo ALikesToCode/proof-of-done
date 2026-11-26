@@ -3,7 +3,7 @@ import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/core/settings';
 import { Criterion, Evidence, ProjectSettings, ProofSummary, Verdict } from '../../src/core/types';
 import { GraphGateway } from '../../src/graph/gateway';
 import { IssueContext, IssueInfo, IssueRow, JiraGateway, NewIssue, ProjectInfo, ProofProperty, RunAs, TransitionInfo } from '../../src/jira/gateway';
-import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, SampleMarker } from '../../src/store/types';
+import { ContractBundle, ContractRow, ContractStore, ContractSummaryRow, EventCount, EventRow, PipelineKey, SampleMarker } from '../../src/store/types';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
@@ -79,6 +79,26 @@ export class MemoryStore implements ContractStore {
 
   async saveSettings(projectId: string, settings: ProjectSettings): Promise<void> {
     this.settings.set(projectId, clone(settings));
+  }
+
+  pipelineKeys = new Map<string, PipelineKey>();
+
+  async getPipelineKey(projectId: string): Promise<PipelineKey | null> {
+    const key = this.pipelineKeys.get(projectId);
+    return key ? clone(key) : null;
+  }
+
+  async savePipelineKey(key: PipelineKey): Promise<void> {
+    this.pipelineKeys.set(key.projectId, clone(key));
+  }
+
+  async deletePipelineKey(projectId: string): Promise<void> {
+    this.pipelineKeys.delete(projectId);
+  }
+
+  async markPipelineKeyUsed(projectId: string, now: number): Promise<void> {
+    const key = this.pipelineKeys.get(projectId);
+    if (key) key.lastUsedAt = now;
   }
 
   samples = new Map<string, { projectId: string; slug: string }>();

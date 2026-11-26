@@ -126,6 +126,7 @@ function onOff(value: string | undefined, name: string): boolean | undefined {
 
 const STANDING: Record<EvidenceView['standing'], string> = {
   failed_checks: 'failed its checks',
+  stale: 'about an earlier commit',
   pending: 'waits for a review',
   accepted: 'accepted',
   self_accepted: 'accepted by its submitter',

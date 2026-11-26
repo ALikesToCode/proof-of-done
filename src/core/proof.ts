@@ -31,6 +31,7 @@ export function isIndependent(
   if (decider.channel === 'check') return true;
   if (decider.channel === 'verifier') return true;
   if (decider.channel === 'sample') return true;
+  if (decider.channel === 'ci') return true;
   const byHand: EvidenceChannel = 'ui';
   if (evidence.channel !== byHand) return true;
   if (!decider.actorAccountId || !evidence.actorAccountId) return false;
@@ -58,8 +59,39 @@ export function latestVerdict(evidenceId: string, verdicts: Verdict[]): Verdict 
   return latest;
 }
 
-export function evidenceStanding(evidence: Evidence, verdicts: Verdict[]): EvidenceStanding {
+/** Two commit ids name the same commit when one is the start of the other. Seven characters is the shortest id taken. */
+export function sameCommit(a: string, b: string): boolean {
+  const left = a.trim().toLowerCase();
+  const right = b.trim().toLowerCase();
+  if (left.length < 7 || right.length < 7) return left === right;
+  return left.startsWith(right) || right.startsWith(left);
+}
+
+/**
+ * The commit a work item stands at: the one in the newest result its project's pipeline
+ * reported. Null until a pipeline has reported one. An agent or a person can name a commit
+ * too, but only the pipeline's word moves this, because only the pipeline holds the key.
+ */
+export function pipelineCommit(evidence: Evidence[]): string | null {
+  let newest: Evidence | null = null;
+  for (const item of evidence) {
+    if (item.channel !== 'ci' || !item.details.commit) continue;
+    if (!newest || item.createdAt > newest.createdAt || (item.createdAt === newest.createdAt && item.id > newest.id)) newest = item;
+  }
+  return newest?.details.commit ?? null;
+}
+
+/** Evidence about a commit the pipeline has since moved past. Evidence that names no commit never goes stale. */
+export function isStale(evidence: Pick<Evidence, 'details'>, current: string | null): boolean {
+  const commit = evidence.details.commit;
+  if (!commit || !current) return false;
+  return !sameCommit(commit, current);
+}
+
+/** `current` is what `pipelineCommit` gave for the work item. Leave it out where no pipeline reports. */
+export function evidenceStanding(evidence: Evidence, verdicts: Verdict[], current: string | null = null): EvidenceStanding {
   if (!evidence.checksPassed) return 'failed_checks';
+  if (isStale(evidence, current)) return 'stale';
   const verdict = latestVerdict(evidence.id, verdicts);
   if (!verdict) return 'pending';
   if (verdict.decision === 'rejected') return 'rejected';
@@ -80,6 +112,8 @@ export interface CriterionProof {
   selfReviewed: boolean;
   /** Accepted by its own submitter while the project requires an independent check. */
   needsIndependent: boolean;
+  /** Unproven, and all it has is proof of a commit the pipeline has moved past. */
+  stale: boolean;
 }
 
 export function criterionProof(
@@ -88,8 +122,9 @@ export function criterionProof(
   verdicts: Verdict[],
   requireIndependent: boolean,
 ): CriterionProof {
-  const standings = evidence.filter((e) => e.criterionId === criterionId).map((e) => evidenceStanding(e, verdicts));
-  const base = { selfReviewed: false, needsIndependent: false };
+  const current = pipelineCommit(evidence);
+  const standings = evidence.filter((e) => e.criterionId === criterionId).map((e) => evidenceStanding(e, verdicts, current));
+  const base = { selfReviewed: false, needsIndependent: false, stale: false };
   if (standings.includes('accepted')) return { ...base, state: 'proven' };
   if (standings.includes('self_accepted')) {
     return requireIndependent
@@ -97,6 +132,10 @@ export function criterionProof(
       : { ...base, state: 'proven', selfReviewed: true };
   }
   if (standings.includes('pending')) return { ...base, state: 'submitted' };
+  // A new commit turns earlier proof away without anyone having rejected it. The criterion is open again.
+  if (standings.includes('stale') && !standings.includes('rejected') && !standings.includes('failed_checks')) {
+    return { ...base, state: 'unproven', stale: true };
+  }
   if (standings.length > 0) return { ...base, state: 'rejected' };
   return { ...base, state: 'unproven' };
 }
@@ -117,13 +156,14 @@ export function summarize(
   verdicts: Verdict[],
   requireIndependent: boolean,
 ): ProofSummary {
-  const summary: ProofSummary = { total: 0, proven: 0, submitted: 0, rejected: 0, unproven: 0, selfReviewed: 0, state: 'none' };
+  const summary: ProofSummary = { total: 0, proven: 0, submitted: 0, rejected: 0, unproven: 0, selfReviewed: 0, stale: 0, state: 'none' };
   for (const criterion of criteria) {
     if (!criterion.active) continue;
     summary.total++;
     const proof = criterionProof(criterion.id, evidence, verdicts, requireIndependent);
     summary[proof.state]++;
     if (proof.selfReviewed) summary.selfReviewed++;
+    if (proof.stale) summary.stale++;
   }
   summary.state = proofStateOf(summary.total, summary.proven);
   return summary;
@@ -154,11 +194,14 @@ export function gateDecision(
   if (summary.total === 1) {
     if (summary.submitted) return { pass: false, reason: 'The evidence for the one criterion waits for a check.' };
     if (summary.rejected) return { pass: false, reason: 'The evidence for the one criterion was turned away.' };
+    if (summary.stale) return { pass: false, reason: 'The proof of the one criterion is about an earlier commit.' };
     return { pass: false, reason: 'The one criterion has no evidence.' };
   }
   const missing = summary.total - summary.proven;
   const parts: string[] = [];
-  if (summary.unproven) parts.push(`${summary.unproven} with no evidence`);
+  const fresh = summary.unproven - (summary.stale ?? 0);
+  if (fresh > 0) parts.push(`${fresh} with no evidence`);
+  if (summary.stale) parts.push(`${summary.stale} proven only for an earlier commit`);
   if (summary.submitted) parts.push(`${summary.submitted} waiting for a check`);
   if (summary.rejected) parts.push(`${summary.rejected} rejected`);
   return {

@@ -88,11 +88,13 @@ const DECIDER: Record<VerdictChannel, string> = {
   verifier: 'the Proof Verifier',
   attestation: 'the attestation itself',
   check: 'the automatic checks',
+  ci: "the project's pipeline",
   sample: 'the sample data',
 };
 
 const STANDING: Record<EvidenceStanding, AgentStanding> = {
   failed_checks: 'failed_checks',
+  stale: 'stale_commit',
   pending: 'waiting_for_review',
   accepted: 'accepted',
   self_accepted: 'accepted_by_submitter',

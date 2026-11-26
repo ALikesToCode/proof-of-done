@@ -47,6 +47,19 @@ export interface SampleMarker {
   slug: string;
 }
 
+/**
+ * The key a project's pipeline reports with. Only its SHA-256 is stored, so reading the
+ * table does not give anyone a key that works.
+ */
+export interface PipelineKey {
+  projectId: string;
+  hash: string;
+  createdBy: string | null;
+  createdAt: number;
+  /** When a pipeline last reported with it, or null when none has. */
+  lastUsedAt: number | null;
+}
+
 /** Everything stored about one work item's contract. */
 export interface ContractBundle {
   contract: ContractRow | null;
@@ -74,6 +87,11 @@ export interface ContractStore {
   saveSummary(issueId: string, summary: ProofSummary, now: number): Promise<void>;
   getSettings(projectId: string): Promise<ProjectSettings>;
   saveSettings(projectId: string, settings: ProjectSettings, actorAccountId: string | null, now: number): Promise<void>;
+  getPipelineKey(projectId: string): Promise<PipelineKey | null>;
+  /** Replaces the project's key, so the one before stops working. */
+  savePipelineKey(key: PipelineKey): Promise<void>;
+  deletePipelineKey(projectId: string): Promise<void>;
+  markPipelineKeyUsed(projectId: string, now: number): Promise<void>;
   /** The project's contracts, most recently changed first. */
   listContracts(projectId: string, limit: number): Promise<ContractSummaryRow[]>;
   /** The project's events since `since`, counted by type. */

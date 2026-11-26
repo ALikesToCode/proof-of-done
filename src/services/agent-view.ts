@@ -8,7 +8,7 @@ import { Decision, EvidenceDetails, EvidenceKind, GateMode, ProofState, Required
  * Types only.
  */
 
-export type AgentStanding = 'failed_checks' | 'waiting_for_review' | 'accepted' | 'accepted_by_submitter' | 'rejected';
+export type AgentStanding = 'failed_checks' | 'stale_commit' | 'waiting_for_review' | 'accepted' | 'accepted_by_submitter' | 'rejected';
 export type AgentCriterionState = 'no_evidence' | 'waiting_for_review' | 'proven' | 'rejected';
 
 export interface AgentEvidence {
