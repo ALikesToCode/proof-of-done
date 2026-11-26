@@ -8,8 +8,8 @@ import type {
 } from '../core/types';
 import type { GraphFinding } from '../core/graph';
 import { awaitsReview } from '../core/proof';
-import { GUIDE_STEPS, GUIDE_WORKFLOW } from '../core/sample';
 import type { ContractView, CriterionView, EvidenceView, HistoryEntry } from '../services/view';
+import { GUIDE_STEPS, GUIDE_WORKFLOW } from '../core/sample';
 
 /** Wording and small formatters for the panel. No Forge imports, so it can be unit-tested. */
 
