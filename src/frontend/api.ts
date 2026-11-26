@@ -50,6 +50,7 @@ export const api = {
   removeCriterion: (criterionId: string) => call<ContractView>('removeCriterion', { criterionId }),
   submitEvidence: (input: EvidenceInput) => call<ContractView>('submitEvidence', { ...input }),
   recordVerdict: (input: VerdictInput) => call<ContractView>('recordVerdict', { ...input }),
+  letThrough: (reason: string) => call<ContractView>('letThrough', { reason }),
   getHistory: () => call<HistoryEntry[]>('getHistory'),
   getGraphNote: (evidenceId: string) => call<GraphNoteView>('getGraphNote', { evidenceId }),
 };

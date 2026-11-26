@@ -88,7 +88,13 @@ export interface ContractView {
   createdBy: string | null;
   summary: ProofSummary;
   gate: GateDecision;
-  policy: { requireIndependent: boolean; gateMode: GateMode; pipelineOnly: boolean };
+  policy: { requireIndependent: boolean; gateMode: GateMode; pipelineOnly: boolean; strictGate: boolean };
+  /** A pass someone who administers the project gave this work item, while it holds. */
+  pass: { until: number; reason: string; by: string | null } | null;
+  /** The last time the validator could not check this work item, when that was within the hour. */
+  unchecked: { at: number; reason: string; refused: boolean } | null;
+  /** Whether the viewer may let this work item through the done gate. */
+  canLetThrough: boolean;
   /** The commit the project's pipeline last reported on for this work item, or null when none has. */
   commit: string | null;
   criteria: CriterionView[];

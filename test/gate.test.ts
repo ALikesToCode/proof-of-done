@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import { GateMode } from '../src/core/types';
 import { Caller, ContractService } from '../src/services/contracts';
-import { GateService, StatusChange } from '../src/services/gate';
+import { GateService, REFUSES_BLIND, REFUSES_BY_CHOICE, StatusChange } from '../src/services/gate';
 import { toStatusChange } from '../src/triggers/issue-events';
 import { doc, h, ul } from './helpers/adf';
 import { FakeJira, MemoryStore, issueInfo } from './helpers/fakes';
@@ -225,8 +225,212 @@ describe('the workflow validator', () => {
     expect(await gate.validate('MOBL-1')).toEqual({ result: true });
   });
 
-  it('does not block a work item it cannot read', async () => {
-    expect(await gate.validate('NOPE-1')).toEqual({ result: true });
+  it('still stands down for a gate that is off when it could not read the contract', async () => {
+    await setMode('off');
+    await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
+    store.getBundle = async () => {
+      throw new Error('The database did not answer.');
+    };
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(await gate.validate('MOBL-1')).toEqual({ result: true });
+  });
+});
+
+describe('the validator when it cannot check', () => {
+  const silence = () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    return vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+  };
+  const storeFails = (what: 'getBundle' | 'getSettings' | 'listEvents') => {
+    store[what] = async () => {
+      throw new Error('The database did not answer.');
+    };
+  };
+  const jiraFails = () => {
+    jira.getIssue = async () => {
+      throw new Error('Jira returned 500 when reading work item MOBL-1.');
+    };
+  };
+
+  beforeEach(async () => {
+    await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
+  });
+
+  it('refuses by default when the contract cannot be read, and records why', async () => {
+    const warn = silence();
+    storeFails('getBundle');
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({
+      result: false,
+      errorMessage: `Proof of Done: The app's storage did not answer, so it could not check MOBL-1. ${REFUSES_BY_CHOICE}`,
+    });
+    expect(store.events.at(-1)).toMatchObject({
+      type: 'gate.blocked',
+      actorAccountId: 'bob',
+      data: { unchecked: true, why: 'store', status: 'In Progress' },
+    });
+    expect(warn).toHaveBeenCalledWith('Proof of Done: could not check MOBL-1 (store) and refused the transition.');
+  });
+
+  it('lets it through in a project that chose so, and says so in the history and in the log', async () => {
+    const warn = silence();
+    await setMode('warn', { strictGate: false });
+    storeFails('getBundle');
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({ result: true });
+    expect(store.events.at(-1)).toMatchObject({
+      type: 'gate.unchecked',
+      actorAccountId: 'bob',
+      data: { why: 'store', reason: "The app's storage did not answer, so it could not check MOBL-1." },
+    });
+    expect(warn).toHaveBeenCalledWith('Proof of Done: could not check MOBL-1 (store) and let the transition through, as the project chose.');
+  });
+
+  it('writes nothing to the work item from the validator, because Jira holds it while it asks', async () => {
+    silence();
+    await setMode('warn', { strictGate: false });
+    storeFails('getBundle');
+    await gate.validate('MOBL-1', 'bob');
+    await setMode('warn');
+    await gate.validate('MOBL-1', 'bob');
+    expect(jira.comments).toEqual([]);
+  });
+
+  it('still lets it through there when the entry cannot be written', async () => {
+    silence();
+    await setMode('warn', { strictGate: false });
+    storeFails('getBundle');
+    store.insertEvent = async () => {
+      throw new Error('The database did not answer.');
+    };
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({ result: true });
+  });
+
+  it('refuses when it cannot read what the project chose, whatever that was', async () => {
+    silence();
+    await setMode('warn', { strictGate: false });
+    storeFails('getSettings');
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({
+      result: false,
+      errorMessage: `Proof of Done: The app's storage did not answer, so it could not check MOBL-1. ${REFUSES_BLIND}`,
+    });
+  });
+
+  it('refuses when the whole store is down', async () => {
+    silence();
+    storeFails('getBundle');
+    storeFails('getSettings');
+    storeFails('listEvents');
+    store.insertEvent = async () => {
+      throw new Error('The database did not answer.');
+    };
+    expect((await gate.validate('MOBL-1', 'bob')).errorMessage).toContain(REFUSES_BLIND);
+  });
+
+  it('finds the project through the contract when Jira does not answer', async () => {
+    silence();
+    jiraFails();
+    expect(await gate.validate('MOBL-1', 'bob', '10001')).toEqual({
+      result: false,
+      errorMessage: `Proof of Done: Jira did not answer the app, so it could not check MOBL-1. ${REFUSES_BY_CHOICE}`,
+    });
+    await setMode('warn', { strictGate: false });
+    expect(await gate.validate('MOBL-1', 'bob', '10001')).toEqual({ result: true });
+  });
+
+  it('refuses when Jira does not answer and the request named no id', async () => {
+    silence();
+    jiraFails();
+    await setMode('warn', { strictGate: false });
+    expect((await gate.validate('MOBL-1', 'bob')).errorMessage).toBe(
+      `Proof of Done: Jira did not answer the app, so it could not check MOBL-1. ${REFUSES_BLIND}`,
+    );
+  });
+
+  it('refuses a work item the app may not read', async () => {
+    silence();
+    expect(await gate.validate('NOPE-1', 'bob', '404')).toEqual({
+      result: false,
+      errorMessage: `Proof of Done: The app may not read NOPE-1, so it could not check it. ${REFUSES_BLIND}`,
+    });
+  });
+
+  it('does not let a failed read of the history change a plain answer', async () => {
+    silence();
+    storeFails('listEvents');
+    expect((await gate.validate('MOBL-1', 'bob')).errorMessage).toMatch(/2 of 2 criteria are not proven/);
+  });
+});
+
+describe('letting a work item through', () => {
+  const REASON = 'Hotfix for the outage, proof follows tomorrow.';
+
+  beforeEach(async () => {
+    await contracts.createContract('MOBL-1', ALICE, { withSuggestions: true });
+  });
+
+  it('takes someone who administers the project, and a reason', async () => {
+    jira.admin = false;
+    await expect(gate.letThrough('MOBL-1', 'bob', REASON)).rejects.toThrow('Only someone who administers the project');
+    jira.admin = true;
+    await expect(gate.letThrough('MOBL-1', 'carol', 'because')).rejects.toThrow('Say why, in at least 10 characters.');
+    await expect(gate.letThrough('NOPE-1', 'carol', REASON)).rejects.toThrow('does not exist');
+    expect(store.eventTypes('10001')).not.toContain('gate.pass_granted');
+  });
+
+  it('has nothing to let through when the gate is off', async () => {
+    await setMode('off');
+    await expect(gate.letThrough('MOBL-1', 'carol', REASON)).rejects.toThrow('The done gate is off');
+  });
+
+  it('makes the validator allow an unproven work item for 30 minutes, and records each use', async () => {
+    expect((await gate.validate('MOBL-1', 'bob')).result).toBe(false);
+    await gate.letThrough('MOBL-1', 'carol', REASON);
+    expect(store.events.at(-1)).toMatchObject({ type: 'gate.pass_granted', actorAccountId: 'carol', channel: 'ui', data: { reason: REASON } });
+    expect(jira.comments.at(-1)!.paragraphs[0]).toBe(
+      `Someone who administers the project let MOBL-1 through the done gate for the next 30 minutes. Reason: ${REASON}`,
+    );
+
+    expect(await gate.validate('MOBL-1', 'bob')).toEqual({ result: true });
+    expect(store.events.at(-1)).toMatchObject({
+      type: 'gate.let_through',
+      actorAccountId: 'bob',
+      data: { grantedBy: 'carol', reason: REASON, instead: '2 of 2 criteria are not proven (2 with no evidence).' },
+    });
+
+    clock += 31 * 60_000;
+    expect((await gate.validate('MOBL-1', 'bob')).result).toBe(false);
+  });
+
+  it('works when the validator cannot check, also without Jira', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    await gate.letThrough('MOBL-1', 'carol', REASON);
+    jira.getIssue = async () => {
+      throw new Error('Jira returned 500 when reading work item MOBL-1.');
+    };
+    expect(await gate.validate('MOBL-1', 'bob', '10001')).toEqual({ result: true });
+    expect(store.events.at(-1)).toMatchObject({
+      type: 'gate.let_through',
+      data: { instead: 'Jira did not answer the app, so it could not check MOBL-1.' },
+    });
+  });
+
+  it('keeps the work item where it is when it closes, and records it as closed without proof', async () => {
+    await setMode('bounce');
+    await gate.letThrough('MOBL-1', 'carol', REASON);
+    const comments = jira.comments.length;
+    expect(await gate.onStatusChange(closeIssue({ occurredAt: clock }))).toBe('let_through');
+    expect(jira.issues.get('10001')!.statusName).toBe('Done');
+    expect(jira.comments).toHaveLength(comments);
+    expect(store.events.at(-1)).toMatchObject({
+      type: 'issue.done',
+      data: { proven: false, pass: false, letThrough: true, grantedBy: 'carol', reason: REASON },
+    });
+  });
+
+  it('moves the work item back again once the pass is over', async () => {
+    await setMode('bounce');
+    await gate.letThrough('MOBL-1', 'carol', REASON);
+    clock += 31 * 60_000;
+    expect(await gate.onStatusChange(closeIssue({ occurredAt: clock }))).toBe('bounced');
   });
 });
 

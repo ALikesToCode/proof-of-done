@@ -28,7 +28,8 @@ import {
   VerdictChannel,
 } from '../core/types';
 import { IssueInfo, JiraGateway } from '../jira/gateway';
-import { ContractBundle, ContractStore } from '../store/types';
+import { ContractBundle, ContractStore, EventRow } from '../store/types';
+import { activePass } from './gate';
 import { saveProof } from './proof-sync';
 import {
   ContractView,
@@ -81,12 +82,15 @@ export class ContractService {
 
   async view(issueRef: string, caller: Caller): Promise<ContractView> {
     const issue = await this.issue(issueRef);
-    const [bundle, settings, canEdit] = await Promise.all([
+    const [bundle, settings, canEdit, events, canAdmin] = await Promise.all([
       this.store.getBundle(issue.id),
       this.store.getSettings(issue.projectId),
       this.jira.canEdit(issue.id),
+      this.store.listEvents(issue.id, GATE_LOOKBACK),
+      // An agent never lets work through, so Jira is not asked for it.
+      caller.via === 'ui' ? this.jira.canAdminister(issue.projectId) : false,
     ]);
-    return buildView(issue, bundle, settings, caller, canEdit);
+    return buildView(issue, bundle, settings, caller, canEdit, { events, canAdmin, now: this.now() });
   }
 
   /**
@@ -357,7 +361,10 @@ export class ContractService {
   /** Re-reads the rows, so the stored summary also covers changes made by others meanwhile. */
   private async close(session: Session, caller: Caller): Promise<ContractView> {
     const { issue, settings, before } = session;
-    const bundle = await this.store.getBundle(issue.id);
+    const [bundle, canAdmin] = await Promise.all([
+      this.store.getBundle(issue.id),
+      caller.via === 'ui' ? this.jira.canAdminister(issue.projectId) : false,
+    ]);
     const summary = summarize(bundle.criteria, bundle.evidence, bundle.verdicts, settings.requireIndependent);
     if (before.state !== 'proven' && summary.state === 'proven') {
       await this.record(issue, caller, 'proof.completed', { total: summary.total });
@@ -365,7 +372,8 @@ export class ContractService {
       await this.record(issue, caller, 'proof.reopened', { proven: summary.proven, total: summary.total });
     }
     await saveProof(this.store, this.jira, issue, summary, this.now());
-    return buildView(issue, bundle, settings, caller, true);
+    const events = await this.store.listEvents(issue.id, GATE_LOOKBACK);
+    return buildView(issue, bundle, settings, caller, true, { events, canAdmin, now: this.now() });
   }
 
   private async startContract(issue: IssueInfo, caller: Caller, suggestions: Suggestion[]): Promise<void> {
@@ -457,6 +465,7 @@ export function buildView(
   settings: ProjectSettings,
   caller: Caller,
   canEdit: boolean,
+  gate: { events: EventRow[]; canAdmin: boolean; now: number } = { events: [], canAdmin: false, now: 0 },
 ): ContractView {
   const exists = bundle.contract !== null;
   const summary = summarize(bundle.criteria, bundle.evidence, bundle.verdicts, settings.requireIndependent);
@@ -499,13 +508,44 @@ export function buildView(
     createdBy: bundle.contract?.createdBy ?? null,
     summary,
     gate: gateDecision(exists ? summary : null, settings),
-    policy: { requireIndependent: settings.requireIndependent, gateMode: settings.gateMode, pipelineOnly: settings.pipelineOnly },
+    policy: {
+      requireIndependent: settings.requireIndependent,
+      gateMode: settings.gateMode,
+      pipelineOnly: settings.pipelineOnly,
+      strictGate: settings.strictGate,
+    },
+    pass: passView(gate.events, gate.now),
+    unchecked: uncheckedView(gate.events, gate.now),
+    canLetThrough: gate.canAdmin && settings.gateMode !== 'off',
     commit,
     criteria,
     suggestions: suggest(issue, settings, bundle.criteria).slice(0, Math.max(0, MAX_CRITERIA - criteria.length)),
     canEdit,
     viewerAccountId: caller.accountId,
   };
+}
+
+/** How far back in a work item's history the panel looks for what the gate did. */
+const GATE_LOOKBACK = 50;
+const HOUR = 60 * 60 * 1000;
+
+function passView(events: EventRow[], now: number): ContractView['pass'] {
+  const pass = activePass(events, now);
+  if (!pass) return null;
+  return { until: Number(pass.data['until']), reason: typeof pass.data['reason'] === 'string' ? pass.data['reason'] : '', by: pass.actorAccountId };
+}
+
+/** The newest "could not check" of the validator, when it is recent enough to matter to whoever opens the panel. */
+function uncheckedView(events: EventRow[], now: number): ContractView['unchecked'] {
+  let newest: EventRow | null = null;
+  for (const event of events) {
+    const refused = event.type === 'gate.blocked' && event.data['unchecked'] === true;
+    if (!refused && event.type !== 'gate.unchecked') continue;
+    if (event.at < now - HOUR) continue;
+    if (!newest || event.at > newest.at) newest = event;
+  }
+  if (!newest) return null;
+  return { at: newest.at, reason: typeof newest.data['reason'] === 'string' ? newest.data['reason'] : '', refused: newest.type === 'gate.blocked' };
 }
 
 function toEvidenceView(

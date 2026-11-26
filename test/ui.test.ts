@@ -4,6 +4,7 @@ import { SAMPLE_ITEMS } from '../src/core/sample';
 import { DEFAULT_SETTINGS } from '../src/core/settings';
 import type { IssueInfo } from '../src/jira/gateway';
 import { Caller, ContractService } from '../src/services/contracts';
+import { GateService } from '../src/services/gate';
 import { doc, h, p, ul } from './helpers/adf';
 import { issueInfo } from './helpers/fakes';
 import { Page, mount } from './helpers/page';
@@ -644,10 +645,57 @@ describe('the issue panel', () => {
     expect(page.buttons()).not.toContain('Ask Proof Verifier');
   });
 
+  it('lets someone who administers the project let a work item through, with a reason', async () => {
+    const fresh = onWorkItem();
+    await contract();
+    const page = await show(pages.panel);
+    await page.press('Let it through without proof');
+    expect(page.dialog.text()).toContain('This proves nothing. The work item goes on counting as not proven.');
+    await page.dialog.press('Let it through');
+    expect(page.dialog.text()).toContain('Say why, in at least 10 characters.');
+
+    await page.dialog.type('pass-reason', 'Hotfix for the outage, proof follows tomorrow.');
+    await page.dialog.press('Let it through');
+    expect(page.all('Modal')).toHaveLength(0);
+    expect(page.text()).toContain('Let through the done gate, without proof');
+    expect(page.text()).toContain('for 30 more minutes. Reason: Hotfix for the outage, proof follows tomorrow. It is still not proven.');
+    expect(page.buttons()).not.toContain('Let it through without proof');
+    expect(page.labels('Lozenge')[0]).toBe('Not proven');
+    expect(fresh.store.events.at(-1)).toMatchObject({ type: 'gate.pass_granted', actorAccountId: 'alice' });
+    expect(await new GateService(fresh.store, fresh.jira).validate('MOBL-1', 'bob')).toEqual({ result: true });
+  });
+
+  it('does not offer that to someone who does not administer the project', async () => {
+    const fresh = onWorkItem();
+    await contract();
+    fresh.jira.admin = false;
+    const page = await show(pages.panel);
+    expect(page.buttons()).not.toContain('Let it through without proof');
+  });
+
+  it('says so when the validator could not check a moment ago, and how to go on', async () => {
+    const fresh = onWorkItem();
+    await contract();
+    const getBundle = fresh.store.getBundle.bind(fresh.store);
+    fresh.store.getBundle = async () => {
+      throw new Error('The database did not answer.');
+    };
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    expect((await new GateService(fresh.store, fresh.jira).validate('MOBL-1', 'bob')).result).toBe(false);
+    fresh.store.getBundle = getBundle;
+
+    const page = await show(pages.panel);
+    expect(page.text()).toContain('The validator could not check, and refused');
+    expect(page.text()).toContain("The app's storage did not answer, so it could not check MOBL-1. This project refuses a transition the app cannot check.");
+    expect(page.buttons()).toContain('Let it through without proof');
+  });
+
   it('is read-only for someone who cannot edit the work item', async () => {
     const fresh = onWorkItem();
     await contractWithAgentEvidence();
     fresh.jira.editable = false;
+    fresh.jira.admin = false;
     const page = await show(pages.panel);
     expect(page.text()).toContain('You can read this contract. Changing it or adding evidence needs permission to edit the work item.');
     expect(page.text()).toContain('Submitted by the agent claude-code');
@@ -773,13 +821,21 @@ describe('the project page', () => {
     const page = await show(pages.project);
     await expect(page.press('Save settings')).rejects.toThrow('disabled');
 
+    expect(page.field('strict-gate').props['value']).toBe('refuse');
+    expect(page.text()).toContain('If the app cannot read this setting either, it refuses.');
     await page.choose('gate-mode', 'bounce');
+    await page.choose('strict-gate', 'allow');
     await page.tick('Treat a work item that has no contract as not proven', true);
     expect(page.text()).toContain('You have changes that are not saved.');
     await page.press('Save settings');
     expect(page.text()).toContain('Saved.');
     expect(page.text()).not.toContain('You have changes that are not saved.');
-    expect(fresh.store.settings.get('10000')).toMatchObject({ gateMode: 'bounce', enforceWithoutContract: true, requireIndependent: true });
+    expect(fresh.store.settings.get('10000')).toMatchObject({
+      gateMode: 'bounce',
+      enforceWithoutContract: true,
+      requireIndependent: true,
+      strictGate: false,
+    });
   });
 
   it('adds a project rule and removes it again', async () => {
