@@ -120,6 +120,12 @@ async function show(page: ReactElement): Promise<Page> {
   return shown;
 }
 
+/** The badges that say where a piece of evidence comes from. */
+const SOURCES = ["Agent's claim", 'Typed by a person', 'Pipeline', 'Sample pipeline', 'Teamwork Graph', 'Sample data'];
+/** The badges that say how things stand, without the ones that say where evidence comes from. */
+const states = (page: Page): string[] => page.labels('Lozenge').filter((label) => !SOURCES.includes(label));
+const sources = (page: Page): string[] => page.labels('Lozenge').filter((label) => SOURCES.includes(label));
+
 /** A fresh world with MOBL-1 in it, for the issue panel of that work item. */
 function onWorkItem(overrides: Partial<IssueInfo> = {}): World {
   const fresh = resetWorld();
@@ -211,7 +217,13 @@ describe('the issue panel', () => {
     await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[0]!.id, ...TEST_RUN });
     await elsewhere().submitEvidence('MOBL-1', AGENT, { criterionId: created.criteria[1]!.id, ...FAILED_RUN });
     const page = await show(pages.panel);
-    expect(page.labels('Lozenge')).toEqual(['Not proven', 'Waiting for a check', 'Waiting for a check', 'Evidence rejected', 'Failed checks', 'No evidence']);
+    expect(states(page)).toEqual(['Not proven', 'Waiting for a check', 'Waiting for a check', 'Evidence rejected', 'Failed checks', 'No evidence']);
+    // Each piece of evidence says where it comes from, and the summary says what still blocks closing.
+    expect(sources(page)).toEqual(["Agent's claim", "Agent's claim"]);
+    expect(page.text()).toContain('What still blocks it');
+    expect(page.text()).toContain('Login works with email and password: One piece of evidence waits for a check.');
+    expect(page.text()).toContain('All unit tests pass: The evidence was turned away. 2 tests failed, so this run proves nothing yet.');
+    expect(page.text()).toContain('Release notes are updated: No evidence yet.');
     expect(page.text()).toContain('Submitted by the agent claude-code, just now');
     expect(page.text()).toContain('120 passed, 0 failed');
     expect(page.text()).toContain('2 tests failed, so this run proves nothing yet.');
@@ -341,7 +353,7 @@ describe('the issue panel', () => {
 
     await page.dialog.press('Accept');
     expect(page.all('Modal')).toHaveLength(0);
-    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
     expect(page.text()).toContain('Not ready to close. 2 of 3 criteria are not proven (2 with no evidence).');
   });
 
@@ -358,7 +370,7 @@ describe('the issue panel', () => {
     await page.dialog.type('verdict-reason', 'The run is from another branch.');
     await page.dialog.press('Reject');
     expect(page.all('Modal')).toHaveLength(0);
-    expect(page.labels('Lozenge')).toEqual(['Not proven', 'Evidence rejected', 'Rejected', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Not proven', 'Evidence rejected', 'Rejected', 'No evidence', 'No evidence']);
     expect(page.text()).toContain('just now. The run is from another branch.');
   });
 
@@ -371,13 +383,13 @@ describe('the issue panel', () => {
     await page.press('Review');
     expect(page.dialog.text()).toContain('Teamwork Graph');
     expect(page.dialog.text()).toContain('The evidence says this pull request is merged, but the Teamwork Graph has it as open.');
-    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Differs']);
+    expect(states(page.dialog)).toEqual(['Waiting for a check', 'Differs']);
     expect(world().calls).toEqual(['getContract', 'getGraphNote']);
     expect(graph.asked).toEqual(['10001']);
     // The note is advice. The decision stays with the reviewer.
     expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
     await page.dialog.press('Accept');
-    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
   });
 
   it('says it is asking the graph until the answer is there', async () => {
@@ -389,7 +401,7 @@ describe('the issue panel', () => {
 
     await page.start('Review');
     expect(page.dialog.text()).toContain('Asking what Jira links to this work item.');
-    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check']);
+    expect(states(page.dialog)).toEqual(['Waiting for a check']);
     // The reviewer does not have to wait for it.
     expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
 
@@ -397,7 +409,7 @@ describe('the issue panel', () => {
     await page.settle();
     expect(page.dialog.text()).not.toContain('Asking what Jira links to this work item.');
     expect(page.dialog.text()).toContain('The Teamwork Graph links this pull request to the work item and has it as merged.');
-    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Confirmed']);
+    expect(states(page.dialog)).toEqual(['Waiting for a check', 'Confirmed']);
   });
 
   it('says so when the graph gives no answer, and reviews without it', async () => {
@@ -411,13 +423,13 @@ describe('the issue panel', () => {
     expect(world().calls).toEqual(['getContract', 'getGraphNote']);
     expect(page.dialog.text()).toContain('The Teamwork Graph did not answer. You can judge without it, or ask again.');
     expect(page.dialog.text()).not.toContain('Asking what Jira links');
-    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check']);
+    expect(states(page.dialog)).toEqual(['Waiting for a check']);
     expect(page.dialog.buttons()).toEqual(['Ask again', 'Cancel', 'Reject', 'Accept']);
     expect(warn).toHaveBeenCalledTimes(1);
 
     await page.dialog.press('Accept');
     expect(page.all('Modal')).toHaveLength(0);
-    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
   });
 
   it('asks the graph again when the reviewer wants it to', async () => {
@@ -434,7 +446,7 @@ describe('the issue panel', () => {
     expect(world().calls).toEqual(['getContract', 'getGraphNote', 'getGraphNote']);
     expect(page.dialog.text()).not.toContain('did not answer');
     expect(page.dialog.text()).toContain('The Teamwork Graph links this pull request to the work item and has it as merged.');
-    expect(page.dialog.labels('Lozenge')).toEqual(['Waiting for a check', 'Confirmed']);
+    expect(states(page.dialog)).toEqual(['Waiting for a check', 'Confirmed']);
     expect(page.dialog.buttons()).toEqual(['Cancel', 'Reject', 'Accept']);
   });
 
@@ -487,7 +499,7 @@ describe('the issue panel', () => {
     await page.press('Refresh');
     await page.press('Review');
     await page.dialog.press('Accept');
-    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Partly proven', 'Proven', 'Accepted', 'No evidence', 'No evidence']);
   });
 
   it('shows a pasted excerpt with its line breaks and folds a long one', async () => {
@@ -559,7 +571,7 @@ describe('the issue panel', () => {
     await page.dialog.type('evidence-summary', 'I read the published notes and the login change is in them.');
     await page.dialog.press('Add evidence');
     expect(page.text()).toContain('Attested by the assignee of this work item.');
-    expect(page.labels('Lozenge')).toEqual(['Not proven', 'No evidence', 'No evidence', 'Needs a second person', 'Self-reviewed']);
+    expect(states(page)).toEqual(['Not proven', 'No evidence', 'No evidence', 'Needs a second person', 'Self-reviewed']);
     expect(page.text()).toContain('1 piece of evidence waits for a check.');
   });
 
@@ -572,7 +584,7 @@ describe('the issue panel', () => {
 
     await page.press('Review');
     await page.dialog.press('Accept');
-    expect(page.labels('Lozenge')).toEqual(['Partly proven', 'Proven, self-reviewed', 'Self-reviewed', 'No evidence', 'No evidence']);
+    expect(states(page)).toEqual(['Partly proven', 'Proven, self-reviewed', 'Self-reviewed', 'No evidence', 'No evidence']);
   });
 
   it('changes and removes a criterion, and keeps both in the history', async () => {

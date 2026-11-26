@@ -5,8 +5,11 @@ import {
   actorLabel,
   channelLine,
   criterionBadge,
+  blockers,
   describeEvent,
   passLine,
+  pipelineNote,
+  sourceBadge,
   uncheckedLine,
   detailLines,
   excerptHead,
@@ -136,6 +139,65 @@ describe('describeEvent', () => {
     const long = 'x'.repeat(200);
     expect(describeEvent({ type: 'criterion.removed', data: { text: long } }).length).toBeLessThan(130);
     expect(describeEvent({ type: 'something.new', data: {} })).toBe('something.new');
+  });
+});
+
+describe('what a reviewer weighs', () => {
+  const A = 'a1f3c9e07b2d4c58916e0fa3d7b84c21e5f6a903';
+  const piece = (over: Partial<EvidenceView>): EvidenceView =>
+    ({ id: 'e1', kind: 'test_run', channel: 'agent', details: { commit: A }, standing: 'pending', checks: [], verdict: null, createdAt: 1, ...over }) as EvidenceView;
+
+  it('names the source of a piece of evidence in a word', () => {
+    expect(sourceBadge({ channel: 'ci' })).toEqual({ label: 'Pipeline', tone: 'success' });
+    expect(sourceBadge({ channel: 'ci', details: { workflow: 'proof-of-done-guided-run' } }).label).toBe('Sample pipeline');
+    expect(sourceBadge({ channel: 'agent' }).label).toBe("Agent's claim");
+    expect(sourceBadge({ channel: 'ui' }).label).toBe('Typed by a person');
+    expect(sourceBadge({ channel: 'graph' }).label).toBe('Teamwork Graph');
+    expect(sourceBadge({ channel: 'sample' }).label).toBe('Sample data');
+  });
+
+  it('sets a claim against what the pipeline said about the same commit', () => {
+    const claim = piece({});
+    expect(pipelineNote({ evidence: [claim] }, claim)).toBe(
+      "The project's pipeline has not reported on commit a1f3c9e. This is the word of whoever sent it.",
+    );
+    const failing = piece({ id: 'e2', channel: 'ci', standing: 'failed_checks', createdAt: 2 });
+    expect(pipelineNote({ evidence: [failing, claim] }, claim)).toBe(
+      "The project's pipeline reported on commit a1f3c9e too, and its result does not pass.",
+    );
+    const rerun = piece({ id: 'e3', channel: 'ci', standing: 'accepted', details: { commit: 'a1f3c9e' }, createdAt: 3 });
+    expect(pipelineNote({ evidence: [rerun, failing, claim] }, claim)).toBe(
+      "The project's pipeline reported on commit a1f3c9e too, and its result passes.",
+    );
+    expect(pipelineNote({ evidence: [] }, piece({ details: {} }))).toMatch(/^This names no commit/);
+    // Nothing to set against the pipeline's own result, or against a document.
+    expect(pipelineNote({ evidence: [failing] }, failing)).toBeNull();
+    expect(pipelineNote({ evidence: [] }, piece({ kind: 'document' }))).toBeNull();
+  });
+
+  it('lists what still blocks closing, criterion by criterion', () => {
+    const criterion = (over: Partial<CriterionView>): CriterionView =>
+      ({ id: over.text, text: 'x', requiredKind: 'any', state: 'unproven', selfReviewed: false, needsIndependent: false, stale: false, evidence: [], ...over }) as CriterionView;
+    const policy = { requireIndependent: true, gateMode: 'warn' as const, pipelineOnly: true, strictGate: true };
+    const list = blockers({
+      commit: A,
+      policy,
+      criteria: [
+        criterion({ text: 'Proven one', state: 'proven' }),
+        criterion({ text: 'No evidence', requiredKind: 'test_run' }),
+        criterion({ text: 'Stale', stale: true }),
+        criterion({ text: 'Waiting', state: 'submitted', evidence: [piece({}), piece({ id: 'e2' })] }),
+        criterion({ text: 'Self', state: 'submitted', needsIndependent: true }),
+        criterion({ text: 'Rejected', state: 'rejected', evidence: [piece({ standing: 'rejected', verdict: { reason: 'Wrong branch.' } as EvidenceView['verdict'] })] }),
+      ],
+    });
+    expect(list.map((b) => `${b.text}: ${b.why}`)).toEqual([
+      'No evidence: No evidence yet. It needs a test run. Only the pipeline can report it.',
+      'Stale: Proven for an earlier commit. It needs proof of commit a1f3c9e.',
+      'Waiting: 2 pieces of evidence wait for a check.',
+      'Self: Accepted by the person who entered it. It needs a second person.',
+      'Rejected: The evidence was turned away. Wrong branch.',
+    ]);
   });
 });
 
