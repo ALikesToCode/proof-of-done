@@ -325,6 +325,7 @@ The Teamwork Graph does not always answer on the development site. On 23 Nov 202
 | `src/local/` | The local adapter: task files, the file store, the command line and the stdio tool server |
 | `examples/` | The walk-through that `npm run example` runs |
 | `benchmark/`, `control-eval/` | The author's first measurements, with their protocols and records |
+| `study/` | The protocol of a study on false "done" claims, published before its first run, and the diagnostic behind its design |
 
 ## Preview features
 
