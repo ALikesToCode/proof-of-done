@@ -61,9 +61,34 @@ A work item with a contract should not pass as Done while a criterion is unprove
 
 A work item with no contract passes both, unless the project requires a contract.
 
-Every reaction goes into the event log as `issue.done`, `issue.reopened`, `gate.warned`, `gate.bounced` or `gate.blocked`, and the meter reads them from there. Jira can deliver one status change twice. The app recognises the repeat by Jira's change id and ignores it.
+Every reaction goes into the event log as `issue.done`, `issue.reopened`, `gate.warned`, `gate.bounced`, `gate.blocked`, `gate.unchecked`, `gate.pass_granted` or `gate.let_through`, and the meter reads the first five from there. Jira can deliver one status change twice. The app recognises the repeat by Jira's change id and ignores it.
 
-Two things an admin should know. A validator left on a workflow after the app is uninstalled blocks that transition, so remove it first. And an error inside the app's check lets the transition through, because a broken app must not lock a team out of its own workflow. Once the check has said no, the refusal stands, also when the app cannot store its `gate.blocked` event.
+A validator left on a workflow after the app is uninstalled blocks that transition, so remove it first. Once the check has said no, the refusal stands, also when the app cannot store its `gate.blocked` event.
+
+### When the validator cannot check
+
+The validator needs Jira to read the work item and the app's storage to read the contract. Either can fail to answer, and a permission scheme can keep the app from reading a work item at all. A validator that says yes without having looked proves nothing, so the answer in that case is a stated policy.
+
+| What happened | What the validator answers |
+| --- | --- |
+| The app's storage did not return the contract, or Jira did not answer, or the app may not read the work item | The project's choice under "When the validator cannot check a work item". The default is to refuse. The other choice lets the transition through and writes `gate.unchecked` to the history. |
+| The app could not read that choice either, because the settings did not load or it could not tell which project the work item is in | It refuses. It cannot know that the project chose otherwise. |
+| A fault in the app that nobody planned for | It refuses. |
+| The function crashes or runs past Forge's 25 seconds | Jira refuses on its own, with "The transition failed because of an error in validator". The app has no say in this one. |
+
+When Jira does not answer, the app still asks its storage by the work item id that came with the request. A work item with a contract names its project there, so the project's choice applies. A work item with no contract names no project, so the second row applies.
+
+The setting lives in the app's storage. That is why a project that chose to let transitions through is still refused while that storage is down. The comment-or-move-back reaction is a second line here: it runs when the status change arrives, and by then the storage may answer again.
+
+The validator writes nothing to the work item. Jira holds the work item while it asks the validator, and a comment written from inside it waits until the validator has timed out. That was measured on a staging install on 26 Nov 2026: the transition failed after 26 seconds.
+
+There are three ways out of a refusal, in this order.
+
+1. Try again. Most of these faults pass.
+2. Someone who administers the project presses "Let it through without proof" in the work item's panel and gives a reason. For 30 minutes the validator allows that work item and the app does not move it back. The reason, the person and the time go into the history as `gate.pass_granted` and into a comment, and each transition made with it is recorded as `gate.let_through`. The work item is not proven by this and goes on counting as closed without proof. This needs the app's storage, because the pass is stored there.
+3. A Jira admin takes the validator off the transition in the workflow editor. This works when nothing of the app does, and Jira's audit log records it.
+
+The rows of the table were run against a staging install on 26 Nov 2026 with the faults injected by a test build, except a settings read that fails on its own. A transition under a pass was run there too, with the pass written straight into the storage. The button in the panel is covered by the page tests and was not pressed in a browser.
 
 ## JQL fields
 

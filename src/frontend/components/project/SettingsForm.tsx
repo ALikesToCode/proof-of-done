@@ -15,10 +15,11 @@ import {
   Text,
   Textfield,
 } from '@forge/react';
+import { PASS_MINUTES } from '../../../core/proof';
 import type { GateMode, ProjectRule, ProjectSettings, RequiredKind } from '../../../core/types';
 import type { ProjectView } from '../../../services/project-view';
 import { messageOf, projectApi } from '../../api';
-import { GATE_MODES } from '../../project-text';
+import { GATE_MODES, UNCHECKED_MODES } from '../../project-text';
 import { REQUIRED } from '../../text';
 import { KIND_OPTIONS } from '../AddCriterion';
 import { Line } from '../Line';
@@ -118,6 +119,25 @@ export const SettingsForm = ({ view, onSaved }: Props) => {
         <HelperMessage>
           This reacts a moment after the work item is closed. To stop the close itself, add the "Proof of Done is complete" validator
           to the transition in the workflow editor. The validator works unless this is set to do nothing.
+        </HelperMessage>
+      </Stack>
+
+      <Stack space="space.100">
+        <Heading size="xsmall" as="h3">
+          When the validator cannot check a work item
+        </Heading>
+        <RadioGroup
+          name="strict-gate"
+          isDisabled={locked}
+          options={UNCHECKED_MODES.map((mode) => ({ name: 'strict-gate', value: mode.value, label: mode.label }))}
+          value={draft.strictGate ? 'refuse' : 'allow'}
+          onChange={(event) => change({ strictGate: String(event.target.value) !== 'allow' })}
+        />
+        <HelperMessage>
+          This is for a transition that carries the validator, at a moment when Jira or the app's storage does not answer, or when the
+          app may not read the work item. If the app cannot read this setting either, it refuses. Someone who administers the project
+          can let one work item through from its Proof of Done panel for {PASS_MINUTES} minutes, with a reason that is kept. If the
+          panel does not load either, a Jira admin can take the validator off the transition.
         </HelperMessage>
       </Stack>
 

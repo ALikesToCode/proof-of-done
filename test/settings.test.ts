@@ -6,6 +6,11 @@ describe('normalizeSettings', () => {
     expect(normalizeSettings(null)).toEqual(DEFAULT_SETTINGS);
     expect(normalizeSettings({ gateMode: 'explode', requireIndependent: 'yes', rules: 'none' })).toEqual(DEFAULT_SETTINGS);
   });
+  it('refuses what the validator cannot check unless the project chose otherwise', () => {
+    expect(normalizeSettings({}).strictGate).toBe(true);
+    expect(normalizeSettings({ strictGate: 'no' }).strictGate).toBe(true);
+    expect(normalizeSettings({ strictGate: false }).strictGate).toBe(false);
+  });
   it('keeps valid values and cleans rules', () => {
     const settings = normalizeSettings({
       gateMode: 'bounce',

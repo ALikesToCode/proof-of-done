@@ -65,6 +65,12 @@ export const GATE_MODES: Array<{ value: GateMode; label: string }> = [
   { value: 'off', label: 'Do nothing' },
 ];
 
+/** What the validator answers when it could not check. */
+export const UNCHECKED_MODES: Array<{ value: 'refuse' | 'allow'; label: string }> = [
+  { value: 'refuse', label: 'Refuse the transition and say why' },
+  { value: 'allow', label: "Let it through, and say so in the work item's history" },
+];
+
 export function contractsLine(contracts: { total: number; listed: number }): string {
   if (contracts.total === 0) return 'No work item in this project has a done contract yet.';
   const noun = contracts.total === 1 ? 'work item has' : 'work items have';

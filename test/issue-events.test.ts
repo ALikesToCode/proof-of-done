@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContractService } from '../src/services/contracts';
+import { REFUSES_BROKEN, REFUSES_BY_CHOICE } from '../src/services/gate';
 import { deletedIssueId, validateDone } from '../src/triggers/issue-events';
 import { doc, h, ul } from './helpers/adf';
 import { issueInfo } from './helpers/fakes';
@@ -70,12 +71,40 @@ describe('validateDone', () => {
     expect(warn).toHaveBeenCalledWith('Proof of Done: could not record the refusal for MOBL-1. Error: The storage of this installation is full.');
   });
 
-  it('lets the transition through when the app cannot work out its answer', async () => {
+  it('refuses the transition when the app cannot work out its answer', async () => {
     fresh.store.getBundle = async () => {
       throw new Error('The database did not answer.');
     };
     const logged = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    expect(await validateDone(REQUEST)).toEqual({ result: true });
-    expect(logged).toHaveBeenCalledWith('Proof of Done: the validator failed for MOBL-1 and let the transition through. Error: The database did not answer.');
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    expect(await validateDone(REQUEST)).toEqual({
+      result: false,
+      errorMessage: `Proof of Done: The app's storage did not answer, so it could not check MOBL-1. ${REFUSES_BY_CHOICE}`,
+    });
+    expect(logged).toHaveBeenCalledWith('Proof of Done: the validator could not read the contract of MOBL-1. Error: The database did not answer.');
+  });
+
+  it('refuses the transition when the check itself breaks', async () => {
+    // Nothing the gate plans for: the store hands back something that is not a contract.
+    fresh.store.getBundle = async () => ({ contract: null }) as never;
+    const logged = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(await validateDone(REQUEST)).toEqual({ result: false, errorMessage: REFUSES_BROKEN });
+    expect(logged.mock.calls[0]![0]).toMatch(/^Proof of Done: the validator failed for MOBL-1 and refused the transition\. TypeError/);
+  });
+
+  it('asks the store by the id in the request when Jira does not answer', async () => {
+    fresh.jira.getIssue = async () => {
+      throw new Error('Jira returned 500 when reading work item MOBL-1.');
+    };
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const answer = await validateDone(REQUEST);
+    expect(answer.errorMessage).toBe(`Proof of Done: Jira did not answer the app, so it could not check MOBL-1. ${REFUSES_BY_CHOICE}`);
+    // The contract named the project, so the refusal is in the work item's history.
+    expect(fresh.store.events.at(-1)).toMatchObject({ type: 'gate.blocked', issueId: '10001', projectId: '10000', data: { unchecked: true, why: 'jira' } });
+  });
+
+  it('lets a work item that is being created through, because it has no key yet', async () => {
+    expect(await validateDone({ issue: {}, user: { accountId: 'bob' } })).toEqual({ result: true });
   });
 });

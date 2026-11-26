@@ -4,6 +4,7 @@ import type { ContractView } from '../../services/view';
 import { api, messageOf } from '../api';
 import { sourceLine } from '../text';
 import { AddCriterion } from './AddCriterion';
+import { GateNotice } from './GateNotice';
 
 interface Props {
   view: ContractView;
@@ -34,6 +35,7 @@ export const NoContract = ({ view, onChanged }: Props) => {
         A done contract lists what has to be true before {view.issue.key} can close, and keeps the proof for each point. This work
         item has none yet.
       </Text>
+      <GateNotice view={view} onChanged={onChanged} />
       {count > 0 && (
         <Stack space="space.100">
           <Text weight="medium">
