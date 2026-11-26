@@ -18,6 +18,8 @@ export interface CheckInput {
   otherUrls?: string[];
   /** The project counts a test run or a build only when its pipeline reports it. */
   pipelineOnly?: boolean;
+  /** What the project's pipeline reported for the same commit, when that result does not pass. */
+  pipelineSays?: string | null;
 }
 
 export const KIND_LABEL: Record<RequiredKind, string> = {
@@ -50,6 +52,10 @@ export function runChecks(input: CheckInput): CheckResult[] {
       'source.pipeline',
       `This project counts ${KIND_LABEL[kind]} only when its pipeline reports it. The pipeline reports with the project's key, and a person or an agent cannot.`,
     );
+  }
+
+  if (input.pipelineSays) {
+    fail('pipeline.same_commit', `The project's pipeline reported on the same commit, and its result does not pass: ${input.pipelineSays}`);
   }
 
   if (input.summary.trim().length < 10) {

@@ -185,7 +185,79 @@ describe('which criterion a receipt is for', () => {
   });
 });
 
+describe('a claim the pipeline contradicts', () => {
+  const claim = async (commit: string, passed = 43) => {
+    const start = await view();
+    return contracts.submitEvidence('MOBL-1', AGENT, {
+      criterionId: start.criteria[0]!.id,
+      kind: 'test_run',
+      summary: `Unit suite on my branch, all ${passed} green`,
+      details: { passed, failed: 0, commit },
+    });
+  };
+  const REASON = "The project's pipeline reported on the same commit (aaaaaaa), and its result does not pass: 2 tests failed, so this run proves nothing yet.";
+
+  it('is turned away when the pipeline reports the same commit as failing', async () => {
+    expect((await claim(A)).criteria[0]).toMatchObject({ state: 'submitted' });
+    expect((await receipts.accept(key, body({ passed: 41, failed: 2 }))).outcome).toBe('recorded_failing');
+
+    const after = await view();
+    const [fromPipeline, fromAgent] = after.criteria[0]!.evidence;
+    expect(fromPipeline).toMatchObject({ channel: 'ci', standing: 'failed_checks' });
+    expect(fromAgent).toMatchObject({ channel: 'agent', standing: 'rejected', verdict: { channel: 'check', decision: 'rejected', reason: REASON } });
+    expect(after.criteria[0]!.state).toBe('rejected');
+    expect(after.gate.reason).toContain('1 rejected');
+    expect(store.events.at(-1)).toMatchObject({ type: 'verdict.recorded', channel: 'ci', data: { by: 'check', decision: 'rejected' } });
+  });
+
+  it('is turned away even after a person accepted it', async () => {
+    const before = await claim(A);
+    await contracts.recordVerdict('MOBL-1', ALICE, { evidenceId: before.criteria[0]!.evidence[0]!.id, decision: 'accepted' });
+    expect((await view()).criteria[0]!.state).toBe('proven');
+    await receipts.accept(key, body({ passed: 41, failed: 2 }));
+    expect((await view()).criteria[0]).toMatchObject({ state: 'rejected' });
+  });
+
+  it('is left alone when it is about another commit, or about another criterion', async () => {
+    await claim(B);
+    await receipts.accept(key, body({ passed: 41, failed: 2 }));
+    // The pipeline is at A now, so the claim about B is stale. Nobody rejected it.
+    expect(store.verdicts).toEqual([]);
+  });
+
+  it('is turned away on arrival when the pipeline already reported that commit as failing', async () => {
+    await receipts.accept(key, body({ passed: 41, failed: 2 }));
+    const after = await claim(A);
+    const fromAgent = after.criteria[0]!.evidence[0]!;
+    expect(fromAgent).toMatchObject({ channel: 'agent', standing: 'failed_checks' });
+    expect(fromAgent.checks.find((check) => !check.ok)).toMatchObject({
+      id: 'pipeline.same_commit',
+      note: "The project's pipeline reported on the same commit, and its result does not pass: 2 tests failed, so this run proves nothing yet.",
+    });
+  });
+
+  it('goes by the newest run of a commit, so a rerun that passes clears the way', async () => {
+    await receipts.accept(key, body({ passed: 41, failed: 2 }));
+    await receipts.accept(key, body({ passed: 43, failed: 0, run: '2' }));
+    expect((await claim(A)).criteria[0]!.evidence[0]).toMatchObject({ channel: 'agent', standing: 'pending' });
+  });
+});
+
 describe('a new commit', () => {
+  it('says the proof is about an earlier commit also when an older run had failed', async () => {
+    await receipts.accept(key, body({ passed: 41, failed: 2 }));
+    await receipts.accept(key, body({ commit: B }));
+    expect((await view()).criteria[0]).toMatchObject({ state: 'proven', stale: false });
+
+    const C = 'c'.repeat(40);
+    await receipts.accept(key, JSON.stringify({ issue: 'MOBL-1', commit: C, status: 'failed' }));
+    expect((await view()).criteria[0]).toMatchObject({ state: 'unproven', stale: true });
+
+    // A run of the new commit that fails is a rejection, not a stale proof.
+    await receipts.accept(key, body({ commit: C, passed: 40, failed: 3 }));
+    expect((await view()).criteria[0]).toMatchObject({ state: 'rejected', stale: false });
+  });
+
   it('turns the proof of the commit before stale and opens the criterion again', async () => {
     await receipts.accept(key, body({}));
     await receipts.accept(key, JSON.stringify({ issue: 'MOBL-1', commit: A, status: 'success' }));

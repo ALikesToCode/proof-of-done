@@ -192,6 +192,7 @@ export function describeEvent(entry: Pick<HistoryEntry, 'type' | 'data'>): strin
     case 'verdict.recorded': {
       if (data['by'] === 'attestation') return `attested ${quote(data['text'])}`;
       const verb = data['decision'] === 'accepted' ? 'accepted' : 'rejected';
+      if (data['by'] === 'check') return `reported a result that contradicts evidence for ${quote(data['text'])}, so the app turned that evidence away.${sentence(data['reason'])}`;
       const who = data['by'] === 'verifier' ? 'asked the Proof Verifier, which ' : '';
       const self = data['decision'] === 'accepted' && data['independent'] === false ? ' as a self-review' : '';
       const reason = typeof data['reason'] === 'string' && data['reason'] && data['reason'] !== 'Accepted.' ? ` Reason: ${data['reason']}` : '';

@@ -43,6 +43,8 @@ So one channel is closed to the worker. A project admin makes a key, and the pro
 - A receipt is stored as evidence with the channel `ci`, on each active criterion that asks for its kind. A criterion that takes any evidence counts when its wording asks for that kind (`src/core/kinds.ts`). The same receipt sent twice is stored once.
 - A passing receipt gets a verdict with the channel `ci`, unless the project turns `pipelineProves` off. A failing one fails its checks like any other evidence.
 - The commit a work item stands at is the commit of its newest receipt. Evidence that names another commit has the standing `stale`. A criterion whose only proof is stale is unproven, and the summary counts it in `stale`. Evidence that names no commit never goes stale.
+- A failing receipt turns away what anyone else said about the same commit for the same criterion and kind: each such piece of evidence gets a rejecting verdict with the channel `check`, also one a person had accepted. A claim that arrives after the failing receipt fails the check `pipeline.same_commit`. The newest receipt of a commit is the one that counts, so a rerun that passes clears the way.
+- A criterion that was proven for an earlier commit, with nothing turned away for the commit it stands at now, is unproven with `stale` set, also when an older run had failed.
 - A receipt that no criterion asks for is kept as evidence of no criterion. It proves nothing and it moves the commit.
 - With `pipelineOnly` on, a test run or a build from any other channel fails the check `source.pipeline`.
 

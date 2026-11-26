@@ -196,6 +196,7 @@ What follows from it:
 
 - **A passing result proves its criterion without a person.** A failing one is stored and proves nothing. A project can ask for a person's review all the same.
 - **Proof is bound to a commit.** When the pipeline reports a newer commit, evidence about an earlier commit shows as "Earlier commit" and stops counting. Its criterion is open again, and the done gate says so. This also covers what an agent submitted with a commit.
+- **The pipeline's word beats a claim about the same commit.** When the pipeline reports a commit as failing, the app turns away a test run or a build that an agent or a person reported as passing for that commit, and gives the pipeline's result as the reason.
 - **A project can take test runs and builds only from the pipeline.** With that rule on, the app turns away a test run that an agent or a person reports, and says why.
 
 The key is for one project. Whoever holds it can report results for that project, so keep it where the pipeline's other secrets are. The app stores only its hash. Replace it on the same page, and the key before stops working.
