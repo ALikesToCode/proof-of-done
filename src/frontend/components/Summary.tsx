@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Inline, Lozenge, ProgressBar, SectionMessage, Stack, Text } from '@forge/react';
 import type { ContractView } from '../../services/view';
-import { PROOF_STATE, proofLine } from '../text';
+import { PROOF_STATE, proofLine, shortCommit } from '../text';
 
 interface Props {
   view: ContractView;
@@ -39,6 +39,11 @@ export const Summary = ({ view, onHistory, onRefresh }: Props) => {
           appearance={proven ? 'success' : 'default'}
           ariaLabel={proofLine(summary.proven, summary.total)}
         />
+      )}
+      {view.commit && (
+        <Text size="small" color="color.text.subtle">
+          The pipeline last reported commit {shortCommit(view.commit)}. Proof of an earlier commit does not count.
+        </Text>
       )}
       {closedWithoutProof && (
         <SectionMessage appearance="warning" title={`${issue.key} is ${issue.statusName}, but it is not proven`}>

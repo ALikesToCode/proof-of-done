@@ -17,7 +17,12 @@ import { World, resetWorld, world } from './helpers/world';
 
 vi.mock('@forge/react', () => import('./helpers/forge-react'));
 vi.mock('@forge/bridge', () => import('./helpers/forge-bridge'));
-vi.mock('@forge/api', () => ({ default: {}, route: () => '', isForgePlatformError: () => false }));
+vi.mock('@forge/api', () => ({
+  default: {},
+  route: () => '',
+  isForgePlatformError: () => false,
+  webTrigger: { getUrl: async () => 'https://example.webtrigger.atlassian.app/public/abc' },
+}));
 vi.mock('../src/store/sql-store', async () => {
   const helpers = await import('./helpers/world');
   return {
@@ -832,6 +837,26 @@ describe('the project settings page', () => {
     await page.press('Save settings');
     expect(page.text()).toContain('Saved.');
     expect(fresh.store.settings.get('10000')).toMatchObject({ requireIndependent: false });
+  });
+
+  it("makes the pipeline's key, shows it once with the step to add, and removes it", async () => {
+    const fresh = onProject();
+    const page = await show(pages.settings);
+    expect(fresh.calls).toEqual(['getProject']);
+    await page.press('Set up the pipeline');
+    expect(page.text()).toContain('This project has no pipeline key');
+
+    await page.press('Create a key');
+    const key = /pod_10000_[0-9a-f]{48}/.exec(JSON.stringify(page.all('CodeBlock').map((block) => block.props['text'])))?.[0];
+    expect(key).toBeDefined();
+    expect(page.text()).toContain('Copy the key now. It is not shown again.');
+    expect(JSON.stringify(page.all('CodeBlock').map((block) => block.props['text']))).toContain('https://example.webtrigger.atlassian.app/public/abc');
+    expect(fresh.store.pipelineKeys.get('10000')!.hash).not.toContain(key!.slice(-48));
+
+    await page.press('Remove the key');
+    expect(page.text()).toContain('This project has no pipeline key');
+    expect(page.text()).not.toContain('Copy the key now');
+    expect(fresh.store.pipelineKeys.size).toBe(0);
   });
 
   it('locks the rules for someone who does not administer the project', async () => {

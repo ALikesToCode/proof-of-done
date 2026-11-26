@@ -50,6 +50,53 @@ modules:
       handler: index.listEvidenceToReview
     - key: tool-record-verdict
       handler: index.recordVerdict
+    - key: on-pipeline-receipt
+      handler: index.onPipelineReceipt
+  # A project's pipeline posts its test runs and builds here, with the project's key. The
+  # responses are fixed, so nothing leaves the app through it.
+  webtrigger:
+    - key: pipeline-receipt
+      function: on-pipeline-receipt
+      urlFormat: v2
+      response:
+        type: static
+        outputs:
+          - key: receipt-recorded
+            statusCode: 200
+            contentType: application/json
+            body: '{"ok":true,"result":"recorded","message":"Stored. The result passes."}'
+          - key: receipt-recorded-failing
+            statusCode: 200
+            contentType: application/json
+            body: '{"ok":true,"result":"recorded_failing","message":"Stored. The result does not pass, so it proves nothing."}'
+          - key: receipt-duplicate
+            statusCode: 200
+            contentType: application/json
+            body: '{"ok":true,"result":"duplicate","message":"This result was already stored."}'
+          - key: receipt-unauthorized
+            statusCode: 401
+            contentType: application/json
+            body: '{"ok":false,"result":"unauthorized","message":"Send the project key as Authorization: Bearer <key>. A key that was replaced no longer works."}'
+          - key: receipt-invalid
+            statusCode: 400
+            contentType: application/json
+            body: '{"ok":false,"result":"invalid","message":"Send JSON with issue or ref, commit, and either passed and failed or status."}'
+          - key: receipt-no-work-item
+            statusCode: 404
+            contentType: application/json
+            body: '{"ok":false,"result":"no_work_item","message":"No named work item is in this project with a done contract."}'
+          - key: receipt-no-criterion
+            statusCode: 422
+            contentType: application/json
+            body: '{"ok":false,"result":"no_criterion","message":"The done contract has no criterion that asks for this kind of evidence."}'
+          - key: receipt-method
+            statusCode: 405
+            contentType: application/json
+            body: '{"ok":false,"result":"method","message":"Use POST."}'
+          - key: receipt-error
+            statusCode: 500
+            contentType: application/json
+            body: '{"ok":false,"result":"error","message":"The result could not be stored. Try again."}'
   trigger:
     - key: app-installed
       function: on-installed
